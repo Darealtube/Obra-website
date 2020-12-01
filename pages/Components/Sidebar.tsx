@@ -38,6 +38,7 @@ return (
 
 
   <style jsx>{`
+  
  .sidebar{
     background: #020402;
     width: 100vw;

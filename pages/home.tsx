@@ -146,6 +146,11 @@ return (
  </div>
  </div>
  <style tsx>{`
+
+ *{
+  overscroll-behavior: contain;
+ }
+
  .home{
      display: flex;
      flex-direction: column;

@@ -1,30 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Introduction
 
-## Getting Started
+Hello! Welcome to the OFFICIAL repository for our project!
 
-First, run the development server:
+I deleted the previous one because I've *kinda* messed it up a bit. But through hours and hours of
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+trying to solve the problem, I've done it!
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Notes
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+The project is going to be made with Typescript. Don't worry if you don't know it, just send some JS
 
-## Learn More
+files and I'm going to convert it to Typescript. It will also serve as a practice for me.
 
-To learn more about Next.js, take a look at the following resources:
+This project's CSS contains React-bootstrap and Font Awesome, so make sure to learn them.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Also, learn how to do Github because that's how you'll be able to contribute to this repo project.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

@@ -104,9 +104,7 @@ const Login = () => {
                 color="primary"
                 className={classes.submit}
               >
-                <Link href="/home">
-                  <span style={{ color: "white" }}>Log In</span>
-                </Link>
+                Log In
               </Button>
             </form>
             <Grid container>

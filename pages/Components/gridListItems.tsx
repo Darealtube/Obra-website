@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(4),
     },
     card: {
-      width: "25vw",
+      width: "20em",
     },
     feature: {
       marginTop: theme.spacing(2),

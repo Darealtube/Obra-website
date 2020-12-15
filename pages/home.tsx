@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   Drawer,
   Theme,
@@ -17,8 +18,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Avatar,
+  Popover,
+  Box,
 } from "@material-ui/core";
-import ListItems from "./Components/listItems";
+import { Items, Menu, Notification } from "./Components/listItems";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import { Feature, Recent } from "./Components/gridListItems";
@@ -32,8 +36,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       width: "100%",
-      height: "100vh",
-      maxWidth: 360,
+      height: "100%",
+      maxWidth: 720,
       backgroundColor: theme.palette.background.paper,
       overflow: "auto",
     },
@@ -60,6 +64,14 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbarTitle: {
       flexGrow: 1,
     },
+    menu: {
+      height: "100%",
+      overflow: "auto",
+      width: "20em",
+    },
+    box: {
+      margin: theme.spacing(2.5, 2),
+    },
   })
 );
 
@@ -67,6 +79,24 @@ const Home = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [intro, setIntro] = useState(true);
+  const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
+  const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
+
+  const handleProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setprofAnchor(event.currentTarget);
+  };
+
+  const handleProfileClose = () => {
+    setprofAnchor(null);
+  };
+
+  const handleNotif = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setnotifAnchor(event.currentTarget);
+  };
+
+  const handleNotifClose = () => {
+    setnotifAnchor(null);
+  };
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -79,7 +109,6 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -95,9 +124,62 @@ const Home = () => {
             Canvas
           </Typography>
 
-          <IconButton>
-            <NotificationImportantIcon />
+          <IconButton onClick={handleNotif}>
+            <NotificationImportantIcon fontSize="large" htmlColor="white" />
           </IconButton>
+          <Popover
+            anchorEl={notifAnchor}
+            keepMounted
+            open={Boolean(notifAnchor)}
+            onClose={handleNotifClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <List className={classes.list}>
+              <Box className={classes.box}>
+                <Typography>Notifications</Typography>
+              </Box>
+              <Divider />
+              <Notification />
+            </List>
+          </Popover>
+
+          <IconButton onClick={handleProfile}>
+            <Avatar>D</Avatar>
+          </IconButton>
+          <Popover
+            id="simple-menu"
+            anchorEl={profAnchor}
+            keepMounted
+            open={Boolean(profAnchor)}
+            onClose={handleProfileClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <Box display="flex" flexWrap="wrap" className={classes.box}>
+              <Avatar>D</Avatar>
+              <div style={{ marginLeft: "25px" }}>
+                <Typography>Darryl Javier</Typography>
+                <Typography>balah@gmail.com</Typography>
+              </div>
+            </Box>
+            <Divider />
+            <List className={classes.menu}>
+              <Menu />
+            </List>
+          </Popover>
         </Toolbar>
       </AppBar>
 
@@ -109,13 +191,11 @@ const Home = () => {
         <Typography variant="h4">Recently</Typography>
         <Recent />
       </Container>
-
       <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
         <List className={classes.list}>
-          <ListItems />
+          <Items />
         </List>
       </Drawer>
-
       <Dialog
         open={intro}
         keepMounted

@@ -47,7 +47,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       width: "100%",
       justifyContent: "flex-start",
-      margin: theme.spacing(1, 1),
+      alignItems: "flex-start",
+    },
+    notifInfo: {
+      flexDirection: "column",
+      marginRight: theme.spacing(10),
     },
   })
 );
@@ -238,10 +242,51 @@ export const Notification = () => {
   return (
     <div>
       <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>A</Avatar> Check out this new .....!
+        <Avatar className={classes.icon}>A</Avatar>
+        <div>
+          <Typography className={classes.notifInfo}>
+            Check out this new .....!Check out this new .....!Check out this new
+            .....!Check out this new .....!
+          </Typography>
+        </div>
       </ListItem>
       <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>B</Avatar> Check out this new .....!
+        <Avatar className={classes.icon}>B</Avatar>
+        <Typography className={classes.notifInfo}>
+          Check out this new .....!Check out this new .....!Check out this new
+          .....!Check out this new .....!Check out this new .....!Check out this
+          new .....!Check outCheck out this new .....! this new .....!Check out
+          this new .....!
+        </Typography>
+      </ListItem>
+      <ListItem className={classes.notifitem}>
+        <Avatar className={classes.icon}>C</Avatar>
+        <div className={classes.notifInfo}>
+          <Typography>Darryl Javier </Typography>
+          <Typography>
+            Check out this new .....!Check out this new .....!Check out this new
+            .....!
+          </Typography>
+        </div>
+      </ListItem>
+      <ListItem className={classes.notifitem}>
+        <Avatar className={classes.icon}>D</Avatar>
+        <div className={classes.notifInfo}>
+          <Typography>Darryl Javier </Typography>
+          <Typography>
+            Check out this new .....!Check out this new .....!Check out this new
+            .....!Check out this new .....!
+          </Typography>
+        </div>
+      </ListItem>
+      <ListItem className={classes.notifitem}>
+        <Avatar className={classes.icon}>E</Avatar>
+        <div className={classes.notifInfo}>
+          <Typography>Darryl Javier </Typography>
+          <Typography>
+            Check out this new .....!Check out this new .....!
+          </Typography>
+        </div>
       </ListItem>
     </div>
   );

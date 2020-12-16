@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Link from "next/link";
 import React from "react";
 import {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
   const classes = useStyles();
+  const router = useRouter();
 
   function Copyright() {
     return (
@@ -67,125 +69,127 @@ const Register = () => {
             <br />
             <Typography variant="h5">Log In</Typography>
 
-            <form className={classes.form}></form>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+            <form
+              className={classes.form}
+              onSubmit={() => router.push("/home")}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  name="password"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="password"
+                    label="Password"
+                    name="password"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={4}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email"
+                    name="email"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={4}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="age"
-                  label="Age"
-                  name="age"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="age"
+                    label="Age"
+                    name="age"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={4}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  fullWidth
-                  id="phone"
-                  label="Phone Number"
-                  name="phone"
-                  color="primary"
-                  helperText="Optional."
-                />
-              </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    id="phone"
+                    label="Phone Number"
+                    name="phone"
+                    color="primary"
+                    helperText="Optional."
+                  />
+                </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="country"
-                  label="Country"
-                  name="country"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="country"
+                    label="Country"
+                    name="country"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="city"
-                  label="City/State"
-                  name="city"
-                  autoFocus
-                  color="primary"
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="city"
+                    label="City/State"
+                    name="city"
+                    autoFocus
+                    color="primary"
+                  />
+                </Grid>
 
-              <Grid item xs={12}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  <Link href="/home">
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
                     <span style={{ color: "white" }}>Register</span>
-                  </Link>
-                </Button>
-              </Grid>
+                  </Button>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Typography>
-                  <Link href="/">Already have an account? Log in!</Link>
-                </Typography>
+                <Grid item xs={12}>
+                  <Typography style={{ textDecoration: "none" }}>
+                    <Link href="/">Already have an account? Log in!</Link>
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
+            </form>
           </div>
           <Box mt={5}>
             <Copyright />

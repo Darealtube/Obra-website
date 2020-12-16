@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   Toolbar,
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+  const router = useRouter();
 
   function Copyright() {
     return (
@@ -69,7 +71,10 @@ const Login = () => {
             <br />
             <Typography variant="h5">Log In</Typography>
 
-            <form className={classes.form}>
+            <form
+              className={classes.form}
+              onSubmit={() => router.push("/home")}
+            >
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -109,17 +114,21 @@ const Login = () => {
             </form>
             <Grid container>
               <Grid item xs={6}>
-                <Typography color="secondary">
+                <Typography
+                  style={{ textDecoration: "none" }}
+                  color="secondary"
+                >
                   <Link href="#">Forgot Password?</Link>
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography color="primary">
+                <Typography color="primary" style={{ textDecoration: "none" }}>
                   <Link href="/register">Don't have an account? Sign up!</Link>
                 </Typography>
               </Grid>
             </Grid>
           </div>
+          <Copyright />
         </Grid>
       </Grid>
     </div>

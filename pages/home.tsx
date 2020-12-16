@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import {
   Drawer,
   Theme,
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
     list: {
       width: "100%",
       height: "100%",
-      maxWidth: 720,
+      maxWidth: 320,
       backgroundColor: theme.palette.background.paper,
       overflow: "auto",
     },
@@ -71,6 +70,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     box: {
       margin: theme.spacing(2.5, 2),
+    },
+    notifmenu: {
+      height: "100%",
+      overflow: "auto",
+      width: "100%",
+      maxWidth: 568,
+      maxHeight: 420,
     },
   })
 );
@@ -141,11 +147,11 @@ const Home = () => {
               horizontal: "right",
             }}
           >
-            <List className={classes.list}>
-              <Box className={classes.box}>
-                <Typography>Notifications</Typography>
-              </Box>
-              <Divider />
+            <Box className={classes.box}>
+              <Typography>Notifications</Typography>
+            </Box>
+            <Divider />
+            <List className={classes.notifmenu}>
               <Notification />
             </List>
           </Popover>

@@ -12,7 +12,7 @@ The project is going to be made with Typescript. Don't worry if you don't know i
 
 files and I'm going to convert it to Typescript. It will also serve as a practice for me.
 
-This project's CSS contains React-bootstrap and Font Awesome, so make sure to learn them.
+This project's CSS contains MATERIAL UI and CSS in JS, so make sure to learn them.
 
 
 Also, learn how to do Github because that's how you'll be able to contribute to this repo project.

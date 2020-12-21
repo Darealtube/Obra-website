@@ -12,10 +12,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Fab,
 } from "@material-ui/core";
 import { useState } from "react";
 import { Feature, Recent } from "./Components/gridListItems";
 import Appbar from "./Components/Appbar";
+import { Palette } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme: Theme) =>
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: "#fff",
+    },
+    fab: {
+      position: "fixed",
+      bottom: theme.spacing(2),
+      right: theme.spacing(1),
     },
   })
 );
@@ -89,6 +96,16 @@ const Home = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Fab
+        aria-label="Create"
+        className={classes.fab}
+        size="large"
+        color="primary"
+        href="/create"
+      >
+        <Palette />
+      </Fab>
     </div>
   );
 };

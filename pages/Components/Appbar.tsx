@@ -18,7 +18,6 @@ import { Items, Menu, Notification } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
-import { Palette } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,11 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100%",
       maxWidth: 568,
       maxHeight: 420,
-    },
-    fab: {
-      position: "fixed",
-      bottom: theme.spacing(2),
-      right: theme.spacing(1),
     },
   })
 );
@@ -165,16 +159,6 @@ const Appbar = () => {
           <Items />
         </List>
       </Drawer>
-
-      <Fab
-        aria-label="Create"
-        className={classes.fab}
-        size="large"
-        color="primary"
-        href="/create"
-      >
-        <Palette />
-      </Fab>
     </div>
   );
 };

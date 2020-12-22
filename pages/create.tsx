@@ -1,13 +1,11 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
+import NumberFormat from "react-number-format";
+import AvatarEditor from "react-avatar-editor";
+import { Palette } from "@material-ui/icons";
 import React from "react";
 import {
-  Box,
   CssBaseline,
   Paper,
   Grid,
-  Typography,
-  Button,
   TextField,
   makeStyles,
   FormControl,
@@ -15,6 +13,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Button,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
 
@@ -31,19 +30,43 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     height: "100vh",
   },
+  price: {
+    width: "100%",
+    height: "2em",
+  },
+  art: {
+    marginTop: theme.spacing(8),
+  },
 }));
 
 const Create = () => {
   const classes = useStyles();
-  const router = useRouter();
+  const [sale, setSale] = React.useState("No");
+  const [price, setPrice] = React.useState("");
+
+  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSale((e.target as HTMLInputElement).value);
+  };
+
+  React.useEffect(() => {
+    if (sale === "No") {
+      setPrice("");
+    }
+  }, [sale]);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Appbar />
       <Grid container className={classes.grid}>
-        <Grid item sm={4} md={7}>
-          {/* Art Image here */}
+        <Grid item xs={false} sm={4} md={7}>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            className={classes.art}
+          />
+          {/* Continue tomorrow using NEXTJS 10 IMAGES!!!!*/}
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
@@ -63,7 +86,7 @@ const Create = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    variant="standard"
+                    variant="outlined"
                     margin="none"
                     required
                     fullWidth
@@ -81,9 +104,16 @@ const Create = () => {
                     margin="normal"
                     variant="outlined"
                     component="fieldset"
+                    required
                   >
                     <FormLabel component="legend">Is it for Sale?</FormLabel>
-                    <RadioGroup row aria-label="Sale" name="Sale">
+                    <RadioGroup
+                      row
+                      aria-label="Sale"
+                      name="Sale"
+                      onChange={handleSale}
+                      value={sale}
+                    >
                       <FormControlLabel
                         value="No"
                         control={<Radio />}
@@ -98,7 +128,50 @@ const Create = () => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={6}>
-                  {/* Price (continue tomorrow) */}
+                  <FormControl margin="normal" variant="outlined">
+                    <FormLabel component="legend">Price</FormLabel>
+                    <div style={{ marginTop: ".5em" }}>
+                      <NumberFormat
+                        value={price}
+                        displayType={"input"}
+                        thousandSeparator={true}
+                        prefix={"₱"}
+                        disabled={sale === "No" ? true : false}
+                        inputMode="numeric"
+                        allowNegative={false}
+                        className={classes.price}
+                        isNumericString={true}
+                        onValueChange={(values) => {
+                          setPrice(values.value);
+                        }}
+                        required={sale === "No" ? false : true}
+                      />
+                    </div>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    id="tags"
+                    label="Tags"
+                    name="tags"
+                    color="secondary"
+                    rows={4}
+                    multiline={true}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="outlined"
+                    color="primary"
+                    startIcon={<Palette />}
+                  >
+                    Publish
+                  </Button>
                 </Grid>
               </Grid>
             </form>

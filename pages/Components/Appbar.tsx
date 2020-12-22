@@ -80,8 +80,10 @@ const Appbar = () => {
 
   return (
     <div>
+      {/* App Bar */}
       <AppBar>
         <Toolbar>
+          {/* Drawer and Logo */}
           <IconButton
             edge="start"
             color="inherit"
@@ -94,7 +96,9 @@ const Appbar = () => {
           <Typography variant="h6" noWrap className={classes.toolbarTitle}>
             Canvas
           </Typography>
+          {/* Drawer and Logo */}
 
+          {/* Notification */}
           <IconButton onClick={handleNotif}>
             <NotificationImportantIcon fontSize="large" htmlColor="white" />
           </IconButton>
@@ -120,7 +124,9 @@ const Appbar = () => {
               <Notification />
             </List>
           </Popover>
+          {/* Notification */}
 
+          {/* Profile */}
           <IconButton onClick={handleProfile}>
             <Avatar>D</Avatar>
           </IconButton>
@@ -151,14 +157,18 @@ const Appbar = () => {
               <Menu />
             </List>
           </Popover>
+          {/* Profile */}
         </Toolbar>
       </AppBar>
+      {/* App Bar */}
 
+      {/* Drawer */}
       <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
         <List className={classes.list}>
           <Items />
         </List>
       </Drawer>
+      {/* Drawer */}
     </div>
   );
 };

@@ -58,16 +58,16 @@ const Home = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Appbar />
+      <Appbar /> {/* Appbar */}
       <Container className={classes.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={classes.divider} />
-        <Feature />
+        <Feature /> {/* Featured list */}
         <Divider className={classes.divider} />
         <Typography variant="h4">Recently</Typography>
-        <Recent />
+        <Recent /> {/* Recent posts list */}
       </Container>
-
+      {/* Intro dialogue */}
       <Dialog
         open={intro}
         keepMounted
@@ -96,7 +96,8 @@ const Home = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
+      {/* Intro dialogue */}
+      {/* Link to Create page */}
       <Fab
         aria-label="Create"
         className={classes.fab}
@@ -106,6 +107,7 @@ const Home = () => {
       >
         <Palette />
       </Fab>
+      {/* Link to Create page */}
     </div>
   );
 };

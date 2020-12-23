@@ -1,5 +1,4 @@
 import NumberFormat from "react-number-format";
-import AvatarEditor from "react-avatar-editor";
 import { Palette } from "@material-ui/icons";
 import React from "react";
 import {
@@ -14,8 +13,11 @@ import {
   FormControlLabel,
   Radio,
   Button,
+  Container,
+  Input,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
+import Image from "next/image";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,15 +36,41 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "2em",
   },
-  art: {
-    marginTop: theme.spacing(8),
+  //Changes
+  displayArt: {
+    display: "flex",
+    position: "relative",
+    justifyItems: "center",
+    alignItems: "center",
+    overflow: "auto",
   },
+  actualArt: {
+    position: "absolute",
+    objectFit: "cover",
+    objectPosition: "left center",
+    width: "100%",
+    height: "100",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    marginTop: theme.spacing(5),
+  },
+  //Changes
 }));
 
 const Create = () => {
   const classes = useStyles();
   const [sale, setSale] = React.useState("No");
   const [price, setPrice] = React.useState("");
+  {
+    /* Changes */
+  }
+  const [art, setArt] = React.useState(null);
+  {
+    /* Changes */
+  }
+  const handleArt = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setArt(URL.createObjectURL((e.target as HTMLInputElement).files[0]));
+  };
 
   const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSale((e.target as HTMLInputElement).value);
@@ -59,14 +87,10 @@ const Create = () => {
       <CssBaseline />
       <Appbar />
       <Grid container className={classes.grid}>
-        <Grid item xs={false} sm={4} md={7}>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            className={classes.art}
-          />
-          {/* Continue tomorrow using NEXTJS 10 IMAGES!!!!*/}
+        <Grid item xs={12} sm={4} md={7} className={classes.displayArt}>
+          {/* Changes */}
+          <img src={art} alt="Your Art" className={classes.actualArt} />
+          {/* Changes */}
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
@@ -85,6 +109,11 @@ const Create = () => {
                     color="primary"
                   />
                 </Grid>
+                {/* Changes */}
+                <Grid item xs={12}>
+                  <Input type="file" name="image" onChange={handleArt} />
+                </Grid>
+                {/* Changes */}
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
@@ -159,7 +188,7 @@ const Create = () => {
                     label="Tags"
                     name="tags"
                     color="secondary"
-                    rows={4}
+                    rows={2}
                     multiline={true}
                   />
                 </Grid>

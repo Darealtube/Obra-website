@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import {
@@ -18,11 +19,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
-  image: {
-    backgroundImage: "url(https://picsum.photos/500)",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  sideImage: {
+    position: "relative",
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -58,7 +56,15 @@ const Login = () => {
       <Grid container className={classes.root}>
         <CssBaseline />
         {/* Side Image */}
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={4} md={7} className={classes.sideImage}>
+          <Image
+            src="https://picsum.photos/600"
+            alt="Scenery image"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center left"
+          />
+        </Grid>
         {/* Side Image */}
 
         {/* Form */}

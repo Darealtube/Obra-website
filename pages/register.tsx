@@ -13,16 +13,14 @@ import {
   Box,
 } from "@material-ui/core";
 import PaletteIcon from "@material-ui/icons/Palette";
+import Image from "next/image";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
-  image: {
-    backgroundImage: "url(https://picsum.photos/600)",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+  sideImage: {
+    position: "relative",
   },
   paper: {
     margin: theme.spacing(2, 4),
@@ -199,7 +197,15 @@ const Register = () => {
         {/* Form */}
 
         {/* Side Image */}
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={false} sm={4} md={7} className={classes.sideImage}>
+          <Image
+            src="https://picsum.photos/700"
+            alt="Scenery image"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center right"
+          />
+        </Grid>
         {/* Side Image */}
       </Grid>
     </div>

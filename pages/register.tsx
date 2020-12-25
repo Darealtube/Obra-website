@@ -190,9 +190,11 @@ const Register = () => {
               </Grid>
             </form>
           </div>
+          {/*Copyright*/}
           <Box mt={5}>
             <Copyright />
           </Box>
+          {/*Copyright*/}
         </Grid>
         {/* Form */}
 

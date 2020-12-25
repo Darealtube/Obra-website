@@ -15,6 +15,7 @@ import {
   Button,
   Container,
   Input,
+  Box,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
 import Image from "next/image";
@@ -40,19 +41,23 @@ const useStyles = makeStyles((theme) => ({
   displayArt: {
     display: "flex",
     position: "relative",
-    justifyItems: "center",
+    justifyContent: "center",
     alignItems: "center",
     overflow: "auto",
   },
+  artContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    maxWidth: "60%",
+    maxHeight: "60%",
+    marginTop: theme.spacing(8),
+  },
   actualArt: {
-    position: "absolute",
     objectFit: "cover",
-    objectPosition: "left center",
     width: "100%",
-    height: "100",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    marginTop: theme.spacing(5),
+    height: "100%",
   },
   //Changes
 }));
@@ -87,11 +92,13 @@ const Create = () => {
       <CssBaseline />
       <Appbar />
       <Grid container className={classes.grid}>
-        <Grid item xs={12} sm={4} md={7} className={classes.displayArt}>
-          {/* Changes */}
-          <img src={art} alt="Your Art" className={classes.actualArt} />
-          {/* Changes */}
+        {/* Changes */}
+        <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
+          <Container className={classes.artContainer}>
+            <img src={art} alt="Your Art" className={classes.actualArt} />
+          </Container>
         </Grid>
+        {/* Changes */}
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
             {/* Form */}

@@ -15,7 +15,7 @@ import {
   Button,
   Container,
   Input,
-  Box,
+  CircularProgress,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
 import Image from "next/image";
@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "2em",
   },
-  //Changes
   displayArt: {
     display: "flex",
     position: "relative",
@@ -50,32 +49,50 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    maxWidth: "60%",
-    maxHeight: "60%",
-    marginTop: theme.spacing(8),
   },
-  actualArt: {
-    objectFit: "cover",
-    width: "100%",
-    height: "100%",
-  },
-  //Changes
 }));
 
 const Create = () => {
   const classes = useStyles();
   const [sale, setSale] = React.useState("No");
   const [price, setPrice] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   {
     /* Changes */
   }
-  const [art, setArt] = React.useState(null);
+  const [art, setArt] = React.useState("");
   {
     /* Changes */
   }
-  const handleArt = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setArt(URL.createObjectURL((e.target as HTMLInputElement).files[0]));
+
+  /* Changes */
+
+  // This will post to an unsigned preset in Cloudinary and shall not stay like that when
+  // privacy matters. Turn this into an action that will post to a signed preset, with
+  // signatures and all the things needed for that action in Cloudinary.
+  const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = (e.target as HTMLInputElement).files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "Japhil");
+    setLoading(true);
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dyuvjmyfy/image/upload",
+      {
+        method: "POST",
+        body: data,
+        mode: "cors",
+      }
+    );
+
+    const file = await res.json();
+    setArt(file.secure_url);
+    setLoading(false);
+    // The Loading here is quite inaccurate, and it needs a bit of fixing. Basically, when it stops
+    // "loading", even if the art is supposedly still 'GET'ting, (which will display none), the circular
+    // progress component won't appear.
   };
+  /* Changes */
 
   const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSale((e.target as HTMLInputElement).value);
@@ -95,7 +112,25 @@ const Create = () => {
         {/* Changes */}
         <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
           <Container className={classes.artContainer}>
-            <img src={art} alt="Your Art" className={classes.actualArt} />
+            {/* Fix this alongside the setLoading function, and the CSS */}
+            {art && !loading ? (
+              <Image
+                src={art}
+                width={500}
+                height={500}
+                objectPosition="center"
+              />
+            ) : loading ? (
+              <CircularProgress />
+            ) : (
+              ""
+            )}
+
+            {/* We could possibly just use the cloudinary widget which handles the dropzone and 
+                file uploading for us, I'm talking about CSS.
+            */}
+
+            {/* Fix this alongside the setLoading function, and the CSS */}
           </Container>
         </Grid>
         {/* Changes */}

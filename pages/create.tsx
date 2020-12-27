@@ -46,9 +46,12 @@ const useStyles = makeStyles((theme) => ({
   },
   artContainer: {
     display: "flex",
+    position: "relative",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "80%",
+    height: "80%",
   },
 }));
 
@@ -67,14 +70,16 @@ const Create = () => {
 
   /* Changes */
 
-  // This will post to an unsigned preset in Cloudinary and shall not stay like that when
-  // privacy matters. Turn this into an action that will post to a signed preset, with
-  // signatures and all the things needed for that action in Cloudinary.
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
     const data = new FormData();
+    const { signature, timestamp } = await getSignature(); // Get returned sign and timestamp
+
     data.append("file", files[0]);
-    data.append("upload_preset", "Japhil");
+    data.append("signature", signature); // Signature
+    data.append("timestamp", timestamp); // Timestamp
+    data.append("api_key", "771813118347355"); // API key (MUST BE HIDDEN IN ENV)
+
     setLoading(true);
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dyuvjmyfy/image/upload",
@@ -98,6 +103,8 @@ const Create = () => {
     setSale((e.target as HTMLInputElement).value);
   };
 
+  console.log(loading);
+
   React.useEffect(() => {
     if (sale === "No") {
       setPrice("");
@@ -111,13 +118,13 @@ const Create = () => {
       <Grid container className={classes.grid}>
         {/* Changes */}
         <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
-          <Container className={classes.artContainer}>
+          <div className={classes.artContainer}>
             {/* Fix this alongside the setLoading function, and the CSS */}
             {art && !loading ? (
               <Image
                 src={art}
-                width={500}
-                height={500}
+                layout="fill"
+                objectFit="cover"
                 objectPosition="center"
               />
             ) : loading ? (
@@ -125,13 +132,8 @@ const Create = () => {
             ) : (
               ""
             )}
-
-            {/* We could possibly just use the cloudinary widget which handles the dropzone and 
-                file uploading for us, I'm talking about CSS.
-            */}
-
             {/* Fix this alongside the setLoading function, and the CSS */}
-          </Container>
+          </div>
         </Grid>
         {/* Changes */}
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -254,5 +256,15 @@ const Create = () => {
     </div>
   );
 };
+
+async function getSignature() {
+  //Call API which handles the signature and timestamp
+  const response = await fetch("/api/cloud_sign");
+  //Get the response in JSON format
+  const data = await response.json();
+  //Extract signature and timestamp
+  const { signature, timestamp } = data;
+  return { signature, timestamp };
+}
 
 export default Create;

@@ -16,9 +16,11 @@ import {
   Container,
   Input,
   CircularProgress,
+  Chip,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
 import Image from "next/image";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,18 +61,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Create = () => {
   const classes = useStyles();
-  const [sale, setSale] = React.useState("No");
-  const [price, setPrice] = React.useState("");
+  const [post, setPost] = React.useState({
+    title: "",
+    description: "",
+    art: "",
+    price: "",
+    sale: "No",
+    date: moment().format("l"),
+    tags: [] as string[],
+  });
   const [loading, setLoading] = React.useState(false);
-  {
-    /* Changes */
-  }
-  const [art, setArt] = React.useState("");
-  {
-    /* Changes */
-  }
-
-  /* Changes */
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
@@ -80,7 +80,7 @@ const Create = () => {
     data.append("file", files[0]);
     data.append("signature", signature); // Signature
     data.append("timestamp", timestamp); // Timestamp
-    data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY); // API key (MUST BE HIDDEN IN ENV)
+    data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
 
     setLoading(true);
     const res = await fetch(
@@ -93,38 +93,54 @@ const Create = () => {
     );
 
     const file = await res.json();
-    setArt(file.secure_url);
+    setPost({
+      ...post,
+      art: file.secure_url,
+    });
     setLoading(false);
-    // The Loading here is quite inaccurate, and it needs a bit of fixing. Basically, when it stops
-    // "loading", even if the art is supposedly still 'GET'ting, (which will display none), the circular
-    // progress component won't appear.
-  };
-  /* Changes */
-
-  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSale((e.target as HTMLInputElement).value);
   };
 
-  console.log(loading);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPost({
+      ...post,
+      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement)
+        .value,
+    });
+  };
+
+  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const tags = (e.target as HTMLInputElement).value
+      .split(",")
+      .map((tag) => tag.replace(/\s+/, ""))
+      .filter((tag) => tag !== "");
+    setPost({
+      ...post,
+      tags: tags,
+    });
+  };
+
+  console.log(post);
 
   React.useEffect(() => {
-    if (sale === "No") {
-      setPrice("");
+    if (post.sale === "No") {
+      setPost({
+        ...post,
+        price: "",
+      });
     }
-  }, [sale]);
+  }, [post.sale]);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Appbar />
       <Grid container className={classes.grid}>
-        {/* Changes */}
         <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
+          {/* Art Display */}
           <div className={classes.artContainer}>
-            {/* Fix this alongside the setLoading function, and the CSS */}
-            {art && !loading ? (
+            {post.art && !loading ? (
               <Image
-                src={art}
+                src={post.art}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
@@ -134,10 +150,9 @@ const Create = () => {
             ) : (
               ""
             )}
-            {/* Fix this alongside the setLoading function, and the CSS */}
           </div>
+          {/* Art Display */}
         </Grid>
-        {/* Changes */}
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
             {/* Form */}
@@ -153,6 +168,7 @@ const Create = () => {
                     label="Title"
                     name="title"
                     color="primary"
+                    onChange={handleChange}
                   />
                 </Grid>
                 {/* Changes */}
@@ -173,6 +189,7 @@ const Create = () => {
                     rows={4}
                     multiline={true}
                     rowsMax={8}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -186,9 +203,9 @@ const Create = () => {
                     <RadioGroup
                       row
                       aria-label="Sale"
-                      name="Sale"
-                      onChange={handleSale}
-                      value={sale}
+                      name="sale"
+                      onChange={handleChange}
+                      value={post.sale}
                     >
                       <FormControlLabel
                         value="No"
@@ -208,19 +225,22 @@ const Create = () => {
                     <FormLabel component="legend">Price</FormLabel>
                     <div style={{ marginTop: ".5em" }}>
                       <NumberFormat
-                        value={price}
+                        value={post.price}
                         displayType={"input"}
                         thousandSeparator={true}
                         prefix={"₱"}
-                        disabled={sale === "No" ? true : false}
+                        disabled={post.sale === "No" ? true : false}
                         inputMode="numeric"
                         allowNegative={false}
                         className={classes.price}
                         isNumericString={true}
                         onValueChange={(values) => {
-                          setPrice(values.value);
+                          setPost({
+                            ...post,
+                            price: values.value,
+                          });
                         }}
-                        required={sale === "No" ? false : true}
+                        required={post.sale === "No" ? false : true}
                       />
                     </div>
                   </FormControl>
@@ -234,8 +254,10 @@ const Create = () => {
                     label="Tags"
                     name="tags"
                     color="secondary"
+                    placeholder="Seperate tags with comma (,)"
                     rows={2}
                     multiline={true}
+                    onChange={handleTags}
                   />
                 </Grid>
                 <Grid item xs={12}>

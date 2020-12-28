@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema({
     type: String,
     default: moment().format("l"),
   },
-  sale: Boolean,
+  sale: String,
   price: String,
   image: String,
   tags: Array,

@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     overflow: "auto",
+    backgroundImage: "linear-gradient(65deg, #fff1e6, #ddbea9)",
   },
   artContainer: {
     display: "flex",
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     width: "80%",
     height: "80%",
+    marginTop: theme.spacing(8),
   },
 }));
 
@@ -78,11 +80,11 @@ const Create = () => {
     data.append("file", files[0]);
     data.append("signature", signature); // Signature
     data.append("timestamp", timestamp); // Timestamp
-    data.append("api_key", "771813118347355"); // API key (MUST BE HIDDEN IN ENV)
+    data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY); // API key (MUST BE HIDDEN IN ENV)
 
     setLoading(true);
     const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dyuvjmyfy/image/upload",
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
       {
         method: "POST",
         body: data,
@@ -124,7 +126,7 @@ const Create = () => {
               <Image
                 src={art}
                 layout="fill"
-                objectFit="cover"
+                objectFit="contain"
                 objectPosition="center"
               />
             ) : loading ? (

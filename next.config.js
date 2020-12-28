@@ -1,7 +1,5 @@
 module.exports = {
-  env: {
-    MONGODB_URI: "",
-  },
+  env: {},
   images: {
     domains: ["picsum.photos", "res.cloudinary.com"],
     //Changes

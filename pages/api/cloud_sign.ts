@@ -10,7 +10,7 @@ export default async (_req: NextApiRequest, res: NextApiResponse) => {
     {
       timestamp: timestamp,
     },
-    "HYbaYazvnM4RewXbhwj3i_3NgdQ" //API Secret (MUST BE HIDDEN IN ENV)
+    process.env.CLOUDINARY_SECRET //API Secret (MUST BE HIDDEN IN ENV)
   );
 
   res.statusCode = 200;

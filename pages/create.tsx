@@ -21,6 +21,7 @@ import {
 import Appbar from "./Components/Appbar";
 import Image from "next/image";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,6 +72,7 @@ const Create = () => {
     tags: [] as string[],
   });
   const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = (e.target as HTMLInputElement).files;
@@ -119,8 +121,6 @@ const Create = () => {
     });
   };
 
-  console.log(post);
-
   React.useEffect(() => {
     if (post.sale === "No") {
       setPost({
@@ -129,6 +129,25 @@ const Create = () => {
       });
     }
   }, [post.sale]);
+
+  console.log(post);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("api/Posts", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post),
+      });
+      router.push("/home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -156,7 +175,7 @@ const Create = () => {
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={classes.paper}>
             {/* Form */}
-            <form>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
@@ -173,7 +192,12 @@ const Create = () => {
                 </Grid>
                 {/* Changes */}
                 <Grid item xs={12}>
-                  <Input type="file" name="image" onChange={handleArt} />
+                  <Input
+                    type="file"
+                    name="image"
+                    onChange={handleArt}
+                    required
+                  />
                 </Grid>
                 {/* Changes */}
                 <Grid item xs={12}>
@@ -254,10 +278,11 @@ const Create = () => {
                     label="Tags"
                     name="tags"
                     color="secondary"
-                    placeholder="Seperate tags with comma (,)"
+                    placeholder="Seperate tags with comma (,) and input atleast 1 Tag"
                     rows={2}
                     multiline={true}
                     onChange={handleTags}
+                    required
                   />
                 </Grid>
                 <Grid item xs={12}>

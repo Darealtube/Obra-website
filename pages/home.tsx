@@ -12,12 +12,22 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Grid,
   Fab,
+  Chip,
 } from "@material-ui/core";
 import { useState } from "react";
-import { Feature, Recent } from "./Components/gridListItems";
 import Appbar from "./Components/Appbar";
 import { Palette } from "@material-ui/icons";
+import { GetStaticProps } from "next";
+import dbConnect from "./utils/dbConnect";
+import Post from "./model/Post";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,12 +54,25 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: theme.spacing(2),
       right: theme.spacing(1),
     },
+    card: {
+      width: "20em",
+    },
+    feature: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+    tag: {
+      marginTop: theme.spacing(0.2),
+      marginRight: theme.spacing(0.2),
+    },
   })
 );
 
-const Home = () => {
+const Home = ({ posts }) => {
   const classes = useStyles();
+  const router = useRouter();
   const [intro, setIntro] = useState(true);
+  console.log(posts);
 
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -62,10 +85,92 @@ const Home = () => {
       <Container className={classes.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={classes.divider} />
-        <Feature /> {/* Featured list */}
+        {/* Featured list */}
+        <Grid container spacing={4} className={classes.feature}>
+          {posts &&
+            posts.map((post) => (
+              <Grid item>
+                <Card className={classes.card}>
+                  <CardMedia
+                    component="img"
+                    alt="Featured Art No.1"
+                    height="140"
+                    image={post.art}
+                    title="Featured Art No.1"
+                  />
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {post.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {post.description}
+                      </Typography>
+                      <Typography>
+                        {post.tags.map((tag) => (
+                          <Chip label={tag} className={classes.tag} />
+                        ))}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button size="small" color="primary">
+                      View
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+        </Grid>
+        {/* Featured list */}
         <Divider className={classes.divider} />
         <Typography variant="h4">Recently</Typography>
-        <Recent /> {/* Recent posts list */}
+        {/* Recent posts list */}
+        <Grid container spacing={4} className={classes.feature}>
+          {posts &&
+            posts.map((post) => (
+              <Grid item>
+                <Card className={classes.card}>
+                  <CardMedia
+                    component="img"
+                    alt="Featured Art No.1"
+                    height="140"
+                    image={post.art}
+                    title="Featured Art No.1"
+                  />
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {post.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {post.description}
+                      </Typography>
+                      <Typography>
+                        {post.tags.map((tag) => (
+                          <Chip label={tag} className={classes.tag} />
+                        ))}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button size="small" color="primary">
+                      View
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+        </Grid>
+        {/* Recent posts list */}
       </Container>
       {/* Intro dialogue */}
       <Dialog
@@ -110,6 +215,19 @@ const Home = () => {
       {/* Link to Create page */}
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  await dbConnect();
+  /* find all the data in our database */
+  const result = await Post.find({});
+  const posts = result.map((data) => {
+    const post = data.toObject();
+    post._id = post._id.toString();
+    return post;
+  });
+  console.log(posts);
+  return { props: { posts: posts } };
 };
 
 export default Home;

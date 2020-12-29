@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema({
   },
   sale: String,
   price: String,
-  image: String,
+  art: String,
   tags: Array,
   title: {
     type: String,
@@ -21,6 +21,7 @@ const PostSchema = new mongoose.Schema({
     required: true,
     maxLength: [400, "Explain it more briefly."],
   },
+  likes: Number,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);

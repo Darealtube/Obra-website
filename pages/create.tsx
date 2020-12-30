@@ -130,8 +130,6 @@ const Create = () => {
     }
   }, [post.sale]);
 
-  console.log(post);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -143,9 +141,14 @@ const Create = () => {
         },
         body: JSON.stringify(post),
       });
+
+      if (!res.ok) {
+        throw new Error("404 not found");
+      }
+
       router.push("/home");
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
@@ -210,9 +213,9 @@ const Create = () => {
                     label="Description"
                     name="description"
                     color="primary"
-                    rows={4}
+                    rows={3}
                     multiline={true}
-                    rowsMax={8}
+                    rowsMax={4}
                     onChange={handleChange}
                   />
                 </Grid>

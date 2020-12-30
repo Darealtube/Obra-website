@@ -20,6 +20,8 @@ import {
   Grid,
   Fab,
   Chip,
+  CardHeader,
+  Avatar,
 } from "@material-ui/core";
 import { useState } from "react";
 import Appbar from "./Components/Appbar";
@@ -65,15 +67,20 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(0.2),
       marginRight: theme.spacing(0.2),
     },
+    title: {
+      whiteSpace: "normal",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      WebkitLineClamp: 2,
+      WebkitBoxOrient: "vertical",
+    },
   })
 );
 
 const Home = ({ posts }) => {
   const classes = useStyles();
-  const router = useRouter();
   const [intro, setIntro] = useState(true);
-  console.log(posts);
-
+  const router = useRouter();
   const handleBackdrop = () => {
     setIntro(!intro);
   };
@@ -106,15 +113,13 @@ const Home = ({ posts }) => {
                       <Typography
                         variant="body2"
                         color="textSecondary"
-                        component="p"
+                        className={classes.title}
                       >
-                        {post.description}
+                        {post.title}
                       </Typography>
-                      <Typography>
-                        {post.tags.map((tag) => (
-                          <Chip label={tag} className={classes.tag} />
-                        ))}
-                      </Typography>
+                      {post.tags.map((tag) => (
+                        <Chip label={tag} className={classes.tag} />
+                      ))}
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
@@ -135,6 +140,11 @@ const Home = ({ posts }) => {
             posts.map((post) => (
               <Grid item>
                 <Card className={classes.card}>
+                  <CardHeader
+                    avatar={<Avatar aria-label="User">D</Avatar>}
+                    title="Author"
+                    subheader={post.date}
+                  />
                   <CardMedia
                     component="img"
                     alt="Featured Art No.1"
@@ -144,21 +154,17 @@ const Home = ({ posts }) => {
                   />
                   <CardActionArea>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
+                      <Typography
+                        variant="h6"
+                        color="textSecondary"
+                        className={classes.title}
+                      >
                         {post.title}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {post.description}
-                      </Typography>
-                      <Typography>
-                        {post.tags.map((tag) => (
-                          <Chip label={tag} className={classes.tag} />
-                        ))}
-                      </Typography>
+                      <br />
+                      {post.tags.map((tag) => (
+                        <Chip label={tag} className={classes.tag} />
+                      ))}
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
@@ -226,7 +232,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     post._id = post._id.toString();
     return post;
   });
-  console.log(posts);
   return { props: { posts: posts } };
 };
 

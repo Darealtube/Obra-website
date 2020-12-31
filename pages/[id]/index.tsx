@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetStaticPaths } from "next";
 import dbConnect from "../utils/dbConnect";
 import Post from "../model/Post";
 import Appbar from "../Components/Appbar";
@@ -25,11 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const PostID = ({ post }) => {
   const classes = useStyles();
-
+  console.log(post);
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Appbar />
       <Grid container className={classes.grid}>
         <Grid item>
           <Card>
@@ -43,9 +42,22 @@ const PostID = ({ post }) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   await dbConnect();
-  const result = await Post.findById({ _id: context.params });
+  const result = await Post.findById(context.params.id).lean();
   result._id = result._id.toString();
   return { props: { post: result } };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  await dbConnect();
+  const result = await Post.find({});
+  const paths = result.map((post) => {
+    return { params: { id: post._id.toString() } };
+  });
+
+  return {
+    paths: paths,
+    fallback: false,
+  };
 };
 
 export default PostID;

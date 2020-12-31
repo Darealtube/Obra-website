@@ -105,7 +105,7 @@ const Home = ({ posts }) => {
                     image={post.art}
                     title="Featured Art No.1"
                   />
-                  <CardActionArea>
+                  <CardActionArea onClick={() => router.push(`/${post._id}`)}>
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
                         {post.title}
@@ -232,7 +232,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     post._id = post._id.toString();
     return post;
   });
-  return { props: { posts: posts } };
+  return { props: { posts: posts }, revalidate: 1 };
 };
 
 export default Home;

@@ -2,6 +2,7 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import dbConnect from "../utils/dbConnect";
 import Post from "../model/Post";
 import Appbar from "../Components/Appbar";
+import useSWR from "swr";
 import {
   Theme,
   makeStyles,
@@ -9,7 +10,14 @@ import {
   createStyles,
   Grid,
   Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Typography,
+  Avatar,
+  CardActionArea,
 } from "@material-ui/core";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,16 +31,43 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 const PostID = ({ post }) => {
+  const router = useRouter();
+  const url = `http://localhost:3000/api/Posts/${router.query.id}`;
   const classes = useStyles();
-  console.log(post);
+  const { data: postId, error } = useSWR(url, fetcher);
+  if (error) return <h1>Something went wrong!</h1>;
+  if (!postId) return <h1>Loading...</h1>;
+
+  console.log(postId);
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Grid container className={classes.grid}>
         <Grid item>
           <Card>
-            <h1>{post.title}</h1>
+            <CardHeader
+              avatar={<Avatar aria-label="User">D</Avatar>}
+              title="Author"
+              subheader={postId.date}
+            />
+            <CardMedia
+              component="img"
+              alt="Featured Art No.1"
+              height="140"
+              image={postId.art}
+              title="Featured Art No.1"
+            />
+            <CardActionArea>
+              <CardContent>
+                <Typography variant="h6" color="textSecondary">
+                  {postId.title}
+                </Typography>
+                <br />
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
       </Grid>

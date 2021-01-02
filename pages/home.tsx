@@ -30,6 +30,7 @@ import { GetStaticProps } from "next";
 import dbConnect from "./utils/dbConnect";
 import Post from "./model/Post";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -98,6 +99,12 @@ const Home = ({ posts }) => {
             posts.map((post) => (
               <Grid item>
                 <Card className={classes.card}>
+                  <CardHeader
+                    avatar={<Avatar aria-label="User">D</Avatar>}
+                    title="Author"
+                    subheader={post.date}
+                  />
+
                   <CardMedia
                     component="img"
                     alt="Featured Art No.1"
@@ -105,23 +112,23 @@ const Home = ({ posts }) => {
                     image={post.art}
                     title="Featured Art No.1"
                   />
-                  <CardActionArea onClick={() => router.push(`/${post._id}`)}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {post.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        className={classes.title}
-                      >
-                        {post.title}
-                      </Typography>
-                      {post.tags.map((tag) => (
-                        <Chip label={tag} className={classes.tag} />
-                      ))}
-                    </CardContent>
-                  </CardActionArea>
+                  <Link href="/[id]" as={`/${post._id}`}>
+                    <CardActionArea>
+                      <CardContent>
+                        <Typography
+                          variant="h6"
+                          color="textSecondary"
+                          className={classes.title}
+                        >
+                          {post.title}
+                        </Typography>
+                        <br />
+                        {post.tags.map((tag) => (
+                          <Chip label={tag} className={classes.tag} />
+                        ))}
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
                   <CardActions>
                     <Button size="small" color="primary">
                       View

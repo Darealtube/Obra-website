@@ -12,7 +12,6 @@ import {
   Avatar,
   Popover,
   Box,
-  Fab,
 } from "@material-ui/core";
 import { Items, Menu, Notification } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";

@@ -97,7 +97,7 @@ const Home = ({ posts }) => {
         <Grid container spacing={4} className={classes.feature}>
           {posts &&
             posts.map((post) => (
-              <Grid item>
+              <Grid item key={post._id}>
                 <Card className={classes.card}>
                   <CardHeader
                     avatar={<Avatar aria-label="User">D</Avatar>}
@@ -112,7 +112,7 @@ const Home = ({ posts }) => {
                     image={post.art}
                     title="Featured Art No.1"
                   />
-                  <Link href="/[id]" as={`/${post._id}`}>
+                  <Link href={`/${post._id}`}>
                     <CardActionArea>
                       <CardContent>
                         <Typography
@@ -145,13 +145,14 @@ const Home = ({ posts }) => {
         <Grid container spacing={4} className={classes.feature}>
           {posts &&
             posts.map((post) => (
-              <Grid item>
+              <Grid item key={post._id}>
                 <Card className={classes.card}>
                   <CardHeader
                     avatar={<Avatar aria-label="User">D</Avatar>}
                     title="Author"
                     subheader={post.date}
                   />
+
                   <CardMedia
                     component="img"
                     alt="Featured Art No.1"
@@ -159,21 +160,23 @@ const Home = ({ posts }) => {
                     image={post.art}
                     title="Featured Art No.1"
                   />
-                  <CardActionArea>
-                    <CardContent>
-                      <Typography
-                        variant="h6"
-                        color="textSecondary"
-                        className={classes.title}
-                      >
-                        {post.title}
-                      </Typography>
-                      <br />
-                      {post.tags.map((tag) => (
-                        <Chip label={tag} className={classes.tag} />
-                      ))}
-                    </CardContent>
-                  </CardActionArea>
+                  <Link href={`/${post._id}`}>
+                    <CardActionArea>
+                      <CardContent>
+                        <Typography
+                          variant="h6"
+                          color="textSecondary"
+                          className={classes.title}
+                        >
+                          {post.title}
+                        </Typography>
+                        <br />
+                        {post.tags.map((tag) => (
+                          <Chip label={tag} className={classes.tag} />
+                        ))}
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
                   <CardActions>
                     <Button size="small" color="primary">
                       View

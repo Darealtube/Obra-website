@@ -22,6 +22,8 @@ const PostSchema = new mongoose.Schema({
     maxLength: [400, "Explain it more briefly."],
   },
   likes: Number,
+  comments: Array,
+  forSale: Boolean,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);

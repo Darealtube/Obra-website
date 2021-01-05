@@ -4,10 +4,7 @@ import Post from "../model/Post";
 import Appbar from "../Components/Appbar";
 import useSWR from "swr";
 import {
-  Theme,
-  makeStyles,
   CssBaseline,
-  createStyles,
   Grid,
   Card,
   CardHeader,
@@ -28,82 +25,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import SkeletonPost from "../Components/idSkeleton";
+import styles from "../styles/Specific/Post.module.css";
+import { CardList } from "../Components/CardList";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    grid: {
-      height: "100%",
-      position: "relative",
-    },
-    artContainer: {
-      display: "flex",
-      position: "relative",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      width: 500,
-      height: 500,
-      background: "black",
-    },
-    appBarSpacer: theme.mixins.toolbar,
-    information: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    tag: {
-      marginRight: theme.spacing(0.2),
-    },
-    postInfo: {
-      display: "flex",
-      position: "relative",
-      justifyContent: "flex-start",
-      marginTop: theme.spacing(10),
-    },
-    recommended: {
-      marginTop: theme.spacing(10),
-    },
-    card: {
-      width: "20em",
-      marginBottom: theme.spacing(2),
-    },
-    recommendedList: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: theme.spacing(2),
-    },
-    dialog: {
-      width: "100em",
-      Height: "100em",
-      position: "relative",
-    },
-  })
-);
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const PostID = ({ recommendedPosts }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const url = `http://localhost:3000/api/Posts/${router.query.id}`;
-  const classes = useStyles();
   const { data: postId, error } = useSWR(url, fetcher);
   if (error) return <h1>Something went wrong!</h1>;
   if (!postId) return <SkeletonPost />;
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
       <CssBaseline />
       <Appbar />
-      <Grid container className={classes.grid}>
-        <Grid item lg={8} className={classes.postInfo}>
+      <Grid container className={styles.grid}>
+        <Grid item lg={8} className={styles.postInfo}>
           <Container>
             <Grid container spacing={2}>
-              <Grid item lg={6} className={classes.artContainer}>
+              <Grid item lg={6} className={styles.artContainer}>
                 {postId.art && (
                   <Image
                     src={postId.art}
@@ -113,7 +56,7 @@ const PostID = ({ recommendedPosts }) => {
                   />
                 )}
               </Grid>
-              <Grid item lg={6} className={classes.information}>
+              <Grid item lg={6} className={styles.information}>
                 <Grid container spacing={2}>
                   <Grid item lg={12}>
                     <Typography variant="h4" style={{ wordWrap: "break-word" }}>
@@ -132,7 +75,7 @@ const PostID = ({ recommendedPosts }) => {
                   </Grid>
                   <Grid item lg={12}>
                     {postId.tags.map((tag) => {
-                      <Chip label={tag} className={classes.tag}></Chip>;
+                      <Chip label={tag} className={styles.tag}></Chip>;
                     })}
                   </Grid>
                   <Grid item lg={12}>
@@ -159,54 +102,29 @@ const PostID = ({ recommendedPosts }) => {
             <Typography></Typography>
           </Container>
         </Grid>
-        <Grid item lg={4} className={classes.recommended}>
+        <Grid item lg={4} className={styles.recommended}>
           <Container>
             <Typography variant="h4">Recommended List</Typography>
             <Divider />
-            <Container className={classes.recommendedList}>
-              {recommendedPosts &&
-                recommendedPosts.map((post) => (
-                  <Card className={classes.card} key={post._id}>
-                    <CardHeader
-                      avatar={<Avatar aria-label="User">D</Avatar>}
-                      title="Author"
-                      subheader={post.date}
-                    />
-
-                    <CardMedia
-                      component="img"
-                      alt="Featured Art No.1"
-                      height="140"
-                      image={post.art}
-                      title="Featured Art No.1"
-                    />
-                    <Link href={`/${post._id}`}>
-                      <CardActionArea>
-                        <CardContent>
-                          <Typography variant="h6" color="textSecondary">
-                            {post.title}
-                          </Typography>
-                          <br />
-                          {post.tags.map((tag) => (
-                            <Chip label={tag} className={classes.tag} />
-                          ))}
-                        </CardContent>
-                      </CardActionArea>
-                    </Link>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        View
-                      </Button>
-                    </CardActions>
-                  </Card>
-                ))}
+            {/* Understand this further */}
+            <Container className={styles.recommendedList}>
+              {recommendedPosts.map((post) => (
+                <CardList
+                  _id={post._id}
+                  date={post.date}
+                  art={post.art}
+                  title={post.title}
+                  tags={post.tags}
+                />
+              ))}
             </Container>
+            {/* Understand this further */}
           </Container>
         </Grid>
       </Grid>
 
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <Container className={classes.dialog}>
+        <Container className={styles.dialog}>
           <Image src={postId.art} layout="fill" objectFit="contain" />
         </Container>
       </Dialog>

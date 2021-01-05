@@ -6,62 +6,22 @@ import {
   Paper,
   Grid,
   TextField,
-  makeStyles,
   FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
   Button,
-  Container,
   Input,
   CircularProgress,
-  Chip,
 } from "@material-ui/core";
 import Appbar from "./Components/Appbar";
 import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: "flex",
-    flexDirection: "column",
-  },
-  grid: {
-    height: "100vh",
-  },
-  price: {
-    width: "100%",
-    height: "2em",
-  },
-  displayArt: {
-    display: "flex",
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "auto",
-    backgroundImage: "linear-gradient(65deg, #fff1e6, #ddbea9)",
-  },
-  artContainer: {
-    display: "flex",
-    position: "relative",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "80%",
-    height: "80%",
-    marginTop: theme.spacing(8),
-  },
-}));
+import styles from "./styles/General/Create.module.css";
 
 const Create = () => {
-  const classes = useStyles();
   const [post, setPost] = React.useState({
     title: "",
     description: "",
@@ -153,13 +113,13 @@ const Create = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
       <CssBaseline />
       <Appbar />
-      <Grid container className={classes.grid}>
-        <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
+      <Grid container className={styles.grid}>
+        <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
           {/* Art Display */}
-          <div className={classes.artContainer}>
+          <div className={styles.artContainer}>
             {post.art && !loading ? (
               <Image
                 src={post.art}
@@ -176,7 +136,7 @@ const Create = () => {
           {/* Art Display */}
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
+          <div className={styles.paper}>
             {/* Form */}
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
@@ -259,7 +219,7 @@ const Create = () => {
                         disabled={post.sale === "No" ? true : false}
                         inputMode="numeric"
                         allowNegative={false}
-                        className={classes.price}
+                        className={styles.price}
                         isNumericString={true}
                         onValueChange={(values) => {
                           setPost({

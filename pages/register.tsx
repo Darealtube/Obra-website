@@ -9,37 +9,23 @@ import {
   Typography,
   Button,
   TextField,
-  makeStyles,
   Box,
 } from "@material-ui/core";
 import PaletteIcon from "@material-ui/icons/Palette";
 import Image from "next/image";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
-  sideImage: {
-    position: "relative",
-  },
-  paper: {
-    margin: theme.spacing(2, 4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import styles from "./styles/General/Register.module.css";
 
 const Register = () => {
-  const classes = useStyles();
   const router = useRouter();
+  const requirements = [
+    { label: "Username", size: 6 as 6 },
+    { label: "Password", size: 6 as 6 },
+    { label: "Email", size: 4 as 4 },
+    { label: "Age", size: 4 as 4 },
+    { label: "Phone", size: 4 as 4 },
+    { label: "Country", size: 6 as 6 },
+    { label: "City", size: 6 as 6 },
+  ];
 
   function Copyright() {
     return (
@@ -53,12 +39,12 @@ const Register = () => {
 
   return (
     <div>
-      <Grid container className={classes.root}>
+      <Grid container className={styles.root}>
         <CssBaseline />
 
         {/* Form */}
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
+          <div className={styles.paper}>
             <Toolbar>
               <PaletteIcon fontSize="large" />
               <Typography variant="h4" color="inherit" noWrap>
@@ -68,115 +54,32 @@ const Register = () => {
             <br />
             <Typography variant="h5">Log In</Typography>
 
-            <form
-              className={classes.form}
-              onSubmit={() => router.push("/home")}
-            >
+            <form className={styles.form} onSubmit={() => router.push("/home")}>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    name="username"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="password"
-                    label="Password"
-                    name="password"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
-                <Grid item xs={4}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
-                <Grid item xs={4}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="age"
-                    label="Age"
-                    name="age"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
-                <Grid item xs={4}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="phone"
-                    label="Phone Number"
-                    name="phone"
-                    color="primary"
-                    helperText="Optional."
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="country"
-                    label="Country"
-                    name="country"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="city"
-                    label="City/State"
-                    name="city"
-                    autoFocus
-                    color="primary"
-                  />
-                </Grid>
-
+                {/* Form */}
+                {requirements.map((requirement) => (
+                  <Grid item xs={requirement.size}>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id={requirement.label}
+                      label={requirement.label}
+                      name={requirement.label}
+                      autoFocus
+                      color="primary"
+                    />
+                  </Grid>
+                ))}
+                {/* Form */}
                 <Grid item xs={12}>
                   <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    className={styles.submit}
                   >
                     <span style={{ color: "white" }}>Register</span>
                   </Button>
@@ -199,7 +102,7 @@ const Register = () => {
         {/* Form */}
 
         {/* Side Image */}
-        <Grid item xs={false} sm={4} md={7} className={classes.sideImage}>
+        <Grid item xs={false} sm={4} md={7} className={styles.sideImage}>
           <Image
             src="https://picsum.photos/700"
             alt="Scenery image"

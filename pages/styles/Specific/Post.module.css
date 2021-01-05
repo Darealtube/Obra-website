@@ -1,0 +1,58 @@
+.root {
+  display: flex;
+}
+
+.grid {
+  height: 100%;
+  position: relative;
+}
+
+.artContainer {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500;
+  height: 500;
+  background: black;
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+}
+
+.tag {
+  margin-right: 1.6px;
+}
+
+.postInfo {
+  display: flex;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 80px;
+}
+
+.recommended {
+  margin-top: 80px;
+}
+
+.card {
+  width: 20em;
+  margin-bottom: 16px;
+}
+
+.recommendedList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.dialog {
+  width: 100em;
+  height: 100em;
+  position: relative;
+}

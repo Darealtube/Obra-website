@@ -1,8 +1,5 @@
 import {
-  Theme,
-  makeStyles,
   CssBaseline,
-  createStyles,
   Typography,
   Container,
   Divider,
@@ -29,76 +26,28 @@ import { Palette } from "@material-ui/icons";
 import { GetStaticProps } from "next";
 import dbConnect from "./utils/dbConnect";
 import Post from "./model/Post";
-import { useRouter } from "next/router";
 import Link from "next/link";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    content: {
-      marginTop: theme.spacing(10),
-      display: "flex",
-      flexDirection: "column",
-    },
-    divider: {
-      height: "10px",
-      marginTop: theme.spacing(1.5),
-      marginBottom: theme.spacing(1.5),
-    },
-    backdrop: {
-      zIndex: theme.zIndex.drawer + 1,
-      color: "#fff",
-    },
-    fab: {
-      position: "fixed",
-      bottom: theme.spacing(2),
-      right: theme.spacing(1),
-    },
-    card: {
-      width: "20em",
-    },
-    feature: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    tag: {
-      marginTop: theme.spacing(0.2),
-      marginRight: theme.spacing(0.2),
-    },
-    title: {
-      whiteSpace: "normal",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      WebkitLineClamp: 2,
-      WebkitBoxOrient: "vertical",
-    },
-  })
-);
+import styles from "./styles/General/Home.module.css";
 
 const Home = ({ posts }) => {
-  const classes = useStyles();
   const [intro, setIntro] = useState(true);
-  const router = useRouter();
   const handleBackdrop = () => {
     setIntro(!intro);
   };
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
       <CssBaseline />
       <Appbar /> {/* Appbar */}
-      <Container className={classes.content}>
+      <Container className={styles.content}>
         <Typography variant="h4">Featured</Typography>
-        <Divider className={classes.divider} />
+        <Divider className={styles.divider} />
         {/* Featured list */}
-        <Grid container spacing={4} className={classes.feature}>
+        <Grid container spacing={4} className={styles.feature}>
           {posts &&
             posts.map((post) => (
               <Grid item key={post._id}>
-                <Card className={classes.card}>
+                <Card className={styles.card}>
                   <CardHeader
                     avatar={<Avatar aria-label="User">D</Avatar>}
                     title="Author"
@@ -118,13 +67,13 @@ const Home = ({ posts }) => {
                         <Typography
                           variant="h6"
                           color="textSecondary"
-                          className={classes.title}
+                          className={styles.title}
                         >
                           {post.title}
                         </Typography>
                         <br />
                         {post.tags.map((tag) => (
-                          <Chip label={tag} className={classes.tag} />
+                          <Chip label={tag} className={styles.tag} />
                         ))}
                       </CardContent>
                     </CardActionArea>
@@ -139,14 +88,14 @@ const Home = ({ posts }) => {
             ))}
         </Grid>
         {/* Featured list */}
-        <Divider className={classes.divider} />
+        <Divider className={styles.divider} />
         <Typography variant="h4">Recently</Typography>
         {/* Recent posts list */}
-        <Grid container spacing={4} className={classes.feature}>
+        <Grid container spacing={4} className={styles.feature}>
           {posts &&
             posts.map((post) => (
               <Grid item key={post._id}>
-                <Card className={classes.card}>
+                <Card className={styles.card}>
                   <CardHeader
                     avatar={<Avatar aria-label="User">D</Avatar>}
                     title="Author"
@@ -166,13 +115,13 @@ const Home = ({ posts }) => {
                         <Typography
                           variant="h6"
                           color="textSecondary"
-                          className={classes.title}
+                          className={styles.title}
                         >
                           {post.title}
                         </Typography>
                         <br />
                         {post.tags.map((tag) => (
-                          <Chip label={tag} className={classes.tag} />
+                          <Chip label={tag} className={styles.tag} />
                         ))}
                       </CardContent>
                     </CardActionArea>
@@ -221,7 +170,7 @@ const Home = ({ posts }) => {
       {/* Link to Create page */}
       <Fab
         aria-label="Create"
-        className={classes.fab}
+        className={styles.fab}
         size="large"
         color="primary"
         href="/create"

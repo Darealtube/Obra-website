@@ -24,6 +24,7 @@ const PostSchema = new mongoose.Schema({
   likes: Number,
   comments: Array,
   forSale: Boolean,
+  forSalePrice: String,
 });
 
 export default mongoose.models.Post || mongoose.model("Post", PostSchema);

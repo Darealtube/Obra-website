@@ -10,35 +10,11 @@ import {
   Typography,
   Button,
   TextField,
-  makeStyles,
-  Box,
 } from "@material-ui/core";
 import PaletteIcon from "@material-ui/icons/Palette";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100vh",
-  },
-  sideImage: {
-    position: "relative",
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import styles from "./styles/General/Login.module.css";
 
 const Login = () => {
-  const classes = useStyles();
   const router = useRouter();
 
   function Copyright() {
@@ -53,10 +29,10 @@ const Login = () => {
 
   return (
     <div>
-      <Grid container className={classes.root}>
+      <Grid container className={styles.root}>
         <CssBaseline />
         {/* Side Image */}
-        <Grid item xs={12} sm={4} md={7} className={classes.sideImage}>
+        <Grid item xs={12} sm={4} md={7} className={styles.sideImage}>
           <Image
             src="https://picsum.photos/600"
             alt="Scenery image"
@@ -69,7 +45,7 @@ const Login = () => {
 
         {/* Form */}
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
+          <div className={styles.paper}>
             <Toolbar>
               <PaletteIcon fontSize="large" />
               <Typography variant="h4" color="inherit" noWrap>
@@ -79,10 +55,7 @@ const Login = () => {
             <br />
             <Typography variant="h5">Log In</Typography>
 
-            <form
-              className={classes.form}
-              onSubmit={() => router.push("/home")}
-            >
+            <form className={styles.form} onSubmit={() => router.push("/home")}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -115,7 +88,7 @@ const Login = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={classes.submit}
+                className={styles.submit}
               >
                 Log In
               </Button>

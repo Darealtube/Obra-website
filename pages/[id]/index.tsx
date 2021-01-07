@@ -1,4 +1,4 @@
-import { GetStaticProps, GetStaticPaths } from "next";
+import { GetStaticProps, GetStaticPaths, GetStaticPropsResult } from "next";
 import dbConnect from "../utils/dbConnect";
 import Post from "../model/Post";
 import Appbar from "../Components/Appbar";
@@ -27,10 +27,15 @@ import { useState } from "react";
 import SkeletonPost from "../Components/idSkeleton";
 import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../Components/CardList";
+import { PostInterface } from "../interfaces/PostInterface";
+
+interface RecommendedData {
+  recommendedPosts: PostInterface[];
+}
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const PostID = ({ recommendedPosts }) => {
+const PostID = ({ recommendedPosts }: RecommendedData) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const url = `http://localhost:3000/api/Posts/${router.query.id}`;
@@ -99,26 +104,17 @@ const PostID = ({ recommendedPosts }) => {
               </Grid>
             </Grid>
             <Typography variant="h2">Comments</Typography>
-            <Typography></Typography>
           </Container>
         </Grid>
         <Grid item lg={4} className={styles.recommended}>
           <Container>
             <Typography variant="h4">Recommended List</Typography>
             <Divider />
-            {/* Understand this further */}
+            {/* Recommended List */}
             <Container className={styles.recommendedList}>
-              {recommendedPosts.map((post) => (
-                <CardList
-                  _id={post._id}
-                  date={post.date}
-                  art={post.art}
-                  title={post.title}
-                  tags={post.tags}
-                />
-              ))}
+              <CardList postData={recommendedPosts} />
             </Container>
-            {/* Understand this further */}
+            {/* Recommended List */}
           </Container>
         </Grid>
       </Grid>
@@ -132,7 +128,9 @@ const PostID = ({ recommendedPosts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (
+  context
+): Promise<GetStaticPropsResult<RecommendedData>> => {
   await dbConnect();
   const result = await Post.findById(context.params.id).lean();
   const recommended = await Post.find({});
@@ -142,7 +140,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return post;
   });
   result._id = result._id.toString();
-  return { props: { post: result, recommendedPosts } };
+  return { props: { recommendedPosts } };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

@@ -23,13 +23,19 @@ import {
 import { useState } from "react";
 import Appbar from "./Components/Appbar";
 import { Palette } from "@material-ui/icons";
-import { GetStaticProps } from "next";
+import { GetStaticProps, GetStaticPropsResult } from "next";
 import dbConnect from "./utils/dbConnect";
 import Post from "./model/Post";
 import Link from "next/link";
 import styles from "./styles/General/Home.module.css";
+import { CardList } from "./Components/CardList";
+import { PostInterface } from "./interfaces/PostInterface";
 
-const Home = ({ posts }) => {
+interface PostData {
+  posts: PostInterface[];
+}
+
+const Home = ({ posts }: PostData) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -182,7 +188,9 @@ const Home = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (
+  context
+): Promise<GetStaticPropsResult<PostData>> => {
   await dbConnect();
   /* find all the data in our database */
   const result = await Post.find({});

@@ -29,7 +29,8 @@
     "react-bootstrap": "^1.4.0",
     "react-dom": "17.0.1",
     "react-number-format": "^4.4.1",
-    "swr": "^0.3.11"
+    "swr": "^0.3.11",
+    "unfetch": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.10",

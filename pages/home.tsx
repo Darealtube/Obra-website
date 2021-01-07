@@ -9,16 +9,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Grid,
   Fab,
-  Chip,
-  CardHeader,
-  Avatar,
 } from "@material-ui/core";
 import { useState } from "react";
 import Appbar from "./Components/Appbar";
@@ -26,14 +17,17 @@ import { Palette } from "@material-ui/icons";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import dbConnect from "./utils/dbConnect";
 import Post from "./model/Post";
-import Link from "next/link";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "./Components/CardList";
 import { PostInterface } from "./interfaces/PostInterface";
+import useSWR from "swr";
+import fetch from "unfetch";
 
 interface PostData {
   posts: PostInterface[];
 }
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = ({ posts }: PostData) => {
   const [intro, setIntro] = useState(true);
@@ -49,98 +43,13 @@ const Home = ({ posts }: PostData) => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <Grid container spacing={4} className={styles.feature}>
-          {posts &&
-            posts.map((post) => (
-              <Grid item key={post._id}>
-                <Card className={styles.card}>
-                  <CardHeader
-                    avatar={<Avatar aria-label="User">D</Avatar>}
-                    title="Author"
-                    subheader={post.date}
-                  />
-
-                  <CardMedia
-                    component="img"
-                    alt="Featured Art No.1"
-                    height="140"
-                    image={post.art}
-                    title="Featured Art No.1"
-                  />
-                  <Link href={`/${post._id}`}>
-                    <CardActionArea>
-                      <CardContent>
-                        <Typography
-                          variant="h6"
-                          color="textSecondary"
-                          className={styles.title}
-                        >
-                          {post.title}
-                        </Typography>
-                        <br />
-                        {post.tags.map((tag) => (
-                          <Chip label={tag} className={styles.tag} />
-                        ))}
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-        </Grid>
+        <CardList postData={posts} />
         {/* Featured list */}
-        <Divider className={styles.divider} />
-        <Typography variant="h4">Recently</Typography>
-        {/* Recent posts list */}
-        <Grid container spacing={4} className={styles.feature}>
-          {posts &&
-            posts.map((post) => (
-              <Grid item key={post._id}>
-                <Card className={styles.card}>
-                  <CardHeader
-                    avatar={<Avatar aria-label="User">D</Avatar>}
-                    title="Author"
-                    subheader={post.date}
-                  />
 
-                  <CardMedia
-                    component="img"
-                    alt="Featured Art No.1"
-                    height="140"
-                    image={post.art}
-                    title="Featured Art No.1"
-                  />
-                  <Link href={`/${post._id}`}>
-                    <CardActionArea>
-                      <CardContent>
-                        <Typography
-                          variant="h6"
-                          color="textSecondary"
-                          className={styles.title}
-                        >
-                          {post.title}
-                        </Typography>
-                        <br />
-                        {post.tags.map((tag) => (
-                          <Chip label={tag} className={styles.tag} />
-                        ))}
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-        </Grid>
+        <Typography variant="h4">Recently</Typography>
+        <Divider className={styles.divider} />
+        {/* Recent posts list */}
+        <CardList postData={posts} />
         {/* Recent posts list */}
       </Container>
       {/* Intro dialogue */}

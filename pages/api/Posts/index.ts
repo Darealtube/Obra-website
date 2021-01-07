@@ -14,8 +14,13 @@ export default async function handler(
   switch (method) {
     case "GET": // GET Posts
       try {
-        const posts = await Post.find({});
-        res.status(200).json({ success: true, data: posts });
+        const result = await Post.find({});
+        const posts = result.map((data) => {
+          const post = data.toObject();
+          post._id = post._id.toString();
+          return post;
+        });
+        res.status(200).json(posts);
       } catch (error) {
         res.status(400).json({ success: false });
       }

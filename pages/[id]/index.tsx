@@ -6,28 +6,21 @@ import useSWR from "swr";
 import {
   CssBaseline,
   Grid,
-  Card,
-  CardHeader,
-  CardMedia,
-  CardContent,
   Typography,
-  Avatar,
-  CardActionArea,
   Chip,
   Button,
   Container,
-  CardActions,
   Divider,
   Dialog,
 } from "@material-ui/core";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import SkeletonPost from "../Components/idSkeleton";
 import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../Components/CardList";
 import { PostInterface } from "../interfaces/PostInterface";
+import fetch from "unfetch";
 
 interface RecommendedData {
   recommendedPosts: PostInterface[];
@@ -38,7 +31,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const PostID = ({ recommendedPosts }: RecommendedData) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const url = `http://localhost:3000/api/Posts/${router.query.id}`;
+  const url = `api/Posts/${router.query.id}`;
   const { data: postId, error } = useSWR(url, fetcher);
   if (error) return <h1>Something went wrong!</h1>;
   if (!postId) return <SkeletonPost />;
@@ -132,14 +125,12 @@ export const getStaticProps: GetStaticProps = async (
   context
 ): Promise<GetStaticPropsResult<RecommendedData>> => {
   await dbConnect();
-  const result = await Post.findById(context.params.id).lean();
   const recommended = await Post.find({});
   const recommendedPosts = recommended.map((data) => {
     const post = data.toObject();
     post._id = post._id.toString();
     return post;
   });
-  result._id = result._id.toString();
   return { props: { recommendedPosts } };
 };
 

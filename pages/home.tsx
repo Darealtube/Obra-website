@@ -14,26 +14,22 @@ import {
 import { useState } from "react";
 import Appbar from "./Components/Appbar";
 import { Palette } from "@material-ui/icons";
-import { GetStaticProps, GetStaticPropsResult } from "next";
-import dbConnect from "./utils/dbConnect";
-import Post from "./model/Post";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "./Components/CardList";
-import { PostInterface } from "./interfaces/PostInterface";
+import { PostProp } from "./interfaces/PostInterface";
 import useSWR from "swr";
 import fetch from "unfetch";
 
-interface PostData {
-  posts: PostInterface[];
-}
-
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = ({ posts }: PostData) => {
+const Home = () => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
   };
+  const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
+  if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
+  if (!data) return <h1>Loading...</h1>;
 
   return (
     <div className={styles.root}>
@@ -43,13 +39,13 @@ const Home = ({ posts }: PostData) => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={posts} />
+        <CardList postData={data} />
         {/* Featured list */}
 
         <Typography variant="h4">Recently</Typography>
         <Divider className={styles.divider} />
         {/* Recent posts list */}
-        <CardList postData={posts} />
+        <CardList postData={data} />
         {/* Recent posts list */}
       </Container>
       {/* Intro dialogue */}
@@ -95,20 +91,6 @@ const Home = ({ posts }: PostData) => {
       {/* Link to Create page */}
     </div>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (
-  context
-): Promise<GetStaticPropsResult<PostData>> => {
-  await dbConnect();
-  /* find all the data in our database */
-  const result = await Post.find({});
-  const posts = result.map((data) => {
-    const post = data.toObject();
-    post._id = post._id.toString();
-    return post;
-  });
-  return { props: { posts: posts }, revalidate: 1 };
 };
 
 export default Home;

@@ -39,5 +39,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         throw error;
       }
       break;
+
+    case "LIKE":
+      try {
+        const post = await Post.findByIdAndUpdate(id, req.body, {
+          new: true,
+          runValidators: true,
+        });
+
+        if (!post) {
+          return res.status(400).json({ success: false });
+        }
+
+        post.save();
+      } catch (error) {
+        throw error;
+      }
+      break;
   }
 };

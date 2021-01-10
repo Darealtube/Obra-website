@@ -202,7 +202,10 @@ export const Menu = () => {
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item} onClick={() => router.push("/")}>
+        <Button
+          className={classes.item}
+          onClick={() => router.push("/api/Authentication/logout")}
+        >
           <ExitToAppIcon className={classes.icon} /> Logout
         </Button>
       </ListItem>

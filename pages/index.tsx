@@ -55,7 +55,7 @@ const Login = () => {
             <br />
             <Typography variant="h5">Log In</Typography>
 
-            <form className={styles.form} onSubmit={() => router.push("/home")}>
+            <form className={styles.form}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -83,15 +83,17 @@ const Login = () => {
                 helperText="Don't share your password to anyone."
               />
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={styles.submit}
-              >
-                Log In
-              </Button>
+              <Link href="/api/Authentication/login">
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={styles.submit}
+                >
+                  Log In
+                </Button>
+              </Link>
             </form>
             <Grid container>
               <Grid item xs={6}>

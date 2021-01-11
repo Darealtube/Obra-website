@@ -20,6 +20,7 @@ export interface PostProp {
 }
 
 export interface PostPropId {
+  // useSWR
   data: PostInterface;
   error?: string;
 }

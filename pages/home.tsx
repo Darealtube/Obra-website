@@ -19,10 +19,12 @@ import { CardList } from "./Components/CardList";
 import { PostProp } from "./interfaces/PostInterface";
 import useSWR from "swr";
 import fetch from "unfetch";
+import auth0 from "./utils/auth0";
+import { GetServerSideProps } from "next";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = () => {
+const Home = ({ user }) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -30,7 +32,7 @@ const Home = () => {
   const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
-
+  console.log(user);
   return (
     <div className={styles.root}>
       <CssBaseline />
@@ -91,6 +93,16 @@ const Home = () => {
       {/* Link to Create page */}
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await auth0.getSession(context.req);
+
+  return {
+    props: {
+      user: session?.user || null,
+    },
+  };
 };
 
 export default Home;

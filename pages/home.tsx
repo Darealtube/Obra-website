@@ -20,11 +20,13 @@ import { PostProp } from "./interfaces/PostInterface";
 import useSWR from "swr";
 import fetch from "unfetch";
 import auth0 from "./utils/auth0";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsResult } from "next";
+import { UserData } from "./interfaces/UserInterface";
+const axios = require("axios").default;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = ({ user }) => {
+const Home = ({ user }: UserData) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -32,11 +34,11 @@ const Home = ({ user }) => {
   const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
-  console.log(user);
+
   return (
     <div className={styles.root}>
       <CssBaseline />
-      <Appbar /> {/* Appbar */}
+      <Appbar userData={user} /> {/* Appbar */}
       <Container className={styles.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
@@ -95,12 +97,25 @@ const Home = ({ user }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await auth0.getSession(context.req);
+const fetchData = async (id: string) =>
+  await axios
+    .get(`http://localhost:3000/api/Users/${id}`)
+    .then((res: { data: UserData }) => ({
+      user: res.data,
+    }))
+    .catch(() => ({
+      user: null,
+    }));
 
+export const getServerSideProps: GetServerSideProps = async (
+  context
+): Promise<GetServerSidePropsResult<UserData>> => {
+  const session = await auth0.getSession(context.req);
+  const id = session.user.sub.replace("auth0|", "");
+  const user = await fetchData(id);
   return {
     props: {
-      user: session?.user || null,
+      user: user.user,
     },
   };
 };

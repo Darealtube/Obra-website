@@ -52,8 +52,8 @@ export const CardList = ({ postData }: PostData) => {
                         {post.title}
                       </Typography>
                       <br />
-                      {post.tags.map((tag) => (
-                        <Chip label={tag} className={styles.tag} />
+                      {post.tags.map((tag, index) => (
+                        <Chip key={index} label={tag} className={styles.tag} />
                       ))}
                     </CardContent>
                   </CardActionArea>

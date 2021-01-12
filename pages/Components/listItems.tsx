@@ -32,6 +32,7 @@ import TranslateIcon from "@material-ui/icons/Translate";
 import LanguageIcon from "@material-ui/icons/Language";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import Link from "next/link";
+import { NotifInterface } from "../interfaces/UserInterface";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -239,58 +240,30 @@ export const Menu = () => {
   );
 };
 
-export const Notification = () => {
+type NotifData = {
+  notifications: NotifInterface[];
+};
+
+export const Notification = ({ notifications }: NotifData) => {
   const classes = useStyles();
 
   return (
     <div>
-      <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>A</Avatar>
-        <div>
-          <Typography className={classes.notifInfo}>
-            Check out this new .....!Check out this new .....!Check out this new
-            .....!Check out this new .....!
-          </Typography>
-        </div>
-      </ListItem>
-      <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>B</Avatar>
-        <Typography className={classes.notifInfo}>
-          Check out this new .....!Check out this new .....!Check out this new
-          .....!Check out this new .....!Check out this new .....!Check out this
-          new .....!Check outCheck out this new .....! this new .....!Check out
-          this new .....!
-        </Typography>
-      </ListItem>
-      <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>C</Avatar>
-        <div className={classes.notifInfo}>
-          <Typography>Darryl Javier </Typography>
-          <Typography>
-            Check out this new .....!Check out this new .....!Check out this new
-            .....!
-          </Typography>
-        </div>
-      </ListItem>
-      <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>D</Avatar>
-        <div className={classes.notifInfo}>
-          <Typography>Darryl Javier </Typography>
-          <Typography>
-            Check out this new .....!Check out this new .....!Check out this new
-            .....!Check out this new .....!
-          </Typography>
-        </div>
-      </ListItem>
-      <ListItem className={classes.notifitem}>
-        <Avatar className={classes.icon}>E</Avatar>
-        <div className={classes.notifInfo}>
-          <Typography>Darryl Javier </Typography>
-          <Typography>
-            Check out this new .....!Check out this new .....!
-          </Typography>
-        </div>
-      </ListItem>
+      {notifications ? (
+        notifications.map((notif) => (
+          <ListItem className={classes.notifitem} key={notif.postId}>
+            <Avatar className={classes.icon}>{notif.user.avatar}</Avatar>
+            <div>
+              <Typography>{notif.date}</Typography>
+              <Typography className={classes.notifInfo}>
+                {notif.description}
+              </Typography>
+            </div>
+          </ListItem>
+        ))
+      ) : (
+        <Typography variant="h3">Seems like no one is here...</Typography>
+      )}
     </div>
   );
 };

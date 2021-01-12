@@ -17,6 +17,11 @@ import { Items, Menu, Notification } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
+import { UserInterface } from "../interfaces/UserInterface";
+
+type UserData = {
+  userData: UserInterface;
+};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Appbar = () => {
+const Appbar = ({ userData }: UserData) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
@@ -120,14 +125,19 @@ const Appbar = () => {
             </Box>
             <Divider />
             <List className={classes.notifmenu}>
-              <Notification />
+              <Notification notifications={userData.notifications} />
+              {/* Manage this later */}
             </List>
           </Popover>
           {/* Notification */}
 
           {/* Profile */}
           <IconButton onClick={handleProfile}>
-            <Avatar>D</Avatar>
+            {userData.username ? (
+              <Avatar>{userData.username.charAt(0)}</Avatar>
+            ) : (
+              <Avatar>N</Avatar>
+            )}
           </IconButton>
           <Popover
             id="simple-menu"
@@ -147,8 +157,16 @@ const Appbar = () => {
             <Box display="flex" flexWrap="wrap" className={classes.box}>
               <Avatar>D</Avatar>
               <div style={{ marginLeft: "25px" }}>
-                <Typography>Darryl Javier</Typography>
-                <Typography>balah@gmail.com</Typography>
+                {userData.username ? (
+                  <Typography>{userData.username}</Typography>
+                ) : (
+                  <Typography>No Name</Typography>
+                )}
+                {userData.email ? (
+                  <Typography>{userData.email}</Typography>
+                ) : (
+                  <Typography>No Email found</Typography>
+                )}
               </div>
             </Box>
             <Divider />
@@ -164,7 +182,7 @@ const Appbar = () => {
       {/* Drawer */}
       <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
         <List className={classes.list}>
-          <Items />
+          <Items /> {/* Manage this later */}
         </List>
       </Drawer>
       {/* Drawer */}

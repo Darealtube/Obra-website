@@ -25,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         throw error;
       }
       break;
-    case "UPDATE":
+    case "PUT":
       try {
         const post = await Post.findByIdAndUpdate(id, req.body, {
           new: true,

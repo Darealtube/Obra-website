@@ -115,7 +115,6 @@ const Create = () => {
   return (
     <div className={styles.root}>
       <CssBaseline />
-      <Appbar />
       <Grid container className={styles.grid}>
         <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
           {/* Art Display */}

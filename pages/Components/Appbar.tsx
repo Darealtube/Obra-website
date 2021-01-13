@@ -125,7 +125,10 @@ const Appbar = ({ userData }: UserData) => {
             </Box>
             <Divider />
             <List className={classes.notifmenu}>
-              <Notification notifications={userData.notifications} />
+              <Notification
+                notifications={userData.notifications}
+                user={userData}
+              />
               {/* Manage this later */}
             </List>
           </Popover>

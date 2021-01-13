@@ -32,7 +32,7 @@ import TranslateIcon from "@material-ui/icons/Translate";
 import LanguageIcon from "@material-ui/icons/Language";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import Link from "next/link";
-import { NotifInterface } from "../interfaces/UserInterface";
+import { NotifInterface, UserInterface } from "../interfaces/UserInterface";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -242,14 +242,14 @@ export const Menu = () => {
 
 type NotifData = {
   notifications: NotifInterface[];
+  user: UserInterface;
 };
 
-export const Notification = ({ notifications }: NotifData) => {
+export const Notification = ({ notifications, user }: NotifData) => {
   const classes = useStyles();
-
   return (
     <div>
-      {notifications ? (
+      {notifications.length > 0 ? (
         notifications.map((notif) => (
           <ListItem className={classes.notifitem} key={notif.postId}>
             <Avatar className={classes.icon}>{notif.user.avatar}</Avatar>
@@ -261,8 +261,19 @@ export const Notification = ({ notifications }: NotifData) => {
             </div>
           </ListItem>
         ))
+      ) : !user.email_verified ? (
+        <ListItem className={classes.notifitem}>
+          <Avatar className={classes.icon}>O</Avatar>
+          <div>
+            <Typography className={classes.notifInfo}>
+              Obra says: Thank you for staying with us! We'd like you to verify
+              your email for security purposes. Check your Gmail for the
+              verification link. We appreciate it!
+            </Typography>
+          </div>
+        </ListItem>
       ) : (
-        <Typography variant="h3">Seems like no one is here...</Typography>
+        ""
       )}
     </div>
   );

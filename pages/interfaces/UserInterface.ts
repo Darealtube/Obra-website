@@ -27,5 +27,4 @@ export interface NotifInterface {
   date: string;
   description: string;
   postId: string;
-  verified?: UserInterface["email_verified"];
 }

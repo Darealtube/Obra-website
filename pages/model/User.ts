@@ -1,12 +1,9 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  tenant: String,
-  client_id: String,
-  connection: String,
+  sub: String,
+  picture: String,
   email: String,
-  password: String,
-  request_language: String,
   email_verified: Boolean,
   posts: Array,
   likedPosts: Array,

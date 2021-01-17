@@ -6,7 +6,9 @@ export default async function callback(
   res: NextApiResponse
 ) {
   try {
-    await auth0.handleCallback(req, res, { redirectTo: "/home" });
+    await auth0.handleCallback(req, res, {
+      redirectTo: "/api/Authentication/dbSave",
+    });
   } catch (error) {
     console.error(error);
     res.status(error.status || 400).end(error.message);

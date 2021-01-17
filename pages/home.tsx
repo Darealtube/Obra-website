@@ -26,7 +26,7 @@ const axios = require("axios").default;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = ({ user }: UserData) => {
+const Home = ({ user }) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -34,11 +34,11 @@ const Home = ({ user }: UserData) => {
   const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
-
+  console.log(user);
   return (
     <div className={styles.root}>
       <CssBaseline />
-      <Appbar userData={user} /> {/* Appbar */}
+      {/* Appbar <Appbar userData={user} /> */}
       <Container className={styles.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
@@ -88,7 +88,7 @@ const Home = ({ user }: UserData) => {
         className={styles.fab}
         size="large"
         color="primary"
-        href="/create"
+        href={user ? "/create" : "api/Authentication/login"}
       >
         <Palette />
       </Fab>
@@ -97,25 +97,22 @@ const Home = ({ user }: UserData) => {
   );
 };
 
-const fetchData = async (id: string) =>
-  await axios
-    .get(`http://localhost:3000/api/Users/${id}`)
-    .then((res: { data: UserData }) => ({
-      user: res.data,
-    }))
-    .catch(() => ({
-      user: null,
-    }));
+//const fetchData = async (id: string) =>
+// await axios
+//  .get(`http://localhost:3000/api/Users/${id}`)
+// .then((res: { data: UserData }) => ({
+//  user: res.data,
+//}))
+//.catch(() => ({
+//   user: null,
+//}));
 
-export const getServerSideProps: GetServerSideProps = async (
-  context
-): Promise<GetServerSidePropsResult<UserData>> => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await auth0.getSession(context.req);
-  const id = session.user.sub.replace("auth0|", "");
-  const user = await fetchData(id);
+
   return {
     props: {
-      user: user.user,
+      user: session,
     },
   };
 };

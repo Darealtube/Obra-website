@@ -4,7 +4,7 @@ export default initAuth0({
   domain: process.env.AUTH_DOMAIN,
   clientId: process.env.AUTH_CLIENT_ID,
   clientSecret: process.env.AUTH_CLIENT_SECRET,
-  scope: "openid profile",
+  scope: "openid profile email",
   redirectUri: "http://localhost:3000/api/Authentication/callback",
   postLogoutRedirectUri: "http://localhost:3000/",
   session: {
@@ -17,9 +17,9 @@ export default initAuth0({
     // (Optional) SameSite configuration for the session cookie. Defaults to 'lax', but can be changed to 'strict' or 'none'. Set it to false if you want to disable the SameSite setting.
     // cookieSameSite: "lax",
     // (Optional) Store the id_token in the session. Defaults to false.
-    storeIdToken: false,
+    storeIdToken: true,
     // (Optional) Store the access_token in the session. Defaults to false.
-    storeAccessToken: false,
+    storeAccessToken: true,
     // (Optional) Store the refresh_token in the session. Defaults to false.
     storeRefreshToken: false,
   },

@@ -93,7 +93,7 @@ const Create = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("api/Posts", {
+      const res = await fetch("/api/Posts/create", {
         method: "POST",
         headers: {
           Accept: "application/json",

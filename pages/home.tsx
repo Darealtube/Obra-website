@@ -34,7 +34,7 @@ const Home = ({ user }: UserData) => {
   const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
-  console.log(user);
+
   return (
     <div className={styles.root}>
       <CssBaseline />

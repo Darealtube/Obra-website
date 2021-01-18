@@ -13,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case "GET":
       try {
-        const user = await User.findById(id);
+        const user = await User.findOne({ sub: id });
         user._id = user._id.toString();
 
         if (!user) {

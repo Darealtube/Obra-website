@@ -252,7 +252,7 @@ export const Notification = ({ notifications, user }: NotifData) => {
       {notifications.length > 0 ? (
         notifications.map((notif) => (
           <ListItem className={classes.notifitem} key={notif.postId}>
-            <Avatar className={classes.icon}>{notif.user.avatar}</Avatar>
+            <Avatar className={classes.icon}>{notif.user.picture}</Avatar>
             <div>
               <Typography>{notif.date}</Typography>
               <Typography className={classes.notifInfo}>

@@ -1,10 +1,7 @@
 import { PostInterface } from "./PostInterface";
 
 export interface UserInterface {
-  tenant: string;
-  client_id: string;
-  connection: string;
-  avatar: string;
+  picture: string;
   _id: string;
   email: string;
   username?: string;
@@ -14,7 +11,6 @@ export interface UserInterface {
   likedArtists?: UserInterface[];
   balance?: string;
   notifications?: NotifInterface[]; // For now
-  request_language: string;
   // More to come
 }
 

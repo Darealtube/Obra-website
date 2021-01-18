@@ -26,7 +26,7 @@ const axios = require("axios").default;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = ({ user }) => {
+const Home = ({ user }: UserData) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -38,7 +38,7 @@ const Home = ({ user }) => {
   return (
     <div className={styles.root}>
       <CssBaseline />
-      {/* Appbar <Appbar userData={user} /> */}
+      <Appbar userData={user} />
       <Container className={styles.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
@@ -97,22 +97,24 @@ const Home = ({ user }) => {
   );
 };
 
-//const fetchData = async (id: string) =>
-// await axios
-//  .get(`http://localhost:3000/api/Users/${id}`)
-// .then((res: { data: UserData }) => ({
-//  user: res.data,
-//}))
-//.catch(() => ({
-//   user: null,
-//}));
+const fetchData = async (id: string) =>
+  await axios
+    .get(`http://localhost:3000/api/Users/${id}`)
+    .then((res: { data: UserData }) => ({
+      user: res.data,
+    }))
+    .catch(() => ({
+      user: null,
+    }));
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context
+): Promise<GetServerSidePropsResult<UserData>> => {
   const session = await auth0.getSession(context.req);
-
+  const user = await fetchData(session.user.sub);
   return {
     props: {
-      user: session,
+      user: user?.user || null,
     },
   };
 };

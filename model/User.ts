@@ -10,7 +10,13 @@ const UserSchema = new mongoose.Schema({
   likedArtists: Array,
   balance: String,
   notifications: Array,
-  avatar: String,
+  tutorial: {
+    type: Boolean,
+    default: true,
+  },
+  name: String,
+  locale: String, // language
+
   // More to come
 });
 

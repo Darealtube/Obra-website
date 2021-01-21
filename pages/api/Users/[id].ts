@@ -1,5 +1,5 @@
-import dbConnect from "../../utils/dbConnect";
-import User from "../../model/User";
+import dbConnect from "../../../utils/dbConnect";
+import User from "../../../model/User";
 import { NextApiResponse, NextApiRequest } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

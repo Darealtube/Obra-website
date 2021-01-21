@@ -11,6 +11,9 @@ export interface UserInterface {
   likedArtists?: UserInterface[];
   balance?: string;
   notifications?: NotifInterface[]; // For now
+  name?: string; // Not required for now
+  locale?: string;
+  tutorial?: boolean;
   // More to come
 }
 
@@ -23,4 +26,9 @@ export interface NotifInterface {
   date: string;
   description: string;
   postId: string;
+}
+
+export interface UserPropId {
+  data: UserInterface;
+  error?: string;
 }

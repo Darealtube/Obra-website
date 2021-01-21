@@ -1,4 +1,4 @@
-import Appbar from "../Components/Appbar";
+import Appbar from "../../Components/Appbar";
 import useSWR from "swr";
 import {
   CssBaseline,
@@ -13,10 +13,10 @@ import {
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import SkeletonPost from "../Components/idSkeleton";
+import SkeletonPost from "../../Components/idSkeleton";
 import styles from "../styles/Specific/Post.module.css";
-import { CardList } from "../Components/CardList";
-import { PostProp, PostPropId } from "../interfaces/PostInterface";
+import { CardList } from "../../Components/CardList";
+import { PostProp, PostPropId } from "../../interfaces/PostInterface";
 import fetch from "unfetch";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

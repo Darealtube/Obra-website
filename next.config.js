@@ -1,7 +1,11 @@
 module.exports = {
   env: {},
   images: {
-    domains: ["picsum.photos", "res.cloudinary.com"],
+    domains: [
+      "picsum.photos",
+      "res.cloudinary.com",
+      "lh3.googleusercontent.com",
+    ],
     //Changes
 
     //loader: "cloudinary",

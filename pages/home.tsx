@@ -12,17 +12,17 @@ import {
   Fab,
 } from "@material-ui/core";
 import { useState } from "react";
-import Appbar from "./Components/Appbar";
+import Appbar from "../Components/Appbar";
 import { Palette } from "@material-ui/icons";
 import styles from "./styles/General/Home.module.css";
-import { CardList } from "./Components/CardList";
-import { PostProp } from "./interfaces/PostInterface";
+import { CardList } from "../Components/CardList";
+import { PostProp } from "../interfaces/PostInterface";
 import useSWR from "swr";
 import fetch from "unfetch";
-import auth0 from "./utils/auth0";
+import auth0 from "../utils/auth0";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { UserData } from "./interfaces/UserInterface";
-const axios = require("axios").default;
+import { UserData } from "../interfaces/UserInterface";
+import fetchData from "../utils/fetchData";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -97,16 +97,6 @@ const Home = ({ user }: UserData) => {
   );
 };
 
-const fetchData = async (id: string) =>
-  await axios
-    .get(`http://localhost:3000/api/Users/${id}`)
-    .then((res: { data: UserData }) => ({
-      user: res.data,
-    }))
-    .catch(() => ({
-      user: null,
-    }));
-
 export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<GetServerSidePropsResult<UserData>> => {
@@ -114,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const user = await fetchData(session.user.sub);
   return {
     props: {
-      user: user?.user || null,
+      user: user || null,
     },
   };
 };

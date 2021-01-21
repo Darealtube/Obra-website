@@ -1,8 +1,8 @@
 import { NextApiResponse, NextApiRequest } from "next";
-import dbConnect from "../../utils/dbConnect";
-import Post from "../../model/Post";
-import User from "../../model/User";
-import auth0 from "../../utils/auth0";
+import dbConnect from "../../../utils/dbConnect";
+import Post from "../../../model/Post";
+import User from "../../../model/User";
+import auth0 from "../../../utils/auth0";
 
 export default auth0.requireAuthentication(async function handler(
   req: NextApiRequest,

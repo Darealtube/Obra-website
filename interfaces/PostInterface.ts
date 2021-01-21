@@ -15,12 +15,13 @@ export interface PostInterface {
 }
 
 export interface PostProp {
+  // General useSWR
   data: PostInterface[];
   error?: string;
 }
 
 export interface PostPropId {
-  // useSWR
+  // Specific useSWR
   data: PostInterface;
   error?: string;
 }

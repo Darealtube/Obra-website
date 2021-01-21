@@ -1,7 +1,7 @@
 import { NextApiResponse, NextApiRequest } from "next";
-import auth0 from "../../utils/auth0";
-import dbConnect from "../../utils/dbConnect";
-import User from "../../model/User";
+import auth0 from "../../../utils/auth0";
+import dbConnect from "../../../utils/dbConnect";
+import User from "../../../model/User";
 
 export default auth0.requireAuthentication(
   async (req: NextApiRequest, res: NextApiResponse) => {

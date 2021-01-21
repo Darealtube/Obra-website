@@ -1,5 +1,5 @@
-import dbConnect from "../utils/dbConnect";
-import Post from "../model/Post";
+import dbConnect from "../../utils/dbConnect";
+import Post from "../../model/Post";
 import NumberFormat from "react-number-format";
 import { Palette } from "@material-ui/icons";
 import React from "react";
@@ -20,7 +20,7 @@ import {
   CircularProgress,
   Chip,
 } from "@material-ui/core";
-import Appbar from "../Components/Appbar";
+import Appbar from "../../Components/Appbar";
 import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";

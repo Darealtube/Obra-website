@@ -12,7 +12,7 @@ import {
   Button,
 } from "@material-ui/core";
 import Link from "next/link";
-import styles from "../styles/General/Home.module.css";
+import styles from "../pages/styles/General/Home.module.css";
 import { PostInterface } from "../interfaces/PostInterface";
 
 type PostData = {

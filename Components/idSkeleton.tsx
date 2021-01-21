@@ -14,7 +14,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import Appbar from "../Components/Appbar";
+import Appbar from "./Appbar";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

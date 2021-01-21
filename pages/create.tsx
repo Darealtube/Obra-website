@@ -15,7 +15,7 @@ import {
   Input,
   CircularProgress,
 } from "@material-ui/core";
-import Appbar from "./Components/Appbar";
+import Appbar from "../Components/Appbar";
 import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";

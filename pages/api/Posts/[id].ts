@@ -1,5 +1,5 @@
-import dbConnect from "../../utils/dbConnect";
-import Post from "../../model/Post";
+import dbConnect from "../../../utils/dbConnect";
+import Post from "../../../model/Post";
 import { NextApiResponse, NextApiRequest } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

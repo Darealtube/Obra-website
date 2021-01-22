@@ -38,7 +38,7 @@ const Home = ({ user }: UserData) => {
   return (
     <div className={styles.root}>
       <CssBaseline />
-      <Appbar userData={user} />
+      <Appbar />
       <Container className={styles.content}>
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
@@ -101,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<GetServerSidePropsResult<UserData>> => {
   const session = await auth0.getSession(context.req);
-  const user = await fetchData(session.user.sub);
+  const user = await fetchData();
   return {
     props: {
       user: user || null,

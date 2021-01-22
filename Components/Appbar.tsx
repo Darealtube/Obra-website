@@ -12,16 +12,16 @@ import {
   Avatar,
   Popover,
   Box,
+  Button,
 } from "@material-ui/core";
 import { Items, Menu, Notification } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
-import { UserInterface } from "../interfaces/UserInterface";
-
-type UserData = {
-  userData: UserInterface;
-};
+import { UserPropId } from "../interfaces/UserInterface";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import fetch from "unfetch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,11 +56,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Appbar = ({ userData }: UserData) => {
+const Appbar = () => {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const classes = useStyles();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
+  const { data: user, error } = useSWR("/api/Users/", fetcher) as UserPropId;
 
   const handleProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setprofAnchor(event.currentTarget);
@@ -101,83 +104,84 @@ const Appbar = ({ userData }: UserData) => {
             Canvas
           </Typography>
           {/* Drawer and Logo */}
-
-          {/* Notification */}
-          <IconButton onClick={handleNotif}>
-            <NotificationImportantIcon fontSize="large" htmlColor="white" />
-          </IconButton>
-          <Popover
-            anchorEl={notifAnchor}
-            keepMounted
-            open={Boolean(notifAnchor)}
-            onClose={handleNotifClose}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Box className={classes.box}>
-              <Typography>Notifications</Typography>
-            </Box>
-            <Divider />
-            <List className={classes.notifmenu}>
-              <Notification
-                notifications={userData.notifications}
-                user={userData}
-              />
-              {/* Manage this later */}
-            </List>
-          </Popover>
-          {/* Notification */}
-
-          {/* Profile */}
-          <IconButton onClick={handleProfile}>
-            {userData.username ? (
-              <Avatar>{userData.username.charAt(0)}</Avatar>
-            ) : (
-              <Avatar>N</Avatar>
-            )}
-          </IconButton>
-          <Popover
-            id="simple-menu"
-            anchorEl={profAnchor}
-            keepMounted
-            open={Boolean(profAnchor)}
-            onClose={handleProfileClose}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Box display="flex" flexWrap="wrap" className={classes.box}>
-              <Avatar>D</Avatar>
-              <div style={{ marginLeft: "25px" }}>
-                {userData.username ? (
-                  <Typography>{userData.username}</Typography>
+          {user ? (
+            <div>
+              <IconButton onClick={handleNotif}>
+                <NotificationImportantIcon fontSize="large" htmlColor="white" />
+              </IconButton>
+              <Popover
+                anchorEl={notifAnchor}
+                keepMounted
+                open={Boolean(notifAnchor)}
+                onClose={handleNotifClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <Box className={classes.box}>
+                  <Typography>Notifications</Typography>
+                </Box>
+                <Divider />
+                <List className={classes.notifmenu}>
+                  <Notification
+                    notifications={user ? user.notifications : null}
+                    user={user}
+                  />
+                </List>
+              </Popover>
+              <IconButton onClick={handleProfile}>
+                {user.username ? (
+                  <Avatar>{user.username.charAt(0)}</Avatar>
                 ) : (
-                  <Typography>No Name</Typography>
+                  <Avatar>N</Avatar>
                 )}
-                {userData.email ? (
-                  <Typography>{userData.email}</Typography>
-                ) : (
-                  <Typography>No Email found</Typography>
-                )}
-              </div>
-            </Box>
-            <Divider />
-            <List className={classes.menu}>
-              <Menu />
-            </List>
-          </Popover>
-          {/* Profile */}
+              </IconButton>
+              <Popover
+                id="simple-menu"
+                anchorEl={profAnchor}
+                keepMounted
+                open={Boolean(profAnchor)}
+                onClose={handleProfileClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <Box display="flex" flexWrap="wrap" className={classes.box}>
+                  <Avatar>D</Avatar>
+                  <div style={{ marginLeft: "25px" }}>
+                    {user.username ? (
+                      <Typography>{user.username}</Typography>
+                    ) : (
+                      <Typography>No Name</Typography>
+                    )}
+                    {user.email ? (
+                      <Typography>{user.email}</Typography>
+                    ) : (
+                      <Typography>No Email found</Typography>
+                    )}
+                  </div>
+                </Box>
+                <Divider />
+                <List className={classes.menu}>
+                  <Menu name={user.name} />
+                </List>
+              </Popover>
+            </div>
+          ) : (
+            <Button onClick={() => router.push("/api/Authentication/login")}>
+              Log In
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       {/* App Bar */}

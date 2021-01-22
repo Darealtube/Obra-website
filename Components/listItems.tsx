@@ -186,13 +186,20 @@ export const Items = () => {
   );
 };
 
-export const Menu = () => {
+type userName = {
+  name: string;
+};
+
+export const Menu = ({ name }: userName) => {
   const router = useRouter();
   const classes = useStyles();
   return (
     <div>
       <ListItem>
-        <Button className={classes.item}>
+        <Button
+          className={classes.item}
+          onClick={() => router.push(`/profile/${name}`)}
+        >
           <AccountCircleIcon className={classes.icon} /> Profile
         </Button>
       </ListItem>
@@ -249,7 +256,7 @@ export const Notification = ({ notifications, user }: NotifData) => {
   const classes = useStyles();
   return (
     <div>
-      {notifications.length > 0 ? (
+      {notifications && notifications.length > 0 ? (
         notifications.map((notif) => (
           <ListItem className={classes.notifitem} key={notif.postId}>
             <Avatar className={classes.icon}>{notif.user.picture}</Avatar>

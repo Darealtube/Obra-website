@@ -34,7 +34,6 @@ const Home = ({ user }: UserData) => {
   const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
-
   return (
     <div className={styles.root}>
       <CssBaseline />
@@ -101,10 +100,17 @@ export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<GetServerSidePropsResult<UserData>> => {
   const session = await auth0.getSession(context.req);
-  const user = await fetchData();
+  if (session) {
+    const user = await fetchData(session.user.sub);
+    return {
+      props: {
+        user: user || null,
+      },
+    };
+  }
   return {
     props: {
-      user: user || null,
+      user: null,
     },
   };
 };

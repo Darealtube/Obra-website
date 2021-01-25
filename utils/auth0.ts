@@ -17,9 +17,9 @@ export default initAuth0({
     // (Optional) SameSite configuration for the session cookie. Defaults to 'lax', but can be changed to 'strict' or 'none'. Set it to false if you want to disable the SameSite setting.
     // cookieSameSite: "lax",
     // (Optional) Store the id_token in the session. Defaults to false.
-    storeIdToken: true,
+    storeIdToken: false,
     // (Optional) Store the access_token in the session. Defaults to false.
-    storeAccessToken: true,
+    storeAccessToken: false,
     // (Optional) Store the refresh_token in the session. Defaults to false.
     storeRefreshToken: false,
   },

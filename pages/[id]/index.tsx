@@ -58,7 +58,7 @@ const PostID = () => {
                     </Typography>
                   </Grid>
                   <Grid item lg={12}>
-                    <Typography variant="subtitle1">Author</Typography>
+                    <Typography variant="subtitle1">{postId.author}</Typography>
                   </Grid>
                   <Grid item lg={12}>
                     <Typography variant="h6">

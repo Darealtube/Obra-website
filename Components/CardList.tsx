@@ -29,8 +29,8 @@ export const CardList = ({ postData }: PostData) => {
             <Grid item key={post._id}>
               <Card className={styles.card}>
                 <CardHeader
-                  avatar={<Avatar aria-label="User">D</Avatar>}
-                  title="Author"
+                  avatar={<Avatar aria-label="User" src={post.picture} />}
+                  title={post.author}
                   subheader={post.date}
                 />
 

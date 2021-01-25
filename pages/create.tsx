@@ -20,9 +20,15 @@ import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";
 import styles from "./styles/General/Create.module.css";
+import fetchData from "../utils/fetchData";
+import { GetServerSideProps, GetServerSidePropsResult } from "next";
+import { UserData } from "../interfaces/UserInterface";
+import auth0 from "../utils/auth0";
 
-const Create = () => {
+const Create = ({ user }: UserData) => {
   const [post, setPost] = React.useState({
+    author: user ? user.name : null,
+    picture: user ? user.picture : null,
     title: "",
     description: "",
     art: "",
@@ -111,10 +117,10 @@ const Create = () => {
       throw error;
     }
   };
-
   return (
     <div className={styles.root}>
       <CssBaseline />
+      <Appbar />
       <Grid container className={styles.grid}>
         <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
           {/* Art Display */}
@@ -277,5 +283,24 @@ async function getSignature() {
   const { signature, timestamp } = data;
   return { signature, timestamp };
 }
+
+export const getServerSideProps: GetServerSideProps = async (
+  context
+): Promise<GetServerSidePropsResult<UserData>> => {
+  const session = await auth0.getSession(context.req);
+  if (session) {
+    const user = await fetchData(session.user.sub);
+    return {
+      props: {
+        user: user || null,
+      },
+    };
+  }
+  return {
+    props: {
+      user: null,
+    },
+  };
+};
 
 export default Create;

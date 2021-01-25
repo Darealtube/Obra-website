@@ -3,6 +3,7 @@ import moment from "moment";
 
 const PostSchema = new mongoose.Schema({
   author: String,
+  picture: String,
   date: {
     type: String,
     default: moment().format("l"),

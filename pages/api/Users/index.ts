@@ -18,29 +18,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).json({ success: false });
           }
 
-          res.status(200).json(user);
+          return res.status(200).json(user);
         } catch (error) {
           throw error;
         }
-        break;
-      case "UPDATE":
-        try {
-          const user = await User.findOneAndUpdate(
-            { sub: session.user.sub },
-            req.body,
-            {
-              new: true,
-              runValidators: true,
-            }
-          );
-          if (!user) {
-            return res.status(400).json({ success: false });
-          }
-          res.status(200).json({ success: true, data: user });
-        } catch (error) {
-          throw error;
-        }
-        break;
     }
   } else {
     return res.status(200).json(null);

@@ -7,7 +7,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const {
     query: { name },
-    method,
   } = req;
 
   try {

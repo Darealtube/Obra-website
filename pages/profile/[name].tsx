@@ -8,6 +8,7 @@ import fetch from "unfetch";
 import styles from "../styles/Specific/Profile.module.css";
 import { PostProp } from "../../interfaces/PostInterface";
 import { CardList } from "../../Components/CardList";
+import Head from "next/head";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -26,8 +27,12 @@ const PostID = () => {
 
   return (
     <div className={styles.root}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>{user.name}</title>
+      </Head>
       <CssBaseline />
-      <Appbar userData={user} />
+      <Appbar />
       <Image src={user.picture} width={500} height={500} />
       <h1>{user.name}</h1>
       <Grid container className={styles.profile}>

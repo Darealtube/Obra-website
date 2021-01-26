@@ -24,6 +24,7 @@ import fetchData from "../utils/fetchData";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { UserData } from "../interfaces/UserInterface";
 import auth0 from "../utils/auth0";
+import Head from "next/head";
 
 const Create = ({ user }: UserData) => {
   const [post, setPost] = React.useState({
@@ -119,6 +120,10 @@ const Create = ({ user }: UserData) => {
   };
   return (
     <div className={styles.root}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Create</title>
+      </Head>
       <CssBaseline />
       <Appbar />
       <Grid container className={styles.grid}>

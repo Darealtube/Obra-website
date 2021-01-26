@@ -22,6 +22,8 @@ import { UserPropId } from "../interfaces/UserInterface";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import fetch from "unfetch";
+import { Palette } from "@material-ui/icons";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -106,6 +108,11 @@ const Appbar = () => {
           {/* Drawer and Logo */}
           {user ? (
             <div>
+              <IconButton>
+                <Link href={`/create`}>
+                  <Palette fontSize="large" htmlColor="white" />
+                </Link>
+              </IconButton>
               <IconButton onClick={handleNotif}>
                 <NotificationImportantIcon fontSize="large" htmlColor="white" />
               </IconButton>
@@ -135,8 +142,8 @@ const Appbar = () => {
                 </List>
               </Popover>
               <IconButton onClick={handleProfile}>
-                {user.username ? (
-                  <Avatar>{user.username.charAt(0)}</Avatar>
+                {user.picture ? (
+                  <Avatar src={user.picture} />
                 ) : (
                   <Avatar>N</Avatar>
                 )}
@@ -157,10 +164,14 @@ const Appbar = () => {
                 }}
               >
                 <Box display="flex" flexWrap="wrap" className={classes.box}>
-                  <Avatar>D</Avatar>
+                  {user.picture ? (
+                    <Avatar src={user.picture} />
+                  ) : (
+                    <Avatar>N</Avatar>
+                  )}
                   <div style={{ marginLeft: "25px" }}>
-                    {user.username ? (
-                      <Typography>{user.username}</Typography>
+                    {user.username || user.name ? (
+                      <Typography>{user.name}</Typography>
                     ) : (
                       <Typography>No Name</Typography>
                     )}

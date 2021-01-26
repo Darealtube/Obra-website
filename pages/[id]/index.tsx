@@ -18,6 +18,7 @@ import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
 import { PostProp, PostPropId } from "../../interfaces/PostInterface";
 import fetch from "unfetch";
+import Head from "next/head";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -34,6 +35,10 @@ const PostID = () => {
 
   return (
     <div className={styles.root}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>{postId.title}</title>
+      </Head>
       <CssBaseline />
       <Appbar />
       <Grid container className={styles.grid}>

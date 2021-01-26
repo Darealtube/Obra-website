@@ -2,6 +2,7 @@ import React from "react";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import router from "next/router";
+import "./styles/patch.css";
 
 router.events.on("routeChangeStart", () => NProgress.start());
 router.events.on("routeChangeComplete", () => NProgress.done());

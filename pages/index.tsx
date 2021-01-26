@@ -9,10 +9,10 @@ import {
   Grid,
   Typography,
   Button,
-  TextField,
 } from "@material-ui/core";
 import PaletteIcon from "@material-ui/icons/Palette";
 import styles from "./styles/General/Login.module.css";
+import Head from "next/head";
 
 const Login = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const Login = () => {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {"Copyright © "}
-        <Link href="#">Canvas</Link> {new Date().getFullYear()}
+        <Link href="/#">Canvas</Link> {new Date().getFullYear()}
         {"."}
       </Typography>
     );
@@ -29,6 +29,11 @@ const Login = () => {
 
   return (
     <div>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Obra</title>
+      </Head>
+
       <Grid container className={styles.root}>
         <CssBaseline />
         {/* Side Image */}
@@ -49,67 +54,27 @@ const Login = () => {
             <Toolbar>
               <PaletteIcon fontSize="large" />
               <Typography variant="h4" color="inherit" noWrap>
-                Canvas
+                Obra
               </Typography>
             </Toolbar>
             <br />
-            <Typography variant="h5">Log In</Typography>
+            <Typography variant="h5">
+              Canvas is a website that focuses on Artists, giving them an
+              opportunity to shine amidst the shame that brings upon the Art
+              Community.
+            </Typography>
 
-            <form className={styles.form}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
+            <Link href="/api/Authentication/login">
+              <Button
+                type="submit"
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
+                variant="contained"
                 color="primary"
-              />
-
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="password"
-                label="Password"
-                name="password"
-                autoComplete="password"
-                autoFocus
-                color="primary"
-                helperText="Don't share your password to anyone."
-              />
-
-              <Link href="/api/Authentication/login">
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={styles.submit}
-                >
-                  Log In
-                </Button>
-              </Link>
-            </form>
-            <Grid container>
-              <Grid item xs={6}>
-                <Typography
-                  style={{ textDecoration: "none" }}
-                  color="secondary"
-                >
-                  <Link href="#">Forgot Password?</Link>
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography color="primary" style={{ textDecoration: "none" }}>
-                  <Link href="/register">Don't have an account? Sign up!</Link>
-                </Typography>
-              </Grid>
-            </Grid>
+                className={styles.submit}
+              >
+                Log In
+              </Button>
+            </Link>
           </div>
           {/*Copyright*/}
           <Copyright />

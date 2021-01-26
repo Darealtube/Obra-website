@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Fab,
 } from "@material-ui/core";
 import { useState } from "react";
 import Appbar from "../Components/Appbar";
@@ -23,6 +22,7 @@ import auth0 from "../utils/auth0";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { UserData } from "../interfaces/UserInterface";
 import fetchData from "../utils/fetchData";
+import Head from "next/head";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -31,11 +31,15 @@ const Home = ({ user }: UserData) => {
   const handleBackdrop = () => {
     setIntro(!intro);
   };
-  const { data, error } = useSWR("api/Posts", fetcher) as PostProp;
+  const { data, error } = useSWR("/api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
   if (!data) return <h1>Loading...</h1>;
   return (
     <div className={styles.root}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Home</title>
+      </Head>
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
@@ -56,8 +60,6 @@ const Home = ({ user }: UserData) => {
         open={intro}
         keepMounted
         onClose={handleBackdrop}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
         disableBackdropClick={true}
         disableEscapeKeyDown={true}
       >
@@ -81,17 +83,6 @@ const Home = ({ user }: UserData) => {
         </DialogActions>
       </Dialog>
       {/* Intro dialogue */}
-      {/* Link to Create page */}
-      <Fab
-        aria-label="Create"
-        className={styles.fab}
-        size="large"
-        color="primary"
-        href={user ? "/create" : "api/Authentication/login"}
-      >
-        <Palette />
-      </Fab>
-      {/* Link to Create page */}
     </div>
   );
 };

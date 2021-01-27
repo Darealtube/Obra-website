@@ -33,6 +33,7 @@ import LanguageIcon from "@material-ui/icons/Language";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import Link from "next/link";
 import { NotifInterface, UserInterface } from "../interfaces/UserInterface";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -233,6 +234,34 @@ export const Menu = ({ name }: userName) => {
           <SettingsApplicationsIcon className={classes.icon} /> Settings
         </Button>
       </ListItem>
+      <ListItem>
+        <Button className={classes.item}>
+          <InfoIcon className={classes.icon} /> Help
+        </Button>
+      </ListItem>
+      <ListItem>
+        <Button className={classes.item}>
+          <ContactSupportIcon className={classes.icon} /> Send Feedback
+        </Button>
+      </ListItem>
+    </div>
+  );
+};
+
+export const NoUserMenu = () => {
+  const router = useRouter();
+  const classes = useStyles();
+  return (
+    <div>
+      <ListItem>
+        <Button
+          className={classes.item}
+          onClick={() => router.push("/api/Authentication/login")}
+        >
+          <MeetingRoomIcon className={classes.icon} /> Login
+        </Button>
+      </ListItem>
+      <Divider />
       <ListItem>
         <Button className={classes.item}>
           <InfoIcon className={classes.icon} /> Help

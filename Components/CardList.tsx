@@ -10,7 +10,6 @@ import {
   Avatar,
   Chip,
   Button,
-  IconButton,
 } from "@material-ui/core";
 import Link from "next/link";
 import styles from "../pages/styles/General/Home.module.css";
@@ -24,18 +23,16 @@ type PostData = {
 export const CardList = ({ postData }: PostData) => {
   return (
     <div>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         {postData &&
           postData.map((post) => (
             <Grid item key={post._id}>
               <Card className={styles.card}>
                 <CardHeader
                   avatar={
-                    <IconButton>
-                      <Link href={`/profile/${post.author}`}>
-                        <Avatar aria-label="User" src={post.picture} />
-                      </Link>
-                    </IconButton>
+                    <Link href={`/profile/${post.author}`}>
+                      <Avatar aria-label="User" src={post.picture} />
+                    </Link>
                   }
                   title={post.author}
                   subheader={post.date}

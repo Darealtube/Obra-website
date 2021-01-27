@@ -14,7 +14,7 @@ import {
   Box,
   Button,
 } from "@material-ui/core";
-import { Items, Menu, Notification } from "./listItems";
+import { Items, Menu, Notification, NoUserMenu } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
@@ -189,9 +189,40 @@ const Appbar = () => {
               </Popover>
             </div>
           ) : (
-            <Button onClick={() => router.push("/api/Authentication/login")}>
-              Log In
-            </Button>
+            <div>
+              <IconButton onClick={handleProfile}>
+                <Avatar>N</Avatar>
+              </IconButton>
+              <Popover
+                id="simple-menu"
+                anchorEl={profAnchor}
+                keepMounted
+                open={Boolean(profAnchor)}
+                onClose={handleProfileClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <Box display="flex" flexWrap="wrap" className={classes.box}>
+                  <Avatar>N</Avatar>
+
+                  <div style={{ marginLeft: "25px" }}>
+                    <Typography>No Name</Typography>
+
+                    <Typography>No Email found</Typography>
+                  </div>
+                </Box>
+                <Divider />
+                <List className={classes.menu}>
+                  <NoUserMenu />
+                </List>
+              </Popover>
+            </div>
           )}
         </Toolbar>
       </AppBar>

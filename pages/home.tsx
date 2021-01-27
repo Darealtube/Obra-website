@@ -12,7 +12,6 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import Appbar from "../Components/Appbar";
-import { Palette } from "@material-ui/icons";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
 import { PostProp } from "../interfaces/PostInterface";
@@ -23,17 +22,18 @@ import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { UserData } from "../interfaces/UserInterface";
 import fetchData from "../utils/fetchData";
 import Head from "next/head";
+import HomeSkeleton from "../Components/HomeSkeleton";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Home = ({ user }: UserData) => {
+const Home = () => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
   };
   const { data, error } = useSWR("/api/Posts", fetcher) as PostProp;
   if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
-  if (!data) return <h1>Loading...</h1>;
+  if (!data) return <HomeSkeleton />;
   return (
     <div className={styles.root}>
       <Head>
@@ -87,7 +87,7 @@ const Home = ({ user }: UserData) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
+/* export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<GetServerSidePropsResult<UserData>> => {
   const session = await auth0.getSession(context.req);
@@ -104,6 +104,6 @@ export const getServerSideProps: GetServerSideProps = async (
       user: null,
     },
   };
-};
+}; */
 
 export default Home;

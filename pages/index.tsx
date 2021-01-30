@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React from "react";
 import {
   Toolbar,
@@ -15,8 +14,6 @@ import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
 
 const Login = () => {
-  const router = useRouter();
-
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">

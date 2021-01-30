@@ -10,9 +10,11 @@ import {
   Avatar,
   Chip,
   Button,
+  Container,
 } from "@material-ui/core";
 import Link from "next/link";
 import styles from "../pages/styles/General/Home.module.css";
+import Image from "next/image";
 import { PostInterface } from "../interfaces/PostInterface";
 
 type PostData = {
@@ -30,21 +32,35 @@ export const CardList = ({ postData }: PostData) => {
               <Card className={styles.card}>
                 <CardHeader
                   avatar={
-                    <Link href={`/profile/${post.author}`}>
-                      <Avatar aria-label="User" src={post.picture} />
-                    </Link>
+                    post.picture ? (
+                      <Link href={`/profile/${post.author}`}>
+                        <Image
+                          src={post.picture}
+                          width={40}
+                          height={40}
+                          className={styles.avatar}
+                        />
+                      </Link>
+                    ) : (
+                      <Avatar src="" />
+                    )
                   }
                   title={post.author}
                   subheader={post.date}
                 />
 
-                <CardMedia
+                <Container component="div" className={styles.artContainer}>
+                  {post.art && (
+                    <Image src={post.art} layout="fill" objectFit="contain" />
+                  )}
+                </Container>
+                {/* <CardMedia
                   component="img"
                   alt="Featured Art No.1"
                   height="140"
                   image={post.art}
                   title="Featured Art No.1"
-                />
+                /> */}
                 <Link href={`/${post._id}`}>
                   <CardActionArea>
                     <CardContent>

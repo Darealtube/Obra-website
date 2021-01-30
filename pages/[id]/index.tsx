@@ -1,5 +1,4 @@
 import Appbar from "../../Components/Appbar";
-import useSWR from "swr";
 import {
   CssBaseline,
   Grid,
@@ -10,34 +9,29 @@ import {
   Divider,
   Dialog,
 } from "@material-ui/core";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import SkeletonPost from "../../Components/idSkeleton";
 import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
-import { PostProp, PostPropId } from "../../interfaces/PostInterface";
-import fetch from "unfetch";
+import { PostInterface } from "../../interfaces/PostInterface";
 import Head from "next/head";
+import { fetchAPost, fetchPosts } from "../../utils/fetchData";
+import { GetServerSideProps } from "next";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const PostID = () => {
+const PostID = ({
+  postID,
+  posts,
+}: {
+  postID: PostInterface;
+  posts: PostInterface[];
+}) => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const { data: postId, error } = useSWR(
-    `api/Posts/${router.query.id}`,
-    fetcher
-  ) as PostPropId;
-  const { data: Recommended } = useSWR("api/Posts", fetcher) as PostProp;
-  if (error) return <h1>Something went wrong!</h1>;
-  if (!postId) return <SkeletonPost />;
 
   return (
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{postId.title}</title>
+        <title>{postID.title}</title>
       </Head>
       <CssBaseline />
       <Appbar />
@@ -46,9 +40,9 @@ const PostID = () => {
           <Container>
             <Grid container spacing={2}>
               <Grid item lg={6} className={styles.artContainer}>
-                {postId.art && (
+                {postID.art && (
                   <Image
-                    src={postId.art}
+                    src={postID.art}
                     layout="fill"
                     objectFit="contain"
                     onClick={() => setOpen(true)}
@@ -59,21 +53,21 @@ const PostID = () => {
                 <Grid container spacing={2}>
                   <Grid item lg={12}>
                     <Typography variant="h4" style={{ wordWrap: "break-word" }}>
-                      {postId.title}
+                      {postID.title}
                     </Typography>
                   </Grid>
                   <Grid item lg={12}>
-                    <Typography variant="subtitle1">{postId.author}</Typography>
+                    <Typography variant="subtitle1">{postID.author}</Typography>
                   </Grid>
                   <Grid item lg={12}>
                     <Typography variant="h6">
-                      {postId.sale === "No"
+                      {postID.sale === "No"
                         ? "Showcase only"
-                        : "₱" + postId.price}
+                        : "₱" + postID.price}
                     </Typography>
                   </Grid>
                   <Grid item lg={12}>
-                    {postId.tags.map((tag) => {
+                    {postID.tags?.map((tag) => {
                       <Chip label={tag} className={styles.tag}></Chip>;
                     })}
                   </Grid>
@@ -82,7 +76,7 @@ const PostID = () => {
                       variant="body1"
                       style={{ wordWrap: "break-word" }}
                     >
-                      {postId.description}
+                      {postID.description}
                     </Typography>
                   </Grid>
                   <Grid item lg={4}>
@@ -106,7 +100,7 @@ const PostID = () => {
             <Divider />
             {/* Recommended List */}
             <Container className={styles.recommendedList}>
-              <CardList postData={Recommended} />
+              <CardList postData={posts} />
             </Container>
             {/* Recommended List */}
           </Container>
@@ -115,11 +109,29 @@ const PostID = () => {
 
       <Dialog open={open} onClose={() => setOpen(false)}>
         <Container className={styles.dialog}>
-          <Image src={postId.art} layout="fill" objectFit="contain" />
+          <Image src={postID.art} layout="fill" objectFit="contain" />
         </Container>
       </Dialog>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const postID: PostInterface = await fetchAPost(context.params.id as string);
+  const posts: PostInterface[] = await fetchPosts();
+
+  if (!postID) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      postID,
+      posts,
+    },
+  };
 };
 
 export default PostID;

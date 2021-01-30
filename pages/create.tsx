@@ -20,7 +20,7 @@ import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";
 import styles from "./styles/General/Create.module.css";
-import fetchData from "../utils/fetchData";
+import { fetchUser } from "../utils/fetchData";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { UserData } from "../interfaces/UserInterface";
 import auth0 from "../utils/auth0";
@@ -294,7 +294,7 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<GetServerSidePropsResult<UserData>> => {
   const session = await auth0.getSession(context.req);
   if (session) {
-    const user = await fetchData(session.user.sub);
+    const user = await fetchUser(session.user.sub);
     return {
       props: {
         user: user || null,

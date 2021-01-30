@@ -14,26 +14,17 @@ import { useState } from "react";
 import Appbar from "../Components/Appbar";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
-import { PostProp } from "../interfaces/PostInterface";
-import useSWR from "swr";
-import fetch from "unfetch";
-import auth0 from "../utils/auth0";
-import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { UserData } from "../interfaces/UserInterface";
-import fetchData from "../utils/fetchData";
+import { PostInterface } from "../interfaces/PostInterface";
 import Head from "next/head";
-import HomeSkeleton from "../Components/HomeSkeleton";
+import { GetStaticProps, GetStaticPropsResult } from "next";
+import { fetchPosts } from "../utils/fetchData";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const Home = () => {
+const Home = ({ posts }: PostInterface[]) => {
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
   };
-  const { data, error } = useSWR("/api/Posts", fetcher) as PostProp;
-  if (error) return <h1>Something happened, and it's terribly wrong.</h1>;
-  if (!data) return <HomeSkeleton />;
+
   return (
     <div className={styles.root}>
       <Head>
@@ -46,13 +37,13 @@ const Home = () => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={data} />
+        <CardList postData={posts} />
         {/* Featured list */}
 
         <Typography variant="h4">Recently</Typography>
         <Divider className={styles.divider} />
         {/* Recent posts list */}
-        <CardList postData={data} />
+        <CardList postData={posts} />
         {/* Recent posts list */}
       </Container>
       {/* Intro dialogue */}
@@ -85,6 +76,16 @@ const Home = () => {
       {/* Intro dialogue */}
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const posts: PostInterface[] = await fetchPosts();
+  return {
+    props: {
+      posts,
+    },
+    revalidate: 60,
+  };
 };
 
 /* export const getServerSideProps: GetServerSideProps = async (

@@ -12,7 +12,6 @@ import {
   Avatar,
   Popover,
   Box,
-  Button,
 } from "@material-ui/core";
 import { Items, Menu, Notification, NoUserMenu } from "./listItems";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -20,10 +19,10 @@ import { useState } from "react";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 import { UserPropId } from "../interfaces/UserInterface";
 import useSWR from "swr";
-import { useRouter } from "next/router";
 import fetch from "unfetch";
 import { Palette } from "@material-ui/icons";
 import Link from "next/link";
+import Image from "next/image";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,17 +54,19 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 568,
       maxHeight: 420,
     },
+    avatar: {
+      borderRadius: "50%",
+    },
   })
 );
 
 const Appbar = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const classes = useStyles();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
-  const { data: user, error } = useSWR("/api/Users/", fetcher) as UserPropId;
+  const { data: user } = useSWR("/api/Users/", fetcher) as UserPropId;
 
   const handleProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setprofAnchor(event.currentTarget);
@@ -143,9 +144,14 @@ const Appbar = () => {
               </Popover>
               <IconButton onClick={handleProfile}>
                 {user.picture ? (
-                  <Avatar src={user.picture} />
+                  <Image
+                    src={user.picture}
+                    width={48}
+                    height={48}
+                    className={classes.avatar}
+                  />
                 ) : (
-                  <Avatar>N</Avatar>
+                  <Avatar src="" />
                 )}
               </IconButton>
               <Popover
@@ -165,9 +171,14 @@ const Appbar = () => {
               >
                 <Box display="flex" flexWrap="wrap" className={classes.box}>
                   {user.picture ? (
-                    <Avatar src={user.picture} />
+                    <Image
+                      src={user.picture}
+                      width={48}
+                      height={48}
+                      className={classes.avatar}
+                    />
                   ) : (
-                    <Avatar>N</Avatar>
+                    <Avatar src="" />
                   )}
                   <div style={{ marginLeft: "25px" }}>
                     {user.username || user.name ? (
@@ -191,7 +202,7 @@ const Appbar = () => {
           ) : (
             <div>
               <IconButton onClick={handleProfile}>
-                <Avatar>N</Avatar>
+                <Avatar src="" />
               </IconButton>
               <Popover
                 id="simple-menu"
@@ -209,7 +220,7 @@ const Appbar = () => {
                 }}
               >
                 <Box display="flex" flexWrap="wrap" className={classes.box}>
-                  <Avatar>N</Avatar>
+                  <Avatar src="" />
 
                   <div style={{ marginLeft: "25px" }}>
                     <Typography>No Name</Typography>

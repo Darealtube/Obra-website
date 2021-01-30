@@ -1,29 +1,27 @@
 import Appbar from "../../Components/Appbar";
-import useSWR from "swr";
 import { CssBaseline, Grid } from "@material-ui/core";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { UserPropId } from "../../interfaces/UserInterface";
-import fetch from "unfetch";
 import styles from "../styles/Specific/Profile.module.css";
-import { PostProp } from "../../interfaces/PostInterface";
 import { CardList } from "../../Components/CardList";
 import Head from "next/head";
+import { PostInterface } from "../../interfaces/PostInterface";
+import { GetServerSideProps } from "next";
+import {
+  fetchUser,
+  fetchUserPosts,
+  fetchUserbyName,
+} from "../../utils/fetchData";
+import { UserInterface } from "../../interfaces/UserInterface";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const PostID = () => {
+const PostID = ({
+  user,
+  userPosts,
+}: {
+  user: UserInterface;
+  userPosts: PostInterface[];
+}) => {
   const router = useRouter();
-  const { data: user, error } = useSWR(
-    `/api/Users/profiles/${router.query.name}`,
-    fetcher
-  ) as UserPropId;
-  const { data: posts } = useSWR(
-    `/api/Users/profiles/${router.query.name}/posts`,
-    fetcher
-  ) as PostProp;
-  if (error) return <h1>Something went wrong!</h1>;
-  if (!user) return <h1>Loading</h1>;
 
   return (
     <div className={styles.root}>
@@ -37,13 +35,35 @@ const PostID = () => {
       <h1>{user.name}</h1>
       <Grid container className={styles.profile}>
         {user.posts ? (
-          <CardList postData={posts} />
+          <CardList postData={userPosts} />
         ) : (
           <h3>This user has no posts.</h3>
         )}
       </Grid>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user: UserInterface = await fetchUserbyName(
+    context.params.name as string
+  );
+  const userPosts: PostInterface[] = await fetchUserPosts(
+    context.params.name as string
+  );
+
+  if (!user) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      user,
+      userPosts,
+    },
+  };
 };
 
 export default PostID;

@@ -1,17 +1,12 @@
 import Appbar from "../../Components/Appbar";
 import { CssBaseline, Grid } from "@material-ui/core";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import styles from "../styles/Specific/Profile.module.css";
 import { CardList } from "../../Components/CardList";
 import Head from "next/head";
 import { PostInterface } from "../../interfaces/PostInterface";
 import { GetServerSideProps } from "next";
-import {
-  fetchUser,
-  fetchUserPosts,
-  fetchUserbyName,
-} from "../../utils/fetchData";
+import { fetchUserPosts, fetchUser } from "../../utils/fetchData";
 import { UserInterface } from "../../interfaces/UserInterface";
 
 const PostID = ({
@@ -21,8 +16,6 @@ const PostID = ({
   user: UserInterface;
   userPosts: PostInterface[];
 }) => {
-  const router = useRouter();
-
   return (
     <div className={styles.root}>
       <Head>
@@ -31,7 +24,7 @@ const PostID = ({
       </Head>
       <CssBaseline />
       <Appbar />
-      <Image src={user.picture} width={500} height={500} />
+      <Image src={user.image} width={500} height={500} />
       <h1>{user.name}</h1>
       <Grid container className={styles.profile}>
         {user.posts ? (
@@ -45,9 +38,7 @@ const PostID = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user: UserInterface = await fetchUserbyName(
-    context.params.name as string
-  );
+  const user: UserInterface = await fetchUser(context.params.name as string);
   const userPosts: PostInterface[] = await fetchUserPosts(
     context.params.name as string
   );

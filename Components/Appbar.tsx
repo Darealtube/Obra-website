@@ -143,11 +143,11 @@ const Appbar = () => {
                 </List>
               </Popover>
               <IconButton onClick={handleProfile}>
-                {user.picture ? (
+                {user.image ? (
                   <Image
-                    src={user.picture}
-                    width={48}
-                    height={48}
+                    src={user.image}
+                    width={40}
+                    height={40}
                     className={classes.avatar}
                   />
                 ) : (
@@ -170,11 +170,11 @@ const Appbar = () => {
                 }}
               >
                 <Box display="flex" flexWrap="wrap" className={classes.box}>
-                  {user.picture ? (
+                  {user.image ? (
                     <Image
-                      src={user.picture}
-                      width={48}
-                      height={48}
+                      src={user.image}
+                      width={40}
+                      height={35}
                       className={classes.avatar}
                     />
                   ) : (

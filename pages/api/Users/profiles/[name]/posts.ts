@@ -3,8 +3,6 @@ import { NextApiResponse, NextApiRequest } from "next";
 import dbConnect from "../../../../../utils/dbConnect";
 import Post from "../../../../../model/Post";
 import User from "../../../../../model/User";
-import auth0 from "../../../../../utils/auth0";
-import { UserInterface } from "../../../../../interfaces/UserInterface";
 
 export default async function handler(
   req: NextApiRequest,

@@ -16,10 +16,12 @@ import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
 import { PostInterface } from "../interfaces/PostInterface";
 import Head from "next/head";
-import { GetStaticProps, GetStaticPropsResult } from "next";
+import { GetStaticProps } from "next";
 import { fetchPosts } from "../utils/fetchData";
+import { useSession } from "next-auth/client";
 
 const Home = ({ posts }: PostInterface[]) => {
+  const [session, loading] = useSession();
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
@@ -87,24 +89,4 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 60,
   };
 };
-
-/* export const getServerSideProps: GetServerSideProps = async (
-  context
-): Promise<GetServerSidePropsResult<UserData>> => {
-  const session = await auth0.getSession(context.req);
-  if (session) {
-    const user = await fetchData(session.user.sub);
-    return {
-      props: {
-        user: user || null,
-      },
-    };
-  }
-  return {
-    props: {
-      user: null,
-    },
-  };
-}; */
-
 export default Home;

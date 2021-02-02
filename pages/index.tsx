@@ -12,8 +12,11 @@ import {
 import PaletteIcon from "@material-ui/icons/Palette";
 import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
+import { getSession, signIn, useSession } from "next-auth/client";
+import { GetServerSideProps } from "next";
 
 const Login = () => {
+  const [session, loading] = useSession();
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -23,6 +26,11 @@ const Login = () => {
       </Typography>
     );
   }
+
+  const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    signIn(null, { callbackUrl: "http://localhost:3000/home" });
+  };
 
   return (
     <div>
@@ -61,17 +69,15 @@ const Login = () => {
               Community.
             </Typography>
 
-            <Link href="/api/Authentication/login">
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={styles.submit}
-              >
-                Log In
-              </Button>
-            </Link>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={styles.submit}
+              onClick={handleSignIn}
+            >
+              Log In
+            </Button>
           </div>
           {/*Copyright*/}
           <Copyright />
@@ -81,6 +87,22 @@ const Login = () => {
       </Grid>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user = await getSession(context);
+  if (user) {
+    return {
+      redirect: {
+        destination: "/home",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Login;

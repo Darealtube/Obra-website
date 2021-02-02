@@ -34,6 +34,7 @@ import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import Link from "next/link";
 import { NotifInterface, UserInterface } from "../interfaces/UserInterface";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import { signIn, signOut } from "next-auth/client";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -194,6 +195,11 @@ type userName = {
 export const Menu = ({ name }: userName) => {
   const router = useRouter();
   const classes = useStyles();
+  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    signOut({ callbackUrl: "http://localhost:3000/" });
+  };
+
   return (
     <div>
       <ListItem>
@@ -211,10 +217,7 @@ export const Menu = ({ name }: userName) => {
         </Button>
       </ListItem>
       <ListItem>
-        <Button
-          className={classes.item}
-          onClick={() => router.push("/api/Authentication/logout")}
-        >
+        <Button className={classes.item} onClick={handleSignOut}>
           <ExitToAppIcon className={classes.icon} /> Logout
         </Button>
       </ListItem>
@@ -249,15 +252,15 @@ export const Menu = ({ name }: userName) => {
 };
 
 export const NoUserMenu = () => {
-  const router = useRouter();
   const classes = useStyles();
+  const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    signIn(null, { callbackUrl: "http://localhost:3000/home" });
+  };
   return (
     <div>
       <ListItem>
-        <Button
-          className={classes.item}
-          onClick={() => router.push("/api/Authentication/login")}
-        >
+        <Button className={classes.item} onClick={handleSignIn}>
           <MeetingRoomIcon className={classes.icon} /> Login
         </Button>
       </ListItem>
@@ -285,32 +288,19 @@ export const Notification = ({ notifications, user }: NotifData) => {
   const classes = useStyles();
   return (
     <div>
-      {notifications && notifications.length > 0 ? (
-        notifications.map((notif) => (
-          <ListItem className={classes.notifitem} key={notif.postId}>
-            <Avatar className={classes.icon}>{notif.user.picture}</Avatar>
-            <div>
-              <Typography>{notif.date}</Typography>
-              <Typography className={classes.notifInfo}>
-                {notif.description}
-              </Typography>
-            </div>
-          </ListItem>
-        ))
-      ) : !user.email_verified ? (
-        <ListItem className={classes.notifitem}>
-          <Avatar className={classes.icon}>O</Avatar>
-          <div>
-            <Typography className={classes.notifInfo}>
-              Obra says: Thank you for staying with us! We'd like you to verify
-              your email for security purposes. Check your Gmail for the
-              verification link. We appreciate it!
-            </Typography>
-          </div>
-        </ListItem>
-      ) : (
-        ""
-      )}
+      {notifications && notifications.length > 0
+        ? notifications.map((notif) => (
+            <ListItem className={classes.notifitem} key={notif.postId}>
+              <Avatar className={classes.icon}>{notif.user.image}</Avatar>
+              <div>
+                <Typography>{notif.date}</Typography>
+                <Typography className={classes.notifInfo}>
+                  {notif.description}
+                </Typography>
+              </div>
+            </ListItem>
+          ))
+        : ""}
     </div>
   );
 };

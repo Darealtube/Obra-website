@@ -3,6 +3,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import router from "next/router";
 import "./styles/patch.css";
+import { Provider } from "next-auth/client";
 
 router.events.on("routeChangeStart", () => NProgress.start());
 router.events.on("routeChangeComplete", () => NProgress.done());
@@ -17,7 +18,11 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <Provider session={pageProps.session}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
 
 export default MyApp;

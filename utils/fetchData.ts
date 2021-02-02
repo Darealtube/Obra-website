@@ -2,21 +2,7 @@ import dbConnect from "./dbConnect";
 import User from "../model/User";
 import Post from "../model/Post";
 
-export const fetchUser = async (id: string) => {
-  await dbConnect();
-  try {
-    const data = await User.findOne({ sub: id });
-    if (!data) {
-      return null;
-    }
-
-    return JSON.parse(JSON.stringify(data));
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const fetchUserbyName = async (name: string) => {
+export const fetchUser = async (name: string) => {
   await dbConnect();
   try {
     const data = await User.findOne({ name: name });

@@ -2,19 +2,23 @@ import { NextApiResponse, NextApiRequest } from "next";
 import dbConnect from "../../../utils/dbConnect";
 import Post from "../../../model/Post";
 import User from "../../../model/User";
-import auth0 from "../../../utils/auth0";
+import { getSession } from "next-auth/client";
 
-export default auth0.requireAuthentication(async function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await auth0.getSession(req);
   await dbConnect(); // Connect to DB
+  const session = await getSession({ req });
+  if (!session) {
+    res.redirect("/api/auth/signin");
+  }
+
   try {
     const post = await Post.create(req.body); // from body (for now)
 
     await User.findOneAndUpdate(
-      { sub: session.user.sub },
+      { name: session.user.name },
       // @ts-ignore
       { $push: { posts: post._id } }
     );
@@ -22,4 +26,4 @@ export default auth0.requireAuthentication(async function handler(
   } catch (error) {
     res.status(400).json({ success: false });
   }
-});
+}

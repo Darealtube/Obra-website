@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  sub: String,
-  picture: String,
+  image: String,
   email: String,
-  email_verified: Boolean,
   posts: Array,
   likedPosts: Array,
   likedArtists: Array,
@@ -15,7 +13,6 @@ const UserSchema = new mongoose.Schema({
     default: true,
   },
   name: String,
-  locale: String, // language
   // More to come
 });
 

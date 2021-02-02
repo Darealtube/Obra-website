@@ -2,17 +2,18 @@ import dbConnect from "../../../utils/dbConnect";
 import User from "../../../model/User";
 import { NextApiResponse, NextApiRequest } from "next";
 import auth0 from "../../../utils/auth0";
+import { getSession } from "next-auth/client";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   await dbConnect();
-  const session = await auth0.getSession(req);
+  const session = await getSession({ req });
   const { method } = req;
 
   if (session) {
     switch (method) {
       case "GET":
         try {
-          const user = await User.findOne({ sub: session.user.sub });
+          const user = await User.findOne({ name: session.user.name });
 
           if (!user) {
             return res.status(400).json({ success: false });

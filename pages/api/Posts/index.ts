@@ -7,7 +7,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method } = req;
   await dbConnect(); // Connect to DB
   try {
     const result = await Post.find({});

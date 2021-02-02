@@ -23,13 +23,14 @@ import styles from "./styles/General/Create.module.css";
 import { fetchUser } from "../utils/fetchData";
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
 import { UserData } from "../interfaces/UserInterface";
-import auth0 from "../utils/auth0";
 import Head from "next/head";
+import { getSession, useSession } from "next-auth/client";
 
 const Create = ({ user }: UserData) => {
+  const [session, loading] = useSession();
   const [post, setPost] = React.useState({
     author: user ? user.name : null,
-    picture: user ? user.picture : null,
+    picture: user ? user.image : null,
     title: "",
     description: "",
     art: "",
@@ -38,7 +39,7 @@ const Create = ({ user }: UserData) => {
     date: moment().format("l"),
     tags: [] as string[],
   });
-  const [loading, setLoading] = React.useState(false);
+  const [loadings, setLoadings] = React.useState(false);
   const router = useRouter();
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +52,7 @@ const Create = ({ user }: UserData) => {
     data.append("timestamp", timestamp); // Timestamp
     data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
 
-    setLoading(true);
+    setLoadings(true);
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
       {
@@ -66,7 +67,7 @@ const Create = ({ user }: UserData) => {
       ...post,
       art: file.secure_url,
     });
-    setLoading(false);
+    setLoadings(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,14 +131,14 @@ const Create = ({ user }: UserData) => {
         <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
           {/* Art Display */}
           <div className={styles.artContainer}>
-            {post.art && !loading ? (
+            {post.art && !loadings ? (
               <Image
                 src={post.art}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
               />
-            ) : loading ? (
+            ) : loadings ? (
               <CircularProgress />
             ) : (
               ""
@@ -289,22 +290,29 @@ async function getSignature() {
   return { signature, timestamp };
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context
-): Promise<GetServerSidePropsResult<UserData>> => {
-  const session = await auth0.getSession(context.req);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
   if (session) {
-    const user = await fetchUser(session.user.sub);
+    const user = await fetchUser(session.user.name);
     return {
       props: {
         user: user || null,
       },
     };
   }
+
   return {
-    props: {
-      user: null,
-    },
+    props: {},
   };
 };
 

@@ -5,6 +5,7 @@ module.exports = {
       "picsum.photos",
       "res.cloudinary.com",
       "lh3.googleusercontent.com",
+      "lh4.googleusercontent.com",
     ],
   },
   routes: [

@@ -17,6 +17,7 @@ import { PostInterface } from "../../interfaces/PostInterface";
 import Head from "next/head";
 import { fetchAPost, fetchPosts } from "../../utils/fetchData";
 import { GetServerSideProps } from "next";
+import { useSession } from "next-auth/client";
 
 const PostID = ({
   postID,
@@ -26,6 +27,19 @@ const PostID = ({
   posts: PostInterface[];
 }) => {
   const [open, setOpen] = useState(false);
+  const [session, loading] = useSession();
+
+  const handleLike = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      const res = await fetch(`/api/Posts/${postID._id}/like`);
+
+      if (!res.ok) {
+        throw new Error("404 not found");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
 
   return (
     <div className={styles.root}>
@@ -80,7 +94,7 @@ const PostID = ({
                     </Typography>
                   </Grid>
                   <Grid item lg={4}>
-                    <Button>LIKE</Button>
+                    <Button onClick={handleLike}>LIKE</Button>
                   </Grid>
                   <Grid item lg={4}>
                     <Button>ADD</Button>

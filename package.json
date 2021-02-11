@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.8",
     "@auth0/nextjs-auth0": "^0.16.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
@@ -17,9 +18,14 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/styles": "^4.11.3",
     "@zeit/next-css": "^1.0.1",
+    "apollo-server-micro": "^2.19.2",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "cloudinary": "^1.23.0",
+    "deepmerge": "^4.2.2",
+    "graphql": "^15.5.0",
+    "graphql-tools": "^7.0.2",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.13",

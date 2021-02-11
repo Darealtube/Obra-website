@@ -6,16 +6,11 @@ import { CardList } from "../../Components/CardList";
 import Head from "next/head";
 import { PostInterface } from "../../interfaces/PostInterface";
 import { GetServerSideProps } from "next";
-import { fetchUserPosts, fetchUser } from "../../utils/fetchData";
+import { fetchUserandPosts } from "../../utils/fetchData";
 import { UserInterface } from "../../interfaces/UserInterface";
 
-const PostID = ({
-  user,
-  userPosts,
-}: {
-  user: UserInterface;
-  userPosts: PostInterface[];
-}) => {
+const PostID = ({ user }: { user: UserInterface }) => {
+  const userPosts = user.posts;
   return (
     <div className={styles.root}>
       <Head>
@@ -38,10 +33,7 @@ const PostID = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user: UserInterface = await fetchUser(context.params.name as string);
-  const userPosts: PostInterface[] = await fetchUserPosts(
-    context.params.name as string
-  );
+  const user = await fetchUserandPosts(context.params.name as string);
 
   if (!user) {
     return {
@@ -52,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       user,
-      userPosts,
     },
   };
 };

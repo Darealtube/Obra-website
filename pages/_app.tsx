@@ -4,12 +4,15 @@ import "nprogress/nprogress.css";
 import router from "next/router";
 import "./styles/patch.css";
 import { Provider } from "next-auth/client";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "../apollo/apolloClient";
 
 router.events.on("routeChangeStart", () => NProgress.start());
 router.events.on("routeChangeComplete", () => NProgress.done());
 router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp({ Component, pageProps }) {
+  const apolloClient = useApollo(pageProps);
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -19,9 +22,11 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <Provider session={pageProps.session}>
-      <Component {...pageProps} />
-    </Provider>
+    <ApolloProvider client={apolloClient}>
+      <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+      </Provider>
+    </ApolloProvider>
   );
 }
 

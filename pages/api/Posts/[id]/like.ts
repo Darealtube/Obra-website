@@ -1,11 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
-import Post from "../../../../model/Post";
+import { initializeApollo } from "../../../../apollo/apolloClient";
+import {
+  LIKE_MUTATION,
+  UNLIKE_MUTATION,
+} from "../../../../apollo/apolloQueries";
 import User from "../../../../model/User";
-import dbConnect from "../../../../utils/dbConnect";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await dbConnect();
+  const apolloClient = initializeApollo();
   const session = await getSession({ req });
   if (!session) {
     res.redirect("/api/auth/signin");
@@ -16,29 +19,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
 
   try {
-    const post = await Post.findById(id);
     const user = await User.findOne({ name: session.user.name });
-    if (user.likedPosts.includes(post._id)) {
-      await User.findOneAndUpdate(
-        { name: session.user.name },
-        { $pull: { likedPosts: post._id } },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+
+    if (user.likedPosts.includes(id)) {
+      await apolloClient.mutate({
+        mutation: UNLIKE_MUTATION,
+        variables: {
+          postId: id,
+          userName: session.user.name,
+        },
+      });
     } else {
-      await User.findOneAndUpdate(
-        { name: session.user.name },
-        { $push: { likedPosts: post._id } },
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+      await apolloClient.mutate({
+        mutation: LIKE_MUTATION,
+        variables: {
+          postId: id,
+          userName: session.user.name,
+        },
+      });
     }
 
-    if (!post || !user) {
+    if (!user) {
       return res.status(400).json({ success: false });
     }
 

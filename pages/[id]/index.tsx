@@ -15,30 +15,36 @@ import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
 import { PostInterface } from "../../interfaces/PostInterface";
 import Head from "next/head";
-import { fetchAPost, fetchPosts } from "../../utils/fetchData";
+import { fetchAPost, fetchPosts, fetchUser } from "../../utils/fetchData";
 import { GetServerSideProps } from "next";
-import { useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
+import { UserInterface } from "../../interfaces/UserInterface";
+import { LIKE_MUTATION, UNLIKE_MUTATION } from "../../apollo/apolloQueries";
+import { useMutation } from "@apollo/client";
 
 const PostID = ({
   postID,
   posts,
+  user,
 }: {
   postID: PostInterface;
   posts: PostInterface[];
+  user: UserInterface;
 }) => {
   const [open, setOpen] = useState(false);
-  const [session, loading] = useSession();
+  let userLikedPosts = user.likedPosts.map((post) => post.id);
+  const [liked, setLiked] = useState(userLikedPosts.includes(postID.id));
+  const [like] = useMutation(LIKE_MUTATION);
+  const [unlike] = useMutation(UNLIKE_MUTATION);
 
-  const handleLike = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      const res = await fetch(`/api/Posts/${postID._id}/like`);
-
-      if (!res.ok) {
-        throw new Error("404 not found");
-      }
-    } catch (error) {
-      throw error;
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!liked) {
+      like({ variables: { postId: postID.id, userName: user.name } });
+    } else {
+      unlike({ variables: { postId: postID.id, userName: user.name } });
     }
+    setLiked(!liked);
   };
 
   return (
@@ -94,7 +100,12 @@ const PostID = ({
                     </Typography>
                   </Grid>
                   <Grid item lg={4}>
-                    <Button onClick={handleLike}>LIKE</Button>
+                    <Button
+                      onClick={handleLike}
+                      style={liked ? { color: "red" } : { color: "inherit" }}
+                    >
+                      LIKE
+                    </Button>
                   </Grid>
                   <Grid item lg={4}>
                     <Button>ADD</Button>
@@ -131,9 +142,10 @@ const PostID = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
   const postID: PostInterface = await fetchAPost(context.params.id as string);
   const posts: PostInterface[] = await fetchPosts();
-
+  const user: UserInterface = await fetchUser(session.user.name);
   if (!postID) {
     return {
       notFound: true,
@@ -144,6 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       postID,
       posts,
+      user,
     },
   };
 };

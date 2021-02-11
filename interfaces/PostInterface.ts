@@ -1,5 +1,5 @@
 export interface PostInterface {
-  _id: string;
+  id: string;
   author?: string;
   picture?: string;
   date: string;

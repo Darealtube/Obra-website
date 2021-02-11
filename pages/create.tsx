@@ -27,7 +27,6 @@ import Head from "next/head";
 import { getSession, useSession } from "next-auth/client";
 
 const Create = ({ user }: UserData) => {
-  const [session, loading] = useSession();
   const [post, setPost] = React.useState({
     author: user ? user.name : null,
     picture: user ? user.image : null,
@@ -304,6 +303,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session) {
     const user = await fetchUser(session.user.name);
+
     return {
       props: {
         user: user || null,

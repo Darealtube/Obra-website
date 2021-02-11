@@ -281,10 +281,9 @@ export const NoUserMenu = () => {
 
 type NotifData = {
   notifications: NotifInterface[];
-  user: UserInterface;
 };
 
-export const Notification = ({ notifications, user }: NotifData) => {
+export const Notification = ({ notifications }: NotifData) => {
   const classes = useStyles();
   return (
     <div>
@@ -301,6 +300,34 @@ export const Notification = ({ notifications, user }: NotifData) => {
             </ListItem>
           ))
         : ""}
+    </div>
+  );
+};
+
+export const EditMenu = ({ id }: { id: string }) => {
+  const classes = useStyles();
+  const router = useRouter();
+  return (
+    <div>
+      <ListItem>
+        <Button
+          className={classes.item}
+          onClick={() => router.push(`/${id}/edit`)}
+        >
+          <MeetingRoomIcon className={classes.icon} /> Edit
+        </Button>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <Button className={classes.item}>
+          <InfoIcon className={classes.icon} /> Delete
+        </Button>
+      </ListItem>
+      <ListItem>
+        <Button className={classes.item}>
+          <ContactSupportIcon className={classes.icon} /> Report
+        </Button>
+      </ListItem>
     </div>
   );
 };

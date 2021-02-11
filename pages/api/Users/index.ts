@@ -1,30 +1,19 @@
-import dbConnect from "../../../utils/dbConnect";
-import User from "../../../model/User";
 import { NextApiResponse, NextApiRequest } from "next";
-import auth0 from "../../../utils/auth0";
 import { getSession } from "next-auth/client";
+import { initializeApollo } from "../../../apollo/apolloClient";
+import { APPBAR_USER_QUERY } from "../../../apollo/apolloQueries";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  await dbConnect();
   const session = await getSession({ req });
-  const { method } = req;
-
-  if (session) {
-    switch (method) {
-      case "GET":
-        try {
-          const user = await User.findOne({ name: session.user.name });
-
-          if (!user) {
-            return res.status(400).json({ success: false });
-          }
-
-          return res.status(200).json(user);
-        } catch (error) {
-          throw error;
-        }
-    }
-  } else {
-    return res.status(200).json(null);
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: APPBAR_USER_QUERY,
+    variables: {
+      name: session.user.name,
+    },
+  });
+  if (!data) {
+    return null;
   }
+  return res.status(200).json(data.userId);
 };

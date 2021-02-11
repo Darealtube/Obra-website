@@ -20,13 +20,16 @@ import { GetStaticProps } from "next";
 import { fetchPosts } from "../utils/fetchData";
 import { useSession } from "next-auth/client";
 
-const Home = ({ posts }: PostInterface[]) => {
+type Posts = {
+  posts: PostInterface[];
+};
+
+const Home = ({ posts }: Posts) => {
   const [session, loading] = useSession();
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
   };
-
   return (
     <div className={styles.root}>
       <Head>
@@ -82,6 +85,7 @@ const Home = ({ posts }: PostInterface[]) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts: PostInterface[] = await fetchPosts();
+
   return {
     props: {
       posts,

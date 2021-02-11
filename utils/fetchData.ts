@@ -1,82 +1,76 @@
 import dbConnect from "./dbConnect";
-import User from "../model/User";
 import Post from "../model/Post";
+import { initializeApollo } from "../apollo/apolloClient";
+import {
+  POST_ID_QUERY,
+  POST_QUERY,
+  USER_ID_QUERY,
+  USER_POST_QUERY,
+} from "../apollo/apolloQueries";
 
 export const fetchUser = async (name: string) => {
-  await dbConnect();
-  try {
-    const data = await User.findOne({ name: name });
-    if (!data) {
-      return null;
-    }
-
-    return JSON.parse(JSON.stringify(data));
-  } catch (error) {
-    throw error;
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: USER_ID_QUERY,
+    variables: {
+      name: name,
+    },
+  });
+  if (!data) {
+    return null;
   }
+  return data.userId;
 };
 
-export const fetchUserPosts = async (name: string) => {
-  await dbConnect();
-  try {
-    const result = await Post.find({});
-    const user = await User.findOne({ name: name });
-
-    if (!user) {
-      return null;
-    }
-
-    if (user.posts.length <= 0) {
-      return null;
-    }
-
-    const userPosts = result
-      .map((post) => {
-        return post.toObject();
-      })
-      .filter((post) => {
-        return user.posts.includes(post._id);
-      });
-
-    if (!userPosts) {
-      return null;
-    }
-
-    return JSON.parse(JSON.stringify(userPosts));
-  } catch (error) {
-    throw error;
+/* export const fetchUserPosts = async (name: string) => {
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: USER_ID_QUERY,
+    variables: {
+      name: name,
+    },
+  });
+  if (!data) {
+    return null;
   }
+  return data.userId;
+}; */
+
+export const fetchUserandPosts = async (name: string) => {
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: USER_POST_QUERY,
+    variables: {
+      name: name,
+    },
+  });
+  if (!data) {
+    return null;
+  }
+  return data.userId;
 };
 
 export const fetchPosts = async () => {
-  await dbConnect();
-  try {
-    const data = await Post.find({});
-
-    const posts = data.map((data) => {
-      const post = data.toObject();
-      post._id = post._id.toString();
-      return post;
-    });
-
-    if (!data) {
-      return null;
-    }
-    return JSON.parse(JSON.stringify(posts));
-  } catch (error) {
-    throw error;
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: POST_QUERY,
+  });
+  if (!data) {
+    return null;
   }
+  return data.posts;
 };
 
 export const fetchAPost = async (id: string) => {
-  await dbConnect();
-  try {
-    const data = await Post.findOne({ _id: id });
-    if (!data) {
-      return null;
-    }
-    return JSON.parse(JSON.stringify(data));
-  } catch (error) {
-    throw error;
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: POST_ID_QUERY,
+    variables: {
+      id: id,
+    },
+  });
+  if (!data) {
+    return null;
   }
+  return data.postId;
 };

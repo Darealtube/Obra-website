@@ -1,5 +1,3 @@
-import dbConnect from "../../utils/dbConnect";
-import Post from "../../model/Post";
 import NumberFormat from "react-number-format";
 import { Palette } from "@material-ui/icons";
 import React from "react";
@@ -8,73 +6,42 @@ import {
   Paper,
   Grid,
   TextField,
-  makeStyles,
   FormControl,
   FormLabel,
   RadioGroup,
   FormControlLabel,
   Radio,
   Button,
-  Container,
-  Input,
-  CircularProgress,
-  Chip,
 } from "@material-ui/core";
 import Appbar from "../../Components/Appbar";
 import Image from "next/image";
-import moment from "moment";
 import { useRouter } from "next/router";
-import { GetStaticProps } from "next";
+import styles from "../styles/General/Create.module.css";
+import { fetchAPost, fetchUser } from "../../utils/fetchData";
+import { GetServerSideProps, GetServerSidePropsResult } from "next";
+import { UserData } from "../../interfaces/UserInterface";
+import Head from "next/head";
+import { getSession } from "next-auth/client";
+import { PostInterface } from "../../interfaces/PostInterface";
+import { EDIT_POST_MUTATION } from "../../apollo/apolloQueries";
+import { useMutation } from "@apollo/client";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: "flex",
-    flexDirection: "column",
-  },
-  grid: {
-    height: "100vh",
-  },
-  price: {
-    width: "100%",
-    height: "2em",
-  },
-  displayArt: {
-    display: "flex",
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "auto",
-    backgroundImage: "linear-gradient(65deg, #fff1e6, #ddbea9)",
-  },
-  artContainer: {
-    display: "flex",
-    position: "relative",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "80%",
-    height: "80%",
-    marginTop: theme.spacing(8),
-  },
-}));
-
-const Edit = ({ posts }) => {
-  const classes = useStyles();
+const Create = ({
+  user,
+  postId,
+}: {
+  user: UserData;
+  postId: PostInterface;
+}) => {
   const [post, setPost] = React.useState({
-    title: "",
-    description: "",
-    art: "",
-    price: "",
-    sale: "No",
-    date: moment().format("l"),
-    tags: [] as string[],
+    title: postId.title,
+    description: postId.description,
+    art: postId.art,
+    price: postId.price,
+    sale: postId.sale,
+    tags: postId.tags as string[],
   });
-  const [loading, setLoading] = React.useState(false);
+  const [edit] = useMutation(EDIT_POST_MUTATION);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,45 +63,31 @@ const Edit = ({ posts }) => {
     });
   };
 
-  React.useEffect(() => {
-    if (post.sale === "No") {
-      setPost({
-        ...post,
-        price: "",
-      });
-    }
-  }, [post.sale]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const res = await fetch("api/Posts", {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(post),
-      });
-
-      if (!res.ok) {
-        throw new Error("404 not found");
-      }
-
-      router.push("/home");
-    } catch (error) {
-      throw error;
-    }
+    edit({
+      variables: {
+        postId: postId.id,
+        title: post.title,
+        description: post.description,
+        tags: post.tags,
+      },
+    });
+    router.push("/home");
   };
 
   return (
-    <div className={classes.root}>
+    <div className={styles.root}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Edit</title>
+      </Head>
       <CssBaseline />
       <Appbar />
-      <Grid container className={classes.grid}>
-        <Grid item xs={false} sm={4} md={7} className={classes.displayArt}>
+      <Grid container className={styles.grid}>
+        <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
           {/* Art Display */}
-          <div className={classes.artContainer}>
+          <div className={styles.artContainer}>
             <Image
               src={post.art}
               layout="fill"
@@ -145,7 +98,7 @@ const Edit = ({ posts }) => {
           {/* Art Display */}
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
+          <div className={styles.paper}>
             {/* Form */}
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
@@ -153,29 +106,30 @@ const Edit = ({ posts }) => {
                   <TextField
                     variant="filled"
                     margin="normal"
-                    required
                     fullWidth
                     id="title"
                     label="Title"
                     name="title"
                     color="primary"
                     onChange={handleChange}
+                    defaultValue={post.title}
                   />
                 </Grid>
+
                 <Grid item xs={12}>
                   <TextField
                     variant="outlined"
                     margin="none"
-                    required
                     fullWidth
                     id="description"
                     label="Description"
                     name="description"
                     color="primary"
-                    rows={4}
+                    rows={8}
                     multiline={true}
-                    rowsMax={6}
+                    rowsMax={4}
                     onChange={handleChange}
+                    defaultValue={post.description}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -183,7 +137,7 @@ const Edit = ({ posts }) => {
                     margin="normal"
                     variant="outlined"
                     component="fieldset"
-                    required
+                    disabled
                   >
                     <FormLabel component="legend">Is it for Sale?</FormLabel>
                     <RadioGroup
@@ -215,10 +169,10 @@ const Edit = ({ posts }) => {
                         displayType={"input"}
                         thousandSeparator={true}
                         prefix={"₱"}
-                        disabled={post.sale === "No" ? true : false}
+                        disabled
                         inputMode="numeric"
                         allowNegative={false}
-                        className={classes.price}
+                        className={styles.price}
                         isNumericString={true}
                         onValueChange={(values) => {
                           setPost({
@@ -226,7 +180,6 @@ const Edit = ({ posts }) => {
                             price: values.value,
                           });
                         }}
-                        required={post.sale === "No" ? false : true}
                       />
                     </div>
                   </FormControl>
@@ -244,7 +197,7 @@ const Edit = ({ posts }) => {
                     rows={2}
                     multiline={true}
                     onChange={handleTags}
-                    required
+                    defaultValue={post.tags}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -255,7 +208,7 @@ const Edit = ({ posts }) => {
                     color="primary"
                     startIcon={<Palette />}
                   >
-                    Publish
+                    Edit
                   </Button>
                 </Grid>
               </Grid>
@@ -268,16 +221,33 @@ const Edit = ({ posts }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  await dbConnect();
-  /* find all the data in our database */
-  const result = await Post.find({});
-  const posts = result.map((data) => {
-    const post = data.toObject();
-    post._id = post._id.toString();
-    return post;
-  });
-  return { props: { posts: posts }, revalidate: 1 };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const postId = await fetchAPost(context.params.id as string);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  if (session) {
+    const user = await fetchUser(session.user.name);
+
+    return {
+      props: {
+        user: user || null,
+        postId,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
-export default Edit;
+export default Create;

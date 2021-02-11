@@ -2,7 +2,6 @@ import {
   Grid,
   Card,
   CardHeader,
-  CardMedia,
   CardActionArea,
   CardActions,
   CardContent,
@@ -11,11 +10,17 @@ import {
   Chip,
   Button,
   Container,
+  IconButton,
+  Popover,
+  List,
 } from "@material-ui/core";
 import Link from "next/link";
 import styles from "../pages/styles/General/Home.module.css";
 import Image from "next/image";
 import { PostInterface } from "../interfaces/PostInterface";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { useState } from "react";
+import { EditMenu } from "./listItems";
 
 type PostData = {
   postData: PostInterface[];
@@ -23,12 +28,21 @@ type PostData = {
 };
 
 export const CardList = ({ postData }: PostData) => {
+  const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    seteditAnchor(e.currentTarget);
+  };
+
+  const handleEditClose = () => {
+    seteditAnchor(null);
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
         {postData &&
-          postData.map((post) => (
-            <Grid item key={post._id}>
+          postData.map((post, index) => (
+            <Grid item key={index}>
               <Card className={styles.card}>
                 <CardHeader
                   avatar={
@@ -45,6 +59,11 @@ export const CardList = ({ postData }: PostData) => {
                       <Avatar src="" />
                     )
                   }
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
                   title={post.author}
                   subheader={post.date}
                 />
@@ -54,14 +73,8 @@ export const CardList = ({ postData }: PostData) => {
                     <Image src={post.art} layout="fill" objectFit="contain" />
                   )}
                 </Container>
-                {/* <CardMedia
-                  component="img"
-                  alt="Featured Art No.1"
-                  height="140"
-                  image={post.art}
-                  title="Featured Art No.1"
-                /> */}
-                <Link href={`/${post._id}`}>
+
+                <Link href={`/${post.id}`}>
                   <CardActionArea>
                     <CardContent>
                       <Typography

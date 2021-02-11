@@ -138,7 +138,6 @@ const Appbar = () => {
                 <List className={classes.notifmenu}>
                   <Notification
                     notifications={user ? user.notifications : null}
-                    user={user}
                   />
                 </List>
               </Popover>

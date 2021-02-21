@@ -12,7 +12,7 @@ router.events.on("routeChangeComplete", () => NProgress.done());
 router.events.on("routeChangeError", () => NProgress.done());
 
 function MyApp({ Component, pageProps }) {
-  const apolloClient = useApollo(pageProps);
+  const apolloClient = useApollo(pageProps.initialApolloState);
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");

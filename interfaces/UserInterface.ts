@@ -2,7 +2,7 @@ import { PostInterface } from "./PostInterface";
 
 export interface UserInterface {
   image: string;
-  _id: string;
+  id: string;
   email: string;
   username?: string;
   posts?: PostInterface[];

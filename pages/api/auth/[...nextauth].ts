@@ -32,6 +32,10 @@ const options = {
         ? Promise.resolve(url)
         : Promise.resolve(baseUrl);
     },
+    session: async (session, user) => {
+      session.id = user.id;
+      return Promise.resolve(session);
+    },
   },
 };
 

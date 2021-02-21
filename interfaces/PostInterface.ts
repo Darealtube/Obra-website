@@ -1,6 +1,8 @@
+import { UserInterface } from "./UserInterface";
+
 export interface PostInterface {
   id: string;
-  author?: string;
+  author?: UserInterface;
   picture?: string;
   date: string;
   art: string;

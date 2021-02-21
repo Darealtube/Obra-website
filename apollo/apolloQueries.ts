@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+//Fetch all Users
 export const USER_QUERY = gql`
   query Users {
     users {
@@ -9,12 +10,16 @@ export const USER_QUERY = gql`
   }
 `;
 
+//Fetch all Posts
 export const POST_QUERY = gql`
-  query Users {
+  query Posts {
     posts {
       id
       picture
-      author
+      author {
+        id
+        name
+      }
       date
       title
       tags
@@ -23,9 +28,10 @@ export const POST_QUERY = gql`
   }
 `;
 
+//Fetch User by ID
 export const USER_ID_QUERY = gql`
-  query UserID($name: String!) {
-    userId(name: $name) {
+  query UserID($id: ID!) {
+    userId(id: $id) {
       id
       name
       image
@@ -36,13 +42,17 @@ export const USER_ID_QUERY = gql`
   }
 `;
 
+//Fetch Post By ID
 export const POST_ID_QUERY = gql`
   query PostID($id: ID!) {
     postId(id: $id) {
       id
       title
       art
-      author
+      author {
+        id
+        name
+      }
       sale
       price
       tags
@@ -51,9 +61,11 @@ export const POST_ID_QUERY = gql`
   }
 `;
 
+//Fetch Appbar Info
 export const APPBAR_USER_QUERY = gql`
-  query UserAppbarID($name: String!) {
-    userId(name: $name) {
+  query UserAppbarID($id: ID!) {
+    userId(id: $id) {
+      id
       name
       image
       email
@@ -69,14 +81,19 @@ export const APPBAR_USER_QUERY = gql`
   }
 `;
 
+//Fetch User and Posts
 export const USER_POST_QUERY = gql`
   query UserPosts($name: String!) {
-    userId(name: $name) {
+    userName(name: $name) {
+      id
       name
       image
       posts {
         id
-        author
+        author {
+          id
+          name
+        }
         picture
         date
         art
@@ -111,5 +128,37 @@ export const EDIT_POST_MUTATION = gql`
       description: $description
       tags: $tags
     )
+  }
+`;
+
+export const CREATE_POST_MUTATION = gql`
+  mutation CreatePost(
+    $date: String!
+    $tags: [String]
+    $title: String!
+    $description: String!
+    $art: String!
+    $price: String!
+    $sale: String!
+    $author: String!
+    $picture: String!
+  ) {
+    createPost(
+      date: $date
+      tags: $tags
+      title: $title
+      description: $description
+      art: $art
+      price: $price
+      sale: $sale
+      author: $author
+      picture: $picture
+    )
+  }
+`;
+
+export const DELETE_POST_MUTATION = gql`
+  mutation DeletePost($postId: ID!) {
+    deletePost(postId: $postId)
   }
 `;

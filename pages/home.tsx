@@ -11,25 +11,35 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import { useState } from "react";
-import Appbar from "../Components/Appbar";
+import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
 import { PostInterface } from "../interfaces/PostInterface";
 import Head from "next/head";
 import { GetStaticProps } from "next";
-import { fetchPosts } from "../utils/fetchData";
 import { useSession } from "next-auth/client";
+import { useQuery } from "@apollo/client";
+import { POST_QUERY } from "../apollo/apolloQueries";
+import { initializeApollo } from "../apollo/apolloClient";
+import { fetchPosts } from "../utils/fetchData";
+
+interface PostData {
+  posts: PostInterface[];
+}
 
 type Posts = {
-  posts: PostInterface[];
+  data: PostData;
+  loading: Boolean;
 };
 
-const Home = ({ posts }: Posts) => {
+const Home = () => {
   const [session, loading] = useSession();
+  const { data, loading: load } = useQuery(POST_QUERY) as Posts;
   const [intro, setIntro] = useState(true);
   const handleBackdrop = () => {
     setIntro(!intro);
   };
+
   return (
     <div className={styles.root}>
       <Head>
@@ -42,13 +52,14 @@ const Home = ({ posts }: Posts) => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={posts} />
+        {load ? "" : <CardList postData={data.posts} id={session?.id} />}
+
         {/* Featured list */}
 
         <Typography variant="h4">Recently</Typography>
         <Divider className={styles.divider} />
         {/* Recent posts list */}
-        <CardList postData={posts} />
+        {load ? "" : <CardList postData={data.posts} id={session?.id} />}
         {/* Recent posts list */}
       </Container>
       {/* Intro dialogue */}
@@ -84,13 +95,14 @@ const Home = ({ posts }: Posts) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts: PostInterface[] = await fetchPosts();
+  const apollo = await fetchPosts();
 
   return {
     props: {
-      posts,
+      initialApolloState: apollo,
     },
     revalidate: 60,
   };
 };
+
 export default Home;

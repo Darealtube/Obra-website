@@ -1,4 +1,4 @@
-import Appbar from "../../Components/Appbar";
+import Appbar from "../../Components/Appbar/Appbar";
 import {
   CssBaseline,
   Grid,
@@ -10,48 +10,69 @@ import {
   Dialog,
 } from "@material-ui/core";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
 import { PostInterface } from "../../interfaces/PostInterface";
 import Head from "next/head";
-import { fetchAPost, fetchPosts, fetchUser } from "../../utils/fetchData";
+import { InitializePostInfo } from "../../utils/fetchData";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 import { UserInterface } from "../../interfaces/UserInterface";
-import { LIKE_MUTATION, UNLIKE_MUTATION } from "../../apollo/apolloQueries";
-import { useMutation } from "@apollo/client";
+import {
+  LIKE_MUTATION,
+  POST_ID_QUERY,
+  POST_QUERY,
+  UNLIKE_MUTATION,
+  USER_ID_QUERY,
+} from "../../apollo/apolloQueries";
+import { useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 
-const PostID = ({
-  postID,
-  posts,
-  user,
-}: {
-  postID: PostInterface;
-  posts: PostInterface[];
-  user: UserInterface;
-}) => {
+const PostID = ({ id, alreadyLiked }) => {
   const [open, setOpen] = useState(false);
-  let userLikedPosts = user.likedPosts.map((post) => post.id);
-  const [liked, setLiked] = useState(userLikedPosts.includes(postID.id));
+  const router = useRouter();
+  const [session, loading] = useSession();
   const [like] = useMutation(LIKE_MUTATION);
   const [unlike] = useMutation(UNLIKE_MUTATION);
+  const { data: user } = useQuery(USER_ID_QUERY, {
+    variables: {
+      id: session?.id,
+    },
+    skip: !session,
+  });
+  const { data: posts } = useQuery(POST_QUERY);
+  const { data: postID } = useQuery(POST_ID_QUERY, {
+    variables: {
+      id: id,
+    },
+  });
+
+  const [liked, setLiked] = useState(alreadyLiked);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!liked) {
-      like({ variables: { postId: postID.id, userName: user.name } });
-    } else {
-      unlike({ variables: { postId: postID.id, userName: user.name } });
+    if (!session && !loading) {
+      router.replace("/api/auth/signin");
     }
-    setLiked(!liked);
+    if (!liked) {
+      like({
+        variables: { postId: postID.postId.id, userName: user?.userId.name },
+      });
+      setLiked(true);
+    } else {
+      unlike({
+        variables: { postId: postID.postId.id, userName: user?.userId.name },
+      });
+      setLiked(false);
+    }
   };
 
   return (
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{postID.title}</title>
+        <title>{postID.postId.title}</title>
       </Head>
       <CssBaseline />
       <Appbar />
@@ -60,9 +81,9 @@ const PostID = ({
           <Container>
             <Grid container spacing={2}>
               <Grid item lg={6} className={styles.artContainer}>
-                {postID.art && (
+                {postID.postId.art && (
                   <Image
-                    src={postID.art}
+                    src={postID.postId.art}
                     layout="fill"
                     objectFit="contain"
                     onClick={() => setOpen(true)}
@@ -73,21 +94,23 @@ const PostID = ({
                 <Grid container spacing={2}>
                   <Grid item lg={12}>
                     <Typography variant="h4" style={{ wordWrap: "break-word" }}>
-                      {postID.title}
+                      {postID.postId.title}
                     </Typography>
                   </Grid>
                   <Grid item lg={12}>
-                    <Typography variant="subtitle1">{postID.author}</Typography>
+                    <Typography variant="subtitle1">
+                      {postID.postId.author.name}
+                    </Typography>
                   </Grid>
                   <Grid item lg={12}>
                     <Typography variant="h6">
-                      {postID.sale === "No"
+                      {postID.postId.sale === "No"
                         ? "Showcase only"
-                        : "₱" + postID.price}
+                        : "₱" + postID.postId.price}
                     </Typography>
                   </Grid>
                   <Grid item lg={12}>
-                    {postID.tags?.map((tag) => {
+                    {postID.postId.tags?.map((tag) => {
                       <Chip label={tag} className={styles.tag}></Chip>;
                     })}
                   </Grid>
@@ -96,7 +119,7 @@ const PostID = ({
                       variant="body1"
                       style={{ wordWrap: "break-word" }}
                     >
-                      {postID.description}
+                      {postID.postId.description}
                     </Typography>
                   </Grid>
                   <Grid item lg={4}>
@@ -125,7 +148,7 @@ const PostID = ({
             <Divider />
             {/* Recommended List */}
             <Container className={styles.recommendedList}>
-              <CardList postData={posts} />
+              <CardList postData={posts.posts} id={session?.id} />
             </Container>
             {/* Recommended List */}
           </Container>
@@ -134,7 +157,7 @@ const PostID = ({
 
       <Dialog open={open} onClose={() => setOpen(false)}>
         <Container className={styles.dialog}>
-          <Image src={postID.art} layout="fill" objectFit="contain" />
+          <Image src={postID.postId.art} layout="fill" objectFit="contain" />
         </Container>
       </Dialog>
     </div>
@@ -143,10 +166,12 @@ const PostID = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const postID: PostInterface = await fetchAPost(context.params.id as string);
-  const posts: PostInterface[] = await fetchPosts();
-  const user: UserInterface = await fetchUser(session.user.name);
-  if (!postID) {
+  const data = await InitializePostInfo(
+    context.params.id as string,
+    session.id
+  );
+
+  if (data.exists === false) {
     return {
       notFound: true,
     };
@@ -154,9 +179,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      postID,
-      posts,
-      user,
+      initialApolloState: data.data,
+      id: context.params.id,
+      alreadyLiked: data.alreadyLiked,
     },
   };
 };

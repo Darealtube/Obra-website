@@ -20,21 +20,33 @@ import Image from "next/image";
 import { PostInterface } from "../interfaces/PostInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useState } from "react";
-import { EditMenu } from "./listItems";
+import EditMenu from "../Components/ListItems/EditMenu";
+import { useSession } from "next-auth/client";
+import { SupervisedUserCircleRounded } from "@material-ui/icons";
 
 type PostData = {
   postData: PostInterface[];
+  id: string;
   error?: string;
 };
 
-export const CardList = ({ postData }: PostData) => {
+export const CardList = ({ postData, id }: PostData) => {
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
+  const [targetId, settargetId] = useState<string>(null);
+  const [admin, setadmin] = useState<boolean>(null);
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     seteditAnchor(e.currentTarget);
+    settargetId(e.currentTarget.value);
+    setadmin(id === e.currentTarget.id);
   };
 
   const handleEditClose = () => {
     seteditAnchor(null);
+    settargetId(null);
+  };
+
+  const handleEditExit = () => {
+    setadmin(null);
   };
 
   return (
@@ -47,7 +59,7 @@ export const CardList = ({ postData }: PostData) => {
                 <CardHeader
                   avatar={
                     post.picture ? (
-                      <Link href={`/profile/${post.author}`}>
+                      <Link href={`/profile/${post.author.name}`}>
                         <Image
                           src={post.picture}
                           width={40}
@@ -60,11 +72,16 @@ export const CardList = ({ postData }: PostData) => {
                     )
                   }
                   action={
-                    <IconButton aria-label="settings">
+                    <IconButton
+                      aria-label="settings"
+                      onClick={handleEdit}
+                      value={post.id}
+                      id={post.author.id}
+                    >
                       <MoreVertIcon />
                     </IconButton>
                   }
-                  title={post.author}
+                  title={post.author.name}
                   subheader={post.date}
                 />
 
@@ -100,6 +117,30 @@ export const CardList = ({ postData }: PostData) => {
             </Grid>
           ))}
       </Grid>
+      <Popover
+        anchorEl={editAnchor}
+        keepMounted
+        open={Boolean(editAnchor)}
+        onClose={handleEditClose}
+        onExited={handleEditExit}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <List>
+          <EditMenu
+            id={targetId}
+            admin={admin}
+            onClose={handleEditClose}
+            onExited={handleEditExit}
+          />
+        </List>
+      </Popover>
     </div>
   );
 };

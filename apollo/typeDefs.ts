@@ -2,12 +2,12 @@ import { gql } from "apollo-server-micro";
 
 export const typeDefs = gql`
   type User {
-    id: ID!
+    id: ID
     name: String
     email: String
     image: String
-    createdAt: String!
-    updatedAt: String!
+    createdAt: String
+    updatedAt: String
     posts: [Post]
     likedPosts: [Post]
     notifications: [Notification]
@@ -22,14 +22,15 @@ export const typeDefs = gql`
     art: String!
     price: String!
     sale: String!
-    author: String
+    author: User
     picture: String
   }
 
   type Query {
     users: [User]!
     posts: [Post]
-    userId(name: String!): User
+    userId(id: ID!): User
+    userName(name: String!): User
     postId(id: ID!): Post
   }
 
@@ -49,5 +50,17 @@ export const typeDefs = gql`
       description: String!
       tags: [String!]
     ): Boolean!
+    createPost(
+      date: String!
+      tags: [String]
+      title: String!
+      description: String!
+      art: String!
+      price: String!
+      sale: String!
+      author: String
+      picture: String
+    ): Boolean!
+    deletePost(postId: ID!): Boolean!
   }
 `;

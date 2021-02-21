@@ -8,12 +8,12 @@ import {
   USER_POST_QUERY,
 } from "../apollo/apolloQueries";
 
-export const fetchUser = async (name: string) => {
+export const fetchUser = async (id: string) => {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: USER_ID_QUERY,
     variables: {
-      name: name,
+      id: id,
     },
   });
   if (!data) {
@@ -44,21 +44,16 @@ export const fetchUserandPosts = async (name: string) => {
       name: name,
     },
   });
-  if (!data) {
-    return null;
-  }
-  return data.userId;
+
+  return { data: apolloClient.cache.extract(), exists: data ? true : false };
 };
 
 export const fetchPosts = async () => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  await apolloClient.query({
     query: POST_QUERY,
   });
-  if (!data) {
-    return null;
-  }
-  return data.posts;
+  return apolloClient.cache.extract();
 };
 
 export const fetchAPost = async (id: string) => {
@@ -73,4 +68,29 @@ export const fetchAPost = async (id: string) => {
     return null;
   }
   return data.postId;
+};
+
+export const InitializePostInfo = async (id: string, sessionId: string) => {
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: POST_ID_QUERY,
+    variables: {
+      id: id,
+    },
+  });
+  await apolloClient.query({
+    query: POST_QUERY,
+  });
+  const { data: user } = await apolloClient.query({
+    query: USER_ID_QUERY,
+    variables: {
+      id: sessionId,
+    },
+  });
+
+  return {
+    data: apolloClient.cache.extract(),
+    exists: data ? true : false,
+    alreadyLiked: user.userId.likedPosts.some((post) => post.id === id),
+  };
 };

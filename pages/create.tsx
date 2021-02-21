@@ -1,35 +1,31 @@
-import NumberFormat from "react-number-format";
-import { Palette } from "@material-ui/icons";
+import { NumberFormatValues } from "react-number-format";
 import React from "react";
-import {
-  CssBaseline,
-  Paper,
-  Grid,
-  TextField,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  Button,
-  Input,
-  CircularProgress,
-} from "@material-ui/core";
-import Appbar from "../Components/Appbar";
+import { CssBaseline, Paper, Grid, CircularProgress } from "@material-ui/core";
+import Appbar from "../Components/Appbar/Appbar";
 import Image from "next/image";
 import moment from "moment";
 import { useRouter } from "next/router";
 import styles from "./styles/General/Create.module.css";
-import { fetchUser } from "../utils/fetchData";
-import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { UserData } from "../interfaces/UserInterface";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { getSession, useSession } from "next-auth/client";
+import { CREATE_POST_MUTATION, USER_ID_QUERY } from "../apollo/apolloQueries";
+import { initializeApollo } from "../apollo/apolloClient";
+import { useMutation, useQuery } from "@apollo/client";
+import PostForm from "../Components/Forms/CreatePost";
 
-const Create = ({ user }: UserData) => {
+const Create = ({ userData }) => {
+  const [session, loading] = useSession();
+  const { data } = useQuery(USER_ID_QUERY, {
+    variables: {
+      id: session?.id,
+    },
+    skip: !session,
+  });
+  const [create] = useMutation(CREATE_POST_MUTATION);
   const [post, setPost] = React.useState({
-    author: user ? user.name : null,
-    picture: user ? user.image : null,
+    author: userData.name,
+    picture: userData.picture,
     title: "",
     description: "",
     art: "",
@@ -60,11 +56,13 @@ const Create = ({ user }: UserData) => {
         mode: "cors",
       }
     );
-
     const file = await res.json();
-    setPost({
-      ...post,
-      art: file.secure_url,
+
+    setPost((prevpost) => {
+      return {
+        ...prevpost,
+        art: file.secure_url,
+      };
     });
     setLoadings(false);
   };
@@ -99,25 +97,29 @@ const Create = ({ user }: UserData) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const res = await fetch("/api/Posts/create", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(post),
-      });
-
-      if (!res.ok) {
-        throw new Error("404 not found");
-      }
-
-      router.push("/home");
-    } catch (error) {
-      throw error;
-    }
+    create({
+      variables: {
+        author: post.author,
+        picture: post.picture,
+        title: post.title,
+        description: post.description,
+        art: post.art,
+        price: post.price,
+        sale: post.sale,
+        date: post.date,
+        tags: post.tags,
+      },
+    });
+    router.push("/home");
   };
+
+  const handleNumber = (values: NumberFormatValues) => {
+    setPost({
+      ...post,
+      price: values.value,
+    });
+  };
+
   return (
     <div className={styles.root}>
       <Head>
@@ -147,131 +149,14 @@ const Create = ({ user }: UserData) => {
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={styles.paper}>
-            {/* Form */}
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="filled"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="title"
-                    label="Title"
-                    name="title"
-                    color="primary"
-                    onChange={handleChange}
-                  />
-                </Grid>
-                {/* Changes */}
-                <Grid item xs={12}>
-                  <Input
-                    type="file"
-                    name="image"
-                    onChange={handleArt}
-                    required
-                  />
-                </Grid>
-                {/* Changes */}
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    margin="none"
-                    required
-                    fullWidth
-                    id="description"
-                    label="Description"
-                    name="description"
-                    color="primary"
-                    rows={3}
-                    multiline={true}
-                    rowsMax={4}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl
-                    margin="normal"
-                    variant="outlined"
-                    component="fieldset"
-                    required
-                  >
-                    <FormLabel component="legend">Is it for Sale?</FormLabel>
-                    <RadioGroup
-                      row
-                      aria-label="Sale"
-                      name="sale"
-                      onChange={handleChange}
-                      value={post.sale}
-                    >
-                      <FormControlLabel
-                        value="No"
-                        control={<Radio />}
-                        label="No"
-                      />
-                      <FormControlLabel
-                        value="Yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControl margin="normal" variant="outlined">
-                    <FormLabel component="legend">Price</FormLabel>
-                    <div style={{ marginTop: ".5em" }}>
-                      <NumberFormat
-                        value={post.price}
-                        displayType={"input"}
-                        thousandSeparator={true}
-                        prefix={"₱"}
-                        disabled={post.sale === "No" ? true : false}
-                        inputMode="numeric"
-                        allowNegative={false}
-                        className={styles.price}
-                        isNumericString={true}
-                        onValueChange={(values) => {
-                          setPost({
-                            ...post,
-                            price: values.value,
-                          });
-                        }}
-                        required={post.sale === "No" ? false : true}
-                      />
-                    </div>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="tags"
-                    label="Tags"
-                    name="tags"
-                    color="secondary"
-                    placeholder="Seperate tags with comma (,) and input atleast 1 Tag"
-                    rows={2}
-                    multiline={true}
-                    onChange={handleTags}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="outlined"
-                    color="primary"
-                    startIcon={<Palette />}
-                  >
-                    Publish
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-            {/* Form */}
+            <PostForm
+              post={post}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+              handleArt={handleArt}
+              handleTags={handleTags}
+              handleNumber={handleNumber}
+            />
           </div>
         </Grid>
       </Grid>
@@ -291,7 +176,7 @@ async function getSignature() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-
+  const apolloClient = initializeApollo();
   if (!session) {
     return {
       redirect: {
@@ -302,11 +187,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   if (session) {
-    const user = await fetchUser(session.user.name);
+    const { data } = await apolloClient.query({
+      query: USER_ID_QUERY,
+      variables: {
+        id: session.id,
+      },
+    });
 
     return {
       props: {
-        user: user || null,
+        initialApolloState: apolloClient.cache.extract(),
+        userData: { name: data.userId.name, picture: data.userId.image },
       },
     };
   }

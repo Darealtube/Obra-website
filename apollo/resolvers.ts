@@ -11,6 +11,9 @@ export const resolvers = {
       return Post.find({});
     },
     userId(_parent, args, _context, _info) {
+      return User.findById(args.id);
+    },
+    userName(_parent, args, _context, _info) {
       return User.findOne({ name: args.name });
     },
     postId(_parent, args, _context, _info) {
@@ -25,6 +28,13 @@ export const resolvers = {
     async posts(parent, _args, _context, _info) {
       const posts = await Post.find({});
       return posts.filter((post) => parent.posts.includes(post._id));
+    },
+  },
+  Post: {
+    async author(parent, _args, _context, _info) {
+      return User.findOne({
+        name: parent.author,
+      });
     },
   },
   Mutation: {
@@ -57,6 +67,29 @@ export const resolvers = {
           new: true,
         }
       );
+      return true;
+    },
+    async deletePost(_parent, args, _context, _info) {
+      const post = await Post.findById(args.postId);
+      await Post.deleteOne({ _id: args.postId });
+      await User.findOneAndUpdate(
+        { name: post.author },
+        { $pull: { posts: new ObjectId(args.postId as string) } },
+        {
+          new: true,
+        }
+      );
+      return true;
+    },
+    async createPost(_parent, args, _context, _info) {
+      const post = await Post.create(args); // from body (for now)
+
+      await User.findOneAndUpdate(
+        { name: post.author },
+        // @ts-ignore
+        { $push: { posts: post._id } }
+      );
+
       return true;
     },
   },

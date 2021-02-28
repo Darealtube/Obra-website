@@ -21,8 +21,6 @@ import { PostInterface } from "../interfaces/PostInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useState } from "react";
 import EditMenu from "../Components/ListItems/EditMenu";
-import { useSession } from "next-auth/client";
-import { SupervisedUserCircleRounded } from "@material-ui/icons";
 
 type PostData = {
   postData: PostInterface[];

@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+import User from "../../../model/User";
+import dbConnect from "../../../utils/dbConnect";
 
 const options = {
   providers: [
@@ -27,15 +29,37 @@ const options = {
   database: process.env.MONGODB_URI,
   secret: process.env.AUTH_CLIENT_SECRET,
   callbacks: {
-    redirect: async (url, baseUrl) => {
-      return url.startsWith(baseUrl)
-        ? Promise.resolve(url)
-        : Promise.resolve(baseUrl);
+    signIn: async (user, account, profile) => {
+      await dbConnect();
+      const data = await User.findById(user.id);
+      if (data) {
+        await User.findByIdAndUpdate(
+          user.id,
+          { newUser: false, tutorial: data.tutorial ? true : false },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      } else {
+        await User.findByIdAndUpdate(
+          user.id,
+          { newUser: true, tutorial: data.tutorial ? true : false },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+      return Promise.resolve(true);
     },
     session: async (session, user) => {
       session.id = user.id;
       return Promise.resolve(session);
     },
+  },
+  pages: {
+    newUser: "/configure",
   },
 };
 

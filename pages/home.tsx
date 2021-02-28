@@ -1,16 +1,4 @@
-import {
-  CssBaseline,
-  Typography,
-  Container,
-  Divider,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from "@material-ui/core";
-import { useState } from "react";
+import { CssBaseline, Typography, Container, Divider } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
@@ -20,7 +8,6 @@ import { GetStaticProps } from "next";
 import { useSession } from "next-auth/client";
 import { useQuery } from "@apollo/client";
 import { POST_QUERY } from "../apollo/apolloQueries";
-import { initializeApollo } from "../apollo/apolloClient";
 import { fetchPosts } from "../utils/fetchData";
 
 interface PostData {
@@ -33,12 +20,8 @@ type Posts = {
 };
 
 const Home = () => {
-  const [session, loading] = useSession();
+  const [session] = useSession();
   const { data, loading: load } = useQuery(POST_QUERY) as Posts;
-  const [intro, setIntro] = useState(true);
-  const handleBackdrop = () => {
-    setIntro(!intro);
-  };
 
   return (
     <div className={styles.root}>
@@ -62,34 +45,6 @@ const Home = () => {
         {load ? "" : <CardList postData={data.posts} id={session?.id} />}
         {/* Recent posts list */}
       </Container>
-      {/* Intro dialogue */}
-      <Dialog
-        open={intro}
-        keepMounted
-        onClose={handleBackdrop}
-        disableBackdropClick={true}
-        disableEscapeKeyDown={true}
-      >
-        <DialogTitle id="alert-dialog-slide-title">
-          {"Welcome to Canvas!"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Canvas is a platform that blah blah blah blah... If you are new
-            here, see the tutorial on how we do things around here. If not, you
-            can go ahead and skip it. Have fun!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleBackdrop} color="primary">
-            Skip
-          </Button>
-          <Button onClick={handleBackdrop} color="primary">
-            Show me the way!
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* Intro dialogue */}
     </div>
   );
 };

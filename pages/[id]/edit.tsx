@@ -1,11 +1,7 @@
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { Palette } from "@material-ui/icons";
 import React from "react";
-import {
-  CssBaseline,
-  Paper,
-  Grid,
-} from "@material-ui/core";
+import { CssBaseline, Paper, Grid } from "@material-ui/core";
 import Appbar from "../../Components/Appbar/Appbar";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -20,12 +16,7 @@ import { EDIT_POST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import EditPostForm from "../../Components/Forms/EditPost";
 
-const Create = ({
-  postId,
-}: {
-  user: UserData;
-  postId: PostInterface;
-}) => {
+const Create = ({ postId }: { postId: PostInterface }) => {
   const [post, setPost] = React.useState({
     title: postId.title,
     description: postId.description,
@@ -99,13 +90,13 @@ const Create = ({
         </Grid>
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className={styles.paper}>
-           <EditPostForm
-            post={post}
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
-            handleTags={handleTags}
-            handleNumber={handleNumber}           
-           />
+            <EditPostForm
+              post={post}
+              handleSubmit={handleSubmit}
+              handleChange={handleChange}
+              handleTags={handleTags}
+              handleNumber={handleNumber}
+            />
           </div>
         </Grid>
       </Grid>
@@ -127,8 +118,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   if (session) {
-    const user = await fetchUser(session.id);
-
     return {
       props: {
         postId,

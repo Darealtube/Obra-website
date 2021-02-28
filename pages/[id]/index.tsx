@@ -10,15 +10,13 @@ import {
   Dialog,
 } from "@material-ui/core";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "../styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
-import { PostInterface } from "../../interfaces/PostInterface";
 import Head from "next/head";
 import { InitializePostInfo } from "../../utils/fetchData";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/client";
-import { UserInterface } from "../../interfaces/UserInterface";
 import {
   LIKE_MUTATION,
   POST_ID_QUERY,
@@ -180,6 +178,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       initialApolloState: data.data,
+      session: session,
       id: context.params.id,
       alreadyLiked: data.alreadyLiked,
     },

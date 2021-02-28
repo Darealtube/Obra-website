@@ -9,6 +9,8 @@ import {
   createStyles,
   makeStyles,
   Theme,
+  Badge,
+  withStyles,
 } from "@material-ui/core";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 import { Palette } from "@material-ui/icons";
@@ -40,6 +42,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      right: 6,
+      top: 6,
+      border: `2px solid #3f51b5`,
+      padding: "0 4px",
+    },
+  })
+)(Badge);
+
 interface Prop {
   user: any; //will set later
   handleNotif: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -48,6 +61,7 @@ interface Prop {
   handleProfileClose: () => void;
   profAnchor: null | HTMLElement;
   notifAnchor: null | HTMLElement;
+  notifCount: number;
 }
 
 const AppbarMenu = ({
@@ -58,6 +72,7 @@ const AppbarMenu = ({
   handleProfile,
   handleProfileClose,
   profAnchor,
+  notifCount,
 }: Prop) => {
   const classes = useStyles();
   return (
@@ -68,7 +83,9 @@ const AppbarMenu = ({
         </Link>
       </IconButton>
       <IconButton onClick={handleNotif}>
-        <NotificationImportantIcon fontSize="large" htmlColor="white" />
+        <StyledBadge badgeContent={notifCount} color="secondary">
+          <NotificationImportantIcon fontSize="large" htmlColor="white" />
+        </StyledBadge>
       </IconButton>
       <Popover
         anchorEl={notifAnchor}
@@ -90,6 +107,8 @@ const AppbarMenu = ({
         <Divider />
         <List className={classes.notifmenu}>
           <Notification
+            newUser={user.userId.newUser}
+            tutorial={user.userId.tutorial}
             notifications={user.userId ? user.userId.notifications : null}
           />
         </List>

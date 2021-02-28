@@ -1,10 +1,9 @@
-import dbConnect from "./dbConnect";
-import Post from "../model/Post";
 import { initializeApollo } from "../apollo/apolloClient";
 import {
   POST_ID_QUERY,
   POST_QUERY,
   USER_ID_QUERY,
+  USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
 } from "../apollo/apolloQueries";
 
@@ -40,6 +39,18 @@ export const fetchUserandPosts = async (name: string) => {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: USER_POST_QUERY,
+    variables: {
+      name: name,
+    },
+  });
+
+  return { data: apolloClient.cache.extract(), exists: data ? true : false };
+};
+
+export const fetchUserandLikedPosts = async (name: string) => {
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: USER_LIKED_POST_QUERY,
     variables: {
       name: name,
     },

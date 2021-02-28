@@ -1,14 +1,21 @@
-import Appbar from "../../Components/Appbar/Appbar";
-import { CssBaseline, Grid } from "@material-ui/core";
-import Image from "next/image";
-import styles from "../styles/Specific/Profile.module.css";
-import { CardList } from "../../Components/CardList";
+import Appbar from "../../../Components/Appbar/Appbar";
+import {
+  CssBaseline,
+  Grid,
+  Divider,
+  Breadcrumbs,
+  Typography,
+} from "@material-ui/core";
+import Link from "next/link";
+import styles from "../../styles/Specific/Profile.module.css";
+import { CardList } from "../../../Components/CardList";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { fetchUserandPosts } from "../../utils/fetchData";
+import { fetchUserandPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { USER_POST_QUERY } from "../../apollo/apolloQueries";
+import { USER_POST_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
+import ProfileWrap from "../../../Components/Profile/ProfileWrap"
 
 const PostID = ({ name, id }) => {
   const { data: user } = useQuery(USER_POST_QUERY, {
@@ -25,22 +32,18 @@ const PostID = ({ name, id }) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      {user ? (
-        <Image src={user?.userName.image} width={500} height={500} />
-      ) : (
-        ""
-      )}
-      <h1>{user?.userName.name}</h1>
-      <Grid container className={styles.profile}>
+      <ProfileWrap user={user}>
         {user?.userName.posts ? (
-          <CardList postData={user?.userName.posts} id={id} />
-        ) : (
-          <h3>This user has no posts.</h3>
+            <CardList postData={user?.userName.posts} id={id} />
+          ) : (
+            <h3>This user has no posts.</h3>
         )}
-      </Grid>
+      </ProfileWrap>
     </div>
   );
 };
+
+/*  */
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = await fetchUserandPosts(context.params.name as string);
@@ -54,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       initialApolloState: user.data,
+      session: session,
       name: context.params.name,
       id: session.id,
     },

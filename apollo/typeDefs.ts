@@ -11,6 +11,14 @@ export const typeDefs = gql`
     posts: [Post]
     likedPosts: [Post]
     notifications: [Notification]
+    username: String
+    age: String
+    country: String
+    birthday: String
+    phone: String
+    newUser: Boolean
+    tutorial: Boolean
+    notifRead: Boolean
   }
 
   type Post {
@@ -62,5 +70,15 @@ export const typeDefs = gql`
       picture: String
     ): Boolean!
     deletePost(postId: ID!): Boolean!
+    editUser(
+      userId: ID!
+      username: String!
+      age: String!
+      country: String!
+      language: String!
+      birthday: String!
+      phone: String!
+    ): Boolean!
+    readNotif(userId: ID!): Boolean!
   }
 `;

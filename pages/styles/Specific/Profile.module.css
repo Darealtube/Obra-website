@@ -2,6 +2,28 @@
   display: flex;
 }
 
+.image {
+  border-radius: 50%;
+}
+
+.link {
+  color: inherit;
+}
+
 .profile {
+  display: flex;
   margin-top: 80px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.posts {
+  width: 20em;
+}
+
+.container {
+  margin-right: 20em;
+  margin-left: 20em;
 }

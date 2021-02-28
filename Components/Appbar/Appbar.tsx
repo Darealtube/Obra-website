@@ -10,10 +10,10 @@ import {
   IconButton,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
-import { APPBAR_USER_QUERY } from "../../apollo/apolloQueries";
-import { useQuery } from "@apollo/client";
+import { APPBAR_USER_QUERY, READ_NOTIF } from "../../apollo/apolloQueries";
+import { useMutation, useQuery } from "@apollo/client";
 import AppbarMenu from "./AppbarMenu";
 import AppbarNoUser from "./AppbarNoUser";
 import DrawerItems from "../ListItems/Drawer";
@@ -44,15 +44,35 @@ const useStyles = makeStyles((theme: Theme) =>
 const Appbar = () => {
   const classes = useStyles();
   const [session, loading] = useSession();
-  const [open, setOpen] = useState(false);
-  const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
-  const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
   const { data: user } = useQuery(APPBAR_USER_QUERY, {
     variables: {
       id: session?.id,
     },
     skip: !session,
   });
+  const [open, setOpen] = useState(false);
+  const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
+  const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
+  const [notifCount, setnotifCount] = useState(0);
+  const [read] = useMutation(READ_NOTIF, {
+    variables: {
+      userId: session?.id,
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && user && user.userId.notifRead) {
+      setnotifCount(0);
+    }
+
+    if (!loading && user && !user.userId.notifRead) {
+      setnotifCount(
+        user.userId.notifications.length +
+          (user.userId.newUser ? 1 : 0) +
+          (user.userId.tutorial ? 1 : 0)
+      );
+    }
+  }, [loading, user]);
 
   const handleProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
     setprofAnchor(event.currentTarget);
@@ -64,6 +84,14 @@ const Appbar = () => {
 
   const handleNotif = (event: React.MouseEvent<HTMLButtonElement>) => {
     setnotifAnchor(event.currentTarget);
+    if (!user?.userId.notifRead) {
+      read({
+        variables: {
+          userId: session?.id,
+        },
+      });
+    }
+    setnotifCount(0);
   };
 
   const handleNotifClose = () => {
@@ -102,6 +130,7 @@ const Appbar = () => {
               handleProfileClose={handleProfileClose}
               notifAnchor={notifAnchor}
               profAnchor={profAnchor}
+              notifCount={notifCount}
             />
           ) : !user && !loading ? (
             <AppbarNoUser

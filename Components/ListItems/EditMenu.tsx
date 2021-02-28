@@ -10,7 +10,12 @@ import {
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import { DELETE_POST_MUTATION, POST_QUERY } from "../../apollo/apolloQueries";
+import {
+  DELETE_POST_MUTATION,
+  PostInfo,
+  POST_QUERY,
+  USER_POST_QUERY,
+} from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,13 +53,8 @@ const EditMenu = ({
       variables: { postId: id },
       optimisticResponse: true,
       update: (cache) => {
-        const existingPosts: any = cache.readQuery({ query: POST_QUERY });
-        const newPosts = existingPosts.posts.filter((p) => p.id !== id);
-
-        cache.writeQuery({
-          query: POST_QUERY,
-          data: { posts: newPosts },
-        });
+        cache.evict({ id: `Post:${id}` });
+        cache.gc();
         onClose();
         onExited();
       },

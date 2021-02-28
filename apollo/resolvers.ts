@@ -92,5 +92,37 @@ export const resolvers = {
 
       return true;
     },
+    async editUser(_parent, args, _context, _info) {
+      await User.findByIdAndUpdate(
+        args.userId,
+        {
+          username: args.username,
+          age: args.age,
+          country: args.country,
+          language: args.language,
+          birthday: args.birthday,
+          phone: args.phone,
+          newUser: false,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      return true;
+    },
+    async readNotif(_parent, args, _context, _info) {
+      await User.findByIdAndUpdate(
+        args.userId,
+        {
+          notifRead: true,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      return true;
+    },
   },
 };

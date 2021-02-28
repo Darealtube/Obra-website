@@ -1,5 +1,19 @@
 import { gql } from "@apollo/client";
 
+export const PostInfo = gql`
+  fragment PostInfo on Post {
+    id
+    author {
+      id
+      name
+    }
+    picture
+    date
+    art
+    tags
+  }
+`;
+
 //Fetch all Users
 export const USER_QUERY = gql`
   query Users {
@@ -14,18 +28,10 @@ export const USER_QUERY = gql`
 export const POST_QUERY = gql`
   query Posts {
     posts {
-      id
-      picture
-      author {
-        id
-        name
-      }
-      date
-      title
-      tags
-      art
+      ...PostInfo
     }
   }
+  ${PostInfo}
 `;
 
 //Fetch User by ID
@@ -69,6 +75,9 @@ export const APPBAR_USER_QUERY = gql`
       name
       image
       email
+      newUser
+      tutorial
+      notifRead
       notifications {
         postId
         user {
@@ -89,18 +98,33 @@ export const USER_POST_QUERY = gql`
       name
       image
       posts {
-        id
-        author {
-          id
-          name
-        }
-        picture
-        date
-        art
-        tags
+        ...PostInfo
       }
+      username
+      birthday
+      country
+      phone
     }
   }
+  ${PostInfo}
+`;
+
+export const USER_LIKED_POST_QUERY = gql`
+  query UserPosts($name: String!) {
+    userName(name: $name) {
+      id
+      name
+      image
+      likedPosts {
+        ...PostInfo
+      }
+      username
+      birthday
+      country
+      phone
+    }
+  }
+  ${PostInfo}
 `;
 
 export const LIKE_MUTATION = gql`
@@ -160,5 +184,33 @@ export const CREATE_POST_MUTATION = gql`
 export const DELETE_POST_MUTATION = gql`
   mutation DeletePost($postId: ID!) {
     deletePost(postId: $postId)
+  }
+`;
+
+export const CONFIG_MUTATION = gql`
+  mutation ConfigUser(
+    $userId: ID!
+    $username: String!
+    $age: String!
+    $country: String!
+    $language: String!
+    $birthday: String!
+    $phone: String!
+  ) {
+    editUser(
+      userId: $userId
+      username: $username
+      age: $age
+      country: $country
+      language: $language
+      birthday: $birthday
+      phone: $phone
+    )
+  }
+`;
+
+export const READ_NOTIF = gql`
+  mutation ReadNotif($userId: ID!) {
+    readNotif(userId: $userId)
   }
 `;

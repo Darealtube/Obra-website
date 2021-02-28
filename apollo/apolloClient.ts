@@ -1,7 +1,5 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import merge from "deepmerge";
-import isEqual from "lodash/isEqual";
 
 let apolloClient;
 
@@ -9,8 +7,8 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "http://localhost:3000/api/Apollo/graphql", // Server URL (must be absolute)
-      credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
+      uri: "http://localhost:3000/api/Apollo/graphql",
+      credentials: "same-origin",
     }),
     cache: new InMemoryCache({
       typePolicies: {

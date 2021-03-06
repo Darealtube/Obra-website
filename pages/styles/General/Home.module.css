@@ -52,3 +52,8 @@
 .avatar {
   border-radius: 50%;
 }
+
+.moreButton {
+  width: inherit;
+  height: 4em;
+}

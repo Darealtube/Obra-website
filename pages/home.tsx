@@ -1,4 +1,10 @@
-import { CssBaseline, Typography, Container, Divider } from "@material-ui/core";
+import {
+  CssBaseline,
+  Typography,
+  Container,
+  Divider,
+  Button,
+} from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
@@ -9,6 +15,7 @@ import { useSession } from "next-auth/client";
 import { useQuery } from "@apollo/client";
 import { POST_QUERY } from "../apollo/apolloQueries";
 import { fetchPosts } from "../utils/fetchData";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 interface PostData {
   posts: PostInterface[];
@@ -21,7 +28,13 @@ type Posts = {
 
 const Home = () => {
   const [session] = useSession();
-  const { data, loading: load } = useQuery(POST_QUERY) as Posts;
+  const { data, fetchMore } = useQuery(POST_QUERY);
+
+  const morePosts = () => {
+    fetchMore({
+      variables: { offset: data.posts.length },
+    });
+  };
 
   return (
     <div className={styles.root}>
@@ -35,14 +48,22 @@ const Home = () => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        {load ? "" : <CardList postData={data.posts} id={session?.id} />}
-
+        <CardList postData={data.posts} id={session?.id} />
+        <br />
+        <Button
+          onClick={morePosts}
+          className={styles.moreButton}
+          startIcon={<ExpandMoreIcon />}
+        >
+          {" "}
+        </Button>
+        <Divider className={styles.divider} />
         {/* Featured list */}
 
         <Typography variant="h4">Recently</Typography>
         <Divider className={styles.divider} />
         {/* Recent posts list */}
-        {load ? "" : <CardList postData={data.posts} id={session?.id} />}
+        <CardList postData={data.posts} id={session?.id} />
         {/* Recent posts list */}
       </Container>
     </div>

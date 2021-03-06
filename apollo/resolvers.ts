@@ -7,8 +7,8 @@ export const resolvers = {
     users(_parent, _args, _context, _info) {
       return User.find({});
     },
-    posts(_parent, _args, _context, _info) {
-      return Post.find({});
+    posts(_parent, args, _context, _info) {
+      return Post.find({}).skip(args.offset).limit(args.limit);
     },
     userId(_parent, args, _context, _info) {
       return User.findById(args.id);
@@ -21,13 +21,29 @@ export const resolvers = {
     },
   },
   User: {
-    async likedPosts(parent, _args, _context, _info) {
+    async likedPosts(parent, args, _context, _info) {
       const posts = await Post.find({});
-      return posts.filter((post) => parent.likedPosts.includes(post._id));
+      return posts
+        .filter((post) => parent.likedPosts.includes(post._id))
+        .slice(
+          args.offset ? args.offset : 0,
+          args.limit + (args.offset ? args.offset : 0)
+        );
     },
-    async posts(parent, _args, _context, _info) {
+    async posts(parent, args, _context, _info) {
       const posts = await Post.find({});
-      return posts.filter((post) => parent.posts.includes(post._id));
+      return posts
+        .filter((post) => parent.posts.includes(post._id))
+        .slice(
+          args.offset ? args.offset : 0,
+          args.limit + (args.offset ? args.offset : 0)
+        );
+    },
+    likedPostslength(parent, _args, _context, _info) {
+      return parent.likedPosts.length;
+    },
+    postsLength(parent, _args, _context, _info) {
+      return parent.posts.length;
     },
   },
   Post: {
@@ -75,6 +91,13 @@ export const resolvers = {
       await User.findOneAndUpdate(
         { name: post.author },
         { $pull: { posts: new ObjectId(args.postId as string) } },
+        {
+          new: true,
+        }
+      );
+      await User.updateMany(
+        { likedPosts: { $in: [new ObjectId(args.postId as string)] } },
+        { $pull: { likedPosts: new ObjectId(args.postId as string) } },
         {
           new: true,
         }

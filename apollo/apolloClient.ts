@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 let apolloClient;
 
@@ -14,11 +15,13 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            posts: {
-              merge(existing, incoming) {
-                return incoming;
-              },
-            },
+            posts: offsetLimitPagination(),
+          },
+        },
+        User: {
+          fields: {
+            likedPosts: offsetLimitPagination(),
+            posts: offsetLimitPagination(),
           },
         },
       },

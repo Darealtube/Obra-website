@@ -26,8 +26,8 @@ export const USER_QUERY = gql`
 
 //Fetch all Posts
 export const POST_QUERY = gql`
-  query Posts {
-    posts {
+  query Posts($offset: Int) {
+    posts(limit: 4, offset: $offset) {
       ...PostInfo
     }
   }
@@ -36,12 +36,12 @@ export const POST_QUERY = gql`
 
 //Fetch User by ID
 export const USER_ID_QUERY = gql`
-  query UserID($id: ID!) {
+  query UserID($id: ID!, $offset: Int) {
     userId(id: $id) {
       id
       name
       image
-      likedPosts {
+      likedPosts(limit: 4, offset: $offset) {
         id
       }
     }
@@ -92,14 +92,15 @@ export const APPBAR_USER_QUERY = gql`
 
 //Fetch User and Posts
 export const USER_POST_QUERY = gql`
-  query UserPosts($name: String!) {
+  query UserPosts($name: String!, $offset: Int) {
     userName(name: $name) {
       id
       name
       image
-      posts {
+      posts(limit: 4, offset: $offset) {
         ...PostInfo
       }
+      postsLength
       username
       birthday
       country
@@ -110,14 +111,15 @@ export const USER_POST_QUERY = gql`
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
-  query UserPosts($name: String!) {
+  query UserPosts($name: String!, $offset: Int) {
     userName(name: $name) {
       id
       name
       image
-      likedPosts {
+      likedPosts(limit: 4, offset: $offset) {
         ...PostInfo
       }
+      likedPostslength
       username
       birthday
       country

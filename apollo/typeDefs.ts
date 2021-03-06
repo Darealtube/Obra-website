@@ -8,8 +8,10 @@ export const typeDefs = gql`
     image: String
     createdAt: String
     updatedAt: String
-    posts: [Post]
-    likedPosts: [Post]
+    posts(offset: Int, limit: Int): [Post]
+    likedPosts(offset: Int, limit: Int): [Post]
+    likedPostslength: Int
+    postsLength: Int
     notifications: [Notification]
     username: String
     age: String
@@ -36,7 +38,7 @@ export const typeDefs = gql`
 
   type Query {
     users: [User]!
-    posts: [Post]
+    posts(offset: Int, limit: Int): [Post]
     userId(id: ID!): User
     userName(name: String!): User
     postId(id: ID!): Post

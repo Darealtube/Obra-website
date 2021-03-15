@@ -9,7 +9,7 @@ const ProfileWrap = ({ children, user }) => {
       <Grid item xs={12}>
         {user ? (
           <Image
-            src={user?.userName.image}
+            src={user.image}
             width={200}
             height={200}
             className={styles.image}
@@ -17,7 +17,7 @@ const ProfileWrap = ({ children, user }) => {
         ) : (
           ""
         )}
-        <h1>{user?.userName.name}</h1>
+        <h1>{user.name}</h1>
         <Divider />
         <br />
         <Breadcrumbs
@@ -26,15 +26,13 @@ const ProfileWrap = ({ children, user }) => {
           className={styles.link}
         >
           <Button>
-            <Link href={`/profile/${user?.userName.name}/`}>Posts</Link>
+            <Link href={`/profile/${user.name}/`}>Posts</Link>
           </Button>
           <Button>
-            <Link href={`/profile/${user?.userName.name}/liked`}>
-              Liked Posts
-            </Link>
+            <Link href={`/profile/${user.name}/liked`}>Liked Posts</Link>
           </Button>
           <Button>
-            <Link href={`/profile/${user?.userName.name}/info`}>About</Link>
+            <Link href={`/profile/${user.name}/info`}>About</Link>
           </Button>
         </Breadcrumbs>
       </Grid>

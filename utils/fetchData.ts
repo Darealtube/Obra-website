@@ -1,7 +1,9 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
+  NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_QUERY,
+  POST_RECOMMENDED_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -64,6 +66,9 @@ export const fetchPosts = async () => {
   await apolloClient.query({
     query: POST_QUERY,
   });
+  await apolloClient.query({
+    query: NEW_POSTS_QUERY,
+  });
   return apolloClient.cache.extract();
 };
 
@@ -90,7 +95,10 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
     },
   });
   await apolloClient.query({
-    query: POST_QUERY,
+    query: POST_RECOMMENDED_QUERY,
+    variables: {
+      id: id,
+    },
   });
   const { data: user } = await apolloClient.query({
     query: USER_ID_QUERY,

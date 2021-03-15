@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import Post from "../model/Post";
 import User from "../model/User";
+import moment from "moment";
+import Comment from "../model/Comment";
 
 export const resolvers = {
   Query: {
@@ -18,6 +20,48 @@ export const resolvers = {
     },
     postId(_parent, args, _context, _info) {
       return Post.findById(args.id);
+    },
+    async recommendedPosts(_parent, args, _context, _info) {
+      const post = await Post.findById(args.id);
+      const recommended1 = await Post.find({
+        tags: { $in: [...post.tags] },
+        _id: { $ne: new ObjectId(args.id as string) },
+      });
+
+      const recommended2 = await Post.find({
+        author: post.author,
+        _id: { $ne: new ObjectId(args.id as string) },
+      });
+
+      const merge = Object.values(
+        recommended2.concat(recommended1).reduce((r, o) => {
+          r[o.id] = o;
+          return r;
+        }, {})
+      ).slice(
+        args.offset ? args.offset : 0,
+        args.limit + (args.offset ? args.offset : 0)
+      );
+
+      return merge;
+    },
+    async newPosts(_parent, args, _context, _info) {
+      const posts = await Post.find({});
+
+      const newPosts = posts
+        .sort((a, b) => moment(b.date).diff(a.date))
+        .filter((post) => moment().diff(post.date, "days") <= 7)
+        .slice(
+          args.offset ? args.offset : 0,
+          args.limit + (args.offset ? args.offset : 0)
+        );
+
+      return newPosts;
+    },
+  },
+  Comment: {
+    async author(parent, _args, _context, _info) {
+      return User.findOne({ name: parent.author });
     },
   },
   User: {
@@ -39,18 +83,22 @@ export const resolvers = {
           args.limit + (args.offset ? args.offset : 0)
         );
     },
-    likedPostslength(parent, _args, _context, _info) {
-      return parent.likedPosts.length;
-    },
-    postsLength(parent, _args, _context, _info) {
-      return parent.posts.length;
-    },
   },
   Post: {
     async author(parent, _args, _context, _info) {
       return User.findOne({
         name: parent.author,
       });
+    },
+    async comments(parent, args, _context, _info) {
+      const comments = await Comment.find({});
+      return comments
+        .sort((a, b) => moment(b.date).unix() - moment(a.date).unix())
+        .filter((comment) => parent.comments.includes(comment._id))
+        .slice(
+          args.offset ? args.offset : 0,
+          args.limit + (args.offset ? args.offset : 0)
+        );
     },
   },
   Mutation: {
@@ -111,6 +159,24 @@ export const resolvers = {
         { name: post.author },
         // @ts-ignore
         { $push: { posts: post._id } }
+      );
+
+      return true;
+    },
+    async createComment(_parent, args, _context, _info) {
+      const comment = await Comment.create(args);
+
+      await Post.findByIdAndUpdate(args.postID, {
+        $push: { comments: comment._id },
+      });
+      return comment;
+    },
+    async deleteComment(_parent, args, _context, _info) {
+      await Comment.deleteOne({ _id: args.commentID });
+
+      await Post.updateOne(
+        { comments: { $in: [new ObjectId(args.commentID as string)] } },
+        { $pull: { comments: new ObjectId(args.commentID as string) } }
       );
 
       return true;

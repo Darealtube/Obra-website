@@ -9,44 +9,37 @@ import { useQuery } from "@apollo/client";
 import { USER_POST_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
-import { useState, useEffect } from "react";
+import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const PostID = ({ name, id }) => {
-  const { data: user, fetchMore } = useQuery(USER_POST_QUERY, {
+  const {
+    data: { userName },
+    fetchMore,
+  } = useQuery(USER_POST_QUERY, {
     variables: {
       name: name,
     },
   });
-
-  const [postCount, setpostCount] = useState(user?.userName.posts.length);
-  const [hasMore, sethasMore] = useState(true);
-
-  const loadMore = () => {
-    fetchMore({
-      variables: { offset: user.userName.posts.length, name: name },
-    });
-  };
-
-  useEffect(() => {
-    setpostCount(user?.userName.posts.length);
-    sethasMore(
-      user?.userName.posts.length < user.userName.postsLength ? true : false
-    );
-  }, [user]);
+  const { More, hasMore, page } = usePagination(
+    "userName",
+    fetchMore,
+    userName.posts,
+    "posts"
+  );
 
   return (
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{user?.userName.name}</title>
+        <title>{userName.name}</title>
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap user={user}>
+      <ProfileWrap user={userName}>
         <InfiniteScroll
-          dataLength={postCount}
-          next={loadMore}
+          dataLength={page * 4}
+          next={More}
           hasMore={hasMore}
           loader={
             <>
@@ -63,8 +56,8 @@ const PostID = ({ name, id }) => {
             overflow: "hidden",
           }}
         >
-          {user?.userName.posts ? (
-            <CardList postData={user?.userName.posts} id={id} />
+          {userName.posts ? (
+            <CardList postData={userName.posts} id={id} />
           ) : (
             <h3>This user has no posts.</h3>
           )}

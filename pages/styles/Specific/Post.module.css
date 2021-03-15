@@ -57,3 +57,15 @@
   height: 100em;
   position: relative;
 }
+
+.commentList {
+  width: 100%;
+}
+
+.commentText {
+  display: inline;
+}
+
+.avatar {
+  border-radius: 50%;
+}

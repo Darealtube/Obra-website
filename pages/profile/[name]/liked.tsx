@@ -9,32 +9,24 @@ import { useQuery } from "@apollo/client";
 import { USER_LIKED_POST_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
-import { useEffect, useState } from "react";
+import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const PostIDLiked = ({ name, id }) => {
-  const { data: user, fetchMore } = useQuery(USER_LIKED_POST_QUERY, {
+  const {
+    data: { userName },
+    fetchMore,
+  } = useQuery(USER_LIKED_POST_QUERY, {
     variables: {
       name: name,
     },
   });
-  const [postCount, setpostCount] = useState(user?.userName.likedPosts.length);
-  const [hasMore, sethasMore] = useState(true);
-
-  const loadMore = () => {
-    fetchMore({
-      variables: { offset: user.userName.likedPosts.length, name: name },
-    });
-  };
-
-  useEffect(() => {
-    setpostCount(user?.userName.likedPosts.length);
-    sethasMore(
-      user?.userName.likedPosts.length < user.userName.likedPostslength
-        ? true
-        : false
-    );
-  }, [user]);
+  const { More, hasMore, page } = usePagination(
+    "userName",
+    fetchMore,
+    userName.likedPosts,
+    "likedPosts"
+  );
 
   return (
     <div className={styles.root}>
@@ -44,10 +36,10 @@ const PostIDLiked = ({ name, id }) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap user={user}>
+      <ProfileWrap user={userName}>
         <InfiniteScroll
-          dataLength={postCount}
-          next={loadMore}
+          dataLength={page * 4}
+          next={More}
           hasMore={hasMore}
           loader={
             <>
@@ -64,8 +56,8 @@ const PostIDLiked = ({ name, id }) => {
             overflow: "hidden",
           }}
         >
-          {user?.userName.likedPosts ? (
-            <CardList postData={user?.userName.likedPosts} id={id} />
+          {userName.likedPosts ? (
+            <CardList postData={userName.likedPosts} id={id} />
           ) : (
             <h3>This user has no liked posts.</h3>
           )}

@@ -50,7 +50,7 @@ export const USER_ID_QUERY = gql`
 
 //Fetch Post By ID
 export const POST_ID_QUERY = gql`
-  query PostID($id: ID!) {
+  query PostID($id: ID!, $offset: Int) {
     postId(id: $id) {
       id
       title
@@ -63,6 +63,16 @@ export const POST_ID_QUERY = gql`
       price
       tags
       description
+      comments(offset: $offset, limit: 4) {
+        id
+        author {
+          id
+          image
+          name
+        }
+        date
+        content
+      }
     }
   }
 `;
@@ -100,7 +110,6 @@ export const USER_POST_QUERY = gql`
       posts(limit: 4, offset: $offset) {
         ...PostInfo
       }
-      postsLength
       username
       birthday
       country
@@ -119,11 +128,37 @@ export const USER_LIKED_POST_QUERY = gql`
       likedPosts(limit: 4, offset: $offset) {
         ...PostInfo
       }
-      likedPostslength
       username
       birthday
       country
       phone
+    }
+  }
+  ${PostInfo}
+`;
+
+/* export const POST_RECOMMENDED_QUERY = gql`
+  query RecommendedPosts($id: ID!, $offset: Int, $limit: Int) {
+    recommendedPosts(id: $id, offset: $offset, limit: $limit) {
+      ...PostInfo
+    }
+  }
+  ${PostInfo}
+`; */
+
+export const POST_RECOMMENDED_QUERY = gql`
+  query RecommendedPosts($id: ID!, $offset: Int) {
+    recommendedPosts(id: $id, limit: 4, offset: $offset) {
+      ...PostInfo
+    }
+  }
+  ${PostInfo}
+`;
+
+export const NEW_POSTS_QUERY = gql`
+  query NewPosts($offset: Int) {
+    newPosts(offset: $offset, limit: 4) {
+      ...PostInfo
     }
   }
   ${PostInfo}
@@ -183,9 +218,30 @@ export const CREATE_POST_MUTATION = gql`
   }
 `;
 
+export const CREATE_COMMENT_MUTATION = gql`
+  mutation CreateComment($postID: ID!, $author: String!, $content: String!) {
+    createComment(postID: $postID, author: $author, content: $content) {
+      id
+      date
+      content
+      author {
+        id
+        name
+        image
+      }
+    }
+  }
+`;
+
 export const DELETE_POST_MUTATION = gql`
   mutation DeletePost($postId: ID!) {
     deletePost(postId: $postId)
+  }
+`;
+
+export const DELETE_COMMENT_MUTATION = gql`
+  mutation DeleteComment($commentID: ID!) {
+    deleteComment(commentID: $commentID)
   }
 `;
 

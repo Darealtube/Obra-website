@@ -10,8 +10,6 @@ export const typeDefs = gql`
     updatedAt: String
     posts(offset: Int, limit: Int): [Post]
     likedPosts(offset: Int, limit: Int): [Post]
-    likedPostslength: Int
-    postsLength: Int
     notifications: [Notification]
     username: String
     age: String
@@ -34,6 +32,15 @@ export const typeDefs = gql`
     sale: String!
     author: User
     picture: String
+    comments(offset: Int, limit: Int): [Comment]
+  }
+
+  type Comment {
+    id: ID!
+    postID: ID!
+    date: String!
+    author: User!
+    content: String!
   }
 
   type Query {
@@ -42,6 +49,8 @@ export const typeDefs = gql`
     userId(id: ID!): User
     userName(name: String!): User
     postId(id: ID!): Post
+    recommendedPosts(id: ID!, offset: Int, limit: Int): [Post]
+    newPosts(offset: Int, limit: Int): [Post]
   }
 
   type Notification {
@@ -82,5 +91,7 @@ export const typeDefs = gql`
       phone: String!
     ): Boolean!
     readNotif(userId: ID!): Boolean!
+    createComment(postID: ID!, author: String!, content: String!): Comment!
+    deleteComment(commentID: ID!): Boolean!
   }
 `;

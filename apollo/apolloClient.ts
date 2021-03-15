@@ -16,12 +16,19 @@ function createApolloClient() {
         Query: {
           fields: {
             posts: offsetLimitPagination(),
+            newPosts: offsetLimitPagination(),
+            recommendedPosts: offsetLimitPagination(),
           },
         },
         User: {
           fields: {
             likedPosts: offsetLimitPagination(),
             posts: offsetLimitPagination(),
+          },
+        },
+        Post: {
+          fields: {
+            comments: offsetLimitPagination(),
           },
         },
       },

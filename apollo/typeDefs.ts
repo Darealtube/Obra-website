@@ -8,8 +8,9 @@ export const typeDefs = gql`
     image: String
     createdAt: String
     updatedAt: String
-    posts(offset: Int, limit: Int): [Post]
-    likedPosts(offset: Int, limit: Int): [Post]
+    posts(after: ID, limit: Int): PostConnection
+    likedPosts(after: ID, limit: Int): PostConnection
+    likedArtists(after: ID, limit: Int): UserConnection
     notifications: [Notification]
     username: String
     age: String
@@ -19,6 +20,8 @@ export const typeDefs = gql`
     newUser: Boolean
     tutorial: Boolean
     notifRead: Boolean
+    homeRecommended(after: ID, limit: Int): PostConnection
+    history(after: ID, limit: Int): HistoryConnection
   }
 
   type Post {
@@ -32,7 +35,7 @@ export const typeDefs = gql`
     sale: String!
     author: User
     picture: String
-    comments(offset: Int, limit: Int): [Comment]
+    comments(after: ID, limit: Int): CommentConnection
   }
 
   type Comment {
@@ -45,12 +48,12 @@ export const typeDefs = gql`
 
   type Query {
     users: [User]!
-    posts(offset: Int, limit: Int): [Post]
+    posts(after: ID, limit: Int): PostConnection
     userId(id: ID!): User
     userName(name: String!): User
     postId(id: ID!): Post
-    recommendedPosts(id: ID!, offset: Int, limit: Int): [Post]
-    newPosts(offset: Int, limit: Int): [Post]
+    recommendedPosts(id: ID!, after: ID, limit: Int): PostConnection
+    newPosts(after: ID, limit: Int): PostConnection
   }
 
   type Notification {
@@ -58,6 +61,13 @@ export const typeDefs = gql`
     date: String
     description: String
     postId: ID
+  }
+
+  type History {
+    id: ID!
+    userId: ID
+    viewed: Post
+    lastDateViewed: String
   }
 
   type Mutation {
@@ -77,7 +87,7 @@ export const typeDefs = gql`
       art: String!
       price: String!
       sale: String!
-      author: String
+      author: ID!
       picture: String
     ): Boolean!
     deletePost(postId: ID!): Boolean!
@@ -91,7 +101,56 @@ export const typeDefs = gql`
       phone: String!
     ): Boolean!
     readNotif(userId: ID!): Boolean!
-    createComment(postID: ID!, author: String!, content: String!): Comment!
+    createComment(postID: ID!, author: ID!, content: String!): Comment!
     deleteComment(commentID: ID!): Boolean!
+    likeArtist(artistID: ID!, userName: String!): Boolean!
+    unlikeArtist(artistID: ID!, userName: String!): Boolean!
+    viewPost(viewed: ID!, userId: ID!): Boolean!
+    deleteHistory(historyID: ID!): Boolean!
+  }
+
+  type HistoryConnection {
+    totalCount: Int
+    pageInfo: PageInfo
+    edges: [HistoryEdge]
+  }
+
+  type PostConnection {
+    totalCount: Int
+    pageInfo: PageInfo
+    edges: [PostEdge]
+  }
+
+  type UserConnection {
+    totalCount: Int
+    pageInfo: PageInfo
+    edges: [UserEdge]
+  }
+
+  type CommentConnection {
+    totalCount: Int
+    pageInfo: PageInfo
+    edges: [CommentEdge]
+  }
+
+  type CommentEdge {
+    node: Comment
+  }
+
+  type PostEdge {
+    node: Post
+  }
+
+  type UserEdge {
+    node: User
+  }
+
+  type HistoryEdge {
+    node: History
+  }
+
+  type PageInfo {
+    endCursor: ID
+    hasNextPage: Boolean
   }
 `;

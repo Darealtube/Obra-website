@@ -1,22 +1,22 @@
 import Appbar from "../../../Components/Appbar/Appbar";
 import { CssBaseline, CircularProgress } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
-import { CardList } from "../../../Components/CardList";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
-import { fetchUserandPosts } from "../../../utils/fetchData";
+import { fetchUserHistory } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { USER_POST_QUERY } from "../../../apollo/apolloQueries";
+import { USER_HISTORY_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
+import HistoryList from "../../../Components/HistoryList";
 
-const PostID = ({ name, id }) => {
+const PostIDHistory = ({ name, id }) => {
   const {
     data: { userName },
     fetchMore,
-  } = useQuery(USER_POST_QUERY, {
+  } = useQuery(USER_HISTORY_QUERY, {
     variables: {
       name: name,
     },
@@ -24,21 +24,21 @@ const PostID = ({ name, id }) => {
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
-    userName.posts,
-    "posts"
+    userName.history,
+    "history"
   );
 
   return (
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{userName.name}</title>
+        <title>Liked</title>
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap user={userName} admin={userName.id == id}>
+      <ProfileWrap user={userName} admin={userName.id === id}>
         <InfiniteScroll
-          dataLength={userName.posts.edges.length}
+          dataLength={userName.history.edges.length}
           next={More}
           hasMore={hasMore}
           loader={
@@ -47,19 +47,15 @@ const PostID = ({ name, id }) => {
               <CircularProgress />
             </>
           }
-          endMessage={
-            <p>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
           style={{
             overflow: "hidden",
           }}
+          scrollThreshold={1}
         >
-          {userName.posts ? (
-            <CardList postData={userName.posts.edges} id={id} />
+          {userName.history ? (
+            <HistoryList histories={userName.history.edges} />
           ) : (
-            <h3>This user has no posts.</h3>
+            <h3>You have not viewed any posts yet.</h3>
           )}
         </InfiniteScroll>
       </ProfileWrap>
@@ -67,10 +63,8 @@ const PostID = ({ name, id }) => {
   );
 };
 
-/*  */
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await fetchUserandPosts(context.params.name as string);
+  const user = await fetchUserHistory(context.params.name as string);
   const session = await getSession(context);
   if (!user.exists) {
     return {
@@ -88,4 +82,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default PostID;
+export default PostIDHistory;

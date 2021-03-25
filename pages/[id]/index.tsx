@@ -1,7 +1,7 @@
 import Appbar from "../../Components/Appbar/Appbar";
 import { CssBaseline, Grid, Container, Dialog } from "@material-ui/core";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Specific/Post.module.css";
 import Head from "next/head";
 import { InitializePostInfo } from "../../utils/fetchData";
@@ -13,13 +13,14 @@ import {
   POST_RECOMMENDED_QUERY,
   UNLIKE_MUTATION,
   USER_ID_QUERY,
+  VIEW_POST,
 } from "../../apollo/apolloQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import usePagination from "../../Hooks/usePagination";
 import PostInfo from "../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../Components/PostInfo/RecommendedList";
-import { CommentInterface } from "../../interfaces/CommentInterface";
+import { edges } from "../../interfaces/CommentInterface";
 
 const PostID = ({ id, alreadyLiked }) => {
   const [open, setOpen] = useState(false);
@@ -44,12 +45,6 @@ const PostID = ({ id, alreadyLiked }) => {
     },
   });
   const {
-    More: MoreComments,
-    page: commentsPage,
-    hasMore: hasMoreComments,
-  } = usePagination("postId", MoreComm, postId.comments, "comments");
-
-  const {
     data: { recommendedPosts },
     fetchMore,
   } = useQuery(POST_RECOMMENDED_QUERY, {
@@ -57,12 +52,29 @@ const PostID = ({ id, alreadyLiked }) => {
       id: id,
     },
   });
+  const [viewed] = useMutation(VIEW_POST);
+
+  const { More: MoreComments, hasMore: hasMoreComments } = usePagination(
+    "postId",
+    MoreComm,
+    postId.comments,
+    "comments"
+  );
   const [liked, setLiked] = useState(alreadyLiked);
-  const { More, page, hasMore } = usePagination(
+  const { More, hasMore } = usePagination(
     "recommendedPosts",
     fetchMore,
     recommendedPosts
   );
+
+  useEffect(() => {
+    viewed({
+      variables: {
+        userId: userId.id,
+        viewed: id,
+      },
+    });
+  }, []);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -96,19 +108,19 @@ const PostID = ({ id, alreadyLiked }) => {
           setOpen={setOpen}
           liked={liked as boolean}
           handleLike={handleLike}
-          page={commentsPage}
+          page={postId.comments.edges.length}
           hasMore={hasMoreComments}
           More={MoreComments}
-          comments={postId.comments as CommentInterface[]}
+          comments={postId.comments.edges as edges[]}
           session={session}
           user={userId}
         />
         <RecommendedList
           hasMore={hasMore}
-          page={page}
+          page={recommendedPosts.edges.length}
           More={More}
           session={session}
-          recommendedPosts={recommendedPosts}
+          recommendedPosts={recommendedPosts.edges}
         />
       </Grid>
 

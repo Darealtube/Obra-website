@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import moment from "moment";
 
 const PostSchema = new mongoose.Schema({
-  author: String,
+  author: mongoose.Schema.Types.ObjectId,
   picture: String,
   date: {
     type: String,

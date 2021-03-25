@@ -17,13 +17,13 @@ import {
 import Link from "next/link";
 import styles from "../pages/styles/General/Home.module.css";
 import Image from "next/image";
-import { PostInterface } from "../interfaces/PostInterface";
+import { edges } from "../interfaces/PostInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useState } from "react";
 import EditMenu from "../Components/ListItems/EditMenu";
 
 type PostData = {
-  postData: PostInterface[];
+  postData: edges[];
   id: string;
   error?: string;
 };
@@ -56,10 +56,10 @@ export const CardList = ({ postData, id }: PostData) => {
               <Card className={styles.card}>
                 <CardHeader
                   avatar={
-                    post.picture ? (
-                      <Link href={`/profile/${post.author.name}`}>
+                    post.node.picture ? (
+                      <Link href={`/profile/${post.node.author.name}`}>
                         <Image
-                          src={post.picture}
+                          src={post.node.picture}
                           width={40}
                           height={40}
                           className={styles.avatar}
@@ -73,23 +73,27 @@ export const CardList = ({ postData, id }: PostData) => {
                     <IconButton
                       aria-label="settings"
                       onClick={handleEdit}
-                      value={post.id}
-                      id={post.author.id}
+                      value={post.node.id}
+                      id={post.node.author.id}
                     >
                       <MoreVertIcon />
                     </IconButton>
                   }
-                  title={post.author.name}
-                  subheader={post.date}
+                  title={post.node.author.name}
+                  subheader={post.node.date}
                 />
 
                 <Container component="div" className={styles.artContainer}>
-                  {post.art && (
-                    <Image src={post.art} layout="fill" objectFit="contain" />
+                  {post.node.art && (
+                    <Image
+                      src={post.node.art}
+                      layout="fill"
+                      objectFit="contain"
+                    />
                   )}
                 </Container>
 
-                <Link href={`/${post.id}`}>
+                <Link href={`/${post.node.id}`}>
                   <CardActionArea>
                     <CardContent>
                       <Typography
@@ -97,10 +101,10 @@ export const CardList = ({ postData, id }: PostData) => {
                         color="textSecondary"
                         className={styles.title}
                       >
-                        {post.title}
+                        {post.node.title}
                       </Typography>
                       <br />
-                      {post.tags.map((tag, index) => (
+                      {post.node.tags.map((tag, index) => (
                         <Chip key={index} label={tag} className={styles.tag} />
                       ))}
                     </CardContent>

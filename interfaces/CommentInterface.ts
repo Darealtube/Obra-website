@@ -7,3 +7,7 @@ export interface CommentInterface {
   picture: string;
   date: string;
 }
+
+export interface edges {
+  node: CommentInterface;
+}

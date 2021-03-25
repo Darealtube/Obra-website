@@ -1,46 +1,51 @@
 import { useState, useEffect } from "react";
 
 const usePagination = <T, U, K, O>(
-  key: T,
-  fetchMore: U,
-  info: K[],
-  key2?: O
+  key: string,
+  fetchMore,
+  info,
+  key2?: string
 ) => {
   const [page, setPage] = useState(1);
-  const [hasMore, sethasMore] = useState(info.length < 4 ? false : true);
+  const [hasMore, sethasMore] = useState(info?.pageInfo.hasNextPage);
+  const [refetching, setRefetching] = useState(false);
 
   const More = () => {
-    fetchMore({
-      variables: { offset: info.length },
-    }).then((fetchMoreResult) => {
-      if (
-        (key2
-          ? fetchMoreResult.data[`${key}`][`${key2}`].length
-          : fetchMoreResult.data[`${key}`].length) < 4
-      ) {
-        sethasMore(false);
-      }
-    });
-    setPage((prevpage) => prevpage + 1);
-  };
-
-  useEffect(() => {
-    if (info.length < page * 4 && hasMore) {
+    if (!refetching) {
       fetchMore({
-        variables: { offset: page * 4 - 4 },
+        variables: { after: info?.edges.slice(-1)[0].node.id },
       }).then((fetchMoreResult) => {
+        setPage((prevpage) => prevpage + 1);
         if (
           (key2
-            ? fetchMoreResult.data[`${key}`][`${key2}`].length
-            : fetchMoreResult.data[`${key}`].length) < 4
+            ? fetchMoreResult.data[`${key}`][`${key2}`].pageInfo.hasNextPage
+            : fetchMoreResult.data[`${key}`].pageInfo.hasNextPage) == false
         ) {
           sethasMore(false);
         }
       });
     }
-  }, [info.length]);
+  };
 
-  return { More, page, hasMore };
+  useEffect(() => {
+    if (info?.edges.length < page * 4 && hasMore) {
+      setRefetching(true);
+      fetchMore({
+        variables: { cursor: info?.edges[page * 4 - 5] },
+      }).then((fetchMoreResult) => {
+        if (
+          (key2
+            ? fetchMoreResult.data[`${key}`][`${key2}`].pageInfo.hasNextPage
+            : fetchMoreResult.data[`${key}`].pageInfo.hasNextPage) == false
+        ) {
+          sethasMore(false);
+        }
+        setRefetching(false);
+      });
+    }
+  }, [info?.edges.length, hasMore]);
+
+  return { More, hasMore };
 };
 
 export default usePagination;

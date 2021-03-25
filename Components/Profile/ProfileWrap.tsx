@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 
-const ProfileWrap = ({ children, user }) => {
+const ProfileWrap = ({ children, user, admin }) => {
   return (
     <Grid container className={styles.profile}>
       <Grid item xs={12}>
@@ -34,6 +34,11 @@ const ProfileWrap = ({ children, user }) => {
           <Button>
             <Link href={`/profile/${user.name}/info`}>About</Link>
           </Button>
+          {admin && (
+            <Button>
+              <Link href={`/profile/${user.name}/history`}>History</Link>
+            </Button>
+          )}
         </Breadcrumbs>
       </Grid>
 

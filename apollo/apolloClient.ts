@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import { offsetLimitPagination } from "@apollo/client/utilities";
+import { relayStylePagination } from "@apollo/client/utilities";
 
 let apolloClient;
 
@@ -15,20 +15,22 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            posts: offsetLimitPagination(),
-            newPosts: offsetLimitPagination(),
-            recommendedPosts: offsetLimitPagination(),
+            posts: relayStylePagination(),
+            newPosts: relayStylePagination(),
+            recommendedPosts: relayStylePagination(),
           },
         },
         User: {
           fields: {
-            likedPosts: offsetLimitPagination(),
-            posts: offsetLimitPagination(),
+            likedPosts: relayStylePagination(),
+            posts: relayStylePagination(),
+            homeRecommended: relayStylePagination(),
+            history: relayStylePagination(),
           },
         },
         Post: {
           fields: {
-            comments: offsetLimitPagination(),
+            comments: relayStylePagination(),
           },
         },
       },

@@ -24,7 +24,7 @@ const Create = ({ userData }) => {
   });
   const [create] = useMutation(CREATE_POST_MUTATION);
   const [post, setPost] = React.useState({
-    author: userData.name,
+    author: userData.id,
     picture: userData.picture,
     title: "",
     description: "",
@@ -197,7 +197,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {
         initialApolloState: apolloClient.cache.extract(),
-        userData: { name: data.userId.name, picture: data.userId.image },
+        userData: { id: data.userId.id, picture: data.userId.image },
       },
     };
   }

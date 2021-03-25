@@ -6,8 +6,8 @@ const now = () => {
 };
 
 const CommentSchema = new mongoose.Schema({
-  postID: String,
-  author: String,
+  postID: mongoose.Schema.Types.ObjectId,
+  author: mongoose.Schema.Types.ObjectId,
   date: {
     type: String,
     default: now,

@@ -7,9 +7,6 @@ import {
   Container,
   CircularProgress,
   Divider,
-  TextField,
-  InputAdornment,
-  IconButton,
 } from "@material-ui/core";
 import { Session } from "next-auth/client";
 import Image from "next/image";
@@ -20,19 +17,19 @@ import {
   CREATE_COMMENT_MUTATION,
   POST_ID_QUERY,
 } from "../../apollo/apolloQueries";
-import { CommentInterface } from "../../interfaces/CommentInterface";
+import { CommentInterface, edges } from "../../interfaces/CommentInterface";
 import { PostInterface } from "../../interfaces/PostInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import CommentList from "../CommentList";
-import SendIcon from "@material-ui/icons/Send";
+import CommentForm from "../Forms/CreateComment";
 
 type Parameters = {
   postID: PostInterface;
   setOpen: Dispatch<SetStateAction<boolean>>;
   liked: boolean;
   handleLike: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  comments: CommentInterface[];
+  comments: edges[];
   page: number;
   More: () => void;
   hasMore: boolean;
@@ -55,17 +52,24 @@ const PostInfo = ({
   const [addComment] = useMutation(CREATE_COMMENT_MUTATION, {
     update: (cache, mutationResult) => {
       const newComment = mutationResult.data.createComment;
-      const data = cache.readQuery({
+      const { postId } = cache.readQuery({
         query: POST_ID_QUERY,
         variables: { id: postID.id },
       });
+
       cache.writeQuery({
         query: POST_ID_QUERY,
         variables: { id: postID.id },
         data: {
           postId: {
-            ...data.postId,
-            comments: [newComment, ...data.postId.comments],
+            ...postId,
+            comments: {
+              ...postId.comments,
+              edges: [
+                { __typeName: "CommentEdge", node: newComment },
+                ...postId.comments.edges,
+              ],
+            },
           },
         },
       });
@@ -74,7 +78,7 @@ const PostInfo = ({
   const [comment, setComment] = useState({
     postID: postID.id,
     content: "",
-    author: user.name,
+    author: user.id,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,28 +166,11 @@ const PostInfo = ({
         <br />
         <Typography variant="overline">Comments</Typography>
         <Divider />
-        <form onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="none"
-            fullWidth
-            value={comment.content}
-            id="content"
-            label="Comment"
-            name="content"
-            multiline={true}
-            onChange={handleChange}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">
-                  <IconButton type="submit">
-                    <SendIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </form>
+        <CommentForm
+          comment={comment}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
         <InfiniteScroll
           dataLength={page * 4}
           next={More}
@@ -197,6 +184,7 @@ const PostInfo = ({
           style={{
             overflow: "hidden",
           }}
+          scrollThreshold={0.5}
         >
           <CommentList comments={comments} id={session.id} />
         </InfiniteScroll>

@@ -21,7 +21,7 @@ const PostIDLiked = ({ name, id }) => {
       name: name,
     },
   });
-  const { More, hasMore, page } = usePagination(
+  const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
     userName.likedPosts,
@@ -36,9 +36,9 @@ const PostIDLiked = ({ name, id }) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap user={userName}>
+      <ProfileWrap user={userName} admin={userName.id === id}>
         <InfiniteScroll
-          dataLength={page * 4}
+          dataLength={userName.likedPosts.edges.length}
           next={More}
           hasMore={hasMore}
           loader={
@@ -57,7 +57,7 @@ const PostIDLiked = ({ name, id }) => {
           }}
         >
           {userName.likedPosts ? (
-            <CardList postData={userName.likedPosts} id={id} />
+            <CardList postData={userName.likedPosts.edges} id={id} />
           ) : (
             <h3>This user has no liked posts.</h3>
           )}

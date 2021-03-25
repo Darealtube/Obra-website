@@ -10,19 +10,17 @@ import {
 import Image from "next/image";
 import React, { useState } from "react";
 import styles from "../pages/styles/Specific/Post.module.css";
-import { edges } from "../interfaces/CommentInterface";
+import { edges } from "../interfaces/HistoryInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CommentEditMenu from "./ListItems/CommentEditMenu";
 import moment from "moment";
+import HistoryEditMenu from "./ListItems/HistoryEditMenu";
 
-const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
+const HistoryList = ({ histories }: { histories: edges[] }) => {
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
-  const [targetId, settargetId] = useState(null);
-  const [admin, setadmin] = useState<boolean>(null);
+  const [targetId, settargetId] = useState<string>(null);
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     seteditAnchor(e.currentTarget);
     settargetId(e.currentTarget.value);
-    setadmin(id === e.currentTarget.id);
   };
 
   const handleEditClose = () => {
@@ -30,30 +28,36 @@ const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
     settargetId(null);
   };
 
-  const handleEditExit = () => {
-    setadmin(null);
-  };
-
   return (
     <div>
       <List className={styles.commentList}>
-        {comments &&
-          comments.map((comment, index) => (
+        {histories &&
+          histories.map((history, index) => (
             <ListItem alignItems="flex-start" key={index}>
               <ListItemAvatar>
-                <Image
-                  src={comment.node.author.image}
-                  width={40}
-                  height={40}
-                  className={styles.avatar}
-                />
+                {history.node.viewed && ( // TEMPORARY
+                  <Image
+                    src={history.node.viewed.art}
+                    width={100}
+                    height={100}
+                    className={styles.avatar}
+                  />
+                )}
               </ListItemAvatar>
               <ListItemText
-                primary={`${comment.node.author.name} commented ${moment(
-                  comment.node.date
-                ).fromNow()}`}
+                primary={
+                  history.node.viewed
+                    ? history.node.viewed.title
+                    : "This post has been deleted"
+                }
                 secondary={
-                  <React.Fragment>{comment.node.content}</React.Fragment>
+                  history.node.viewed ? (
+                    <React.Fragment>{`You viewed this post ${moment(
+                      history.node.lastDateViewed
+                    ).fromNow()}`}</React.Fragment>
+                  ) : (
+                    ""
+                  )
                 }
               />
               <ListItemSecondaryAction>
@@ -61,8 +65,7 @@ const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
                   edge="end"
                   aria-label="edit"
                   onClick={handleEdit}
-                  value={comment.node.id}
-                  id={comment.node.author.id}
+                  value={history.node.id}
                 >
                   <MoreVertIcon />
                 </IconButton>
@@ -76,7 +79,6 @@ const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
         keepMounted
         open={Boolean(editAnchor)}
         onClose={handleEditClose}
-        onExited={handleEditExit}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -87,16 +89,11 @@ const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
         }}
       >
         <List>
-          <CommentEditMenu
-            id={targetId}
-            admin={admin}
-            onClose={handleEditClose}
-            onExited={handleEditExit}
-          />
+          <HistoryEditMenu id={targetId} onClose={handleEditClose} />
         </List>
       </Popover>
     </div>
   );
 };
 
-export default CommentList;
+export default HistoryList;

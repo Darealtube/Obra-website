@@ -4,29 +4,25 @@ import {
   Container,
   Divider,
   Button,
+  CircularProgress,
 } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
-import { PostInterface } from "../interfaces/PostInterface";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useSession } from "next-auth/client";
-import { useQuery } from "@apollo/client";
-import { NEW_POSTS_QUERY, POST_QUERY } from "../apollo/apolloQueries";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import {
+  HOME_RECOMMENDED_QUERY,
+  NEW_POSTS_QUERY,
+  POST_QUERY,
+} from "../apollo/apolloQueries";
 import { fetchPosts } from "../utils/fetchData";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import usePagination from "../Hooks/usePagination";
-
-interface PostData {
-  posts: PostInterface[];
-}
-
-type Posts = {
-  data: PostData;
-  loading: Boolean;
-};
+import { useEffect } from "react";
 
 const Home = () => {
   const [session] = useSession();
@@ -38,8 +34,24 @@ const Home = () => {
     data: { newPosts },
     fetchMore: moreNewPosts,
   } = useQuery(NEW_POSTS_QUERY);
+  const [
+    getRecommended,
+    { loading, data, fetchMore: moreRecommended },
+  ] = useLazyQuery(HOME_RECOMMENDED_QUERY);
   const { More } = usePagination("posts", fetchMore, posts);
   const { More: MoreNew } = usePagination("newPosts", moreNewPosts, newPosts);
+  const { More: MoreRecc, hasMore } = usePagination(
+    "userId",
+    moreRecommended,
+    data?.userId.homeRecommended,
+    "homeRecommended"
+  );
+
+  useEffect(() => {
+    if (session) {
+      getRecommended({ variables: { id: session.id } });
+    }
+  }, [session]);
 
   return (
     <div className={styles.root}>
@@ -53,7 +65,7 @@ const Home = () => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={posts} id={session?.id} />
+        <CardList postData={posts.edges} id={session?.id} />
         <br />
         <Button
           onClick={More}
@@ -69,7 +81,7 @@ const Home = () => {
         <Divider className={styles.divider} />
         <br />
         {/* Recent posts list */}
-        <CardList postData={newPosts} id={session?.id} />
+        <CardList postData={newPosts.edges} id={session?.id} />
         <br />
         <Button
           onClick={MoreNew}
@@ -83,6 +95,31 @@ const Home = () => {
         <br />
         <Typography variant="h4">Recommended</Typography>
         <Divider className={styles.divider} />
+        <br />
+        {(loading || !loading) && (!session || !data) ? (
+          ""
+        ) : (
+          <InfiniteScroll
+            dataLength={data?.userId.homeRecommended.edges.length}
+            next={MoreRecc}
+            hasMore={hasMore}
+            loader={
+              <>
+                <br />
+                <CircularProgress />
+              </>
+            }
+            style={{
+              overflow: "hidden",
+            }}
+            scrollThreshold={0.8}
+          >
+            <CardList
+              postData={data?.userId.homeRecommended.edges}
+              id={session?.id}
+            />
+          </InfiniteScroll>
+        )}
         <br />
       </Container>
     </div>

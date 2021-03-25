@@ -26,9 +26,18 @@ export const USER_QUERY = gql`
 
 //Fetch all Posts
 export const POST_QUERY = gql`
-  query Posts($offset: Int) {
-    posts(limit: 4, offset: $offset) {
-      ...PostInfo
+  query Posts($after: ID) {
+    posts(limit: 4, after: $after) {
+      totalCount
+      edges {
+        node {
+          ...PostInfo
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
   ${PostInfo}
@@ -36,13 +45,22 @@ export const POST_QUERY = gql`
 
 //Fetch User by ID
 export const USER_ID_QUERY = gql`
-  query UserID($id: ID!, $offset: Int) {
+  query UserID($id: ID!, $after: ID) {
     userId(id: $id) {
       id
       name
       image
-      likedPosts(limit: 4, offset: $offset) {
-        id
+      likedPosts(limit: 4, after: $after) {
+        totalCount
+        edges {
+          node {
+            id
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
     }
   }
@@ -50,7 +68,7 @@ export const USER_ID_QUERY = gql`
 
 //Fetch Post By ID
 export const POST_ID_QUERY = gql`
-  query PostID($id: ID!, $offset: Int) {
+  query PostID($id: ID!, $after: ID) {
     postId(id: $id) {
       id
       title
@@ -63,15 +81,24 @@ export const POST_ID_QUERY = gql`
       price
       tags
       description
-      comments(offset: $offset, limit: 4) {
-        id
-        author {
-          id
-          image
-          name
+      comments(after: $after, limit: 4) {
+        totalCount
+        edges {
+          node {
+            id
+            author {
+              id
+              image
+              name
+            }
+            date
+            content
+          }
         }
-        date
-        content
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
     }
   }
@@ -102,13 +129,22 @@ export const APPBAR_USER_QUERY = gql`
 
 //Fetch User and Posts
 export const USER_POST_QUERY = gql`
-  query UserPosts($name: String!, $offset: Int) {
+  query UserPosts($name: String!, $after: ID) {
     userName(name: $name) {
       id
       name
       image
-      posts(limit: 4, offset: $offset) {
-        ...PostInfo
+      posts(limit: 4, after: $after) {
+        totalCount
+        edges {
+          node {
+            ...PostInfo
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
       username
       birthday
@@ -120,13 +156,22 @@ export const USER_POST_QUERY = gql`
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
-  query UserPosts($name: String!, $offset: Int) {
+  query UserPosts($name: String!, $after: ID) {
     userName(name: $name) {
       id
       name
       image
-      likedPosts(limit: 4, offset: $offset) {
-        ...PostInfo
+      likedPosts(limit: 4, after: $after) {
+        totalCount
+        edges {
+          node {
+            ...PostInfo
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
       username
       birthday
@@ -137,28 +182,90 @@ export const USER_LIKED_POST_QUERY = gql`
   ${PostInfo}
 `;
 
-/* export const POST_RECOMMENDED_QUERY = gql`
-  query RecommendedPosts($id: ID!, $offset: Int, $limit: Int) {
-    recommendedPosts(id: $id, offset: $offset, limit: $limit) {
-      ...PostInfo
+export const USER_HISTORY_QUERY = gql`
+  query UserHistory($name: String!, $after: ID) {
+    userName(name: $name) {
+      id
+      name
+      image
+      history(after: $after, limit: 4) {
+        totalCount
+        edges {
+          node {
+            id
+            viewed {
+              id
+              title
+              art
+            }
+            lastDateViewed
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+      username
+      birthday
+      country
+      phone
+    }
+  }
+`;
+
+export const POST_RECOMMENDED_QUERY = gql`
+  query RecommendedPosts($id: ID!, $after: ID) {
+    recommendedPosts(id: $id, limit: 4, after: $after) {
+      totalCount
+      edges {
+        node {
+          ...PostInfo
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
   ${PostInfo}
-`; */
+`;
 
-export const POST_RECOMMENDED_QUERY = gql`
-  query RecommendedPosts($id: ID!, $offset: Int) {
-    recommendedPosts(id: $id, limit: 4, offset: $offset) {
-      ...PostInfo
+export const HOME_RECOMMENDED_QUERY = gql`
+  query HomeRecommended($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      homeRecommended(after: $after, limit: 4) {
+        totalCount
+        edges {
+          node {
+            ...PostInfo
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
     }
   }
   ${PostInfo}
 `;
 
 export const NEW_POSTS_QUERY = gql`
-  query NewPosts($offset: Int) {
-    newPosts(offset: $offset, limit: 4) {
-      ...PostInfo
+  query NewPosts($after: ID) {
+    newPosts(after: $after, limit: 4) {
+      totalCount
+      edges {
+        node {
+          ...PostInfo
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
     }
   }
   ${PostInfo}
@@ -201,7 +308,7 @@ export const CREATE_POST_MUTATION = gql`
     $art: String!
     $price: String!
     $sale: String!
-    $author: String!
+    $author: ID!
     $picture: String!
   ) {
     createPost(
@@ -219,7 +326,7 @@ export const CREATE_POST_MUTATION = gql`
 `;
 
 export const CREATE_COMMENT_MUTATION = gql`
-  mutation CreateComment($postID: ID!, $author: String!, $content: String!) {
+  mutation CreateComment($postID: ID!, $author: ID!, $content: String!) {
     createComment(postID: $postID, author: $author, content: $content) {
       id
       date
@@ -242,6 +349,12 @@ export const DELETE_POST_MUTATION = gql`
 export const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteComment($commentID: ID!) {
     deleteComment(commentID: $commentID)
+  }
+`;
+
+export const DELETE_HISTORY_MUTATION = gql`
+  mutation DeleteHistory($historyID: ID!) {
+    deleteHistory(historyID: $historyID)
   }
 `;
 
@@ -270,5 +383,11 @@ export const CONFIG_MUTATION = gql`
 export const READ_NOTIF = gql`
   mutation ReadNotif($userId: ID!) {
     readNotif(userId: $userId)
+  }
+`;
+
+export const VIEW_POST = gql`
+  mutation ViewPost($viewed: ID!, $userId: ID!) {
+    viewPost(viewed: $viewed, userId: $userId)
   }
 `;

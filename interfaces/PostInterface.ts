@@ -17,14 +17,6 @@ export interface PostInterface {
   forSalePrice?: string;
 }
 
-export interface PostProp {
-  // General useSWR
-  data: PostInterface[];
-  error?: string;
-}
-
-export interface PostPropId {
-  // Specific useSWR
-  data: PostInterface;
-  error?: string;
+export interface edges {
+  node: PostInterface;
 }

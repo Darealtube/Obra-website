@@ -8,14 +8,14 @@ import {
 import styles from "../../pages/styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { PostInterface } from "../../interfaces/PostInterface";
+import { edges, PostInterface } from "../../interfaces/PostInterface";
 import { Session } from "next-auth/client";
 
 type Parameters = {
   page: number;
   More: () => void;
   hasMore: boolean;
-  recommendedPosts: PostInterface[];
+  recommendedPosts: edges[];
   session: Session;
 };
 

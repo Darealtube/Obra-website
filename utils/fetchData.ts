@@ -4,6 +4,7 @@ import {
   POST_ID_QUERY,
   POST_QUERY,
   POST_RECOMMENDED_QUERY,
+  USER_HISTORY_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -61,6 +62,18 @@ export const fetchUserandLikedPosts = async (name: string) => {
   return { data: apolloClient.cache.extract(), exists: data ? true : false };
 };
 
+export const fetchUserHistory = async (name: string) => {
+  const apolloClient = initializeApollo();
+  const { data } = await apolloClient.query({
+    query: USER_HISTORY_QUERY,
+    variables: {
+      name: name,
+    },
+  });
+
+  return { data: apolloClient.cache.extract(), exists: data ? true : false };
+};
+
 export const fetchPosts = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({
@@ -110,6 +123,8 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   return {
     data: apolloClient.cache.extract(),
     exists: data ? true : false,
-    alreadyLiked: user.userId.likedPosts.some((post) => post.id === id),
+    alreadyLiked: user.userId.likedPosts.edges.some(
+      (post) => post.node.id === id
+    ),
   };
 };

@@ -52,18 +52,16 @@ const Notification = ({
             </ListItem>
           ))
         : ""}
-      {tutorial && (
-        <ListItem className={classes.notifitem}>
-          <Avatar className={classes.icon}>O</Avatar>
-          <div>
-            <Typography>Obra Tutorial</Typography>
-            <Typography className={classes.notifInfo}>
-              Hey! Welcome to Obra, where we ... . Let us show you how to do
-              things around here!
-            </Typography>
-          </div>
-        </ListItem>
-      )}
+      <ListItem className={classes.notifitem}>
+        <Avatar className={classes.icon}>O</Avatar>
+        <div>
+          <Typography>Obra Tutorial</Typography>
+          <Typography className={classes.notifInfo}>
+            Hey! Welcome to Obra, where we ... . Let us show you how to do
+            things around here!
+          </Typography>
+        </div>
+      </ListItem>
       {newUser && (
         <ListItem className={classes.notifitem}>
           <Avatar className={classes.icon}>O</Avatar>

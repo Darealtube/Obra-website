@@ -57,3 +57,9 @@
   width: inherit;
   height: 4em;
 }
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

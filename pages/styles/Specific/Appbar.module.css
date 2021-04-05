@@ -1,0 +1,36 @@
+.list {
+  width: 100%;
+  height: 100%;
+  max-width: 20em;
+  background-color: #ffff;
+  overflow: auto;
+}
+.menuButton {
+  margin-right: 16px;
+}
+.toolbarTitle {
+  flex-grow: 1;
+}
+
+.menu {
+  height: 100%;
+  overflow: auto;
+  width: 20em;
+}
+
+.box {
+  margin: 16px 12px;
+}
+.box2 {
+  margin: 20px 16px;
+}
+.notifmenu {
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+  max-width: 40em;
+  max-height: 20em;
+}
+.avatar {
+  border-radius: 50%;
+}

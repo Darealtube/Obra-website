@@ -6,24 +6,9 @@ import {
   Avatar,
   Popover,
   Box,
-  createStyles,
-  makeStyles,
-  Theme,
 } from "@material-ui/core";
 import NoUserMenu from "../ListItems/NoUserMenu";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menu: {
-      height: "100%",
-      overflow: "auto",
-      width: "20em",
-    },
-    box: {
-      margin: theme.spacing(2.5, 2),
-    },
-  })
-);
+import styles from "../../pages/styles/Specific/Appbar.module.css";
 
 interface Prop {
   handleProfile: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -36,7 +21,6 @@ const AppbarNoUser = ({
   handleProfileClose,
   profAnchor,
 }: Prop) => {
-  const classes = useStyles();
   return (
     <div>
       <IconButton onClick={handleProfile}>
@@ -57,7 +41,7 @@ const AppbarNoUser = ({
           horizontal: "right",
         }}
       >
-        <Box display="flex" flexWrap="wrap" className={classes.box}>
+        <Box display="flex" flexWrap="wrap" className={styles.box2}>
           <Avatar src="" />
 
           <div style={{ marginLeft: "25px" }}>
@@ -67,7 +51,7 @@ const AppbarNoUser = ({
           </div>
         </Box>
         <Divider />
-        <List className={classes.menu}>
+        <List className={styles.menu}>
           <NoUserMenu />
         </List>
       </Popover>

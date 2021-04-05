@@ -13,13 +13,15 @@ const UserSchema = new mongoose.Schema({
     default: true,
   },
   name: String,
-  username: String,
   age: String,
   country: String,
   birthday: String,
   phone: String,
   newUser: Boolean,
   notifRead: Boolean,
+  artLevel: String,
+  artStyles: Array,
+  artKinds: Array,
   // More to come
 });
 

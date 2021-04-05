@@ -27,9 +27,11 @@ const RecommendedList = ({
   session,
 }: Parameters) => {
   return (
-    <Grid item lg={4} className={styles.recommended}>
+    <Grid item xs={12} md={4} className={styles.recommended}>
       <Container>
-        <Typography variant="h4">Recommended List</Typography>
+        <Typography variant="h4" align="center">
+          Recommended List
+        </Typography>
         <Divider />
         {/* Recommended List */}
         <Container className={styles.recommendedList}>

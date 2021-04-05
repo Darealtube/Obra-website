@@ -12,7 +12,7 @@ import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const PostID = ({ name, id }) => {
+const PostID = ({ name, id, alreadyLiked }) => {
   const {
     data: { userName },
     fetchMore,
@@ -36,7 +36,11 @@ const PostID = ({ name, id }) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap user={userName} admin={userName.id == id}>
+      <ProfileWrap
+        artist={userName}
+        admin={userName.id == id}
+        userLiked={alreadyLiked}
+      >
         <InfiniteScroll
           dataLength={userName.posts.edges.length}
           next={More}
@@ -47,13 +51,9 @@ const PostID = ({ name, id }) => {
               <CircularProgress />
             </>
           }
-          endMessage={
-            <p>
-              <b>Yay! You have seen it all</b>
-            </p>
-          }
           style={{
             overflow: "hidden",
+            textAlign: "center",
           }}
         >
           {userName.posts ? (
@@ -70,8 +70,12 @@ const PostID = ({ name, id }) => {
 /*  */
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await fetchUserandPosts(context.params.name as string);
   const session = await getSession(context);
+  const user = await fetchUserandPosts(
+    context.params.name as string,
+    session.id
+  );
+
   if (!user.exists) {
     return {
       notFound: true,
@@ -84,6 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       session: session,
       name: context.params.name,
       id: session.id,
+      alreadyLiked: user.alreadyLiked,
     },
   };
 };

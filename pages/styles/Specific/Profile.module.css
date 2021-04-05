@@ -1,33 +1,222 @@
+.backdrop {
+  position: relative;
+  height: 20em;
+  width: 100%;
+}
+
 .root {
   display: flex;
+  flex-wrap: wrap;
+  background: rgb(212, 28, 36);
+  background: -moz-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
 }
 
-.image {
-  border-radius: 50%;
-}
-
-.link {
-  color: inherit;
-}
-
-.profile {
+.postContainer {
   display: flex;
-  margin-top: 80px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  text-align: center;
+  margin-top: 40px;
+  width: 60vw;
+  color: #fff;
 }
 
-.posts {
+.userContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  width: 40vw;
+}
+
+.wrapRoot {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.banner {
+  position: relative;
+  bottom: 200px;
   width: 20em;
+  height: 45em;
+  display: flex;
+  flex-direction: column;
+  background: rgb(212, 28, 36);
+  background: -moz-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
 }
 
-.container {
-  margin-right: 20em;
-  margin-left: 20em;
+.dp {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  background-color: lightblue;
+}
+
+.information {
+  display: flex;
+  flex-direction: row;
+  background: rgb(212, 28, 36);
+  background: -moz-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+  background: linear-gradient(
+    104deg,
+    rgba(212, 28, 36, 1) 0%,
+    rgba(13, 104, 187, 1) 35%,
+    rgba(248, 177, 53, 1) 100%
+  );
+}
+
+.button {
+  width: 12em;
+}
+
+.separator {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.button:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  background: #000;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.button:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+.userOptions span {
+  position: relative;
+  z-index: 2;
+}
+
+.userOptions:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #ff003b;
+  transition: all 0.35s;
+}
+
+.userOptions:hover {
+  color: #fff;
+}
+
+.userOptions:hover:after {
+  width: 100%;
+}
+
+.text {
+  display: flex;
+  flex-direction: row;
+  color: white;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.icon2 {
+  margin-right: 8px;
+  color: red;
+}
+
+.userOptions2 span {
+  position: relative;
+  z-index: 2;
+}
+
+.userOptions2:after {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #000;
+  transition: all 0.35s;
+}
+
+.userOptions2:hover {
+  color: #fff;
+}
+
+.userOptions2:hover:after {
+  width: 100%;
+}
+
+@media all and (max-width: 767px) {
+  .backdrop {
+    display: none;
+  }
+  .information {
+    display: flex;
+    flex-direction: column;
+  }
+  .postContainer {
+    width: 100vw;
+    margin-bottom: 20px;
+  }
+  .userContainer {
+    width: 100vw;
+  }
+  .banner {
+    bottom: 0px;
+    margin-top: 80px;
+  }
 }

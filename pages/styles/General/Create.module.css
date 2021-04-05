@@ -10,6 +10,7 @@
 
 .grid {
   height: 100vh;
+  flex-grow: 1;
 }
 
 .price {

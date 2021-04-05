@@ -49,7 +49,7 @@ export const CardList = ({ postData, id }: PostData) => {
 
   return (
     <div>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className={styles.cardContainer}>
         {postData &&
           postData.map((post, index) => (
             <Grid item key={index}>

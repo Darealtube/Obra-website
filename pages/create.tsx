@@ -129,7 +129,7 @@ const Create = ({ userData }) => {
       <CssBaseline />
       <Appbar />
       <Grid container className={styles.grid}>
-        <Grid item xs={false} sm={4} md={7} className={styles.displayArt}>
+        <Grid item xs={12} sm={6} md={7} className={styles.displayArt}>
           {/* Art Display */}
           <div className={styles.artContainer}>
             {post.art && !loadings ? (
@@ -147,7 +147,7 @@ const Create = ({ userData }) => {
           </div>
           {/* Art Display */}
         </Grid>
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
           <div className={styles.paper}>
             <PostForm
               post={post}

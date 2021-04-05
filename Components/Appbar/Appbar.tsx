@@ -1,13 +1,12 @@
 import {
   Drawer,
-  Theme,
-  makeStyles,
   List,
-  createStyles,
   AppBar,
   Toolbar,
   Typography,
   IconButton,
+  useMediaQuery,
+  SwipeableDrawer,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useEffect, useState } from "react";
@@ -17,32 +16,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import AppbarMenu from "./AppbarMenu";
 import AppbarNoUser from "./AppbarNoUser";
 import DrawerItems from "../ListItems/Drawer";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    list: {
-      width: "100%",
-      height: "100%",
-      maxWidth: 320,
-      backgroundColor: theme.palette.background.paper,
-      overflow: "auto",
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    toolbarTitle: {
-      flexGrow: 1,
-    },
-    menu: {
-      height: "100%",
-      overflow: "auto",
-      width: "20em",
-    },
-  })
-);
+import styles from "../../pages/styles/Specific/Appbar.module.css";
 
 const Appbar = () => {
-  const classes = useStyles();
   const [session, loading] = useSession();
   const { data: user } = useQuery(APPBAR_USER_QUERY, {
     variables: {
@@ -59,6 +35,7 @@ const Appbar = () => {
       userId: session?.id,
     },
   });
+  const swipeable = useMediaQuery(`(max-width: 480px)`);
 
   useEffect(() => {
     if (!loading && user && user.userId.notifRead) {
@@ -112,12 +89,12 @@ const Appbar = () => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            className={classes.menuButton}
+            className={styles.menuButton}
             onClick={handleDrawer}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap className={classes.toolbarTitle}>
+          <Typography variant="h6" noWrap className={styles.toolbarTitle}>
             Canvas
           </Typography>
           {/* Drawer and Logo */}
@@ -146,11 +123,24 @@ const Appbar = () => {
       {/* App Bar */}
 
       {/* Drawer */}
-      <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
-        <List className={classes.list}>
-          <DrawerItems /> {/* Manage this later */}
-        </List>
-      </Drawer>
+      {swipeable ? (
+        <SwipeableDrawer
+          anchor={"left"}
+          open={open}
+          onClose={handleDrawer}
+          onOpen={handleDrawer}
+        >
+          <List className={styles.list}>
+            <DrawerItems /> {/* Manage this later */}
+          </List>
+        </SwipeableDrawer>
+      ) : (
+        <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
+          <List className={styles.list}>
+            <DrawerItems /> {/* Manage this later */}
+          </List>
+        </Drawer>
+      )}
       {/* Drawer */}
     </div>
   );

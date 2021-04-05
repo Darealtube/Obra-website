@@ -27,3 +27,13 @@
   height: 6em;
   margin-top: 8px;
 }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.select {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}

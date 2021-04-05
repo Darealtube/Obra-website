@@ -21,7 +21,9 @@ export const typeDefs = gql`
     tutorial: Boolean
     notifRead: Boolean
     homeRecommended(after: ID, limit: Int): PostConnection
-    history(after: ID, limit: Int): HistoryConnection
+    artLevel: String
+    artKinds: [String!]
+    artStyles: [String!]
   }
 
   type Post {
@@ -35,6 +37,7 @@ export const typeDefs = gql`
     sale: String!
     author: User
     picture: String
+    likes: Int
     comments(after: ID, limit: Int): CommentConnection
   }
 
@@ -54,6 +57,9 @@ export const typeDefs = gql`
     postId(id: ID!): Post
     recommendedPosts(id: ID!, after: ID, limit: Int): PostConnection
     newPosts(after: ID, limit: Int): PostConnection
+    featuredPosts(after: ID, limit: Int): PostConnection
+    isLikedArtist(userID: ID!, artistName: String!): Boolean
+    isLikedPost(postID: ID!, userID: ID!): Boolean
   }
 
   type Notification {
@@ -63,16 +69,9 @@ export const typeDefs = gql`
     postId: ID
   }
 
-  type History {
-    id: ID!
-    userId: ID
-    viewed: Post
-    lastDateViewed: String
-  }
-
   type Mutation {
-    likePost(postId: ID!, userName: String!): Boolean!
-    unlikePost(postId: ID!, userName: String!): Boolean!
+    likePost(postId: ID!, userID: ID!): Boolean!
+    unlikePost(postId: ID!, userID: ID!): Boolean!
     editPost(
       postId: ID!
       title: String!
@@ -93,26 +92,22 @@ export const typeDefs = gql`
     deletePost(postId: ID!): Boolean!
     editUser(
       userId: ID!
-      username: String!
+      name: String!
       age: String!
       country: String!
       language: String!
       birthday: String!
       phone: String!
+      artLevel: String!
+      artStyles: [String!]
+      artKinds: [String!]
     ): Boolean!
     readNotif(userId: ID!): Boolean!
     createComment(postID: ID!, author: ID!, content: String!): Comment!
     deleteComment(commentID: ID!): Boolean!
-    likeArtist(artistID: ID!, userName: String!): Boolean!
-    unlikeArtist(artistID: ID!, userName: String!): Boolean!
+    likeArtist(artistID: ID!, userID: ID!): Boolean!
+    unlikeArtist(artistID: ID!, userID: ID!): Boolean!
     viewPost(viewed: ID!, userId: ID!): Boolean!
-    deleteHistory(historyID: ID!): Boolean!
-  }
-
-  type HistoryConnection {
-    totalCount: Int
-    pageInfo: PageInfo
-    edges: [HistoryEdge]
   }
 
   type PostConnection {
@@ -143,10 +138,6 @@ export const typeDefs = gql`
 
   type UserEdge {
     node: User
-  }
-
-  type HistoryEdge {
-    node: History
   }
 
   type PageInfo {

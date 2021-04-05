@@ -150,6 +150,9 @@ export const USER_POST_QUERY = gql`
       birthday
       country
       phone
+      artLevel
+      artStyles
+      artKinds
     }
   }
   ${PostInfo}
@@ -177,41 +180,12 @@ export const USER_LIKED_POST_QUERY = gql`
       birthday
       country
       phone
+      artLevel
+      artStyles
+      artKinds
     }
   }
   ${PostInfo}
-`;
-
-export const USER_HISTORY_QUERY = gql`
-  query UserHistory($name: String!, $after: ID) {
-    userName(name: $name) {
-      id
-      name
-      image
-      history(after: $after, limit: 4) {
-        totalCount
-        edges {
-          node {
-            id
-            viewed {
-              id
-              title
-              art
-            }
-            lastDateViewed
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-      username
-      birthday
-      country
-      phone
-    }
-  }
 `;
 
 export const POST_RECOMMENDED_QUERY = gql`
@@ -253,6 +227,24 @@ export const HOME_RECOMMENDED_QUERY = gql`
   ${PostInfo}
 `;
 
+export const FEATURED_POSTS_QUERY = gql`
+  query FeaturedPosts($after: ID) {
+    featuredPosts(after: $after, limit: 4) {
+      totalCount
+      edges {
+        node {
+          ...PostInfo
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+  ${PostInfo}
+`;
+
 export const NEW_POSTS_QUERY = gql`
   query NewPosts($after: ID) {
     newPosts(after: $after, limit: 4) {
@@ -271,15 +263,39 @@ export const NEW_POSTS_QUERY = gql`
   ${PostInfo}
 `;
 
+export const IS_LIKED_ARTIST = gql`
+  query islikedArtist($userID: ID!, $artistName: String!) {
+    isLikedArtist(userID: $userID, artistName: $artistName)
+  }
+`;
+
+export const IS_LIKED_POST = gql`
+  query islikedPost($userID: ID!, $postID: ID!) {
+    isLikedPost(userID: $userID, postID: $postID)
+  }
+`;
+
 export const LIKE_MUTATION = gql`
-  mutation Like($postId: ID!, $userName: String!) {
-    likePost(postId: $postId, userName: $userName)
+  mutation Like($postId: ID!, $userID: ID!) {
+    likePost(postId: $postId, userID: $userID)
   }
 `;
 
 export const UNLIKE_MUTATION = gql`
-  mutation unLike($postId: ID!, $userName: String!) {
-    unlikePost(postId: $postId, userName: $userName)
+  mutation unLike($postId: ID!, $userID: ID!) {
+    unlikePost(postId: $postId, userID: $userID)
+  }
+`;
+
+export const LIKE_ARTIST_MUTATION = gql`
+  mutation LikeArtist($artistID: ID!, $userID: ID!) {
+    likeArtist(artistID: $artistID, userID: $userID)
+  }
+`;
+
+export const UNLIKE_ARTIST_MUTATION = gql`
+  mutation UnlikeArtist($artistID: ID!, $userID: ID!) {
+    unlikeArtist(artistID: $artistID, userID: $userID)
   }
 `;
 
@@ -352,30 +368,30 @@ export const DELETE_COMMENT_MUTATION = gql`
   }
 `;
 
-export const DELETE_HISTORY_MUTATION = gql`
-  mutation DeleteHistory($historyID: ID!) {
-    deleteHistory(historyID: $historyID)
-  }
-`;
-
 export const CONFIG_MUTATION = gql`
   mutation ConfigUser(
     $userId: ID!
-    $username: String!
+    $name: String!
     $age: String!
     $country: String!
     $language: String!
     $birthday: String!
     $phone: String!
+    $artLevel: String!
+    $artStyles: [String!]
+    $artKinds: [String!]
   ) {
     editUser(
       userId: $userId
-      username: $username
+      name: $name
       age: $age
       country: $country
       language: $language
       birthday: $birthday
       phone: $phone
+      artLevel: $artLevel
+      artStyles: $artStyles
+      artKinds: $artKinds
     )
   }
 `;

@@ -1,5 +1,13 @@
 import Appbar from "../../Components/Appbar/Appbar";
-import { CssBaseline, Grid, Container, Dialog } from "@material-ui/core";
+import {
+  CssBaseline,
+  Grid,
+  Container,
+  Dialog,
+  Paper,
+  IconButton,
+  Fab,
+} from "@material-ui/core";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import styles from "../styles/Specific/Post.module.css";
@@ -12,7 +20,6 @@ import {
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
   UNLIKE_MUTATION,
-  USER_ID_QUERY,
   VIEW_POST,
 } from "../../apollo/apolloQueries";
 import { useMutation, useQuery } from "@apollo/client";
@@ -21,6 +28,7 @@ import usePagination from "../../Hooks/usePagination";
 import PostInfo from "../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../Components/PostInfo/RecommendedList";
 import { edges } from "../../interfaces/CommentInterface";
+import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
 
 const PostID = ({ id, alreadyLiked }) => {
   const [open, setOpen] = useState(false);
@@ -28,14 +36,6 @@ const PostID = ({ id, alreadyLiked }) => {
   const [session, loading] = useSession();
   const [like] = useMutation(LIKE_MUTATION);
   const [unlike] = useMutation(UNLIKE_MUTATION);
-  const {
-    data: { userId },
-  } = useQuery(USER_ID_QUERY, {
-    variables: {
-      id: session?.id,
-    },
-    skip: !session,
-  });
   const {
     data: { postId },
     fetchMore: MoreComm,
@@ -53,7 +53,6 @@ const PostID = ({ id, alreadyLiked }) => {
     },
   });
   const [viewed] = useMutation(VIEW_POST);
-
   const { More: MoreComments, hasMore: hasMoreComments } = usePagination(
     "postId",
     MoreComm,
@@ -70,7 +69,7 @@ const PostID = ({ id, alreadyLiked }) => {
   useEffect(() => {
     viewed({
       variables: {
-        userId: userId.id,
+        userId: session.id,
         viewed: id,
       },
     });
@@ -83,12 +82,12 @@ const PostID = ({ id, alreadyLiked }) => {
     }
     if (!liked) {
       like({
-        variables: { postId: postId.id, userName: userId.name },
+        variables: { postId: postId.id, userID: session.id },
       });
       setLiked(true);
     } else {
       unlike({
-        variables: { postId: postId.id, userName: userId.name },
+        variables: { postId: postId.id, userID: session.id },
       });
       setLiked(false);
     }
@@ -113,7 +112,7 @@ const PostID = ({ id, alreadyLiked }) => {
           More={MoreComments}
           comments={postId.comments.edges as edges[]}
           session={session}
-          user={userId}
+          userID={session.id}
         />
         <RecommendedList
           hasMore={hasMore}
@@ -124,8 +123,29 @@ const PostID = ({ id, alreadyLiked }) => {
         />
       </Grid>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <Container className={styles.dialog}>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        className={styles.dialog}
+        fullWidth
+        maxWidth={"xl"}
+        PaperProps={{
+          style: {
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          },
+        }}
+      >
+        <Container className={styles.container}>
+          <IconButton
+            onClick={() => setOpen(false)}
+            className={styles.exit}
+            edge="start"
+            size="medium"
+            color="inherit"
+          >
+            <FullscreenExitIcon style={{ color: "white" }} />
+          </IconButton>
           <Image src={postId.art} layout="fill" objectFit="contain" />
         </Container>
       </Dialog>

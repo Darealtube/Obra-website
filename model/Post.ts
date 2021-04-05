@@ -22,7 +22,10 @@ const PostSchema = new mongoose.Schema({
     required: true,
     maxLength: [400, "Explain it more briefly."],
   },
-  likes: Number,
+  likes: {
+    type: Number,
+    default: 0,
+  },
   comments: Array,
   forSale: Boolean,
   forSalePrice: String,

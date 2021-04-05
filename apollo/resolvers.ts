@@ -55,6 +55,23 @@ export const resolvers = {
       const data = relayPaginate(newPosts, args.after, args.limit);
       return data;
     },
+    async featuredPosts(_parent, args, _context, _info) {
+      const posts = await Post.find({ likes: { $gt: 0 } }); // WILL MODIFY BASED ON WEBSITE'S PERFORMANCE
+
+      const data = relayPaginate(posts, args.after, args.limit);
+      return data;
+    },
+    async isLikedArtist(_parent, args, _context, _info) {
+      const user = await User.findById(args.userID);
+      const artist = await User.findOne({ name: args.artistName });
+
+      return artist ? user.likedArtists.includes(artist._id) : false;
+    },
+    async isLikedPost(_parent, args, _context, _info) {
+      const user = await User.findById(args.userID);
+
+      return user.likedPosts.includes(args.postID);
+    },
   },
   Comment: {
     async author(parent, _args, _context, _info) {
@@ -97,20 +114,6 @@ export const resolvers = {
       const data = relayPaginate(posts, args.after, args.limit);
       return data;
     },
-    async history(parent, args, _context, _info) {
-      const userHistory = await History.find({ userId: parent.id });
-      const historyArray = userHistory.sort(
-        (a, b) =>
-          moment(b.lastDateViewed).unix() - moment(a.lastDateViewed).unix()
-      );
-      const data = relayPaginate(historyArray, args.after, args.limit);
-      return data;
-    },
-  },
-  History: {
-    async viewed(parent, _args, _context, _info) {
-      return await Post.findById(parent.viewed);
-    },
   },
   Post: {
     async author(parent, _args, _context, _info) {
@@ -128,7 +131,7 @@ export const resolvers = {
   Mutation: {
     async likePost(_parent, args, _context, _info) {
       await User.findOneAndUpdate(
-        { name: args.userName },
+        { _id: args.userID },
         {
           $addToSet: {
             likedPosts: new ObjectId(args.postId as string),
@@ -139,14 +142,38 @@ export const resolvers = {
           runValidators: true,
         }
       );
+
+      await Post.updateOne(
+        { _id: args.postId },
+        {
+          $inc: {
+            likes: 1,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+
       return true;
     },
     async unlikePost(_parent, args, _context, _info) {
       await User.findOneAndUpdate(
-        { name: args.userName },
+        { _id: args.userID },
         {
           $pull: {
             likedPosts: new ObjectId(args.postId as string),
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      await Post.updateOne(
+        { _id: args.postId },
+        {
+          $inc: {
+            likes: -1,
           },
         },
         {
@@ -217,12 +244,15 @@ export const resolvers = {
       await User.findByIdAndUpdate(
         args.userId,
         {
-          username: args.username,
+          name: args.name,
           age: args.age,
           country: args.country,
           language: args.language,
           birthday: args.birthday,
           phone: args.phone,
+          artLevel: args.artLevel,
+          artStyles: args.artStyles,
+          artKinds: args.artKinds,
           newUser: false,
         },
         {
@@ -247,7 +277,7 @@ export const resolvers = {
     },
     async likeArtist(_parent, args, _context, _info) {
       await User.findOneAndUpdate(
-        { name: args.userName },
+        { _id: args.userID },
         { $push: { likedArtists: new ObjectId(args.artistID as string) } },
         {
           new: true,
@@ -258,7 +288,7 @@ export const resolvers = {
     },
     async unlikeArtist(_parent, args, _context, _info) {
       await User.findOneAndUpdate(
-        { name: args.userName },
+        { _id: args.userID },
         { $pull: { likedArtists: new ObjectId(args.artistID as string) } },
         {
           new: true,
@@ -280,10 +310,6 @@ export const resolvers = {
           runValidators: true,
         }
       );
-      return true;
-    },
-    async deleteHistory(_parent, args, _context, _info) {
-      await History.deleteOne({ _id: args.historyID });
       return true;
     },
   },

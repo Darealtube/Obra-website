@@ -1,10 +1,11 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
+  FEATURED_POSTS_QUERY,
+  IS_LIKED_ARTIST,
+  IS_LIKED_POST,
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
-  POST_QUERY,
   POST_RECOMMENDED_QUERY,
-  USER_HISTORY_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -38,7 +39,7 @@ export const fetchUser = async (id: string) => {
   return data.userId;
 }; */
 
-export const fetchUserandPosts = async (name: string) => {
+export const fetchUserandPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: USER_POST_QUERY,
@@ -46,11 +47,24 @@ export const fetchUserandPosts = async (name: string) => {
       name: name,
     },
   });
+  const {
+    data: { isLikedArtist },
+  } = await apolloClient.query({
+    query: IS_LIKED_ARTIST,
+    variables: {
+      userID: userID,
+      artistName: name,
+    },
+  });
 
-  return { data: apolloClient.cache.extract(), exists: data ? true : false };
+  return {
+    data: apolloClient.cache.extract(),
+    exists: data ? true : false,
+    alreadyLiked: isLikedArtist,
+  };
 };
 
-export const fetchUserandLikedPosts = async (name: string) => {
+export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: USER_LIKED_POST_QUERY,
@@ -59,25 +73,27 @@ export const fetchUserandLikedPosts = async (name: string) => {
     },
   });
 
-  return { data: apolloClient.cache.extract(), exists: data ? true : false };
-};
-
-export const fetchUserHistory = async (name: string) => {
-  const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
-    query: USER_HISTORY_QUERY,
+  const {
+    data: { isLikedArtist },
+  } = await apolloClient.query({
+    query: IS_LIKED_ARTIST,
     variables: {
-      name: name,
+      userID: userID,
+      artistName: name,
     },
   });
 
-  return { data: apolloClient.cache.extract(), exists: data ? true : false };
+  return {
+    data: apolloClient.cache.extract(),
+    exists: data ? true : false,
+    alreadyLiked: isLikedArtist,
+  };
 };
 
 export const fetchPosts = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({
-    query: POST_QUERY,
+    query: FEATURED_POSTS_QUERY,
   });
   await apolloClient.query({
     query: NEW_POSTS_QUERY,
@@ -113,18 +129,19 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
       id: id,
     },
   });
-  const { data: user } = await apolloClient.query({
-    query: USER_ID_QUERY,
+  const {
+    data: { isLikedPost },
+  } = await apolloClient.query({
+    query: IS_LIKED_POST,
     variables: {
-      id: sessionId,
+      postID: id,
+      userID: sessionId,
     },
   });
 
   return {
     data: apolloClient.cache.extract(),
     exists: data ? true : false,
-    alreadyLiked: user.userId.likedPosts.edges.some(
-      (post) => post.node.id === id
-    ),
+    alreadyLiked: isLikedPost,
   };
 };

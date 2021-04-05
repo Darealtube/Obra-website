@@ -1,5 +1,6 @@
 .root {
   display: flex;
+  background-attachment: fixed;
 }
 
 .grid {
@@ -53,9 +54,22 @@
 }
 
 .dialog {
-  width: 100em;
-  height: 100em;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.exit {
+  z-index: 2;
+  margin-left: 16px;
+  margin-top: 16px;
+}
+
+.container {
   position: relative;
+  height: 100vh;
+  max-height: 100%;
+  width: 100vw;
+  max-width: 100%;
 }
 
 .commentList {

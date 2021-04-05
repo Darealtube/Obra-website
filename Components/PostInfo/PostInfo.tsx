@@ -7,6 +7,9 @@ import {
   Container,
   CircularProgress,
   Divider,
+  useMediaQuery,
+  Drawer,
+  IconButton,
 } from "@material-ui/core";
 import { Session } from "next-auth/client";
 import Image from "next/image";
@@ -17,12 +20,14 @@ import {
   CREATE_COMMENT_MUTATION,
   POST_ID_QUERY,
 } from "../../apollo/apolloQueries";
-import { CommentInterface, edges } from "../../interfaces/CommentInterface";
+import { edges } from "../../interfaces/CommentInterface";
 import { PostInterface } from "../../interfaces/PostInterface";
 import { UserInterface } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
+import CommentDrawer from "./CommentDrawer";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 type Parameters = {
   postID: PostInterface;
@@ -34,7 +39,7 @@ type Parameters = {
   More: () => void;
   hasMore: boolean;
   session: Session;
-  user: UserInterface;
+  userID: string;
 };
 
 const PostInfo = ({
@@ -47,8 +52,14 @@ const PostInfo = ({
   hasMore,
   More,
   session,
-  user,
+  userID,
 }: Parameters) => {
+  const commentToggle = useMediaQuery("(max-width:768px)");
+  const [openComment, setOpenComment] = useState(false);
+  const handleDrawer = () => {
+    setOpenComment(!openComment);
+  };
+
   const [addComment] = useMutation(CREATE_COMMENT_MUTATION, {
     update: (cache, mutationResult) => {
       const newComment = mutationResult.data.createComment;
@@ -78,7 +89,7 @@ const PostInfo = ({
   const [comment, setComment] = useState({
     postID: postID.id,
     content: "",
-    author: user.id,
+    author: userID,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,10 +115,10 @@ const PostInfo = ({
   };
 
   return (
-    <Grid item lg={8} className={styles.postInfo}>
+    <Grid item xs={12} md={8} className={styles.postInfo}>
       <Container>
         <Grid container spacing={2}>
-          <Grid item lg={6} className={styles.artContainer}>
+          <Grid item xs={6} className={styles.artContainer}>
             {postID.art && (
               <Image
                 src={postID.art}
@@ -117,45 +128,47 @@ const PostInfo = ({
               />
             )}
           </Grid>
-          <Grid item lg={6} className={styles.information}>
+          <Grid item xs={6} className={styles.information}>
             <Grid container spacing={2}>
-              <Grid item lg={12}>
+              <Grid item xs={12}>
                 <Typography variant="h4" style={{ wordWrap: "break-word" }}>
                   {postID.title}
                 </Typography>
               </Grid>
-              <Grid item lg={12}>
+              <Grid item xs={12}>
                 <Typography variant="subtitle1">
                   {postID.author.name}
                 </Typography>
               </Grid>
-              <Grid item lg={12}>
+              <Grid item xs={12}>
                 <Typography variant="h6">
                   {postID.sale === "No" ? "Showcase only" : "₱" + postID.price}
                 </Typography>
               </Grid>
-              <Grid item lg={12}>
+              <Grid item xs={12}>
                 {postID.tags?.map((tag) => {
                   <Chip label={tag} className={styles.tag}></Chip>;
                 })}
               </Grid>
-              <Grid item lg={12}>
+              <Grid item xs={12}>
                 <Typography variant="body1" style={{ wordWrap: "break-word" }}>
                   {postID.description}
                 </Typography>
               </Grid>
-              <Grid item lg={4}>
+              <Grid item xs={4}>
                 <Button
                   onClick={handleLike}
-                  style={liked ? { color: "red" } : { color: "inherit" }}
+                  style={
+                    liked === true ? { color: "red" } : { color: "inherit" }
+                  }
                 >
                   LIKE
                 </Button>
               </Grid>
-              <Grid item lg={4}>
+              <Grid item xs={4}>
                 <Button>ADD</Button>
               </Grid>
-              <Grid item lg={4}>
+              <Grid item xs={4}>
                 <Button>SHARE</Button>
               </Grid>
             </Grid>
@@ -166,29 +179,52 @@ const PostInfo = ({
         <br />
         <Typography variant="overline">Comments</Typography>
         <Divider />
-        <CommentForm
-          comment={comment}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-        />
-        <InfiniteScroll
-          dataLength={page * 4}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-          scrollThreshold={0.5}
-        >
-          <CommentList comments={comments} id={session.id} />
-        </InfiniteScroll>
+        {commentToggle ? (
+          <IconButton onClick={handleDrawer} style={{ width: "inherit" }}>
+            <ExpandMoreIcon />
+          </IconButton>
+        ) : (
+          <>
+            <CommentForm
+              comment={comment}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+            <InfiniteScroll
+              dataLength={page}
+              next={More}
+              hasMore={hasMore}
+              loader={
+                <>
+                  <br />
+                  <CircularProgress />
+                </>
+              }
+              style={{
+                overflow: "hidden",
+              }}
+              scrollThreshold={0.5}
+            >
+              <CommentList comments={comments} id={session.id} />
+            </InfiniteScroll>
+          </>
+        )}
       </Container>
+
+      {/* COMMENT DRAWER IS REALLY BUGGY AT THE MOMENT BECAUSE OF THE REACT-INFINITE-SCROLL BUG WHERE
+          IF THE CONTAINER ISN'T SCROLLABLE, THE "NEXT" FUNCTION DOES NOT EXECUTE. */}
+      <CommentDrawer
+        comment={comment}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        page={page}
+        More={More}
+        hasMore={hasMore}
+        comments={comments}
+        session={session}
+        open={openComment}
+        handleDrawer={handleDrawer}
+      />
     </Grid>
   );
 };

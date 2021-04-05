@@ -1,51 +1,35 @@
-import { Grid, Divider, Breadcrumbs, Button } from "@material-ui/core";
-import Link from "next/link";
+import { useQuery } from "@apollo/client";
+import React from "react";
+import { Grid, Container, List, ListItem, Box } from "@material-ui/core";
+import RightInfo from "./RightInfo";
+import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
+import UserInfo from "./UserInfo";
 
-const ProfileWrap = ({ children, user, admin }) => {
+type Props = {
+  children: React.ReactNode;
+  artist: UserInterface;
+  admin: boolean;
+  userLiked: boolean;
+};
+
+const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
   return (
-    <Grid container className={styles.profile}>
-      <Grid item xs={12}>
-        {user ? (
-          <Image
-            src={user.image}
-            width={200}
-            height={200}
-            className={styles.image}
-          />
-        ) : (
-          ""
-        )}
-        <h1>{user.name}</h1>
-        <Divider />
-        <br />
-        <Breadcrumbs
-          separator="|"
-          aria-label="breadcrumb"
-          className={styles.link}
-        >
-          <Button>
-            <Link href={`/profile/${user.name}/`}>Posts</Link>
-          </Button>
-          <Button>
-            <Link href={`/profile/${user.name}/liked`}>Liked Posts</Link>
-          </Button>
-          <Button>
-            <Link href={`/profile/${user.name}/info`}>About</Link>
-          </Button>
-          {admin && (
-            <Button>
-              <Link href={`/profile/${user.name}/history`}>History</Link>
-            </Button>
-          )}
-        </Breadcrumbs>
-      </Grid>
-
-      <Grid item xs={12} className={styles.posts}>
-        {children}
-      </Grid>
-    </Grid>
+    <div className={styles.wrapRoot}>
+      <Box className={styles.backdrop}>
+        <Image src={artist.image} layout="fill" objectFit="cover" />
+      </Box>
+      <Box className={styles.information}>
+        <UserInfo
+          children={children}
+          artist={artist}
+          admin={admin}
+          userLiked={userLiked}
+        />
+        <RightInfo children={children} artist={artist} />
+      </Box>
+    </div>
   );
 };
 

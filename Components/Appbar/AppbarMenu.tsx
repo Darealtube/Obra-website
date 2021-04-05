@@ -7,10 +7,10 @@ import {
   Popover,
   Box,
   createStyles,
-  makeStyles,
   Theme,
   Badge,
   withStyles,
+  useMediaQuery,
 } from "@material-ui/core";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 import { Palette } from "@material-ui/icons";
@@ -18,29 +18,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Menu from "../ListItems/Menu";
 import Notification from "../ListItems/Notification";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menu: {
-      height: "100%",
-      overflow: "auto",
-      width: "20em",
-    },
-    box: {
-      margin: theme.spacing(2.5, 2),
-    },
-    notifmenu: {
-      height: "100%",
-      overflow: "auto",
-      width: "100%",
-      maxWidth: 568,
-      maxHeight: 420,
-    },
-    avatar: {
-      borderRadius: "50%",
-    },
-  })
-);
+import styles from "../../pages/styles/Specific/Appbar.module.css";
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -74,7 +52,8 @@ const AppbarMenu = ({
   profAnchor,
   notifCount,
 }: Prop) => {
-  const classes = useStyles();
+  const showNotif = useMediaQuery("(max-width:280px)");
+
   return (
     <div>
       <IconButton>
@@ -82,7 +61,10 @@ const AppbarMenu = ({
           <Palette fontSize="large" htmlColor="white" />
         </Link>
       </IconButton>
-      <IconButton onClick={handleNotif}>
+      <IconButton
+        onClick={handleNotif}
+        style={showNotif ? { display: "none" } : { display: "inline-flex" }}
+      >
         <StyledBadge badgeContent={notifCount} color="secondary">
           <NotificationImportantIcon fontSize="large" htmlColor="white" />
         </StyledBadge>
@@ -101,11 +83,11 @@ const AppbarMenu = ({
           horizontal: "right",
         }}
       >
-        <Box className={classes.box}>
+        <Box className={styles.box}>
           <Typography>Notifications</Typography>
         </Box>
         <Divider />
-        <List className={classes.notifmenu}>
+        <List className={styles.notifmenu}>
           <Notification
             newUser={user.userId.newUser}
             tutorial={user.userId.tutorial}
@@ -119,7 +101,7 @@ const AppbarMenu = ({
             src={user.userId.image}
             width={40}
             height={40}
-            className={classes.avatar}
+            className={styles.avatar}
           />
         ) : (
           <Avatar src="" />
@@ -140,19 +122,19 @@ const AppbarMenu = ({
           horizontal: "right",
         }}
       >
-        <Box display="flex" flexWrap="wrap" className={classes.box}>
+        <Box display="flex" flexWrap="wrap" className={styles.box}>
           {user.userId.image ? (
             <Image
               src={user.userId.image}
-              width={40}
-              height={35}
-              className={classes.avatar}
+              width={45}
+              height={45}
+              className={styles.avatar}
             />
           ) : (
             <Avatar src="" />
           )}
           <div style={{ marginLeft: "25px" }}>
-            {user.userId.username || user.userId.name ? (
+            {user.userId.name ? (
               <Typography>{user.userId.name}</Typography>
             ) : (
               <Typography>No Name</Typography>
@@ -165,7 +147,7 @@ const AppbarMenu = ({
           </div>
         </Box>
         <Divider />
-        <List className={classes.menu}>
+        <List className={styles.menu}>
           <Menu name={user.userId.name} />
         </List>
       </Popover>

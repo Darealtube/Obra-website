@@ -15,9 +15,9 @@ import { GetStaticProps } from "next";
 import { useSession } from "next-auth/client";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
+  FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
   NEW_POSTS_QUERY,
-  POST_QUERY,
 } from "../apollo/apolloQueries";
 import { fetchPosts } from "../utils/fetchData";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -27,9 +27,9 @@ import { useEffect } from "react";
 const Home = () => {
   const [session] = useSession();
   const {
-    data: { posts },
+    data: { featuredPosts },
     fetchMore,
-  } = useQuery(POST_QUERY, {});
+  } = useQuery(FEATURED_POSTS_QUERY, {});
   const {
     data: { newPosts },
     fetchMore: moreNewPosts,
@@ -38,7 +38,7 @@ const Home = () => {
     getRecommended,
     { loading, data, fetchMore: moreRecommended },
   ] = useLazyQuery(HOME_RECOMMENDED_QUERY);
-  const { More } = usePagination("posts", fetchMore, posts);
+  const { More } = usePagination("featuredPosts", fetchMore, featuredPosts);
   const { More: MoreNew } = usePagination("newPosts", moreNewPosts, newPosts);
   const { More: MoreRecc, hasMore } = usePagination(
     "userId",
@@ -65,7 +65,7 @@ const Home = () => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={posts.edges} id={session?.id} />
+        <CardList postData={featuredPosts.edges} id={session?.id} />
         <br />
         <Button
           onClick={More}

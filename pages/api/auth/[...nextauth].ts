@@ -30,7 +30,7 @@ const options = {
   secret: process.env.AUTH_CLIENT_SECRET,
   callbacks: {
     signIn: async (user, account, profile) => {
-      await dbConnect();
+      /* await dbConnect();
       const data = await User.findById(user.id);
       if (data) {
         await User.findByIdAndUpdate(
@@ -50,7 +50,7 @@ const options = {
             runValidators: true,
           }
         );
-      }
+      } */
       return Promise.resolve(true);
     },
     session: async (session, user) => {
@@ -59,6 +59,7 @@ const options = {
     },
   },
   pages: {
+    signIn: "/auth/signin",
     newUser: "/configure",
   },
 };

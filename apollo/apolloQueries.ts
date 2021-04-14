@@ -6,11 +6,32 @@ export const PostInfo = gql`
     author {
       id
       name
+      image
     }
-    picture
     date
     art
     tags
+  }
+`;
+
+export const UserInfo = gql`
+  fragment UserInfo on User {
+    id
+    name
+    image
+  }
+`;
+
+export const UserInfo2 = gql`
+  fragment UserInfo2 on User {
+    userBio
+    birthday
+    country
+    phone
+    artLevel
+    artStyles
+    artKinds
+    backdrop
   }
 `;
 
@@ -47,9 +68,7 @@ export const POST_QUERY = gql`
 export const USER_ID_QUERY = gql`
   query UserID($id: ID!, $after: ID) {
     userId(id: $id) {
-      id
-      name
-      image
+      ...UserInfo
       likedPosts(limit: 4, after: $after) {
         totalCount
         edges {
@@ -64,6 +83,7 @@ export const USER_ID_QUERY = gql`
       }
     }
   }
+  ${UserInfo}
 `;
 
 //Fetch Post By ID
@@ -108,9 +128,7 @@ export const POST_ID_QUERY = gql`
 export const APPBAR_USER_QUERY = gql`
   query UserAppbarID($id: ID!) {
     userId(id: $id) {
-      id
-      name
-      image
+      ...UserInfo
       email
       newUser
       tutorial
@@ -125,15 +143,15 @@ export const APPBAR_USER_QUERY = gql`
       }
     }
   }
+  ${UserInfo}
 `;
 
 //Fetch User and Posts
 export const USER_POST_QUERY = gql`
   query UserPosts($name: String!, $after: ID) {
     userName(name: $name) {
-      id
-      name
-      image
+      ...UserInfo
+      ...UserInfo2
       posts(limit: 4, after: $after) {
         totalCount
         edges {
@@ -146,24 +164,18 @@ export const USER_POST_QUERY = gql`
           hasNextPage
         }
       }
-      username
-      birthday
-      country
-      phone
-      artLevel
-      artStyles
-      artKinds
     }
   }
   ${PostInfo}
+  ${UserInfo}
+  ${UserInfo2}
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
   query UserPosts($name: String!, $after: ID) {
     userName(name: $name) {
-      id
-      name
-      image
+      ...UserInfo
+      ...UserInfo2
       likedPosts(limit: 4, after: $after) {
         totalCount
         edges {
@@ -176,16 +188,11 @@ export const USER_LIKED_POST_QUERY = gql`
           hasNextPage
         }
       }
-      username
-      birthday
-      country
-      phone
-      artLevel
-      artStyles
-      artKinds
     }
   }
   ${PostInfo}
+  ${UserInfo}
+  ${UserInfo2}
 `;
 
 export const POST_RECOMMENDED_QUERY = gql`
@@ -325,7 +332,6 @@ export const CREATE_POST_MUTATION = gql`
     $price: String!
     $sale: String!
     $author: ID!
-    $picture: String!
   ) {
     createPost(
       date: $date
@@ -336,7 +342,6 @@ export const CREATE_POST_MUTATION = gql`
       price: $price
       sale: $sale
       author: $author
-      picture: $picture
     )
   }
 `;
@@ -381,7 +386,7 @@ export const CONFIG_MUTATION = gql`
     $artStyles: [String!]
     $artKinds: [String!]
   ) {
-    editUser(
+    configUser(
       userId: $userId
       name: $name
       age: $age
@@ -393,6 +398,45 @@ export const CONFIG_MUTATION = gql`
       artStyles: $artStyles
       artKinds: $artKinds
     )
+  }
+`;
+
+export const EDIT_USER_MUTATION = gql`
+  mutation EditUser(
+    $userId: ID!
+    $name: String!
+    $country: String!
+    $birthday: String!
+    $artLevel: String!
+    $artStyles: [String!]
+    $artKinds: [String!]
+    $userBio: String
+    $image: String
+    $backdrop: String
+  ) {
+    editUser(
+      userId: $userId
+      name: $name
+      country: $country
+      birthday: $birthday
+      artLevel: $artLevel
+      artStyles: $artStyles
+      artKinds: $artKinds
+      userBio: $userBio
+      image: $image
+      backdrop: $backdrop
+    ) {
+      id
+      name
+      country
+      birthday
+      artLevel
+      artStyles
+      artKinds
+      userBio
+      image
+      backdrop
+    }
   }
 `;
 

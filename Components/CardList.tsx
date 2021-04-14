@@ -56,17 +56,21 @@ export const CardList = ({ postData, id }: PostData) => {
               <Card className={styles.card}>
                 <CardHeader
                   avatar={
-                    post.node.picture ? (
-                      <Link href={`/profile/${post.node.author.name}`}>
+                    post.node.author.image ? (
+                      <Link
+                        href={`/profile/${encodeURIComponent(
+                          post.node.author.name
+                        )}`}
+                      >
                         <Image
-                          src={post.node.picture}
+                          src={post.node.author.image}
                           width={40}
                           height={40}
                           className={styles.avatar}
                         />
                       </Link>
                     ) : (
-                      <Avatar src="" />
+                      <Avatar src="/user-empty-avatar.png" />
                     )
                   }
                   action={

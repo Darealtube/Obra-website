@@ -1,11 +1,14 @@
-import {
-  Box,
-  Button,
-} from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import Link from "next/link";
+import { UserInterface } from "../../interfaces/UserInterface";
 
-const RightInfo = ({ children, artist }) => {
+type Props = {
+  children: React.ReactNode;
+  artist: UserInterface;
+};
+
+const RightInfo = ({ children, artist }: Props) => {
   return (
     <Box className={styles.postContainer}>
       <Box justifyContent="center" alignItems="center" marginBottom={8}>

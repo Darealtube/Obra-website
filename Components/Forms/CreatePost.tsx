@@ -16,7 +16,6 @@ import styles from "../../pages/styles/General/Create.module.css";
 
 interface Post {
   author: string;
-  picture: string;
   title: string;
   description: string;
   art: string;

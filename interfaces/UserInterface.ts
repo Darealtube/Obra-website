@@ -16,6 +16,8 @@ export interface UserInterface {
   artLevel?: string;
   artStyles: string[];
   artKinds: string[];
+  userBio: string;
+  backdrop: string;
   // More to come
 }
 

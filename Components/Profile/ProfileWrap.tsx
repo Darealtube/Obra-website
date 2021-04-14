@@ -1,6 +1,5 @@
-import { useQuery } from "@apollo/client";
 import React from "react";
-import { Grid, Container, List, ListItem, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import RightInfo from "./RightInfo";
 import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
@@ -18,7 +17,11 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
   return (
     <div className={styles.wrapRoot}>
       <Box className={styles.backdrop}>
-        <Image src={artist.image} layout="fill" objectFit="cover" />
+        <Image
+          src={artist.backdrop ? artist.backdrop : "/user-empty-backdrop.jpg"}
+          layout="fill"
+          objectFit="cover"
+        />
       </Box>
       <Box className={styles.information}>
         <UserInfo

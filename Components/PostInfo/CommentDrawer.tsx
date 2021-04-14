@@ -13,6 +13,11 @@ import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
 import CloseIcon from "@material-ui/icons/Close";
 import { edges } from "../../interfaces/CommentInterface";
+import {
+  FetchResult,
+  MutationFunctionOptions,
+  OperationVariables,
+} from "@apollo/client";
 import { Session } from "next-auth/client";
 
 interface Props {
@@ -21,8 +26,16 @@ interface Props {
     content: string;
     author: string;
   };
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  setComment: React.Dispatch<
+    React.SetStateAction<{
+      postID: string;
+      content: string;
+      author: any;
+    }>
+  >;
+  addComment: (
+    options?: MutationFunctionOptions<any, OperationVariables>
+  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   page: number;
   More: () => void;
   hasMore: boolean;
@@ -30,19 +43,21 @@ interface Props {
   session: Session;
   open: boolean;
   handleDrawer: () => void;
+  parentRef: (node: HTMLElement) => void;
 }
 
 const CommentDrawer = ({
   comment,
-  handleChange,
-  handleSubmit,
   page,
   More,
   hasMore,
   comments,
+  setComment,
+  addComment,
   session,
   open,
   handleDrawer,
+  parentRef,
 }: Props) => {
   return (
     <div>
@@ -72,11 +87,12 @@ const CommentDrawer = ({
             height: "100rem",
           }}
           id="Scrollable"
+          ref={parentRef}
         >
           <CommentForm
             comment={comment}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
+            setComment={setComment}
+            addComment={addComment}
           />
           <InfiniteScroll
             dataLength={page}

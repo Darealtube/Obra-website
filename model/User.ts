@@ -22,6 +22,8 @@ const UserSchema = new mongoose.Schema({
   artLevel: String,
   artStyles: Array,
   artKinds: Array,
+  userBio: String,
+  backdrop: String,
   // More to come
 });
 

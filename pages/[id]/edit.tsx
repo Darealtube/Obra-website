@@ -1,14 +1,12 @@
-import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { Palette } from "@material-ui/icons";
+import { NumberFormatValues } from "react-number-format";
 import React from "react";
 import { CssBaseline, Paper, Grid } from "@material-ui/core";
 import Appbar from "../../Components/Appbar/Appbar";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styles from "../styles/General/Create.module.css";
-import { fetchAPost, fetchUser } from "../../utils/fetchData";
-import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { UserData } from "../../interfaces/UserInterface";
+import { fetchAPost } from "../../utils/fetchData";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { getSession } from "next-auth/client";
 import { PostInterface } from "../../interfaces/PostInterface";
@@ -117,16 +115,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  if (session) {
-    return {
-      props: {
-        postId,
-      },
-    };
-  }
-
   return {
-    props: {},
+    props: {
+      postId,
+    },
   };
 };
 

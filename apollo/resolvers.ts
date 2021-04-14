@@ -134,7 +134,7 @@ export const resolvers = {
         { _id: args.userID },
         {
           $addToSet: {
-            likedPosts: new ObjectId(args.postId as string),
+            likedPosts: new ObjectId(args.postId as string) as never,
           },
         },
         {
@@ -147,7 +147,7 @@ export const resolvers = {
         { _id: args.postId },
         {
           $inc: {
-            likes: 1,
+            likes: 1 as never,
           },
         },
         {
@@ -173,7 +173,7 @@ export const resolvers = {
         { _id: args.postId },
         {
           $inc: {
-            likes: -1,
+            likes: -1 as never,
           },
         },
         {
@@ -226,7 +226,7 @@ export const resolvers = {
       const comment = await Comment.create(args);
 
       await Post.findByIdAndUpdate(args.postID, {
-        $push: { comments: comment._id },
+        $push: { comments: comment._id as never },
       });
       return comment;
     },
@@ -240,7 +240,7 @@ export const resolvers = {
 
       return true;
     },
-    async editUser(_parent, args, _context, _info) {
+    async configUser(_parent, args, _context, _info) {
       await User.findByIdAndUpdate(
         args.userId,
         {
@@ -262,6 +262,29 @@ export const resolvers = {
       );
       return true;
     },
+    async editUser(_parent, args, _context, _info) {
+      const data = await User.findByIdAndUpdate(
+        args.userId,
+        {
+          name: args.name,
+          userBio: args.userBio,
+          country: args.country,
+          birthday: args.birthday,
+          artLevel: args.artLevel,
+          artStyles: args.artStyles,
+          artKinds: args.artKinds,
+          image: args.image,
+          backdrop: args.backdrop,
+          newUser: false,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      return data;
+    },
     async readNotif(_parent, args, _context, _info) {
       await User.findByIdAndUpdate(
         args.userId,
@@ -278,7 +301,11 @@ export const resolvers = {
     async likeArtist(_parent, args, _context, _info) {
       await User.findOneAndUpdate(
         { _id: args.userID },
-        { $push: { likedArtists: new ObjectId(args.artistID as string) } },
+        {
+          $push: {
+            likedArtists: new ObjectId(args.artistID as string) as never,
+          },
+        },
         {
           new: true,
           runValidators: true,

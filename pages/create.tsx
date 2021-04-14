@@ -15,7 +15,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import PostForm from "../Components/Forms/CreatePost";
 
 const Create = ({ userData }) => {
-  const [session, loading] = useSession();
+  const [session] = useSession();
   const { data } = useQuery(USER_ID_QUERY, {
     variables: {
       id: session?.id,
@@ -25,7 +25,6 @@ const Create = ({ userData }) => {
   const [create] = useMutation(CREATE_POST_MUTATION);
   const [post, setPost] = React.useState({
     author: userData.id,
-    picture: userData.picture,
     title: "",
     description: "",
     art: "",
@@ -100,7 +99,6 @@ const Create = ({ userData }) => {
     create({
       variables: {
         author: post.author,
-        picture: post.picture,
         title: post.title,
         description: post.description,
         art: post.art,
@@ -186,24 +184,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  if (session) {
-    const { data } = await apolloClient.query({
-      query: USER_ID_QUERY,
-      variables: {
-        id: session.id,
-      },
-    });
-
-    return {
-      props: {
-        initialApolloState: apolloClient.cache.extract(),
-        userData: { id: data.userId.id, picture: data.userId.image },
-      },
-    };
-  }
+  const { data } = await apolloClient.query({
+    query: USER_ID_QUERY,
+    variables: {
+      id: session.id,
+    },
+  });
 
   return {
-    props: {},
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+      userData: { id: data.userId.id },
+    },
   };
 };
 

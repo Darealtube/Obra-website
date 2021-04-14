@@ -12,11 +12,10 @@ import {
 import PaletteIcon from "@material-ui/icons/Palette";
 import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
-import { getSession, signIn, useSession } from "next-auth/client";
+import { getSession, signIn } from "next-auth/client";
 import { GetServerSideProps } from "next";
 
 const Login = () => {
-  const [session, loading] = useSession();
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -90,8 +89,8 @@ const Login = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await getSession(context);
-  if (user) {
+  const session = await getSession(context);
+  if (session) {
     return {
       redirect: {
         destination: "/home",
@@ -101,7 +100,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: {},
+    props: {
+      session: session,
+    },
   };
 };
 

@@ -1,14 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { PageInfo } from "../interfaces/PostInterface";
+
+interface edges {
+  node: any;
+}
+
+interface Info {
+  edges: edges[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
 
 const usePagination = <T, U, K, O>(
   key: string,
   fetchMore,
-  info,
-  key2?: string
+  info: Info,
+  key2?: string,
+  drawerOpen?: boolean
 ) => {
   const [page, setPage] = useState(1);
   const [hasMore, sethasMore] = useState(info?.pageInfo.hasNextPage);
   const [refetching, setRefetching] = useState(false);
+  const [node, setNode] = useState<HTMLElement>();
+  const ref = useCallback((node: HTMLElement) => {
+    setNode(node);
+  }, []);
+  const [isScrollable, setisScrollable] = useState(
+    node?.scrollHeight > node?.clientHeight
+  );
+
+  useEffect(() => {
+    if (node && isScrollable === false) {
+      if (drawerOpen === true && hasMore === true) {
+        More();
+      }
+      setisScrollable(node?.scrollHeight > node?.clientHeight);
+    }
+  }, [drawerOpen, node, isScrollable, hasMore, page]);
 
   const More = () => {
     if (!refetching) {
@@ -45,7 +73,7 @@ const usePagination = <T, U, K, O>(
     }
   }, [info?.edges.length, hasMore]);
 
-  return { More, hasMore };
+  return { More, hasMore, ref };
 };
 
 export default usePagination;

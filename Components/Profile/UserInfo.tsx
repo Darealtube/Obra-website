@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import { UserInterface } from "../../interfaces/UserInterface";
-import CakeIcon from "@material-ui/icons/Cake";
-import FlagIcon from "@material-ui/icons/Flag";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import BrushIcon from "@material-ui/icons/Brush";
 import {
@@ -14,9 +12,11 @@ import {
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
-import PersonIcon from "@material-ui/icons/Person";
-import PaletteIcon from "@material-ui/icons/Palette";
 import EditIcon from "@material-ui/icons/Edit";
+import dynamic from "next/dynamic";
+
+const DynamicEditDrawer = dynamic(() => import("./EditDrawer"));
+const DynamicUserDrawer = dynamic(() => import("./UserDrawer"));
 
 type Props = {
   children: React.ReactNode;
@@ -25,12 +25,14 @@ type Props = {
   userLiked: boolean;
 };
 
-const UserInfo = ({ children, artist, admin, userLiked }: Props) => {
+const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
   const [likeArtist] = useMutation(LIKE_ARTIST_MUTATION);
   const [unlikeArtist] = useMutation(UNLIKE_ARTIST_MUTATION);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -50,18 +52,31 @@ const UserInfo = ({ children, artist, admin, userLiked }: Props) => {
     }
   };
 
+  const OpenEditDialog = () => {
+    setOpenEditDialog(true);
+  };
+  const OpenDialog = () => {
+    setOpenDialog(true);
+  };
+
   return (
     <Box className={styles.userContainer}>
       <Paper className={styles.banner} elevation={6}>
         {artist ? (
           <Box className={styles.dp}>
-            <Image src={artist.image} layout="fill" objectFit="contain" />
+            <Image
+              src={artist.image ? artist.image : "/user-empty-avatar.png"}
+              layout="fill"
+              objectFit="contain"
+            />
           </Box>
         ) : (
           ""
         )}
         <br />
-        <Container style={{ flexGrow: 1, color: "white" }}>
+        <Container
+          style={{ flexGrow: 1, color: "white", wordBreak: "break-word" }}
+        >
           <Typography variant="h4">{artist.name}</Typography>
           <br />
           <Typography
@@ -70,42 +85,23 @@ const UserInfo = ({ children, artist, admin, userLiked }: Props) => {
             className={styles.text}
             gutterBottom
           >
-            <CakeIcon className={styles.icon} /> Born in {artist.birthday}
+            {artist.userBio && <Typography>{artist.userBio}</Typography>}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            align="left"
-            className={styles.text}
-            gutterBottom
+          <Button
+            fullWidth
+            className={styles.userOptions2}
+            onClick={OpenDialog}
           >
-            <FlagIcon className={styles.icon} /> Lives in {artist.country}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="left"
-            className={styles.text}
-            gutterBottom
-          >
-            <PersonIcon className={styles.icon} /> {artist.artLevel}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="left"
-            className={styles.text}
-            gutterBottom
-          >
-            <PaletteIcon className={styles.icon} /> Specializes in &nbsp;
-            {artist.artStyles.join(", ").toString()}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="left"
-            className={styles.text}
-            gutterBottom
-          >
-            <BrushIcon className={styles.icon} /> Does &nbsp;
-            {artist.artKinds.join(", ").toString()}
-          </Typography>
+            <span>
+              <Typography align="center">
+                <span className={styles.text}>
+                  {" "}
+                  <EditIcon className={styles.icon} />
+                  More information
+                </span>
+              </Typography>
+            </span>
+          </Button>
         </Container>
 
         {!admin ? (
@@ -140,7 +136,11 @@ const UserInfo = ({ children, artist, admin, userLiked }: Props) => {
           </Container>
         ) : (
           <Container style={{ marginBottom: "16px" }}>
-            <Button fullWidth className={styles.userOptions2}>
+            <Button
+              fullWidth
+              className={styles.userOptions2}
+              onClick={OpenEditDialog}
+            >
               <span>
                 <Typography align="center">
                   <span className={styles.text}>
@@ -154,6 +154,17 @@ const UserInfo = ({ children, artist, admin, userLiked }: Props) => {
           </Container>
         )}
       </Paper>
+
+      <DynamicUserDrawer
+        artist={artist}
+        open={openDialog}
+        setOpen={setOpenDialog}
+      />
+      <DynamicEditDrawer
+        artist={artist}
+        setOpen={setOpenEditDialog}
+        open={openEditDialog}
+      />
     </Box>
   );
 };

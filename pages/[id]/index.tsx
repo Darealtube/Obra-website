@@ -4,9 +4,7 @@ import {
   Grid,
   Container,
   Dialog,
-  Paper,
   IconButton,
-  Fab,
 } from "@material-ui/core";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -24,10 +22,8 @@ import {
 } from "../../apollo/apolloQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import usePagination from "../../Hooks/usePagination";
 import PostInfo from "../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../Components/PostInfo/RecommendedList";
-import { edges } from "../../interfaces/CommentInterface";
 import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
 
 const PostID = ({ id, alreadyLiked }) => {
@@ -46,25 +42,14 @@ const PostID = ({ id, alreadyLiked }) => {
   });
   const {
     data: { recommendedPosts },
-    fetchMore,
+    fetchMore: MoreRecc,
   } = useQuery(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
     },
   });
   const [viewed] = useMutation(VIEW_POST);
-  const { More: MoreComments, hasMore: hasMoreComments } = usePagination(
-    "postId",
-    MoreComm,
-    postId.comments,
-    "comments"
-  );
   const [liked, setLiked] = useState(alreadyLiked);
-  const { More, hasMore } = usePagination(
-    "recommendedPosts",
-    fetchMore,
-    recommendedPosts
-  );
 
   useEffect(() => {
     viewed({
@@ -107,19 +92,13 @@ const PostID = ({ id, alreadyLiked }) => {
           setOpen={setOpen}
           liked={liked as boolean}
           handleLike={handleLike}
-          page={postId.comments.edges.length}
-          hasMore={hasMoreComments}
-          More={MoreComments}
-          comments={postId.comments.edges as edges[]}
           session={session}
-          userID={session.id}
+          fetchMore={MoreComm}
         />
         <RecommendedList
-          hasMore={hasMore}
-          page={recommendedPosts.edges.length}
-          More={More}
+          fetchMore={MoreRecc}
           session={session}
-          recommendedPosts={recommendedPosts.edges}
+          recommended={recommendedPosts}
         />
       </Grid>
 

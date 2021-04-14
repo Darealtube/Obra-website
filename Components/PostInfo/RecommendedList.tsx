@@ -8,24 +8,23 @@ import {
 import styles from "../../pages/styles/Specific/Post.module.css";
 import { CardList } from "../../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { edges, PostInterface } from "../../interfaces/PostInterface";
+import { RecommendedPosts } from "../../interfaces/PostInterface";
+import usePagination from "../../Hooks/usePagination";
 import { Session } from "next-auth/client";
 
 type Parameters = {
-  page: number;
-  More: () => void;
-  hasMore: boolean;
-  recommendedPosts: edges[];
+  fetchMore: any;
   session: Session;
+  recommended: RecommendedPosts;
 };
 
-const RecommendedList = ({
-  page,
-  More,
-  hasMore,
-  recommendedPosts,
-  session,
-}: Parameters) => {
+const RecommendedList = ({ fetchMore, session, recommended }: Parameters) => {
+  const { More, hasMore } = usePagination(
+    "recommendedPosts",
+    fetchMore,
+    recommended
+  );
+
   return (
     <Grid item xs={12} md={4} className={styles.recommended}>
       <Container>
@@ -36,7 +35,7 @@ const RecommendedList = ({
         {/* Recommended List */}
         <Container className={styles.recommendedList}>
           <InfiniteScroll
-            dataLength={page * 4}
+            dataLength={recommended.edges.length}
             next={More}
             hasMore={hasMore}
             loader={
@@ -54,7 +53,7 @@ const RecommendedList = ({
               overflow: "hidden",
             }}
           >
-            <CardList postData={recommendedPosts} id={session?.id} />
+            <CardList postData={recommended.edges} id={session?.id} />
           </InfiniteScroll>
         </Container>
         {/* Recommended List */}

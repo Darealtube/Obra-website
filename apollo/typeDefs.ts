@@ -24,6 +24,8 @@ export const typeDefs = gql`
     artLevel: String
     artKinds: [String!]
     artStyles: [String!]
+    userBio: String
+    backdrop: String
   }
 
   type Post {
@@ -36,7 +38,6 @@ export const typeDefs = gql`
     price: String!
     sale: String!
     author: User
-    picture: String
     likes: Int
     comments(after: ID, limit: Int): CommentConnection
   }
@@ -87,10 +88,9 @@ export const typeDefs = gql`
       price: String!
       sale: String!
       author: ID!
-      picture: String
     ): Boolean!
     deletePost(postId: ID!): Boolean!
-    editUser(
+    configUser(
       userId: ID!
       name: String!
       age: String!
@@ -102,6 +102,18 @@ export const typeDefs = gql`
       artStyles: [String!]
       artKinds: [String!]
     ): Boolean!
+    editUser(
+      userId: ID!
+      name: String!
+      country: String!
+      birthday: String!
+      artLevel: String!
+      artStyles: [String!]
+      artKinds: [String!]
+      userBio: String
+      image: String
+      backdrop: String
+    ): User!
     readNotif(userId: ID!): Boolean!
     createComment(postID: ID!, author: ID!, content: String!): Comment!
     deleteComment(commentID: ID!): Boolean!

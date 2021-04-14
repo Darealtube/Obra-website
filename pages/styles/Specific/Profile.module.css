@@ -164,7 +164,6 @@
 .text {
   display: flex;
   flex-direction: row;
-  color: white;
 }
 
 .icon {
@@ -198,6 +197,21 @@
 
 .userOptions2:hover:after {
   width: 100%;
+}
+
+.dialog {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.container {
+  height: 80vh;
+  max-height: 80%;
+  width: 100vw;
+  max-width: 100%;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  overflow: auto;
 }
 
 @media all and (max-width: 767px) {

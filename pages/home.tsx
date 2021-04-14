@@ -11,7 +11,7 @@ import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { useSession } from "next-auth/client";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
@@ -29,7 +29,7 @@ const Home = () => {
   const {
     data: { featuredPosts },
     fetchMore,
-  } = useQuery(FEATURED_POSTS_QUERY, {});
+  } = useQuery(FEATURED_POSTS_QUERY);
   const {
     data: { newPosts },
     fetchMore: moreNewPosts,
@@ -126,14 +126,13 @@ const Home = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const apollo = await fetchPosts();
 
   return {
     props: {
       initialApolloState: apollo,
     },
-    revalidate: 60,
   };
 };
 

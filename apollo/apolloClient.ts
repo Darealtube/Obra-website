@@ -1,5 +1,10 @@
 import { useMemo } from "react";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from "@apollo/client";
 import { relayStylePagination } from "@apollo/client/utilities";
 
 let apolloClient;
@@ -15,6 +20,7 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
+            featuredPosts: relayStylePagination(),
             posts: relayStylePagination(),
             newPosts: relayStylePagination(),
             recommendedPosts: relayStylePagination(),
@@ -39,7 +45,8 @@ function createApolloClient() {
 }
 
 export function initializeApollo(initialState = null) {
-  const _apolloClient = apolloClient ?? createApolloClient();
+  const _apolloClient: null | ApolloClient<NormalizedCacheObject> =
+    apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here

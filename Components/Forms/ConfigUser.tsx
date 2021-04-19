@@ -4,80 +4,61 @@ import React from "react";
 import Select from "react-select";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
+import { Action, State } from "../../Hooks/Reducers/ConfigReducer";
 
 type Props = {
   handleCalendar: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  user: {
-    name: string;
-    age: string;
-    country: string;
-    language: string;
-    birthday: Date;
-    phone: string;
-    artStyles: string[];
-    artLevel: string;
-    artKinds: string[];
-  };
-  setUser: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      age: string;
-      country: string;
-      language: string;
-      birthday: Date;
-      phone: string;
-      artStyles: string[];
-      artLevel: string;
-      artKinds: string[];
-    }>
-  >;
+  user: State;
+  dispatch: React.Dispatch<Action>;
   selectStyle: {
     control: (base: any) => any;
   };
-  nextPage: () => void;
-  countries: any;
-  seterrMessage: (value: React.SetStateAction<string>) => void;
-  setError: (value: React.SetStateAction<boolean>) => void;
+  countries: { value: string; label: string }[];
 };
 
 const ConfigUser = ({
   handleCalendar,
   user,
-  setUser,
+  dispatch,
   countries,
   selectStyle,
-  nextPage,
-  setError,
-  seterrMessage,
 }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({
-      ...user,
-      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement)
-        .value,
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
+    });
+  };
+
+  const handleCountry = (value) => {
+    dispatch({
+      type: "COUNTRY_CHANGE",
+      payload: value.label,
+      payload2: value.value,
     });
   };
 
   const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (+user.age <= 0 || +user.age > 100 || !Number.isInteger(+user.age)) {
-      setError(true);
-      seterrMessage("Entered age is invalid. Please change it.");
+      dispatch({
+        type: "ERROR",
+        payload: true,
+        message: "Entered age is invalid. Please change it.",
+      });
     } else if (
       +user.phone.length < 11 ||
       +user.phone.length > 11 ||
       !Number.isInteger(+user.age)
     ) {
-      setError(true);
-      seterrMessage("Entered phone number is invalid. Please change it.");
-    } else if (user.artStyles.length > 5) {
-      setError(true);
-      seterrMessage("Please enter no more than 5 Art Styles");
-    } else if (user.artKinds.length > 5) {
-      setError(true);
-      seterrMessage("Please enter no more than 5 Art Kinds");
+      dispatch({
+        type: "ERROR",
+        payload: true,
+        message: "Entered phone number is invalid. Please change it.",
+      });
     } else {
-      nextPage();
+      dispatch({ type: "NEXT_PAGE" });
     }
   };
 
@@ -144,13 +125,7 @@ const ConfigUser = ({
                 ? { value: user.language, label: user.country }
                 : null
             }
-            onChange={(value) => {
-              setUser({
-                ...user,
-                country: value.label,
-                language: value.value,
-              });
-            }}
+            onChange={handleCountry}
             styles={selectStyle}
             placeholder={"Country"}
           />

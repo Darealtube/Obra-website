@@ -12,23 +12,16 @@ import {
 import Palette from "@material-ui/icons/Palette";
 import React from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
+import { State } from "../../Hooks/Reducers/PostReducer";
 import styles from "../../pages/styles/General/Create.module.css";
 
-interface Post {
-  title: string;
-  description: string;
-  art: string;
-  price: string;
-  sale: string;
-  tags: string[];
-}
-
 interface Props {
-  post: Post;
+  post: State;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleTags: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleNumber: (values: NumberFormatValues) => void;
+  handleSale: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const EditPostForm = ({
@@ -37,6 +30,7 @@ const EditPostForm = ({
   handleChange,
   handleTags,
   handleNumber,
+  handleSale,
 }: Props) => {
   return (
     <>
@@ -84,7 +78,7 @@ const EditPostForm = ({
                 row
                 aria-label="Sale"
                 name="sale"
-                onChange={handleChange}
+                onChange={handleSale}
                 value={post.sale}
               >
                 <FormControlLabel value="No" control={<Radio />} label="No" />

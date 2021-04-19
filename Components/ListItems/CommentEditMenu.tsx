@@ -3,41 +3,27 @@ import {
   ListItem,
   Divider,
   Button,
-  Theme,
-  makeStyles,
-  createStyles,
 } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import { DELETE_COMMENT_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
+import styles from "../../pages/styles/Specific/Lists.module.css";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    icon: {
-      marginRight: theme.spacing(1),
-    },
-    item: {
-      display: "flex",
-      width: "100%",
-      justifyContent: "flex-start",
-    },
-  })
-);
+type Props = {
+  id: string;
+  admin: boolean;
+  onClose: () => void;
+  onExited: () => void;
+}
 
 const CommentEditMenu = ({
   id,
   admin,
   onClose,
   onExited,
-}: {
-  id: string;
-  admin: boolean;
-  onClose: () => void;
-  onExited: () => void;
-}) => {
-  const classes = useStyles();
+}: Props) => {
   const router = useRouter();
   const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION);
 
@@ -62,24 +48,24 @@ const CommentEditMenu = ({
         <>
           <ListItem>
             <Button
-              className={classes.item}
+              className={styles.item}
               onClick={() => router.push(`/${id}/edit`)}
             >
-              <MeetingRoomIcon className={classes.icon} /> Edit
+              <MeetingRoomIcon className={styles.icon} /> Edit
             </Button>
           </ListItem>
           <Divider />
           <ListItem>
-            <Button className={classes.item} onClick={DeleteComment}>
-              <InfoIcon className={classes.icon} /> Delete
+            <Button className={styles.item} onClick={DeleteComment}>
+              <InfoIcon className={styles.icon} /> Delete
             </Button>
           </ListItem>
           <Divider />
         </>
       )}
       <ListItem>
-        <Button className={classes.item}>
-          <ContactSupportIcon className={classes.icon} /> Report
+        <Button className={styles.item}>
+          <ContactSupportIcon className={styles.icon} /> Report
         </Button>
       </ListItem>
     </div>

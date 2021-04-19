@@ -18,7 +18,7 @@ import { Action, State } from "../../../Hooks/Reducers/UserReducer";
 import useArt from "../../../Hooks/useArt";
 import dynamic from "next/dynamic";
 
-const DynamicDate = dynamic(() => import("../../DatePopover"));
+const DynamicDate = dynamic(() => import("../../MainPopovers/DatePopover"));
 
 const customStyles = {
   control: (base) => ({
@@ -28,13 +28,12 @@ const customStyles = {
   }),
 };
 
-const Form1 = ({
-  user,
-  dispatch,
-}: {
+type Props = {
   user: State;
   dispatch: React.Dispatch<Action>;
-}) => {
+};
+
+const Form1 = ({ user, dispatch }: Props) => {
   const [dateAnchor, setdateAnchor] = useState<null | HTMLElement>(null);
   const inputFile = useRef<HTMLInputElement>();
   const inputFile2 = useRef<HTMLInputElement>();

@@ -66,21 +66,9 @@ export const POST_QUERY = gql`
 
 //Fetch User by ID
 export const USER_ID_QUERY = gql`
-  query UserID($id: ID!, $after: ID) {
+  query UserID($id: ID!) {
     userId(id: $id) {
       ...UserInfo
-      likedPosts(limit: 4, after: $after) {
-        totalCount
-        edges {
-          node {
-            id
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
     }
   }
   ${UserInfo}
@@ -279,6 +267,12 @@ export const IS_LIKED_ARTIST = gql`
 export const IS_LIKED_POST = gql`
   query islikedPost($userID: ID!, $postID: ID!) {
     isLikedPost(userID: $userID, postID: $postID)
+  }
+`;
+
+export const USER_EXISTS = gql`
+  query UserExist($userName: String!) {
+    userExists(userName: $userName)
   }
 `;
 

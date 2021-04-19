@@ -5,17 +5,25 @@ import {
   ListItemText,
   IconButton,
   ListItemSecondaryAction,
-  Popover,
 } from "@material-ui/core";
 import Image from "next/image";
 import React, { useState } from "react";
 import styles from "../pages/styles/Specific/Post.module.css";
 import { edges } from "../interfaces/CommentInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import CommentEditMenu from "./ListItems/CommentEditMenu";
 import moment from "moment";
+import dynamic from "next/dynamic";
 
-const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
+const DynamicCommentPopover = dynamic(
+  () => import("./MainPopovers/CardPopover")
+);
+
+type Props = {
+  comments: edges[];
+  id: string;
+};
+
+const CommentList = ({ comments, id }: Props) => {
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
   const [targetId, settargetId] = useState(null);
   const [admin, setadmin] = useState<boolean>(null);
@@ -71,30 +79,13 @@ const CommentList = ({ comments, id }: { comments: edges[]; id: string }) => {
           ))}
       </List>
 
-      <Popover
-        anchorEl={editAnchor}
-        keepMounted
-        open={Boolean(editAnchor)}
-        onClose={handleEditClose}
-        onExited={handleEditExit}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <List>
-          <CommentEditMenu
-            id={targetId}
-            admin={admin}
-            onClose={handleEditClose}
-            onExited={handleEditExit}
-          />
-        </List>
-      </Popover>
+      <DynamicCommentPopover
+        editAnchor={editAnchor}
+        handleEditClose={handleEditClose}
+        handleEditExit={handleEditExit}
+        admin={admin}
+        targetId={targetId}
+      />
     </div>
   );
 };

@@ -1,12 +1,5 @@
 import { useRouter } from "next/router";
-import {
-  ListItem,
-  Divider,
-  Button,
-  Theme,
-  makeStyles,
-  createStyles,
-} from "@material-ui/core";
+import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -16,23 +9,10 @@ import TranslateIcon from "@material-ui/icons/Translate";
 import LanguageIcon from "@material-ui/icons/Language";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import { signOut } from "next-auth/client";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    icon: {
-      marginRight: theme.spacing(1),
-    },
-    item: {
-      display: "flex",
-      width: "100%",
-      justifyContent: "flex-start",
-    },
-  })
-);
+import styles from "../../pages/styles/Specific/Lists.module.css";
 
 const Menu = ({ name }: { name: string }) => {
   const router = useRouter();
-  const classes = useStyles();
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signOut({ callbackUrl: "http://localhost:3000/" });
@@ -42,47 +22,47 @@ const Menu = ({ name }: { name: string }) => {
     <div>
       <ListItem>
         <Button
-          className={classes.item}
+          className={styles.item}
           onClick={() => router.push(`/profile/${name}`)}
         >
-          <AccountCircleIcon className={classes.icon} /> Profile
+          <AccountCircleIcon className={styles.icon} /> Profile
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item}>
+        <Button className={styles.item}>
           {" "}
-          <PeopleAltIcon className={classes.icon} /> Switch account
+          <PeopleAltIcon className={styles.icon} /> Switch account
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item} onClick={handleSignOut}>
-          <ExitToAppIcon className={classes.icon} /> Logout
+        <Button className={styles.item} onClick={handleSignOut}>
+          <ExitToAppIcon className={styles.icon} /> Logout
         </Button>
       </ListItem>
       <Divider />
       <ListItem>
-        <Button className={classes.item}>
-          <TranslateIcon className={classes.icon} /> Language
+        <Button className={styles.item}>
+          <TranslateIcon className={styles.icon} /> Language
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item}>
-          <LanguageIcon className={classes.icon} /> Location
+        <Button className={styles.item}>
+          <LanguageIcon className={styles.icon} /> Location
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item}>
-          <SettingsApplicationsIcon className={classes.icon} /> Settings
+        <Button className={styles.item}>
+          <SettingsApplicationsIcon className={styles.icon} /> Settings
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item}>
-          <InfoIcon className={classes.icon} /> Help
+        <Button className={styles.item}>
+          <InfoIcon className={styles.icon} /> Help
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={classes.item}>
-          <ContactSupportIcon className={classes.icon} /> Send Feedback
+        <Button className={styles.item}>
+          <ContactSupportIcon className={styles.icon} /> Send Feedback
         </Button>
       </ListItem>
     </div>

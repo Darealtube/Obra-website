@@ -1,4 +1,19 @@
-const relayPaginate = (finalArray, after: string, limit: number) => {
+type RelayPaginate = {
+  totalCount: number;
+  pageInfo: {
+    endCursor: string;
+    hasNextPage: boolean;
+  };
+  edges: {
+    node: any;
+  }[];
+};
+
+const relayPaginate = (
+  finalArray: any[],
+  after: string,
+  limit: number
+): RelayPaginate => {
   const cursor = finalArray
     .map(function (e) {
       return e.id;

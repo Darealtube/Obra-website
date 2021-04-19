@@ -10,38 +10,36 @@ import {
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
 } from "../apollo/apolloQueries";
+import {
+  FeaturedPostsData,
+  NewPostsData,
+  PaginatedPostsVars,
+  PostData,
+  PostVars,
+  RecommendedPostData,
+  UserData,
+  UserVars,
+} from "../interfaces/QueryInterfaces";
 
 export const fetchUser = async (id: string) => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  const {
+    data: { userId },
+  } = await apolloClient.query({
     query: USER_ID_QUERY,
     variables: {
       id: id,
     },
   });
-  if (!data) {
+  if (!userId) {
     return null;
   }
-  return data.userId;
+  return userId;
 };
-
-/* export const fetchUserPosts = async (name: string) => {
-  const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
-    query: USER_ID_QUERY,
-    variables: {
-      name: name,
-    },
-  });
-  if (!data) {
-    return null;
-  }
-  return data.userId;
-}; */
 
 export const fetchUserandPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<UserData, UserVars>({
     query: USER_POST_QUERY,
     variables: {
       name: name,
@@ -66,7 +64,7 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
 
 export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<UserData, UserVars>({
     query: USER_LIKED_POST_QUERY,
     variables: {
       name: name,
@@ -92,10 +90,10 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
 
 export const fetchPosts = async () => {
   const apolloClient = initializeApollo();
-  await apolloClient.query({
+  await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
     query: FEATURED_POSTS_QUERY,
   });
-  await apolloClient.query({
+  await apolloClient.query<NewPostsData, PaginatedPostsVars>({
     query: NEW_POSTS_QUERY,
   });
   return apolloClient.cache.extract();
@@ -103,27 +101,29 @@ export const fetchPosts = async () => {
 
 export const fetchAPost = async (id: string) => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  const {
+    data: { postId },
+  } = await apolloClient.query<PostData, PostVars>({
     query: POST_ID_QUERY,
     variables: {
       id: id,
     },
   });
-  if (!data) {
+  if (!postId) {
     return null;
   }
-  return data.postId;
+  return postId;
 };
 
 export const InitializePostInfo = async (id: string, sessionId: string) => {
   const apolloClient = initializeApollo();
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<PostData, PostVars>({
     query: POST_ID_QUERY,
     variables: {
       id: id,
     },
   });
-  await apolloClient.query({
+  await apolloClient.query<RecommendedPostData, PostVars>({
     query: POST_RECOMMENDED_QUERY,
     variables: {
       id: id,

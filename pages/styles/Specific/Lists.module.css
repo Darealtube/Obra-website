@@ -1,0 +1,21 @@
+.icon {
+  margin-right: 8px;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.notifitem {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.notifInfo {
+  flex-direction: column;
+  margin-right: 80px;
+}

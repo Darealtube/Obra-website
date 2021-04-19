@@ -2,56 +2,18 @@ import { Grid, Select, MenuItem, InputLabel, Chip } from "@material-ui/core";
 import styles from "../../../pages/styles/General/Configure.module.css";
 import React from "react";
 import { Action, State } from "../../../Hooks/Reducers/UserReducer";
+import {
+  levelOptions,
+  styleOptions,
+  kindOptions,
+} from "../../../utils/Options";
 
-const levelOptions = [
-  "Professional Artist",
-  "Freelancer",
-  "Student",
-  "Veteran",
-];
-const styleOptions = [
-  "Abstract Expressionism",
-  "Art Deco",
-  "Art Nouveau",
-  "Avant-garde",
-  "Baroque",
-  "Bahaus",
-  "Classicism",
-  "Conceptual Art",
-  "Constructivism",
-  "Cubism",
-  "Dada / Dadaism",
-  "Expressionism",
-  "Fauvism",
-  "Futurism",
-  "Impressionism",
-  "Land Art",
-  "Minimalism",
-  "Neo - Impressionism",
-  "Neoclassicism",
-  "Post-Impressionism",
-  "Surrealism",
-  "Symbolism",
-  "Other",
-];
-
-const kindOptions = [
-  "Sculpture",
-  "Landscape Painting",
-  "Portrait",
-  "Oil Painting",
-  "Digital Art",
-  "8-Bit Art",
-  "Fan Art",
-];
-
-const Form2 = ({
-  user,
-  dispatch,
-}: {
+type Props = {
   user: State;
   dispatch: React.Dispatch<Action>;
-}) => {
+};
+
+const Form2 = ({ user, dispatch }: Props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "CHANGE", field: e.target.name, payload: e.target.value });
   };

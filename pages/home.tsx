@@ -23,21 +23,28 @@ import { fetchPosts } from "../utils/fetchData";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../Hooks/usePagination";
 import { useEffect } from "react";
+import {
+  FeaturedPostsData,
+  HomeUserData,
+  HomeUserVars,
+  NewPostsData,
+  PaginatedPostsVars,
+} from "../interfaces/QueryInterfaces";
 
 const Home = () => {
   const [session] = useSession();
   const {
     data: { featuredPosts },
     fetchMore,
-  } = useQuery(FEATURED_POSTS_QUERY);
+  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY);
   const {
     data: { newPosts },
     fetchMore: moreNewPosts,
-  } = useQuery(NEW_POSTS_QUERY);
+  } = useQuery<NewPostsData, PaginatedPostsVars>(NEW_POSTS_QUERY);
   const [
     getRecommended,
     { loading, data, fetchMore: moreRecommended },
-  ] = useLazyQuery(HOME_RECOMMENDED_QUERY);
+  ] = useLazyQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY);
   const { More } = usePagination("featuredPosts", fetchMore, featuredPosts);
   const { More: MoreNew } = usePagination("newPosts", moreNewPosts, newPosts);
   const { More: MoreRecc, hasMore } = usePagination(

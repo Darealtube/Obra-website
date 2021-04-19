@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
 import dynamic from "next/dynamic";
+import { LikeArtistData, UnlikeArtistData, UnlikeLikeArtistVars } from "../../interfaces/MutationInterfaces";
 
 const DynamicEditDrawer = dynamic(() => import("./EditDrawer"));
 const DynamicUserDrawer = dynamic(() => import("./UserDrawer"));
@@ -29,8 +30,8 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
-  const [likeArtist] = useMutation(LIKE_ARTIST_MUTATION);
-  const [unlikeArtist] = useMutation(UNLIKE_ARTIST_MUTATION);
+  const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(LIKE_ARTIST_MUTATION);
+  const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(UNLIKE_ARTIST_MUTATION);
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 

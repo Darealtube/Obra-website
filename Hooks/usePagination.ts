@@ -11,7 +11,7 @@ interface Info {
   totalCount: number;
 }
 
-const usePagination = <T, U, K, O>(
+const usePagination = (
   key: string,
   fetchMore,
   info: Info,
@@ -43,6 +43,7 @@ const usePagination = <T, U, K, O>(
       fetchMore({
         variables: { after: info?.edges.slice(-1)[0].node.id },
       }).then((fetchMoreResult) => {
+        console.log(fetchMoreResult)
         setPage((prevpage) => prevpage + 1);
         if (
           (key2

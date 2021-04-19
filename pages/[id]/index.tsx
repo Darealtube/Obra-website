@@ -1,12 +1,5 @@
 import Appbar from "../../Components/Appbar/Appbar";
-import {
-  CssBaseline,
-  Grid,
-  Container,
-  Dialog,
-  IconButton,
-} from "@material-ui/core";
-import Image from "next/image";
+import { CssBaseline, Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import styles from "../styles/Specific/Post.module.css";
 import Head from "next/head";
@@ -24,18 +17,39 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import PostInfo from "../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../Components/PostInfo/RecommendedList";
-import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
+import dynamic from "next/dynamic";
+import {
+  PostData,
+  PostVars,
+  RecommendedPostData,
+} from "../../interfaces/QueryInterfaces";
+import {
+  LikeData,
+  UnlikeLikeVars,
+  UnlikeData,
+  ViewPostData,
+  ViewPostVars,
+} from "../../interfaces/MutationInterfaces";
 
-const PostID = ({ id, alreadyLiked }) => {
+const DynamicImageDialog = dynamic(
+  () => import("../../Components/PostInfo/ImageDialog")
+);
+
+type Props = {
+  id: string;
+  alreadyLiked: boolean;
+};
+
+const PostID = ({ id, alreadyLiked }: Props) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [session, loading] = useSession();
-  const [like] = useMutation(LIKE_MUTATION);
-  const [unlike] = useMutation(UNLIKE_MUTATION);
+  const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
+  const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
   const {
     data: { postId },
     fetchMore: MoreComm,
-  } = useQuery(POST_ID_QUERY, {
+  } = useQuery<PostData, PostVars>(POST_ID_QUERY, {
     variables: {
       id: id,
     },
@@ -43,13 +57,17 @@ const PostID = ({ id, alreadyLiked }) => {
   const {
     data: { recommendedPosts },
     fetchMore: MoreRecc,
-  } = useQuery(POST_RECOMMENDED_QUERY, {
+  } = useQuery<RecommendedPostData, PostVars>(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
     },
   });
-  const [viewed] = useMutation(VIEW_POST);
+  const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
   const [liked, setLiked] = useState(alreadyLiked);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     viewed({
@@ -102,32 +120,11 @@ const PostID = ({ id, alreadyLiked }) => {
         />
       </Grid>
 
-      <Dialog
+      <DynamicImageDialog
+        handleClose={handleClose}
         open={open}
-        onClose={() => setOpen(false)}
-        className={styles.dialog}
-        fullWidth
-        maxWidth={"xl"}
-        PaperProps={{
-          style: {
-            backgroundColor: "transparent",
-            boxShadow: "none",
-          },
-        }}
-      >
-        <Container className={styles.container}>
-          <IconButton
-            onClick={() => setOpen(false)}
-            className={styles.exit}
-            edge="start"
-            size="medium"
-            color="inherit"
-          >
-            <FullscreenExitIcon style={{ color: "white" }} />
-          </IconButton>
-          <Image src={postId.art} layout="fill" objectFit="contain" />
-        </Container>
-      </Dialog>
+        postId={postId}
+      />
     </div>
   );
 };

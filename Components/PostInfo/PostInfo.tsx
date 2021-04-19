@@ -19,11 +19,15 @@ import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
-import CommentDrawer from "./CommentDrawer";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../../Hooks/usePagination";
 import Main from "./Main";
 import { Session } from "next-auth/client";
+import dynamic from "next/dynamic";
+import { AddCommentData } from "../../interfaces/MutationInterfaces";
+import { PostData, PostVars } from "../../interfaces/QueryInterfaces";
+
+const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
 
 type Parameters = {
   postID: PostInterface;
@@ -55,10 +59,10 @@ const PostInfo = ({
     openComment
   );
 
-  const [addComment] = useMutation(CREATE_COMMENT_MUTATION, {
+  const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
     update: (cache, mutationResult) => {
       const newComment = mutationResult.data.createComment;
-      const { postId } = cache.readQuery({
+      const { postId } = cache.readQuery<PostData, PostVars>({
         query: POST_ID_QUERY,
         variables: { id: postID.id },
       });
@@ -84,7 +88,7 @@ const PostInfo = ({
   const [comment, setComment] = useState({
     postID: postID.id,
     content: "",
-    author: session.id,
+    author: session.id as string,
   });
 
   return (
@@ -132,7 +136,7 @@ const PostInfo = ({
         )}
       </Container>
 
-      <CommentDrawer
+      <DynamicCommentDrawer
         setComment={setComment}
         addComment={addComment}
         comment={comment}

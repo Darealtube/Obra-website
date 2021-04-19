@@ -6,14 +6,22 @@ import {
   Divider,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import CloseIcon from "@material-ui/icons/Close";
 import Form from "./DrawerForms/Form";
+import { State } from "../../Hooks/Reducers/UserReducer";
+import { UserInterface } from "../../interfaces/UserInterface";
 
-const EditDrawer = ({ artist, setOpen, open }) => {
-  const [user, setUser] = useState({
+type Props = {
+  artist: UserInterface;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+};
+
+const EditDrawer = ({ artist, setOpen, open }: Props) => {
+  const [user] = useState<State>({
     name: artist.name,
     country: artist.country,
     birthday: artist.birthday,

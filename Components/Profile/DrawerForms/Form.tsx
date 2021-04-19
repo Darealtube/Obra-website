@@ -1,5 +1,5 @@
 import { Grid, Button } from "@material-ui/core";
-import React, { useReducer } from "react";
+import React, { Dispatch, SetStateAction, useReducer } from "react";
 import "react-calendar/dist/Calendar.css";
 import Form1 from "../DrawerForms/Form1";
 import Form2 from "../DrawerForms/Form2";
@@ -9,15 +9,22 @@ import {
   UserInfo2,
 } from "../../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
-import { reducer } from "../../../Hooks/Reducers/UserReducer";
+import { reducer, State } from "../../../Hooks/Reducers/UserReducer";
 import { useRouter } from "next/router";
+import { EditUserData } from "../../../interfaces/MutationInterfaces";
 
-const Form = ({ id, setOpen, initState }) => {
+type Props = {
+  id: string;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  initState: State;
+};
+
+const Form = ({ id, setOpen, initState }: Props) => {
   const router = useRouter();
   const [user, dispatch] = useReducer(reducer, initState);
-  const [editUser] = useMutation(EDIT_USER_MUTATION, {
+  const [editUser] = useMutation<EditUserData>(EDIT_USER_MUTATION, {
     update: (cache, mutationResult) => {
-      const newUser = mutationResult.data;
+      const newUser = mutationResult.data.editUser;
       cache.writeFragment({
         id: `User:${id}`, // The value of the to-do item's unique identifier
         fragment: UserInfo,
@@ -33,7 +40,7 @@ const Form = ({ id, setOpen, initState }) => {
         data: {
           backdrop: newUser.backdrop,
           userBio: newUser.userBio,
-          birthday: newUser.birhtday,
+          birthday: newUser.birthday,
           country: newUser.country,
           phone: newUser.phone,
           artLevel: newUser.artLevel,

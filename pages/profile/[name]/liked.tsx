@@ -11,12 +11,19 @@ import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 
-const PostIDLiked = ({ name, id, alreadyLiked }) => {
+type Props = {
+  name: string;
+  id: string;
+  alreadyLiked: boolean;
+};
+
+const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
   const {
     data: { userName },
     fetchMore,
-  } = useQuery(USER_LIKED_POST_QUERY, {
+  } = useQuery<UserData, UserVars>(USER_LIKED_POST_QUERY, {
     variables: {
       name: name,
     },
@@ -86,10 +93,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       initialApolloState: user.data,
       session: session,
       name: context.params.name,
-      id: session.id,
+      id: session.id as string,
       alreadyLiked: user.alreadyLiked,
     },
   };
 };
 
-export default PostIDLiked;
+export default UserIDLiked;

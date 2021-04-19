@@ -1,5 +1,5 @@
 import { NumberFormatValues } from "react-number-format";
-import React from "react";
+import React, { useReducer } from "react";
 import { CssBaseline, Paper, Grid } from "@material-ui/core";
 import Appbar from "../../Components/Appbar/Appbar";
 import Image from "next/image";
@@ -13,36 +13,35 @@ import { PostInterface } from "../../interfaces/PostInterface";
 import { EDIT_POST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import EditPostForm from "../../Components/Forms/EditPost";
+import { reducer, State } from "../../Hooks/Reducers/PostReducer";
+import {
+  EditPostData,
+  EditPostVars,
+} from "../../interfaces/MutationInterfaces";
 
 const Create = ({ postId }: { postId: PostInterface }) => {
-  const [post, setPost] = React.useState({
+  const initState: State = {
     title: postId.title,
     description: postId.description,
     art: postId.art,
     price: postId.price,
     sale: postId.sale,
     tags: postId.tags as string[],
-  });
-  const [edit] = useMutation(EDIT_POST_MUTATION);
+  };
+  const [post, dispatch] = useReducer(reducer, initState);
+  const [edit] = useMutation<EditPostData, EditPostVars>(EDIT_POST_MUTATION);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPost({
-      ...post,
-      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement)
-        .value,
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
     });
   };
 
   const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tags = (e.target as HTMLInputElement).value
-      .split(",")
-      .map((tag) => tag.replace(/\s+/, ""))
-      .filter((tag) => tag !== "");
-    setPost({
-      ...post,
-      tags: tags,
-    });
+    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,10 +58,11 @@ const Create = ({ postId }: { postId: PostInterface }) => {
   };
 
   const handleNumber = (values: NumberFormatValues) => {
-    setPost({
-      ...post,
-      price: values.value,
-    });
+    dispatch({ type: "CHANGE", field: "price", payload: values.value });
+  };
+
+  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
   };
 
   return (
@@ -90,6 +90,7 @@ const Create = ({ postId }: { postId: PostInterface }) => {
           <div className={styles.paper}>
             <EditPostForm
               post={post}
+              handleSale={handleSale}
               handleSubmit={handleSubmit}
               handleChange={handleChange}
               handleTags={handleTags}

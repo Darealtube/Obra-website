@@ -30,7 +30,7 @@ interface Props {
     React.SetStateAction<{
       postID: string;
       content: string;
-      author: any;
+      author: string;
     }>
   >;
   addComment: (

@@ -11,8 +11,6 @@ import {
   Button,
   Container,
   IconButton,
-  Popover,
-  List,
 } from "@material-ui/core";
 import Link from "next/link";
 import styles from "../pages/styles/General/Home.module.css";
@@ -20,7 +18,9 @@ import Image from "next/image";
 import { edges } from "../interfaces/PostInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useState } from "react";
-import EditMenu from "../Components/ListItems/EditMenu";
+import dynamic from "next/dynamic";
+
+const DynamicCardPopover = dynamic(() => import("./MainPopovers/CardPopover"));
 
 type PostData = {
   postData: edges[];
@@ -123,30 +123,13 @@ export const CardList = ({ postData, id }: PostData) => {
             </Grid>
           ))}
       </Grid>
-      <Popover
-        anchorEl={editAnchor}
-        keepMounted
-        open={Boolean(editAnchor)}
-        onClose={handleEditClose}
-        onExited={handleEditExit}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <List>
-          <EditMenu
-            id={targetId}
-            admin={admin}
-            onClose={handleEditClose}
-            onExited={handleEditExit}
-          />
-        </List>
-      </Popover>
+      <DynamicCardPopover
+        editAnchor={editAnchor}
+        handleEditClose={handleEditClose}
+        handleEditExit={handleEditExit}
+        admin={admin}
+        targetId={targetId}
+      />
     </div>
   );
 };

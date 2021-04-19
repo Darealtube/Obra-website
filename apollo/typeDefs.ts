@@ -61,6 +61,7 @@ export const typeDefs = gql`
     featuredPosts(after: ID, limit: Int): PostConnection
     isLikedArtist(userID: ID!, artistName: String!): Boolean
     isLikedPost(postID: ID!, userID: ID!): Boolean
+    userExists(userName: String): Boolean
   }
 
   type Notification {

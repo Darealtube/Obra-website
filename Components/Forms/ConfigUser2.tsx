@@ -12,82 +12,49 @@ import styles from "../../pages/styles/General/Configure.module.css";
 import React from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { Session } from "next-auth/client";
+import { Action, State } from "../../Hooks/Reducers/ConfigReducer";
+import {
+  MutationFunctionOptions,
+  OperationVariables,
+  FetchResult,
+} from "@apollo/client";
+import { levelOptions, styleOptions, kindOptions } from "../../utils/Options";
 
-const ConfigUser2 = ({
-  setUser,
-  user,
-  prevPage,
-  seterrMessage,
-  setError,
-  session,
-  configUser,
-}) => {
+type Props = {
+  configUser: (
+    options?: MutationFunctionOptions<any, OperationVariables>
+  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  user: State;
+  dispatch: React.Dispatch<Action>;
+  session: Session;
+};
+
+const ConfigUser2 = ({ dispatch, user, session, configUser }: Props) => {
   const router = useRouter();
-  const levelOptions = [
-    "Professional Artist",
-    "Freelancer",
-    "Student",
-    "Veteran",
-  ];
-  const styleOptions = [
-    "Abstract Expressionism",
-    "Art Deco",
-    "Art Nouveau",
-    "Avant-garde",
-    "Baroque",
-    "Bahaus",
-    "Classicism",
-    "Conceptual Art",
-    "Constructivism",
-    "Cubism",
-    "Dada / Dadaism",
-    "Expressionism",
-    "Fauvism",
-    "Futurism",
-    "Impressionism",
-    "Land Art",
-    "Minimalism",
-    "Neo - Impressionism",
-    "Neoclassicism",
-    "Post-Impressionism",
-    "Surrealism",
-    "Symbolism",
-    "Other",
-  ];
 
-  const kindOptions = [
-    "Sculpture",
-    "Landscape Painting",
-    "Portrait",
-    "Oil Painting",
-    "Digital Art",
-    "8-Bit Art",
-    "Fan Art",
-  ];
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUser({
-      ...user,
-      [(event.target as HTMLInputElement)
-        .name]: (event.target as HTMLInputElement).value as string,
-    });
-  };
-
-  const handleChange2 = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setUser({
-      ...user,
-      [(event.target as HTMLInputElement).name]: event.target.value as string[],
+  const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (user.artStyles.length > 5 || user.artStyles.length == 0) {
-      setError(true);
-      seterrMessage("Please enter no more than 5 Art Styles");
+      dispatch({
+        type: "ERROR",
+        payload: true,
+        message: "Please enter no more than 5 Art Styles",
+      });
     } else if (user.artKinds.length > 5 || user.artKinds.length == 0) {
-      setError(true);
-      seterrMessage("Please enter no more than 5 Art Kinds");
+      dispatch({
+        type: "ERROR",
+        payload: true,
+        message: "Please enter no more than 5 Art Kinds",
+      });
     } else {
       configUser({
         variables: {
@@ -105,6 +72,10 @@ const ConfigUser2 = ({
       });
       router.push("/home");
     }
+  };
+
+  const prevPage = () => {
+    dispatch({ type: "PREVIOUS_PAGE" });
   };
 
   return (
@@ -146,7 +117,7 @@ const ConfigUser2 = ({
               name="artStyles"
               multiple
               value={user.artStyles}
-              onChange={handleChange2}
+              onChange={handleChange}
               required
               renderValue={(selected) => (
                 <Grid container style={{ maxHeight: "4em", overflow: "auto" }}>
@@ -180,7 +151,7 @@ const ConfigUser2 = ({
               multiple
               required
               value={user.artKinds}
-              onChange={handleChange2}
+              onChange={handleChange}
               renderValue={(selected) => (
                 <Grid container style={{ maxHeight: "4em", overflow: "auto" }}>
                   {(selected as string[]).map((value, index) => (

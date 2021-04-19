@@ -6,13 +6,24 @@ import FlagIcon from "@material-ui/icons/Flag";
 import BrushIcon from "@material-ui/icons/Brush";
 import PersonIcon from "@material-ui/icons/Person";
 import PaletteIcon from "@material-ui/icons/Palette";
+import { Dispatch, SetStateAction } from "react";
+import { UserInterface } from "../../interfaces/UserInterface";
 
-const UserDrawer = ({ artist, setOpen, open }) => {
+type Props = {
+  artist: UserInterface;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+};
+
+const UserDrawer = ({ artist, setOpen, open }: Props) => {
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={handleClose}
         className={styles.dialog}
         fullWidth
         maxWidth={"sm"}

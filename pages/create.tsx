@@ -1,5 +1,5 @@
 import { NumberFormatValues } from "react-number-format";
-import React from "react";
+import React, { useReducer } from "react";
 import { CssBaseline, Paper, Grid, CircularProgress } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import Image from "next/image";
@@ -8,103 +8,73 @@ import { useRouter } from "next/router";
 import styles from "./styles/General/Create.module.css";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { getSession, useSession } from "next-auth/client";
-import { CREATE_POST_MUTATION, USER_ID_QUERY } from "../apollo/apolloQueries";
+import { getSession } from "next-auth/client";
+import { CREATE_POST_MUTATION } from "../apollo/apolloQueries";
 import { initializeApollo } from "../apollo/apolloClient";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import PostForm from "../Components/Forms/CreatePost";
+import { reducer, State } from "../Hooks/Reducers/PostReducer";
+import useArt from "../Hooks/useArt";
+import { fetchUser } from "../utils/fetchData";
+import {
+  CreatePostData,
+  CreatePostVars,
+} from "../interfaces/MutationInterfaces";
 
-const Create = ({ userData }) => {
-  const [session] = useSession();
-  const { data } = useQuery(USER_ID_QUERY, {
-    variables: {
-      id: session?.id,
-    },
-    skip: !session,
-  });
-  const [create] = useMutation(CREATE_POST_MUTATION);
-  const [post, setPost] = React.useState({
-    author: userData.id,
-    title: "",
-    description: "",
-    art: "",
-    price: "",
-    sale: "No",
-    date: moment().format("l"),
-    tags: [] as string[],
-  });
-  const [loadings, setLoadings] = React.useState(false);
+const initState: State = {
+  title: "",
+  description: "",
+  art: "",
+  price: "",
+  sale: "No",
+  tags: [] as string[],
+};
+
+const Create = ({ id }: { id: string }) => {
   const router = useRouter();
+  const [create] = useMutation<CreatePostData, CreatePostVars>(
+    CREATE_POST_MUTATION
+  );
+  const [post, dispatch] = useReducer(reducer, initState);
+  const { loading, setArt, placeholder } = useArt("");
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = (e.target as HTMLInputElement).files;
-    const data = new FormData();
-    const { signature, timestamp } = await getSignature(); // Get returned sign and timestamp
-
-    data.append("file", files[0]);
-    data.append("signature", signature); // Signature
-    data.append("timestamp", timestamp); // Timestamp
-    data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
-
-    setLoadings(true);
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: data,
-        mode: "cors",
-      }
-    );
-    const file = await res.json();
-
-    setPost((prevpost) => {
-      return {
-        ...prevpost,
-        art: file.secure_url,
-      };
+    setArt((e.target as HTMLInputElement).files).then((values) => {
+      dispatch({
+        type: "CHANGE",
+        field: "art",
+        payload: values.url,
+      });
     });
-    setLoadings(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPost({
-      ...post,
-      [(e.target as HTMLInputElement).name]: (e.target as HTMLInputElement)
-        .value,
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
     });
   };
 
   const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tags = (e.target as HTMLInputElement).value
-      .split(",")
-      .map((tag) => tag.replace(/\s+/, ""))
-      .filter((tag) => tag !== "");
-    setPost({
-      ...post,
-      tags: tags,
-    });
+    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
   };
 
-  React.useEffect(() => {
-    if (post.sale === "No") {
-      setPost({
-        ...post,
-        price: "",
-      });
-    }
-  }, [post.sale]);
+  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     create({
       variables: {
-        author: post.author,
+        author: id,
         title: post.title,
         description: post.description,
         art: post.art,
         price: post.price,
         sale: post.sale,
-        date: post.date,
+        date: moment().format("l"),
         tags: post.tags,
       },
     });
@@ -112,10 +82,7 @@ const Create = ({ userData }) => {
   };
 
   const handleNumber = (values: NumberFormatValues) => {
-    setPost({
-      ...post,
-      price: values.value,
-    });
+    dispatch({ type: "CHANGE", field: "price", payload: values.value });
   };
 
   return (
@@ -130,14 +97,14 @@ const Create = ({ userData }) => {
         <Grid item xs={12} sm={6} md={7} className={styles.displayArt}>
           {/* Art Display */}
           <div className={styles.artContainer}>
-            {post.art && !loadings ? (
+            {placeholder && !loading ? (
               <Image
-                src={post.art}
+                src={placeholder}
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
               />
-            ) : loadings ? (
+            ) : loading ? (
               <CircularProgress />
             ) : (
               ""
@@ -149,6 +116,7 @@ const Create = ({ userData }) => {
           <div className={styles.paper}>
             <PostForm
               post={post}
+              handleSale={handleSale}
               handleSubmit={handleSubmit}
               handleChange={handleChange}
               handleArt={handleArt}
@@ -162,16 +130,6 @@ const Create = ({ userData }) => {
   );
 };
 
-async function getSignature() {
-  //Call API which handles the signature and timestamp
-  const response = await fetch("/api/cloud_sign");
-  //Get the response in JSON format
-  const data = await response.json();
-  //Extract signature and timestamp
-  const { signature, timestamp } = data;
-  return { signature, timestamp };
-}
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const apolloClient = initializeApollo();
@@ -183,18 +141,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-
-  const { data } = await apolloClient.query({
-    query: USER_ID_QUERY,
-    variables: {
-      id: session.id,
-    },
-  });
+  const data = await fetchUser(session.id as string);
 
   return {
     props: {
       initialApolloState: apolloClient.cache.extract(),
-      userData: { id: data.userId.id },
+      id: data.id,
     },
   };
 };

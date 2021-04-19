@@ -72,6 +72,11 @@ export const resolvers = {
 
       return user.likedPosts.includes(args.postID);
     },
+    async userExists(_parent, args, _context, _info) {
+      const user = await User.findOne({ name: args.userName }).lean();
+
+      return user ? true : false;
+    },
   },
   Comment: {
     async author(parent, _args, _context, _info) {

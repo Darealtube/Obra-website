@@ -1,4 +1,6 @@
-import moment, { MomentInput } from "moment";
+import moment from "moment";
+
+type Options = "CHANGE" | "DATE_CHANGE" | "RESET";
 
 export type State = {
   name: string;
@@ -15,7 +17,7 @@ export type State = {
 };
 
 export type Action = {
-  type: string;
+  type: Options;
   payload?: string | Date | ArrayBuffer | string[] | any;
   field?: string;
   initialState?: State;

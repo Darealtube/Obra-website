@@ -1,7 +1,24 @@
+import { MutationFunctionOptions, OperationVariables, FetchResult } from "@apollo/client";
 import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 
-const CommentForm = ({ comment, setComment, addComment }) => {
+type Comment = {
+  comment : {
+    postID: string;
+    content: string;
+    author: string;
+  }
+  setComment:React.Dispatch<
+  React.SetStateAction<{
+    postID: string;
+    content: string;
+    author: string;
+  }>
+>;
+  addComment: (options?: MutationFunctionOptions<any, OperationVariables>) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+}
+
+const CommentForm = ({ comment, setComment, addComment }: Comment) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment({
       ...comment,

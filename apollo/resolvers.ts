@@ -73,9 +73,10 @@ export const resolvers = {
       return user.likedPosts.includes(args.postID);
     },
     async userExists(_parent, args, _context, _info) {
+      const origUser = await User.findById(args.userId).lean();
       const user = await User.findOne({ name: args.userName }).lean();
 
-      return user ? true : false;
+      return user ? (user?.name === origUser?.name ? false : true) : false;
     },
   },
   Comment: {
@@ -85,19 +86,13 @@ export const resolvers = {
   },
   User: {
     async likedPosts(parent, args, _context, _info) {
-      const posts = await Post.find({});
-      const postsArray = posts.filter((post) =>
-        parent.likedPosts.includes(post._id)
-      );
-      const data = relayPaginate(postsArray, args.after, args.limit);
+      const posts = await Post.find({ _id: { $in: parent.likedPosts } });
+      const data = relayPaginate(posts, args.after, args.limit);
       return data;
     },
     async posts(parent, args, _context, _info) {
-      const posts = await Post.find({});
-      const postsArray = posts.filter((post) =>
-        parent.posts.includes(post._id)
-      );
-      const data = relayPaginate(postsArray, args.after, args.limit);
+      const posts = await Post.find({ author: parent.id });
+      const data = relayPaginate(posts, args.after, args.limit);
       return data;
     },
     async likedArtists(parent, args, _context, _info) {
@@ -280,6 +275,8 @@ export const resolvers = {
           artKinds: args.artKinds,
           image: args.image,
           backdrop: args.backdrop,
+          phone: args.phone,
+          age: args.age,
           newUser: false,
         },
         {

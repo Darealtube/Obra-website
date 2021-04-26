@@ -1,32 +1,20 @@
-import { useRouter } from "next/router";
-import {
-  ListItem,
-  Divider,
-  Button,
-} from "@material-ui/core";
+import Link from "next/link";
+import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import {
-  DELETE_POST_MUTATION,
-} from "../../apollo/apolloQueries";
+import { DELETE_POST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 
-type Props ={
+type Props = {
   id: string;
   admin: boolean;
   onClose: () => void;
   onExited: () => void;
-}
+};
 
-const EditMenu = ({
-  id,
-  admin,
-  onClose,
-  onExited,
-}: Props) => {
-  const router = useRouter();
+const EditMenu = ({ id, admin, onClose, onExited }: Props) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
 
   const DeletePost = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,12 +37,11 @@ const EditMenu = ({
       {admin && (
         <>
           <ListItem>
-            <Button
-              className={styles.item}
-              onClick={() => router.push(`/${id}/edit`)}
-            >
-              <MeetingRoomIcon className={styles.icon} /> Edit
-            </Button>
+            <Link href={`/${id}/edit`}>
+              <Button className={styles.item} component="a">
+                <MeetingRoomIcon className={styles.icon} /> Edit
+              </Button>
+            </Link>
           </ListItem>
           <Divider />
           <ListItem>

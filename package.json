@@ -26,6 +26,7 @@
     "formik": "^2.2.6",
     "graphql": "^15.5.0",
     "graphql-tools": "^7.0.2",
+    "libphonenumber-js": "^1.9.16",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongodb": "^3.6.3",

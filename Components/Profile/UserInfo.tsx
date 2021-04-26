@@ -1,5 +1,6 @@
 import { Button, Box, Paper, Typography, Container } from "@material-ui/core";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import { UserInterface } from "../../interfaces/UserInterface";
@@ -14,9 +15,12 @@ import { useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
 import dynamic from "next/dynamic";
-import { LikeArtistData, UnlikeArtistData, UnlikeLikeArtistVars } from "../../interfaces/MutationInterfaces";
+import {
+  LikeArtistData,
+  UnlikeArtistData,
+  UnlikeLikeArtistVars,
+} from "../../interfaces/MutationInterfaces";
 
-const DynamicEditDrawer = dynamic(() => import("./EditDrawer"));
 const DynamicUserDrawer = dynamic(() => import("./UserDrawer"));
 
 type Props = {
@@ -30,10 +34,13 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
-  const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(LIKE_ARTIST_MUTATION);
-  const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(UNLIKE_ARTIST_MUTATION);
+  const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(
+    LIKE_ARTIST_MUTATION
+  );
+  const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
+    UNLIKE_ARTIST_MUTATION
+  );
   const [openDialog, setOpenDialog] = useState(false);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -53,9 +60,6 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
     }
   };
 
-  const OpenEditDialog = () => {
-    setOpenEditDialog(true);
-  };
   const OpenDialog = () => {
     setOpenDialog(true);
   };
@@ -63,49 +67,49 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   return (
     <Box className={styles.userContainer}>
       <Paper className={styles.banner} elevation={6}>
-        {artist ? (
-          <Box className={styles.dp}>
-            <Image
-              src={artist.image ? artist.image : "/user-empty-avatar.png"}
-              layout="fill"
-              objectFit="contain"
-            />
-          </Box>
-        ) : (
-          ""
-        )}
+        <Box className={styles.dp}>
+          <Image
+            src={
+              artist && artist.image ? artist.image : "/user-empty-avatar.png"
+            }
+            layout="fill"
+            objectFit="contain"
+          />
+        </Box>
         <br />
-        <Container
-          style={{ flexGrow: 1, color: "white", wordBreak: "break-word" }}
-        >
-          <Typography variant="h4">{artist.name}</Typography>
-          <br />
-          <Typography
-            variant="subtitle1"
-            align="left"
-            className={styles.text}
-            gutterBottom
+        {artist && (
+          <Container
+            style={{ flexGrow: 1, color: "white", wordBreak: "break-word" }}
           >
-            {artist.userBio && <Typography>{artist.userBio}</Typography>}
-          </Typography>
-          <Button
-            fullWidth
-            className={styles.userOptions2}
-            onClick={OpenDialog}
-          >
-            <span>
-              <Typography align="center">
-                <span className={styles.text}>
-                  {" "}
-                  <EditIcon className={styles.icon} />
-                  More information
-                </span>
-              </Typography>
-            </span>
-          </Button>
-        </Container>
+            <Typography variant="h4">{artist.name}</Typography>
+            <br />
+            <Typography
+              variant="subtitle1"
+              align="left"
+              className={styles.text}
+              gutterBottom
+            >
+              {artist.userBio && <Typography>{artist.userBio}</Typography>}
+            </Typography>
+            <Button
+              fullWidth
+              className={styles.userOptions2}
+              onClick={OpenDialog}
+            >
+              <span>
+                <Typography align="center">
+                  <span className={styles.text}>
+                    {" "}
+                    <EditIcon className={styles.icon} />
+                    More information
+                  </span>
+                </Typography>
+              </span>
+            </Button>
+          </Container>
+        )}
 
-        {!admin ? (
+        {!admin && artist ? (
           <Container style={{ marginBottom: "16px" }}>
             <Button
               fullWidth
@@ -136,23 +140,20 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
             </Button>
           </Container>
         ) : (
-          <Container style={{ marginBottom: "16px" }}>
-            <Button
-              fullWidth
-              className={styles.userOptions2}
-              onClick={OpenEditDialog}
-            >
-              <span>
-                <Typography align="center">
-                  <span className={styles.text}>
-                    {" "}
-                    <EditIcon className={styles.icon} />
-                    Edit Profile
-                  </span>
-                </Typography>
-              </span>
-            </Button>
-          </Container>
+          <>
+            <Link href={`/settings/account/`}>
+              <Button fullWidth className={styles.userOptions} component="a">
+                <span>
+                  <Typography align="center">
+                    <span className={styles.text}>
+                      {" "}
+                      <BrushIcon className={styles.icon} /> Edit Profile{" "}
+                    </span>
+                  </Typography>
+                </span>
+              </Button>
+            </Link>
+          </>
         )}
       </Paper>
 
@@ -160,11 +161,6 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
         artist={artist}
         open={openDialog}
         setOpen={setOpenDialog}
-      />
-      <DynamicEditDrawer
-        artist={artist}
-        setOpen={setOpenEditDialog}
-        open={openEditDialog}
       />
     </Box>
   );

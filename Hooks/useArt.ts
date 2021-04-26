@@ -31,7 +31,7 @@ const useArt = (initPlaceHolder: string) => {
     reader.readAsDataURL(fileList[0]);
     return { url };
   };
-  return { loading: loading, setArt, placeholder };
+  return { loading, setArt, placeholder };
 };
 
 async function getSignature() {

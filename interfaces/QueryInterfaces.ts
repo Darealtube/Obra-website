@@ -1,6 +1,14 @@
 import { PostInterface, RecommendedPosts } from "./PostInterface";
 import { Posts, UserInterface } from "./UserInterface";
 
+export interface SettingsData {
+  userId: UserInterface;
+}
+
+export interface SettingsVars {
+  id: string;
+}
+
 export interface AppbarUserData {
   userId: UserInterface;
 }

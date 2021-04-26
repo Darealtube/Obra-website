@@ -25,6 +25,8 @@ export const UserInfo = gql`
 export const UserInfo2 = gql`
   fragment UserInfo2 on User {
     userBio
+    email
+    age
     birthday
     country
     phone
@@ -258,6 +260,17 @@ export const NEW_POSTS_QUERY = gql`
   ${PostInfo}
 `;
 
+export const SETTINGS_QUERY = gql`
+  query Settings($id: ID!) {
+    userId(id: $id) {
+      ...UserInfo
+      ...UserInfo2
+    }
+  }
+  ${UserInfo}
+  ${UserInfo2}
+`;
+
 export const IS_LIKED_ARTIST = gql`
   query islikedArtist($userID: ID!, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
@@ -271,8 +284,8 @@ export const IS_LIKED_POST = gql`
 `;
 
 export const USER_EXISTS = gql`
-  query UserExist($userName: String!) {
-    userExists(userName: $userName)
+  query UserExist($userName: String!, $userId: ID!) {
+    userExists(userName: $userName, userId: $userId)
   }
 `;
 
@@ -407,6 +420,8 @@ export const EDIT_USER_MUTATION = gql`
     $userBio: String
     $image: String
     $backdrop: String
+    $phone: String
+    $age: String
   ) {
     editUser(
       userId: $userId
@@ -419,6 +434,8 @@ export const EDIT_USER_MUTATION = gql`
       userBio: $userBio
       image: $image
       backdrop: $backdrop
+      phone: $phone
+      age: $age
     ) {
       id
       name
@@ -430,6 +447,8 @@ export const EDIT_USER_MUTATION = gql`
       userBio
       image
       backdrop
+      phone
+      age
     }
   }
 `;

@@ -1,9 +1,11 @@
 import moment from "moment";
 
-type Options = "CHANGE" | "DATE_CHANGE" | "RESET";
+type Options = "CHANGE" | "DATE_CHANGE" | "RESET" | "ERROR";
 
 export type State = {
   name: string;
+  phone: string;
+  age: string;
   country: string;
   birthday: string;
   artLevel: string;
@@ -14,6 +16,8 @@ export type State = {
   placeholder: string;
   backdrop: string;
   backdropholder: string;
+  error: boolean;
+  errMessage: string;
 };
 
 export type Action = {
@@ -21,6 +25,7 @@ export type Action = {
   payload?: string | Date | ArrayBuffer | string[] | any;
   field?: string;
   initialState?: State;
+  message?: string;
 };
 
 export const reducer = (state: State, action: Action) => {
@@ -28,7 +33,17 @@ export const reducer = (state: State, action: Action) => {
     case "CHANGE":
       return { ...state, [action.field]: action.payload };
     case "DATE_CHANGE":
-      return { ...state, birthday: moment(action.payload).format("l") };
+      return {
+        ...state,
+        birthday: moment(action.payload).format("l"),
+        age: `${moment().diff(action.payload, "years")}`,
+      };
+    case "ERROR":
+      return {
+        ...state,
+        error: action.payload,
+        ...(action.message && { errMessage: action.message }),
+      };
     case "RESET":
       return action.initialState;
     default:

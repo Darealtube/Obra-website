@@ -61,7 +61,7 @@ export const typeDefs = gql`
     featuredPosts(after: ID, limit: Int): PostConnection
     isLikedArtist(userID: ID!, artistName: String!): Boolean
     isLikedPost(postID: ID!, userID: ID!): Boolean
-    userExists(userName: String): Boolean
+    userExists(userName: String, userId: ID!): Boolean
   }
 
   type Notification {
@@ -114,6 +114,8 @@ export const typeDefs = gql`
       userBio: String
       image: String
       backdrop: String
+      phone: String
+      age: String
     ): User!
     readNotif(userId: ID!): Boolean!
     createComment(postID: ID!, author: ID!, content: String!): Comment!

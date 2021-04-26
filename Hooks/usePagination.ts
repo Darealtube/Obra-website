@@ -43,14 +43,15 @@ const usePagination = (
       fetchMore({
         variables: { after: info?.edges.slice(-1)[0].node.id },
       }).then((fetchMoreResult) => {
-        console.log(fetchMoreResult)
-        setPage((prevpage) => prevpage + 1);
-        if (
-          (key2
-            ? fetchMoreResult.data[`${key}`][`${key2}`].pageInfo.hasNextPage
-            : fetchMoreResult.data[`${key}`].pageInfo.hasNextPage) == false
-        ) {
-          sethasMore(false);
+        if (fetchMoreResult.data[`${key}`]) {
+          setPage((prevpage) => prevpage + 1);
+          if (
+            (key2
+              ? fetchMoreResult.data[`${key}`][`${key2}`].pageInfo.hasNextPage
+              : fetchMoreResult.data[`${key}`].pageInfo.hasNextPage) == false
+          ) {
+            sethasMore(false);
+          }
         }
       });
     }

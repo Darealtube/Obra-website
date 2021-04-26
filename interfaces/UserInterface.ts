@@ -22,6 +22,7 @@ export interface UserInterface {
   notifRead?: boolean;
   homeRecommended: Posts;
   phone: string;
+  age: string;
   // More to come
 }
 

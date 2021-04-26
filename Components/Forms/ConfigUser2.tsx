@@ -12,7 +12,7 @@ import styles from "../../pages/styles/General/Configure.module.css";
 import React from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { Session } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { Action, State } from "../../Hooks/Reducers/ConfigReducer";
 import {
   MutationFunctionOptions,
@@ -20,6 +20,7 @@ import {
   FetchResult,
 } from "@apollo/client";
 import { levelOptions, styleOptions, kindOptions } from "../../utils/Options";
+import { UserValidate2 } from "../../utils/userValidator";
 
 type Props = {
   configUser: (
@@ -27,12 +28,11 @@ type Props = {
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
   user: State;
   dispatch: React.Dispatch<Action>;
-  session: Session;
 };
 
-const ConfigUser2 = ({ dispatch, user, session, configUser }: Props) => {
+const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
   const router = useRouter();
-
+  const [session] = useSession();
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     dispatch({
       type: "CHANGE",
@@ -43,17 +43,12 @@ const ConfigUser2 = ({ dispatch, user, session, configUser }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (user.artStyles.length > 5 || user.artStyles.length == 0) {
+    const valid = UserValidate2(user);
+    if (valid.error && valid.errMessage) {
       dispatch({
         type: "ERROR",
-        payload: true,
-        message: "Please enter no more than 5 Art Styles",
-      });
-    } else if (user.artKinds.length > 5 || user.artKinds.length == 0) {
-      dispatch({
-        type: "ERROR",
-        payload: true,
-        message: "Please enter no more than 5 Art Kinds",
+        payload: valid.error,
+        message: valid.errMessage,
       });
     } else {
       configUser({

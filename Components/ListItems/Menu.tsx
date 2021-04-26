@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
@@ -12,7 +12,6 @@ import { signOut } from "next-auth/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 
 const Menu = ({ name }: { name: string }) => {
-  const router = useRouter();
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signOut({ callbackUrl: "http://localhost:3000/" });
@@ -21,12 +20,11 @@ const Menu = ({ name }: { name: string }) => {
   return (
     <div>
       <ListItem>
-        <Button
-          className={styles.item}
-          onClick={() => router.push(`/profile/${name}`)}
-        >
-          <AccountCircleIcon className={styles.icon} /> Profile
-        </Button>
+        <Link href={`/profile/${encodeURIComponent(name)}`} passHref>
+          <Button component="a" className={styles.item}>
+            <AccountCircleIcon className={styles.icon} /> Profile
+          </Button>
+        </Link>
       </ListItem>
       <ListItem>
         <Button className={styles.item}>
@@ -51,9 +49,11 @@ const Menu = ({ name }: { name: string }) => {
         </Button>
       </ListItem>
       <ListItem>
-        <Button className={styles.item}>
-          <SettingsApplicationsIcon className={styles.icon} /> Settings
-        </Button>
+        <Link href={`/settings/account`} passHref>
+          <Button component="a" className={styles.item}>
+            <SettingsApplicationsIcon className={styles.icon} /> Settings
+          </Button>
+        </Link>
       </ListItem>
       <ListItem>
         <Button className={styles.item}>

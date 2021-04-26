@@ -1,9 +1,5 @@
-import { useRouter } from "next/router";
-import {
-  ListItem,
-  Divider,
-  Button,
-} from "@material-ui/core";
+import Link from "next/link";
+import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
@@ -16,15 +12,9 @@ type Props = {
   admin: boolean;
   onClose: () => void;
   onExited: () => void;
-}
+};
 
-const CommentEditMenu = ({
-  id,
-  admin,
-  onClose,
-  onExited,
-}: Props) => {
-  const router = useRouter();
+const CommentEditMenu = ({ id, admin, onClose, onExited }: Props) => {
   const [deleteComment] = useMutation(DELETE_COMMENT_MUTATION);
 
   const DeleteComment = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,12 +37,11 @@ const CommentEditMenu = ({
       {admin && (
         <>
           <ListItem>
-            <Button
-              className={styles.item}
-              onClick={() => router.push(`/${id}/edit`)}
-            >
-              <MeetingRoomIcon className={styles.icon} /> Edit
-            </Button>
+            <Link href={`/${id}/edit`}>
+              <Button component="a" className={styles.item}>
+                <MeetingRoomIcon className={styles.icon} /> Edit
+              </Button>
+            </Link>
           </ListItem>
           <Divider />
           <ListItem>

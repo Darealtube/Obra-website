@@ -11,20 +11,24 @@ type Props = {
 const RightInfo = ({ children, artist }: Props) => {
   return (
     <Box className={styles.postContainer}>
-      <Box justifyContent="center" alignItems="center" marginBottom={8}>
-        <Button className={styles.button}>
-          <Link href={`/profile/${artist.name}/`}>
-            <a style={{ textDecoration: "none", color: "#fff" }}>Posts</a>
-          </Link>
-        </Button>
-        <span className={styles.separator}>|</span>
+      {artist && (
+        <Box justifyContent="center" alignItems="center" marginBottom={8}>
+          <Button className={styles.button}>
+            <Link href={`/profile/${artist.name}/`}>
+              <a style={{ textDecoration: "none", color: "#fff" }}>Posts</a>
+            </Link>
+          </Button>
+          <span className={styles.separator}>|</span>
 
-        <Button className={styles.button}>
-          <Link href={`/profile/${artist.name}/liked`}>
-            <a style={{ textDecoration: "none", color: "#fff" }}>Liked Posts</a>
-          </Link>
-        </Button>
-      </Box>
+          <Button className={styles.button}>
+            <Link href={`/profile/${artist.name}/liked`}>
+              <a style={{ textDecoration: "none", color: "#fff" }}>
+                Liked Posts
+              </a>
+            </Link>
+          </Button>
+        </Box>
+      )}
       {children}
     </Box>
   );

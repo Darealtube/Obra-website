@@ -45,10 +45,10 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
       <Appbar />
       <ProfileWrap
         artist={userName}
-        admin={userName.id === id}
+        admin={userName?.id === id}
         userLiked={alreadyLiked}
       >
-        <InfiniteScroll
+        {userName && <InfiniteScroll
           dataLength={userName.likedPosts.edges.length}
           next={More}
           hasMore={hasMore}
@@ -67,7 +67,7 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
           ) : (
             <h3>This user has no liked posts.</h3>
           )}
-        </InfiniteScroll>
+        </InfiniteScroll>}
       </ProfileWrap>
     </div>
   );

@@ -18,7 +18,11 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
     <div className={styles.wrapRoot}>
       <Box className={styles.backdrop}>
         <Image
-          src={artist.backdrop ? artist.backdrop : "/user-empty-backdrop.jpg"}
+          src={
+            artist && artist.backdrop
+              ? artist.backdrop
+              : "/user-empty-backdrop.jpg"
+          }
           layout="fill"
           objectFit="cover"
         />

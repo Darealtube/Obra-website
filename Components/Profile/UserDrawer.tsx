@@ -28,7 +28,7 @@ const UserDrawer = ({ artist, setOpen, open }: Props) => {
         fullWidth
         maxWidth={"sm"}
       >
-        <Container style={{ flexGrow: 1 }} className={styles.container}>
+        {artist && <Container style={{ flexGrow: 1 }} className={styles.container}>
           {artist ? (
             <Box className={styles.dp}>
               <Image
@@ -85,7 +85,7 @@ const UserDrawer = ({ artist, setOpen, open }: Props) => {
             <BrushIcon className={styles.icon} /> Does &nbsp;
             {artist.artKinds.join(", ").toString()}
           </Typography>
-        </Container>
+        </Container>}
       </Dialog>
     </div>
   );

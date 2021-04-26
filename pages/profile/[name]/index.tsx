@@ -1,5 +1,5 @@
 import Appbar from "../../../Components/Appbar/Appbar";
-import { CssBaseline, CircularProgress } from "@material-ui/core";
+import { CssBaseline, CircularProgress, Typography } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import { CardList } from "../../../Components/CardList";
 import Head from "next/head";
@@ -28,10 +28,11 @@ const UserID = ({ name, id, alreadyLiked }: Props) => {
       name: name,
     },
   });
+
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
-    userName.posts,
+    userName?.posts,
     "posts"
   );
 
@@ -39,36 +40,42 @@ const UserID = ({ name, id, alreadyLiked }: Props) => {
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{userName.name}</title>
+        <title>{name}</title>
       </Head>
       <CssBaseline />
       <Appbar />
       <ProfileWrap
         artist={userName}
-        admin={userName.id == id}
+        admin={userName?.id == id}
         userLiked={alreadyLiked}
       >
-        <InfiniteScroll
-          dataLength={userName.posts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-            textAlign: "center",
-          }}
-        >
-          {userName.posts ? (
-            <CardList postData={userName.posts.edges} id={id} />
-          ) : (
-            <h3>This user has no posts.</h3>
-          )}
-        </InfiniteScroll>
+        {userName ? (
+          <InfiniteScroll
+            dataLength={userName.posts.edges.length}
+            next={More}
+            hasMore={hasMore}
+            loader={
+              <>
+                <br />
+                <CircularProgress />
+              </>
+            }
+            style={{
+              overflow: "hidden",
+              textAlign: "center",
+            }}
+          >
+            {userName.posts ? (
+              <CardList postData={userName.posts.edges} id={id} />
+            ) : (
+              <h3>This user has no posts.</h3>
+            )}
+          </InfiniteScroll>
+        ) : (
+          <Typography variant="h5">
+            This user has been deleted, or has changed their name.
+          </Typography>
+        )}
       </ProfileWrap>
     </div>
   );

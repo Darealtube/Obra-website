@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client";
+import { DataProxy, useMutation } from "@apollo/client";
 import {
   Grid,
   Typography,
@@ -60,7 +60,7 @@ const PostInfo = ({
   );
 
   const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
-    update: (cache, mutationResult) => {
+    update: (cache: DataProxy, mutationResult) => {
       const newComment = mutationResult.data.createComment;
       const { postId } = cache.readQuery<PostData, PostVars>({
         query: POST_ID_QUERY,

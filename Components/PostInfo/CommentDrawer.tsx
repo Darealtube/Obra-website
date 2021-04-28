@@ -18,7 +18,6 @@ import {
   MutationFunctionOptions,
   OperationVariables,
 } from "@apollo/client";
-import { Session } from "next-auth/client";
 
 interface Props {
   comment: {
@@ -36,11 +35,9 @@ interface Props {
   addComment: (
     options?: MutationFunctionOptions<any, OperationVariables>
   ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
-  page: number;
   More: () => void;
   hasMore: boolean;
   comments: edges[];
-  session: Session;
   open: boolean;
   handleDrawer: () => void;
   parentRef: (node: HTMLElement) => void;
@@ -48,13 +45,11 @@ interface Props {
 
 const CommentDrawer = ({
   comment,
-  page,
   More,
   hasMore,
   comments,
   setComment,
   addComment,
-  session,
   open,
   handleDrawer,
   parentRef,
@@ -95,7 +90,7 @@ const CommentDrawer = ({
             addComment={addComment}
           />
           <InfiniteScroll
-            dataLength={page}
+            dataLength={comments.length}
             next={More}
             hasMore={hasMore}
             loader={
@@ -111,7 +106,7 @@ const CommentDrawer = ({
             scrollThreshold={1}
             scrollableTarget="Scrollable"
           >
-            <CommentList comments={comments} id={session.id} />
+            <CommentList comments={comments} />
           </InfiniteScroll>
         </Container>
       </Drawer>

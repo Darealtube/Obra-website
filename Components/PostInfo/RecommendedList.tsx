@@ -10,15 +10,13 @@ import { CardList } from "../../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { RecommendedPosts } from "../../interfaces/PostInterface";
 import usePagination from "../../Hooks/usePagination";
-import { Session } from "next-auth/client";
 
 type Parameters = {
   fetchMore: any;
-  session: Session;
   recommended: RecommendedPosts;
 };
 
-const RecommendedList = ({ fetchMore, session, recommended }: Parameters) => {
+const RecommendedList = ({ fetchMore, recommended }: Parameters) => {
   const { More, hasMore } = usePagination(
     "recommendedPosts",
     fetchMore,
@@ -53,7 +51,7 @@ const RecommendedList = ({ fetchMore, session, recommended }: Parameters) => {
               overflow: "hidden",
             }}
           >
-            <CardList postData={recommended.edges} id={session?.id} />
+            <CardList postData={recommended.edges} />
           </InfiniteScroll>
         </Container>
         {/* Recommended List */}

@@ -13,6 +13,7 @@ import { edges } from "../interfaces/CommentInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import moment from "moment";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/client";
 
 const DynamicCommentPopover = dynamic(
   () => import("./MainPopovers/CardPopover")
@@ -20,17 +21,17 @@ const DynamicCommentPopover = dynamic(
 
 type Props = {
   comments: edges[];
-  id: string;
 };
 
-const CommentList = ({ comments, id }: Props) => {
+const CommentList = ({ comments }: Props) => {
+  const [session] = useSession();
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
   const [targetId, settargetId] = useState(null);
   const [admin, setadmin] = useState<boolean>(null);
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     seteditAnchor(e.currentTarget);
     settargetId(e.currentTarget.value);
-    setadmin(id === e.currentTarget.id);
+    setadmin(session?.id === e.currentTarget.id);
   };
 
   const handleEditClose = () => {

@@ -72,7 +72,7 @@ const Home = () => {
         <Typography variant="h4">Featured</Typography>
         <Divider className={styles.divider} />
         {/* Featured list */}
-        <CardList postData={featuredPosts.edges} id={session?.id} />
+        <CardList postData={featuredPosts.edges} />
         <br />
         <Button
           onClick={More}
@@ -88,7 +88,7 @@ const Home = () => {
         <Divider className={styles.divider} />
         <br />
         {/* Recent posts list */}
-        <CardList postData={newPosts.edges} id={session?.id} />
+        <CardList postData={newPosts.edges} />
         <br />
         <Button
           onClick={MoreNew}
@@ -121,10 +121,7 @@ const Home = () => {
             }}
             scrollThreshold={0.8}
           >
-            <CardList
-              postData={data?.userId.homeRecommended.edges}
-              id={session?.id}
-            />
+            <CardList postData={data?.userId.homeRecommended.edges} />
           </InfiniteScroll>
         )}
         <br />

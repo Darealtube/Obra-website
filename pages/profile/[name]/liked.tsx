@@ -48,26 +48,28 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
         admin={userName?.id === id}
         userLiked={alreadyLiked}
       >
-        {userName && <InfiniteScroll
-          dataLength={userName.likedPosts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-        >
-          {userName.likedPosts ? (
-            <CardList postData={userName.likedPosts.edges} id={id} />
-          ) : (
-            <h3>This user has no liked posts.</h3>
-          )}
-        </InfiniteScroll>}
+        {userName && (
+          <InfiniteScroll
+            dataLength={userName.likedPosts.edges.length}
+            next={More}
+            hasMore={hasMore}
+            loader={
+              <>
+                <br />
+                <CircularProgress />
+              </>
+            }
+            style={{
+              overflow: "hidden",
+            }}
+          >
+            {userName.likedPosts ? (
+              <CardList postData={userName.likedPosts.edges} />
+            ) : (
+              <h3>This user has no liked posts.</h3>
+            )}
+          </InfiniteScroll>
+        )}
       </ProfileWrap>
     </div>
   );

@@ -22,7 +22,7 @@ import CommentForm from "../Forms/CreateComment";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../../Hooks/usePagination";
 import Main from "./Main";
-import { Session } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import { AddCommentData } from "../../interfaces/MutationInterfaces";
 import { PostData, PostVars } from "../../interfaces/QueryInterfaces";
@@ -35,7 +35,6 @@ type Parameters = {
   liked: boolean;
   handleLike: (e: React.MouseEvent<HTMLButtonElement>) => void;
   fetchMore: any;
-  session: Session;
 };
 
 const PostInfo = ({
@@ -44,8 +43,8 @@ const PostInfo = ({
   handleLike,
   liked,
   fetchMore,
-  session,
 }: Parameters) => {
+  const [session] = useSession();
   const commentToggle = useMediaQuery("(max-width:768px)");
   const [openComment, setOpenComment] = useState(false);
   const handleDrawer = () => {
@@ -88,7 +87,7 @@ const PostInfo = ({
   const [comment, setComment] = useState({
     postID: postID.id,
     content: "",
-    author: session.id as string,
+    author: session?.id as string,
   });
 
   return (
@@ -130,7 +129,7 @@ const PostInfo = ({
               }}
               scrollThreshold={0.5}
             >
-              <CommentList comments={postID.comments.edges} id={session.id} />
+              <CommentList comments={postID.comments.edges} />
             </InfiniteScroll>
           </>
         )}
@@ -140,11 +139,9 @@ const PostInfo = ({
         setComment={setComment}
         addComment={addComment}
         comment={comment}
-        page={postID.comments.edges.length}
         More={More}
         hasMore={hasMore}
         comments={postID.comments.edges}
-        session={session}
         open={openComment}
         handleDrawer={handleDrawer}
         parentRef={ref}

@@ -57,7 +57,7 @@ const Appbar = () => {
           </Typography>
           {/* Drawer and Logo */}
           {user && !loading ? (
-            <AppbarMenu user={user} session={session} loading={loading} />
+            <AppbarMenu user={user} loading={loading} />
           ) : !user && !loading ? (
             <AppbarNoUser />
           ) : (

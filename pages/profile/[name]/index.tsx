@@ -66,7 +66,7 @@ const UserID = ({ name, id, alreadyLiked }: Props) => {
             }}
           >
             {userName.posts ? (
-              <CardList postData={userName.posts.edges} id={id} />
+              <CardList postData={userName.posts.edges} />
             ) : (
               <h3>This user has no posts.</h3>
             )}

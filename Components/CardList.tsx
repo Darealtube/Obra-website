@@ -19,23 +19,24 @@ import { edges } from "../interfaces/PostInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/client";
 
 const DynamicCardPopover = dynamic(() => import("./MainPopovers/CardPopover"));
 
 type PostData = {
   postData: edges[];
-  id: string;
   error?: string;
 };
 
-export const CardList = ({ postData, id }: PostData) => {
+export const CardList = ({ postData }: PostData) => {
+  const [session] = useSession();
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
   const [targetId, settargetId] = useState<string>(null);
   const [admin, setadmin] = useState<boolean>(null);
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     seteditAnchor(e.currentTarget);
     settargetId(e.currentTarget.value);
-    setadmin(id === e.currentTarget.id);
+    setadmin(session?.id === e.currentTarget.id);
   };
 
   const handleEditClose = () => {

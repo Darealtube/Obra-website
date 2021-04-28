@@ -16,7 +16,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { READ_NOTIF } from "../../apollo/apolloQueries";
-import { Session } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { AppbarUserData } from "../../interfaces/QueryInterfaces";
 import {
   ReadNotifData,
@@ -39,11 +39,11 @@ const StyledBadge = withStyles((theme: Theme) =>
 
 type Prop = {
   user: AppbarUserData; //will set later
-  session: Session;
   loading: boolean;
 };
 
-const AppbarMenu = ({ user, session, loading }: Prop) => {
+const AppbarMenu = ({ user, loading }: Prop) => {
+  const [session] = useSession();
   const showNotif = useMediaQuery("(max-width:280px)");
   const [profAnchor, setprofAnchor] = useState<null | HTMLElement>(null);
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);

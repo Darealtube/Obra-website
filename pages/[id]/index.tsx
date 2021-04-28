@@ -72,7 +72,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
   useEffect(() => {
     viewed({
       variables: {
-        userId: session.id,
+        userId: session?.id,
         viewed: id,
       },
     });
@@ -85,12 +85,12 @@ const PostID = ({ id, alreadyLiked }: Props) => {
     }
     if (!liked) {
       like({
-        variables: { postId: postId.id, userID: session.id },
+        variables: { postId: postId.id, userID: session?.id },
       });
       setLiked(true);
     } else {
       unlike({
-        variables: { postId: postId.id, userID: session.id },
+        variables: { postId: postId.id, userID: session?.id },
       });
       setLiked(false);
     }
@@ -110,14 +110,9 @@ const PostID = ({ id, alreadyLiked }: Props) => {
           setOpen={setOpen}
           liked={liked as boolean}
           handleLike={handleLike}
-          session={session}
           fetchMore={MoreComm}
         />
-        <RecommendedList
-          fetchMore={MoreRecc}
-          session={session}
-          recommended={recommendedPosts}
-        />
+        <RecommendedList fetchMore={MoreRecc} recommended={recommendedPosts} />
       </Grid>
 
       <DynamicImageDialog

@@ -1,6 +1,6 @@
 import { Grid, Typography, Chip, Button } from "@material-ui/core";
 import Image from "next/image";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { PostInterface } from "../../interfaces/PostInterface";
 
 import styles from "../../pages/styles/Specific/Post.module.css";

@@ -12,7 +12,7 @@ import { CardList } from "../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 import { GetServerSideProps, GetStaticProps } from "next";
-import { useSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   FEATURED_POSTS_QUERY,
@@ -132,10 +132,12 @@ const Home = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const apollo = await fetchPosts();
+  const session = await getSession();
 
   return {
     props: {
       initialApolloState: apollo,
+      session,
     },
   };
 };

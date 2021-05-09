@@ -31,7 +31,9 @@ function createApolloClient() {
             likedPosts: relayStylePagination(),
             posts: relayStylePagination(),
             homeRecommended: relayStylePagination(),
-            history: relayStylePagination(),
+            notifications: relayStylePagination(),
+            commissions: relayStylePagination(),
+            pendingCommissions: relayStylePagination(),
           },
         },
         Post: {

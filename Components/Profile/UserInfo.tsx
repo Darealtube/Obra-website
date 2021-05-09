@@ -128,16 +128,20 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
                 </Typography>
               </span>
             </Button>
-            <Button fullWidth className={styles.userOptions}>
-              <span>
-                <Typography align="center">
-                  <span className={styles.text}>
-                    {" "}
-                    <BrushIcon className={styles.icon} /> Commission Me!{" "}
-                  </span>
-                </Typography>
-              </span>
-            </Button>
+            <Link
+              href={`/profile/${encodeURIComponent(artist.name)}/commission`}
+            >
+              <Button fullWidth className={styles.userOptions} component="a">
+                <span>
+                  <Typography align="center">
+                    <span className={styles.text}>
+                      {" "}
+                      <BrushIcon className={styles.icon} /> Commission Me!{" "}
+                    </span>
+                  </Typography>
+                </span>
+              </Button>
+            </Link>
           </Container>
         ) : (
           <>

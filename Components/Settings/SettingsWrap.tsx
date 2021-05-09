@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Grid, Container, CircularProgress } from "@material-ui/core";
 import { useSession } from "next-auth/client";
-import React from "react";
+import React, { ReactNode } from "react";
 import { SETTINGS_QUERY } from "../../apollo/apolloQueries";
 import { SettingsData, SettingsVars } from "../../interfaces/QueryInterfaces";
 import { UserInterface } from "../../interfaces/UserInterface";
@@ -9,7 +9,7 @@ import SettingList from "../ListItems/SettingList";
 
 export const UserContext = React.createContext<UserInterface>(null);
 
-const SettingsWrap = ({ children }) => {
+const SettingsWrap = ({ children }: { children: ReactNode }) => {
   const [session] = useSession();
   const { data, loading } = useQuery<SettingsData, SettingsVars>(
     SETTINGS_QUERY,

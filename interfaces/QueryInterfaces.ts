@@ -1,5 +1,5 @@
 import { PostInterface, RecommendedPosts } from "./PostInterface";
-import { Posts, UserInterface } from "./UserInterface";
+import { CommissionInterface, Posts, UserInterface } from "./UserInterface";
 
 export interface SettingsData {
   userId: UserInterface;
@@ -58,4 +58,21 @@ export interface HomeUserVars {
 
 export interface PaginatedPostsVars {
   after?: string;
+}
+
+export interface CommissionData {
+  userId: UserInterface;
+}
+
+export interface CommissionVars {
+  id: string;
+  after?: string;
+}
+
+export interface CommissionIdData {
+  commissionId: CommissionInterface;
+}
+
+export interface CommissionIdVars {
+  id: string;
 }

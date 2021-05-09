@@ -1,28 +1,39 @@
-import { ListItem, Typography, Avatar } from "@material-ui/core";
-import { NotifInterface } from "../../interfaces/UserInterface";
+import { ListItem, Typography, Avatar, IconButton } from "@material-ui/core";
+import { notifedges } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Lists.module.css";
+import Image from "next/image";
+import { DELETE_NOTIF_MUTATION } from "../../apollo/apolloQueries";
+import { useMutation } from "@apollo/client";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { useSession } from "next-auth/client";
+import Link from "next/link";
 
 type Props = {
-  notifications: NotifInterface[];
-  newUser: Boolean;
+  notifications: notifedges[];
+  newUser: boolean;
+  setNotifCount: any;
 };
 
-const Notification = ({ notifications, newUser }: Props) => {
+const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
+  const [session] = useSession();
+  const [deleteNotif] = useMutation(DELETE_NOTIF_MUTATION);
+
+  const DeleteNotif = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteNotif({
+      variables: { notifId: e.currentTarget.id, userId: session?.id },
+      optimisticResponse: true,
+      update: (cache) => {
+        cache.evict({ id: `Notification:${e.currentTarget?.id}` });
+        cache.gc();
+      },
+    });
+    setNotifCount(0);
+  };
+
   return (
     <div>
-      {notifications && notifications.length > 0
-        ? notifications.map((notif) => (
-            <ListItem className={styles.notifitem} key={notif.postId}>
-              <Avatar className={styles.icon}>{notif.user.image}</Avatar>
-              <div>
-                <Typography>{notif.date}</Typography>
-                <Typography className={styles.notifInfo}>
-                  {notif.description}
-                </Typography>
-              </div>
-            </ListItem>
-          ))
-        : ""}
       <ListItem className={styles.notifitem}>
         <Avatar className={styles.icon}>O</Avatar>
         <div>
@@ -46,6 +57,44 @@ const Notification = ({ notifications, newUser }: Props) => {
           </div>
         </ListItem>
       )}
+      {notifications && notifications.length > 0
+        ? notifications.map((notif) => (
+            <Link
+              href={
+                notif.node.commissionId
+                  ? `/commissions/${notif.node.commissionId}`
+                  : ``
+              }
+            >
+              <ListItem
+                className={styles.notifitem}
+                key={notif.node.id}
+                button
+                component="a"
+              >
+                <Image
+                  src={
+                    notif.node.commissioner.image
+                      ? notif.node.commissioner.image
+                      : "/user-empty-avatar.png"
+                  }
+                  width={40}
+                  height={40}
+                  className={styles.avatar}
+                />
+                <div style={{ marginLeft: "8px" }}>
+                  <Typography>{notif.node.date}</Typography>
+                  <Typography className={styles.notifInfo}>
+                    {notif.node.description}
+                  </Typography>
+                </div>
+                <IconButton id={notif.node.id} onClick={DeleteNotif}>
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            </Link>
+          ))
+        : ""}
     </div>
   );
 };

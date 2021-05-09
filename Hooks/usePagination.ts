@@ -16,7 +16,7 @@ const usePagination = (
   fetchMore,
   info: Info,
   key2?: string,
-  drawerOpen?: boolean
+  execute?: boolean
 ) => {
   const [page, setPage] = useState(1);
   const [hasMore, sethasMore] = useState(info?.pageInfo.hasNextPage);
@@ -31,12 +31,12 @@ const usePagination = (
 
   useEffect(() => {
     if (node && isScrollable === false) {
-      if (drawerOpen === true && hasMore === true) {
+      if (execute === true && hasMore === true) {
         More();
       }
       setisScrollable(node?.scrollHeight > node?.clientHeight);
     }
-  }, [drawerOpen, node, isScrollable, hasMore, page]);
+  }, [execute, node, isScrollable, hasMore, page]);
 
   const More = () => {
     if (!refetching) {

@@ -11,7 +11,7 @@ export const typeDefs = gql`
     posts(after: ID, limit: Int): PostConnection
     likedPosts(after: ID, limit: Int): PostConnection
     likedArtists(after: ID, limit: Int): UserConnection
-    notifications: [Notification]
+    notifications(after: ID, limit: Int): NotificationConnection
     username: String
     age: String
     country: String
@@ -19,13 +19,18 @@ export const typeDefs = gql`
     phone: String
     newUser: Boolean
     tutorial: Boolean
-    notifRead: Boolean
     homeRecommended(after: ID, limit: Int): PostConnection
     artLevel: String
     artKinds: [String!]
     artStyles: [String!]
     userBio: String
     backdrop: String
+    commissions(after: ID, limit: Int): CommissionConnection
+    yourCommissions(after: ID, limit: Int): CommissionConnection
+    pendingCommissions(after: ID, limit: Int): CommissionConnection
+    finishedCommissions(after: ID, limit: Int): CommissionConnection
+    yourFinishedCommissions(after: ID, limit: Int): CommissionConnection
+    yourPendingCommissions(after: ID, limit: Int): CommissionConnection
   }
 
   type Post {
@@ -42,6 +47,21 @@ export const typeDefs = gql`
     comments(after: ID, limit: Int): CommentConnection
   }
 
+  type Commission {
+    id: ID!
+    fromUser: User!
+    toArtist: User!
+    title: String!
+    description: String!
+    sampleArt: String!
+    width: Int!
+    height: Int!
+    deadline: String!
+    dateIssued: String!
+    accepted: Boolean!
+    finished: Boolean!
+  }
+
   type Comment {
     id: ID!
     postID: ID!
@@ -56,19 +76,23 @@ export const typeDefs = gql`
     userId(id: ID!): User
     userName(name: String!): User
     postId(id: ID!): Post
+    commissionId(id: ID!): Commission
     recommendedPosts(id: ID!, after: ID, limit: Int): PostConnection
     newPosts(after: ID, limit: Int): PostConnection
     featuredPosts(after: ID, limit: Int): PostConnection
     isLikedArtist(userID: ID!, artistName: String!): Boolean
     isLikedPost(postID: ID!, userID: ID!): Boolean
     userExists(userName: String, userId: ID!): Boolean
+    isSameUser(userId: ID!, userName: String!): Boolean
   }
 
   type Notification {
-    user: User
+    id: ID!
+    commissionId: ID
+    commissioner: User
     date: String
     description: String
-    postId: ID
+    read: Boolean
   }
 
   type Mutation {
@@ -117,12 +141,25 @@ export const typeDefs = gql`
       phone: String
       age: String
     ): User!
-    readNotif(userId: ID!): Boolean!
+    readNotif(notifArray: [ID!]): Boolean!
     createComment(postID: ID!, author: ID!, content: String!): Comment!
     deleteComment(commentID: ID!): Boolean!
     likeArtist(artistID: ID!, userID: ID!): Boolean!
     unlikeArtist(artistID: ID!, userID: ID!): Boolean!
     viewPost(viewed: ID!, userId: ID!): Boolean!
+    commissionArtist(
+      artistName: String!
+      userId: ID!
+      title: String!
+      description: String!
+      sampleArt: String!
+      height: Int!
+      width: Int!
+      deadline: Int!
+    ): Boolean!
+    deleteNotification(notifId: ID!, userId: ID!): Boolean!
+    deleteCommission(commissionId: ID!, reason: String): Boolean!
+    acceptCommission(commissionId: ID!, message: String): Commission!
   }
 
   type PostConnection {
@@ -141,6 +178,28 @@ export const typeDefs = gql`
     totalCount: Int
     pageInfo: PageInfo
     edges: [CommentEdge]
+  }
+
+  type CommissionConnection {
+    totalCount: Int
+    pageInfo: PageInfo
+    edges: [CommissionEdge]
+  }
+
+  type NotificationConnection {
+    idList: [ID!]
+    totalCount: Int
+    totalUnreadCount: Int
+    pageInfo: PageInfo
+    edges: [NotificationEdge]
+  }
+
+  type NotificationEdge {
+    node: Notification
+  }
+
+  type CommissionEdge {
+    node: Commission
   }
 
   type CommentEdge {

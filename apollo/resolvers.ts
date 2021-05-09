@@ -6,6 +6,8 @@ import Comment from "../model/Comment";
 import History from "../model/History";
 import _ from "lodash";
 import relayPaginate from "../utils/relayPaginate";
+import Commission from "../model/Commission";
+import Notification from "../model/Notification";
 
 export const resolvers = {
   Query: {
@@ -25,6 +27,9 @@ export const resolvers = {
     },
     postId(_parent, args, _context, _info) {
       return Post.findById(args.id);
+    },
+    commissionId(_parent, args, _context, _info) {
+      return Commission.findById(args.id);
     },
     async recommendedPosts(_parent, args, _context, _info) {
       const post = await Post.findById(args.id);
@@ -78,10 +83,33 @@ export const resolvers = {
 
       return user ? (user?.name === origUser?.name ? false : true) : false;
     },
+    async isSameUser(_parent, args, _context, _info) {
+      const userOriginal = await User.findById(args.userId);
+      const userCompared = await User.findOne({ name: args.userName });
+
+      if (!userCompared || !userOriginal) {
+        return true;
+      }
+
+      return userOriginal._id.toString() == userCompared._id.toString();
+    },
   },
   Comment: {
     async author(parent, _args, _context, _info) {
       return User.findById(parent.author);
+    },
+  },
+  Notification: {
+    async commissioner(parent, _args, _context, _info) {
+      return User.findById(parent.commissioner);
+    },
+  },
+  Commission: {
+    async fromUser(parent, _args, _context, _info) {
+      return User.findById(parent.fromUser);
+    },
+    async toArtist(parent, _args, _context, _info) {
+      return User.findById(parent.toArtist);
     },
   },
   User: {
@@ -113,6 +141,100 @@ export const resolvers = {
       });
       const data = relayPaginate(posts, args.after, args.limit);
       return data;
+    },
+    async commissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.commissions },
+        accepted: true,
+      });
+      const commArray = commissions.sort((a, b) =>
+        moment(b.deadline).diff(a.deadline)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async pendingCommissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.commissions },
+        accepted: false,
+      });
+
+      const commArray = commissions.sort((a, b) =>
+        moment(b.deadline).diff(a.deadline)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async yourCommissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.yourCommissions },
+      });
+      const commArray = commissions.sort((a, b) =>
+        moment(b.dateIssued).diff(a.dateIssued)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async finishedCommissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.commissions, finished: true },
+      });
+      const commArray = commissions.sort((a, b) =>
+        moment(b.dateIssued).diff(a.dateIssued)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async yourFinishedCommissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.yourCommissions, finished: true },
+      });
+      const commArray = commissions.sort((a, b) =>
+        moment(b.dateIssued).diff(a.dateIssued)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async yourPendingCommissions(parent, args, _context, _info) {
+      const commissions = await Commission.find({
+        _id: { $in: parent.yourCommissions, accepted: true },
+      });
+      const commArray = commissions.sort((a, b) =>
+        moment(b.dateIssued).diff(a.dateIssued)
+      );
+      const data = relayPaginate(commArray, args.after, args.limit);
+      return data;
+    },
+    async notifications(parent, args, _context, _info) {
+      const notifs = await Notification.find({
+        _id: { $in: parent.notifications },
+      });
+      const read = notifs.filter((notif) => notif.read === false);
+      const idList = notifs.map((notif) => notif._id);
+      const cursor = notifs
+        .map(function (e) {
+          return e.id;
+        })
+        .indexOf(args.after);
+
+      const final = notifs.slice(
+        args.after && cursor != -1 ? cursor + 1 : 0,
+        args.after && cursor != -1 ? args.limit + cursor + 1 : args.limit
+      );
+
+      return {
+        totalUnreadCount: Math.abs(read.length),
+        totalCount: notifs.length,
+        idList: idList,
+        pageInfo: {
+          endCursor: final[final.length - 1]?.id,
+          hasNextPage:
+            final[final.length - 1]?.id == notifs[notifs.length - 1]?.id
+              ? false
+              : true,
+        },
+        edges: final.map((a) => ({ node: a })),
+      };
     },
   },
   Post: {
@@ -288,14 +410,10 @@ export const resolvers = {
       return data;
     },
     async readNotif(_parent, args, _context, _info) {
-      await User.findByIdAndUpdate(
-        args.userId,
+      await Notification.updateMany(
+        { _id: { $in: args.notifArray } },
         {
-          notifRead: true,
-        },
-        {
-          new: true,
-          runValidators: true,
+          read: true,
         }
       );
       return true;
@@ -340,6 +458,124 @@ export const resolvers = {
         }
       );
       return true;
+    },
+    async commissionArtist(_parent, args, _context, _info) {
+      const toArtist = await User.findOne({ name: args.artistName }).lean();
+      const deadline = moment().add(args.deadline, "d");
+
+      const commission = await Commission.create({
+        fromUser: args.userId,
+        toArtist: toArtist._id,
+        title: args.title,
+        description: args.description,
+        sampleArt: args.sampleArt,
+        width: args.width,
+        height: args.height,
+        deadline,
+      });
+
+      const fromUser = await User.findByIdAndUpdate(
+        args.userId,
+        {
+          $push: {
+            yourCommissions: new ObjectId(commission._id as string) as never,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+
+      const notification = await Notification.create({
+        commissionId: commission._id,
+        commissioner: args.userId,
+        date: moment().format("l"),
+        description: `You have a new commission request from ${fromUser.name}`,
+        read: false,
+      });
+
+      await User.findByIdAndUpdate(
+        toArtist._id,
+        {
+          $push: {
+            commissions: new ObjectId(commission._id as string) as never,
+            notifications: notification._id,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+
+      return true;
+    },
+    async deleteNotification(_parent, args, _context, _info) {
+      await Notification.findByIdAndDelete(args.notifId);
+      await User.findByIdAndUpdate(args.userId, {
+        $pull: { notifications: new ObjectId(args.notifId as string) },
+      });
+      return true;
+    },
+    async deleteCommission(_parent, args, _context, _info) {
+      await Commission.deleteOne({ _id: args.commissionId });
+
+      const user = await User.findOneAndUpdate(
+        { commissions: { $in: [new ObjectId(args.commissionId as string)] } },
+        { $pull: { commissions: new ObjectId(args.commissionId as string) } }
+      );
+
+      await Notification.deleteOne({
+        _id: { $in: user.notifications },
+        commissionId: args.commissionId,
+      });
+
+      const notification = await Notification.create({
+        commissioner: user._id,
+        date: moment().format("l"),
+        description: `Your commission to ${
+          user.name
+        } has been rejected. Reason: ${args.reason ? args.reason : ""}`,
+        read: false,
+      });
+
+      await User.updateOne(
+        {
+          yourCommissions: { $in: [new ObjectId(args.commissionId as string)] },
+        },
+        {
+          $pull: { yourCommissions: new ObjectId(args.commissionId as string) },
+          $push: { notifications: notification._id },
+        }
+      );
+      return true;
+    },
+    async acceptCommission(_parent, args, _context, _info) {
+      const commission = await Commission.findOneAndUpdate(
+        { _id: args.commissionId },
+        { accepted: true },
+        { new: true }
+      );
+      const user = await User.findById(commission.toArtist).lean();
+
+      const notification = await Notification.create({
+        commissioner: user._id,
+        date: moment().format("l"),
+        description: `Your commission to ${
+          user.name
+        } has been accepted. Message: ${args.message ? args.message : ""}`,
+        read: false,
+      });
+
+      await User.updateOne(
+        {
+          yourCommissions: { $in: [new ObjectId(args.commissionId as string)] },
+        },
+        {
+          $push: { notifications: notification._id },
+        }
+      );
+
+      return commission;
     },
   },
 };

@@ -1,12 +1,12 @@
 import { CommentInterface } from "./CommentInterface";
-import { UserInterface } from "./UserInterface";
+import { CommissionInterface, UserInterface } from "./UserInterface";
 
 export interface ReadNotifData {
   readNotif: boolean;
 }
 
 export interface ReadNotifVars {
-  userId: string;
+  notifArray: string[];
 }
 
 export interface AddCommentData {
@@ -93,4 +93,13 @@ export interface CreatePostVars {
   price: string;
   sale: string;
   author: string;
+}
+
+export interface AcceptCommissionData {
+  acceptCommission: CommissionInterface;
+}
+
+export interface AcceptCommissionVars {
+  commissionId: string;
+  message?: string;
 }

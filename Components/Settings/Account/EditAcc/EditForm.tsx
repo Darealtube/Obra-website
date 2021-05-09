@@ -15,7 +15,7 @@ import { reducer, State } from "../../../../Hooks/Reducers/UserReducer";
 import Form1 from "./Form1";
 import Form3 from "./Form3";
 import Form2 from "./Form2";
-import {userValidator} from "../../../../utils/userValidator";
+import { userValidator } from "../../../../utils/userValidator";
 import dynamic from "next/dynamic";
 
 const DynamicSnack = dynamic(
@@ -53,13 +53,14 @@ const EditForm = () => {
         data: {
           id: newUser.id,
           name: newUser.name,
-          email: newUser.email,
+          image: newUser.image,
         },
       });
       cache.writeFragment({
         id: `User:${session?.id}`,
         fragment: UserInfo2,
         data: {
+          email: newUser.email,
           backdrop: newUser.backdrop,
           userBio: newUser.userBio,
           birthday: newUser.birthday,

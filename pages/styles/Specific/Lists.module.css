@@ -19,3 +19,7 @@
   flex-direction: column;
   margin-right: 80px;
 }
+
+.avatar {
+  border-radius: 50%;
+}

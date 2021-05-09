@@ -1,4 +1,4 @@
-import { getCsrfToken, providers, signIn } from "next-auth/client";
+import { getCsrfToken, getProviders, signIn } from "next-auth/client";
 import { useRouter } from "next/router";
 import {
   Paper,
@@ -99,7 +99,7 @@ export default function SignIn({ Providers, csrf }) {
 
 // This is the recommended way for Next.js 9.3 or newer
 export async function getServerSideProps(context) {
-  const Providers = await providers();
+  const Providers = await getProviders();
   const csrf = await getCsrfToken(context);
   return {
     props: { Providers, csrf },

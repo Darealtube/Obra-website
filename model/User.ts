@@ -18,12 +18,13 @@ const UserSchema = new mongoose.Schema({
   birthday: String,
   phone: String,
   newUser: Boolean,
-  notifRead: Boolean,
   artLevel: String,
   artStyles: Array,
   artKinds: Array,
   userBio: String,
   backdrop: String,
+  commissions: Array,
+  yourCommissions: Array,
   // More to come
 });
 

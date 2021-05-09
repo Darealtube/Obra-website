@@ -21,13 +21,14 @@ const DynamicDrawer = dynamic(() => import("./Drawers/Swipeable"));
 
 const Appbar = () => {
   const [session, loading] = useSession();
-  const { data: user } = useQuery<AppbarUserData, AppbarVars>(
+  const { data: user, fetchMore } = useQuery<AppbarUserData, AppbarVars>(
     APPBAR_USER_QUERY,
     {
       variables: {
         id: session?.id,
       },
       skip: !session,
+      pollInterval: 60000,
     }
   );
   const [open, setOpen] = useState(false);
@@ -57,7 +58,7 @@ const Appbar = () => {
           </Typography>
           {/* Drawer and Logo */}
           {user && !loading ? (
-            <AppbarMenu user={user} loading={loading} />
+            <AppbarMenu user={user} fetchMore={fetchMore} />
           ) : !user && !loading ? (
             <AppbarNoUser />
           ) : (

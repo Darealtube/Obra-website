@@ -114,22 +114,56 @@ export const POST_ID_QUERY = gql`
   }
 `;
 
+export const COMMISSION_ID_QUERY = gql`
+  query CommissionID($id: ID!) {
+    commissionId(id: $id) {
+      id
+      fromUser {
+        id
+        name
+        image
+      }
+      dateIssued
+      title
+      deadline
+      width
+      height
+      sampleArt
+      description
+    }
+  }
+`;
+
 //Fetch Appbar Info
 export const APPBAR_USER_QUERY = gql`
-  query UserAppbarID($id: ID!) {
+  query UserAppbarID($id: ID!, $after: ID) {
     userId(id: $id) {
       ...UserInfo
       email
       newUser
       tutorial
-      notifRead
-      notifications {
-        postId
-        user {
-          image
+      notifications(after: $after, limit: 4) {
+        totalCount
+        totalUnreadCount
+        idList
+        pageInfo {
+          endCursor
+          hasNextPage
         }
-        date
-        description
+        edges {
+          node {
+            id
+            commissionId
+            commissioner {
+              id
+              name
+              image
+            }
+            date
+            description
+            read
+          }
+        }
       }
     }
   }
@@ -271,6 +305,178 @@ export const SETTINGS_QUERY = gql`
   ${UserInfo2}
 `;
 
+export const COMMISSIONS_QUERY = gql`
+  query Commissions($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      commissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const YOUR_COMMISSIONS_QUERY = gql`
+  query Commissions($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      yourCommissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const PENDING_COMMS_QUERY = gql`
+  query PendingComms($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      pendingCommissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+            description
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const YOUR_PENDING_COMMS_QUERY = gql`
+  query YourPendingComms($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      yourPendingCommissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+            description
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const FINISHED_COMMS_QUERY = gql`
+  query FinishedComms($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      finishedCommissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+            description
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const YOUR_FINISHED_COMMS_QUERY = gql`
+  query YourFinishedComms($id: ID!, $after: ID) {
+    userId(id: $id) {
+      id
+      yourFinishedCommissions(after: $after, limit: 4) {
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            fromUser {
+              id
+              name
+              image
+            }
+            dateIssued
+            title
+            deadline
+            description
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const IS_LIKED_ARTIST = gql`
   query islikedArtist($userID: ID!, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
@@ -286,6 +492,12 @@ export const IS_LIKED_POST = gql`
 export const USER_EXISTS = gql`
   query UserExist($userName: String!, $userId: ID!) {
     userExists(userName: $userName, userId: $userId)
+  }
+`;
+
+export const IS_SAME_USER = gql`
+  query SameUser($userName: String!, $userId: ID!) {
+    isSameUser(userName: $userName, userId: $userId)
   }
 `;
 
@@ -368,6 +580,30 @@ export const CREATE_COMMENT_MUTATION = gql`
   }
 `;
 
+export const CREATE_COMMISSION_MUTATION = gql`
+  mutation CreateCommission(
+    $artistName: String!
+    $userId: ID!
+    $title: String!
+    $description: String!
+    $sampleArt: String!
+    $height: Int!
+    $width: Int!
+    $deadline: Int!
+  ) {
+    commissionArtist(
+      artistName: $artistName
+      userId: $userId
+      title: $title
+      description: $description
+      sampleArt: $sampleArt
+      height: $height
+      width: $width
+      deadline: $deadline
+    )
+  }
+`;
+
 export const DELETE_POST_MUTATION = gql`
   mutation DeletePost($postId: ID!) {
     deletePost(postId: $postId)
@@ -377,6 +613,35 @@ export const DELETE_POST_MUTATION = gql`
 export const DELETE_COMMENT_MUTATION = gql`
   mutation DeleteComment($commentID: ID!) {
     deleteComment(commentID: $commentID)
+  }
+`;
+
+export const DELETE_NOTIF_MUTATION = gql`
+  mutation DeleteNotification($notifId: ID!, $userId: ID!) {
+    deleteNotification(notifId: $notifId, userId: $userId)
+  }
+`;
+
+export const DELETE_COMMISSION_MUTATION = gql`
+  mutation DeleteCommission($commissionId: ID!, $reason: String) {
+    deleteCommission(commissionId: $commissionId, reason: $reason)
+  }
+`;
+
+export const ACCEPT_COMMISSION_MUTATION = gql`
+  mutation AcceptCommission($commissionId: ID!, $message: String) {
+    acceptCommission(commissionId: $commissionId, message: $message) {
+      id
+      fromUser {
+        id
+        name
+        image
+      }
+      dateIssued
+      title
+      deadline
+      description
+    }
   }
 `;
 
@@ -454,8 +719,8 @@ export const EDIT_USER_MUTATION = gql`
 `;
 
 export const READ_NOTIF = gql`
-  mutation ReadNotif($userId: ID!) {
-    readNotif(userId: $userId)
+  mutation ReadNotif($notifArray: [ID!]) {
+    readNotif(notifArray: $notifArray)
   }
 `;
 

@@ -1,8 +1,10 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
   FEATURED_POSTS_QUERY,
+  HOME_RECOMMENDED_QUERY,
   IS_LIKED_ARTIST,
   IS_LIKED_POST,
+  IS_SAME_USER,
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
@@ -19,6 +21,8 @@ import {
   RecommendedPostData,
   UserData,
   UserVars,
+  HomeUserData,
+  HomeUserVars,
 } from "../interfaces/QueryInterfaces";
 
 export const fetchUser = async (id: string) => {
@@ -35,6 +39,21 @@ export const fetchUser = async (id: string) => {
     return null;
   }
   return userId;
+};
+
+export const isSameUser = async (id: string, name: string) => {
+  const apolloClient = initializeApollo();
+  const {
+    data: { isSameUser },
+  } = await apolloClient.query({
+    query: IS_SAME_USER,
+    variables: {
+      userId: id,
+      userName: name,
+    },
+  });
+
+  return { data: apolloClient.cache.extract(), same: isSameUser };
 };
 
 export const fetchUserandPosts = async (name: string, userID: string) => {
@@ -92,13 +111,19 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   };
 };
 
-export const fetchPosts = async () => {
+export const fetchPosts = async (id: string) => {
   const apolloClient = initializeApollo();
   await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
     query: FEATURED_POSTS_QUERY,
   });
   await apolloClient.query<NewPostsData, PaginatedPostsVars>({
     query: NEW_POSTS_QUERY,
+  });
+  await apolloClient.query<HomeUserData, HomeUserVars>({
+    query: HOME_RECOMMENDED_QUERY,
+    variables: {
+      id: id,
+    },
   });
   return apolloClient.cache.extract();
 };

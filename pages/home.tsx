@@ -41,24 +41,22 @@ const Home = () => {
     data: { newPosts },
     fetchMore: moreNewPosts,
   } = useQuery<NewPostsData, PaginatedPostsVars>(NEW_POSTS_QUERY);
-  const [
-    getRecommended,
-    { loading, data, fetchMore: moreRecommended },
-  ] = useLazyQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY);
+  const {
+    data: { userId },
+    fetchMore: moreRecommended,
+  } = useQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY, {
+    variables: {
+      id: session.id,
+    },
+  });
   const { More } = usePagination("featuredPosts", fetchMore, featuredPosts);
   const { More: MoreNew } = usePagination("newPosts", moreNewPosts, newPosts);
   const { More: MoreRecc, hasMore } = usePagination(
     "userId",
     moreRecommended,
-    data?.userId.homeRecommended,
+    userId.homeRecommended,
     "homeRecommended"
   );
-
-  useEffect(() => {
-    if (session) {
-      getRecommended({ variables: { id: session.id } });
-    }
-  }, [session]);
 
   return (
     <div className={styles.root}>
@@ -103,36 +101,32 @@ const Home = () => {
         <Typography variant="h4">Recommended</Typography>
         <Divider className={styles.divider} />
         <br />
-        {(loading || !loading) && (!session || !data) ? (
-          ""
-        ) : (
-          <InfiniteScroll
-            dataLength={data?.userId.homeRecommended.edges.length}
-            next={MoreRecc}
-            hasMore={hasMore}
-            loader={
-              <>
-                <br />
-                <CircularProgress />
-              </>
-            }
-            style={{
-              overflow: "hidden",
-            }}
-            scrollThreshold={0.8}
-          >
-            <CardList postData={data?.userId.homeRecommended.edges} />
-          </InfiniteScroll>
-        )}
+        <InfiniteScroll
+          dataLength={userId.homeRecommended.edges.length}
+          next={MoreRecc}
+          hasMore={hasMore}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+          }}
+          scrollThreshold={0.8}
+        >
+          <CardList postData={userId.homeRecommended.edges} />
+        </InfiniteScroll>
         <br />
       </Container>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const apollo = await fetchPosts();
-  const session = await getSession();
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const apollo = await fetchPosts(session.id);
 
   return {
     props: {

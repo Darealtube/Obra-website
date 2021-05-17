@@ -30,7 +30,7 @@
     "mongodb": "^3.6.6",
     "mongoose": "^5.12.5",
     "next": "^10.2.0",
-    "next-auth": "^3.19.2",
+    "next-auth": "^3.23.0",
     "nprogress": "^0.2.0",
     "react": "17.0.1",
     "react-calendar": "^3.4.0",
@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.168",
-    "@types/next-auth": "^3.15.0",
     "@types/node": "^14.14.42",
     "@types/react": "^17.0.4",
     "@types/react-select": "^4.0.15",

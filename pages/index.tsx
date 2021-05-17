@@ -28,7 +28,7 @@ const Login = () => {
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signIn(null, { callbackUrl: "http://localhost:3000/home" });
+    signIn(null, { callbackUrl: "/home" });
   };
 
   return (

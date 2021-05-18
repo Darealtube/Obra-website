@@ -20,6 +20,9 @@ export const resolvers = {
       return data;
     },
     userId(_parent, args, _context, _info) {
+      if (!args.id) {
+        return null;
+      }
       return User.findById(args.id);
     },
     userName(_parent, args, _context, _info) {

@@ -28,7 +28,11 @@ const Login = () => {
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signIn(null, { callbackUrl: "/home" });
+    signIn(null, {
+      callbackUrl: `${
+        "http://localhost:3000/home" || `${process.env.VERCEL_URL}/home`
+      }`,
+    });
   };
 
   return (

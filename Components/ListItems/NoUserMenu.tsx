@@ -10,7 +10,9 @@ const NoUserMenu = () => {
     e.preventDefault();
     signOut({
       callbackUrl: `${
-        "http://localhost:3000/" || `${process.env.VERCEL_URL}/`
+        !process.env.VERCEL_URL
+          ? "http://localhost:3000/"
+          : `https://${process.env.VERCEL_URL}/`
       }`,
     });
   };
@@ -18,7 +20,9 @@ const NoUserMenu = () => {
     e.preventDefault();
     signIn(null, {
       callbackUrl: `${
-        "http://localhost:3000/home" || `${process.env.VERCEL_URL}/home`
+        !process.env.VERCEL_URL
+          ? "http://localhost:3000/home"
+          : `https://${process.env.VERCEL_URL}/home`
       }`,
     });
   };

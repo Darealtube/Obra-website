@@ -16,7 +16,7 @@ function createApolloClient() {
       uri: `${
         !process.env.VERCEL_URL
           ? "http://localhost:3000/api/Apollo/graphql"
-          : `${process.env.VERCEL_URL}/api/Apollo/graphql`
+          : `https://${process.env.VERCEL_URL}/api/Apollo/graphql`
       }`,
       credentials: "same-origin",
     }),

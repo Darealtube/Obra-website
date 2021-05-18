@@ -9,13 +9,13 @@ const NoUserMenu = () => {
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signOut({
-      callbackUrl: `https://${process.env.VERCEL_URL}/`,
+      callbackUrl: `https://obra-website.vercel.app/`,
     });
   };
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signIn(null, {
-      callbackUrl: `https://${process.env.VERCEL_URL}/home`,
+      callbackUrl: `https://obra-website.vercel.app/home`,
     });
   };
   return (

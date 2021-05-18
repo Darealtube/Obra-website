@@ -28,10 +28,8 @@ const Login = () => {
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signIn(null, {
-      callbackUrl: 
-          `https://${process.env.VERCEL_URL}/home`
-      ,
+    signIn("google", {
+      callbackUrl: `https://obra-website.vercel.app/home`,
     });
   };
 

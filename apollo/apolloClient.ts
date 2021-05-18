@@ -13,11 +13,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: `${
-        !process.env.VERCEL_URL
-          ? "http://localhost:3000/api/Apollo/graphql"
-          : `https://${process.env.VERCEL_URL}/api/Apollo/graphql`
-      }`,
+      uri: `https://${process.env.VERCEL_URL}/api/Apollo/graphql`,
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({

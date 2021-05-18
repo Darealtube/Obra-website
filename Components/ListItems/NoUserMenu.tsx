@@ -9,21 +9,13 @@ const NoUserMenu = () => {
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signOut({
-      callbackUrl: `${
-        !process.env.VERCEL_URL
-          ? "http://localhost:3000/"
-          : `https://${process.env.VERCEL_URL}/`
-      }`,
+      callbackUrl: `https://${process.env.VERCEL_URL}/`,
     });
   };
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signIn(null, {
-      callbackUrl: `${
-        !process.env.VERCEL_URL
-          ? "http://localhost:3000/home"
-          : `https://${process.env.VERCEL_URL}/home`
-      }`,
+      callbackUrl: `https://${process.env.VERCEL_URL}/home`,
     });
   };
   return (

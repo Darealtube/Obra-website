@@ -74,7 +74,7 @@ export const typeDefs = gql`
   type Query {
     users: [User]!
     posts(after: ID, limit: Int): PostConnection
-    userId(id: ID!): User
+    userId(id: ID): User
     userName(name: String!): User
     postId(id: ID!): Post
     commissionId(id: ID!): Commission

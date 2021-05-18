@@ -5,10 +5,12 @@ import {
   Divider,
   Grid,
   Container,
+  IconButton,
 } from "@material-ui/core";
 import styles from "../../../pages/styles/Specific/Commission.module.css";
 import CommList from "../Lists/CommList";
 import Link from "next/link";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 const NormalComm = ({ children, userId, loading, fetchMore, handleClick }) => {
   return (
@@ -16,7 +18,12 @@ const NormalComm = ({ children, userId, loading, fetchMore, handleClick }) => {
       <Grid container className={styles.wrapRoot}>
         <Grid item xs={8}>
           <Container>
-            <Box>
+            <Box display="flex">
+              <Link href="/home">
+                <IconButton component="a">
+                  <KeyboardBackspaceIcon />
+                </IconButton>
+              </Link>
               <Typography variant="h4">Commissions</Typography>
               <Divider />
             </Box>

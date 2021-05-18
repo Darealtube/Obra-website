@@ -238,7 +238,7 @@ export const POST_RECOMMENDED_QUERY = gql`
 `;
 
 export const HOME_RECOMMENDED_QUERY = gql`
-  query HomeRecommended($id: ID!, $after: ID) {
+  query HomeRecommended($id: ID, $after: ID) {
     userId(id: $id) {
       id
       homeRecommended(after: $after, limit: 4) {

@@ -14,8 +14,9 @@ import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
 import { getSession, signIn } from "next-auth/client";
 import { GetServerSideProps } from "next";
+import { fetchUser } from "../utils/fetchData";
 
-const Login = () => {
+const Login = ({ name }) => {
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -67,7 +68,7 @@ const Login = () => {
             <Typography variant="h5">
               Canvas is a website that focuses on Artists, giving them an
               opportunity to shine amidst the shame that brings upon the Art
-              Community.
+              Community. Test: {name}
             </Typography>
 
             <Button
@@ -100,10 +101,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+  const user = await fetchUser("601647bc598ed0169415e349");
 
   return {
     props: {
       session: session,
+      name: user.name,
     },
   };
 };

@@ -16,9 +16,7 @@ function createApolloClient() {
       uri: `https://obra-api.vercel.app/api/graphql`,
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "https://obra-api.vercel.app",
-        "Access-Control-Allow-Credentials": true,
       },
     }),
     cache: new InMemoryCache({

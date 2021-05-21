@@ -13,11 +13,8 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: `https://obra-api.vercel.app/api/graphql`,
-      credentials: "include",
-      headers: {
-        "Access-Control-Allow-Origin": "https://obra-api.vercel.app",
-      },
+      uri: `https://obra-website.vercel.app/api/Apollo/graphql`,
+      credentials: "same-origin",
     }),
     cache: new InMemoryCache({
       typePolicies: {

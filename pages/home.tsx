@@ -31,7 +31,7 @@ import {
   PaginatedPostsVars,
 } from "../interfaces/QueryInterfaces";
 
-const Home = ({ id }) => {
+const Home = () => {
   const [session] = useSession();
   const {
     data: { featuredPosts },
@@ -46,7 +46,7 @@ const Home = ({ id }) => {
     fetchMore: moreRecommended,
   } = useQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY, {
     variables: {
-      id: id,
+      id: session.id,
     },
   });
   const { More } = usePagination("featuredPosts", fetchMore, featuredPosts);
@@ -132,7 +132,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       initialApolloState: apollo,
       session,
-      id: session.id,
     },
   };
 };

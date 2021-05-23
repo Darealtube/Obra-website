@@ -201,6 +201,7 @@ export const USER_LIKED_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
+      likedBy
       likedPosts(limit: 4, after: $after) {
         totalCount
         edges {

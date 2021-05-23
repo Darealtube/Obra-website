@@ -3,7 +3,6 @@ import {
   ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
-  IS_LIKED_ARTIST,
   IS_LIKED_POST,
   IS_SAME_USER,
   NEW_POSTS_QUERY,
@@ -74,7 +73,7 @@ export const fetchUserandPosts = async (name: string) => {
   };
 };
 
-export const fetchUserandLikedPosts = async (name: string, userID: string) => {
+export const fetchUserandLikedPosts = async (name: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
@@ -85,20 +84,9 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
     },
   });
 
-  const {
-    data: { isLikedArtist },
-  } = await apolloClient.query({
-    query: IS_LIKED_ARTIST,
-    variables: {
-      userID: userID,
-      artistName: name,
-    },
-  });
-
   return {
     data: apolloClient.cache.extract(),
     exists: userName ? true : false,
-    alreadyLiked: isLikedArtist,
   };
 };
 

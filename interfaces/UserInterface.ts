@@ -27,6 +27,7 @@ export interface UserInterface {
   pendingCommissions: Commissions;
   yourPendingCommissions: Commissions;
   yourFinishedCommissions: Commissions;
+  likedBy: string[]; // FOR NOW
   // More to come
 }
 

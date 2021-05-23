@@ -176,6 +176,7 @@ export const USER_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
+      likedBy
       posts(limit: 4, after: $after) {
         totalCount
         edges {
@@ -483,6 +484,12 @@ export const COMMISSION_COUNT_QUERY = gql`
       id
       commissionCount
     }
+  }
+`;
+
+export const ALL_USER_QUERY = gql`
+  query AllUsers {
+    allUsersList
   }
 `;
 

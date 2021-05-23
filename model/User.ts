@@ -25,6 +25,7 @@ const UserSchema = new mongoose.Schema({
   backdrop: String,
   commissions: Array,
   yourCommissions: Array,
+  likedBy: Array,
   // More to come
 });
 

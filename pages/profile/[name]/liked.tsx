@@ -10,7 +10,6 @@ import {
 } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
 import { USER_LIKED_POST_QUERY } from "../../../apollo/apolloQueries";
-import { useSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -23,7 +22,6 @@ type Props = {
 };
 
 const UserIDLiked = ({ name }: Props) => {
-  const [session] = useSession();
   const {
     data: { userName },
     fetchMore,
@@ -47,11 +45,7 @@ const UserIDLiked = ({ name }: Props) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap
-        artist={userName}
-        admin={userName?.id == session?.id}
-        userLiked={userName?.likedBy.includes(session?.id)}
-      >
+      <ProfileWrap artist={userName}>
         {userName && (
           <InfiniteScroll
             dataLength={userName.likedPosts.edges.length}

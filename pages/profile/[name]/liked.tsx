@@ -97,6 +97,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       initialApolloState: user.data,
       name: context.params.name,
     },
+    revalidate: 5,
   };
 };
 

@@ -3,17 +3,16 @@ import { CssBaseline, CircularProgress } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import { CardList } from "../../../Components/CardList";
 import Head from "next/head";
-import { GetStaticProps } from "next";
-import {
-  fetchAllUsers,
-  fetchUserandLikedPosts,
-} from "../../../utils/fetchData";
+import { GetServerSideProps } from "next";
+import { fetchUserandLikedPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
 import { USER_LIKED_POST_QUERY } from "../../../apollo/apolloQueries";
+import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
+import { addApolloState } from "../../../apollo/apolloClient";
 
 type Props = {
   name: string;
@@ -21,7 +20,7 @@ type Props = {
   alreadyLiked: boolean;
 };
 
-const UserIDLiked = ({ name }: Props) => {
+const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
   const {
     data: { userName },
     fetchMore,
@@ -45,7 +44,11 @@ const UserIDLiked = ({ name }: Props) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap artist={userName}>
+      <ProfileWrap
+        artist={userName}
+        admin={userName?.id === id}
+        userLiked={alreadyLiked}
+      >
         {userName && (
           <InfiniteScroll
             dataLength={userName.likedPosts.edges.length}
@@ -75,30 +78,27 @@ const UserIDLiked = ({ name }: Props) => {
 
 /*  */
 
-export const getStaticPaths = async () => {
-  const userList = await fetchAllUsers();
-  const paths = userList.map((name) => ({
-    params: { name },
-  }));
-  return { paths, fallback: false };
-};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const { data, exists, alreadyLiked } = await fetchUserandLikedPosts(
+    context.params.name as string,
+    session.id
+  );
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const user = await fetchUserandLikedPosts(context.params.name as string);
-
-  if (!user.exists) {
+  if (!exists) {
     return {
       notFound: true,
     };
   }
 
-  return {
+  return addApolloState(data, {
     props: {
-      initialApolloState: user.data,
+      session,
       name: context.params.name,
+      id: session.id as string,
+      alreadyLiked: alreadyLiked,
     },
-    revalidate: 5,
-  };
+  });
 };
 
 export default UserIDLiked;

@@ -3,6 +3,7 @@ import {
   ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
+  IS_LIKED_ARTIST,
   IS_LIKED_POST,
   IS_SAME_USER,
   NEW_POSTS_QUERY,
@@ -53,10 +54,10 @@ export const isSameUser = async (id: string, name: string) => {
     },
   });
 
-  return { data: apolloClient.cache.extract(), same: isSameUser };
+  return { data: apolloClient, same: isSameUser };
 };
 
-export const fetchUserandPosts = async (name: string) => {
+export const fetchUserandPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
@@ -66,14 +67,24 @@ export const fetchUserandPosts = async (name: string) => {
       name: name,
     },
   });
+  const {
+    data: { isLikedArtist },
+  } = await apolloClient.query({
+    query: IS_LIKED_ARTIST,
+    variables: {
+      userID: userID,
+      artistName: name,
+    },
+  });
 
   return {
-    data: apolloClient.cache.extract(),
+    data: apolloClient,
     exists: userName ? true : false,
+    alreadyLiked: isLikedArtist,
   };
 };
 
-export const fetchUserandLikedPosts = async (name: string) => {
+export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
@@ -84,22 +95,21 @@ export const fetchUserandLikedPosts = async (name: string) => {
     },
   });
 
-  return {
-    data: apolloClient.cache.extract(),
-    exists: userName ? true : false,
-  };
-};
-
-export const fetchAllUsers = async () => {
-  const apolloClient = initializeApollo();
-
   const {
-    data: { allUsersList },
+    data: { isLikedArtist },
   } = await apolloClient.query({
-    query: ALL_USER_QUERY,
+    query: IS_LIKED_ARTIST,
+    variables: {
+      userID: userID,
+      artistName: name,
+    },
   });
 
-  return allUsersList as string[];
+  return {
+    data: apolloClient,
+    exists: userName ? true : false,
+    alreadyLiked: isLikedArtist,
+  };
 };
 
 export const fetchPosts = async (id: string) => {
@@ -116,7 +126,7 @@ export const fetchPosts = async (id: string) => {
       id: id,
     },
   });
-  return apolloClient.cache.extract();
+  return apolloClient;
 };
 
 export const fetchAPost = async (id: string) => {
@@ -162,7 +172,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   });
 
   return {
-    data: apolloClient.cache.extract(),
+    data: apolloClient,
     exists: postId ? true : false,
     alreadyLiked: isLikedPost,
   };

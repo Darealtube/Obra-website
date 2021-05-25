@@ -16,7 +16,7 @@ import dynamic from "next/dynamic";
 import { useSession } from "next-auth/client";
 
 const DynamicCommentPopover = dynamic(
-  () => import("./MainPopovers/CardPopover")
+  () => import("./MainPopovers/CommentPopover")
 );
 
 type Props = {

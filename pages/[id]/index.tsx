@@ -30,6 +30,7 @@ import {
   ViewPostData,
   ViewPostVars,
 } from "../../interfaces/MutationInterfaces";
+import { addApolloState } from "../../apollo/apolloClient";
 
 const DynamicImageDialog = dynamic(
   () => import("../../Components/PostInfo/ImageDialog")
@@ -126,25 +127,24 @@ const PostID = ({ id, alreadyLiked }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const data = await InitializePostInfo(
+  const { data, exists, alreadyLiked } = await InitializePostInfo(
     context.params.id as string,
     session.id
   );
 
-  if (data.exists === false) {
+  if (exists === false) {
     return {
       notFound: true,
     };
   }
 
-  return {
+  return addApolloState(data, {
     props: {
-      initialApolloState: data.data,
       session: session,
       id: context.params.id,
-      alreadyLiked: data.alreadyLiked,
+      alreadyLiked: alreadyLiked,
     },
-  };
+  });
 };
 
 export default PostID;

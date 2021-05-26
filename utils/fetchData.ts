@@ -65,6 +65,7 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
     query: USER_POST_QUERY,
     variables: {
       name: name,
+      limit: 4,
     },
   });
   const {
@@ -92,6 +93,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
     query: USER_LIKED_POST_QUERY,
     variables: {
       name: name,
+      limit: 4,
     },
   });
 
@@ -116,14 +118,21 @@ export const fetchPosts = async (id: string) => {
   const apolloClient = initializeApollo();
   await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
     query: FEATURED_POSTS_QUERY,
+    variables: {
+      limit: 4,
+    },
   });
   await apolloClient.query<NewPostsData, PaginatedPostsVars>({
     query: NEW_POSTS_QUERY,
+    variables: {
+      limit: 4,
+    },
   });
   await apolloClient.query<HomeUserData, HomeUserVars>({
     query: HOME_RECOMMENDED_QUERY,
     variables: {
       id: id,
+      limit: 4,
     },
   });
   return apolloClient;
@@ -137,6 +146,7 @@ export const fetchAPost = async (id: string) => {
     query: POST_ID_QUERY,
     variables: {
       id: id,
+      limit: 4,
     },
   });
   if (!postId) {
@@ -153,12 +163,14 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
     query: POST_ID_QUERY,
     variables: {
       id: id,
+      limit: 4,
     },
   });
   await apolloClient.query<RecommendedPostData, PostVars>({
     query: POST_RECOMMENDED_QUERY,
     variables: {
       id: id,
+      limit: 4,
     },
   });
   const {

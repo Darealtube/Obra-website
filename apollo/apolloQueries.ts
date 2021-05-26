@@ -49,8 +49,8 @@ export const USER_QUERY = gql`
 
 //Fetch all Posts
 export const POST_QUERY = gql`
-  query Posts($after: ID) {
-    posts(limit: 4, after: $after) {
+  query Posts($after: ID, $limit: Int) {
+    posts(limit: $limit, after: $after) {
       totalCount
       edges {
         node {
@@ -78,7 +78,7 @@ export const USER_ID_QUERY = gql`
 
 //Fetch Post By ID
 export const POST_ID_QUERY = gql`
-  query PostID($id: ID!, $after: ID) {
+  query PostID($id: ID!, $after: ID, $limit: Int) {
     postId(id: $id) {
       id
       title
@@ -91,7 +91,7 @@ export const POST_ID_QUERY = gql`
       price
       tags
       description
-      comments(after: $after, limit: 4) {
+      comments(after: $after, limit: $limit) {
         totalCount
         edges {
           node {
@@ -136,13 +136,13 @@ export const COMMISSION_ID_QUERY = gql`
 
 //Fetch Appbar Info
 export const APPBAR_USER_QUERY = gql`
-  query UserAppbarID($id: ID!, $after: ID) {
+  query UserAppbarID($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       ...UserInfo
       email
       newUser
       tutorial
-      notifications(after: $after, limit: 4) {
+      notifications(after: $after, limit: $limit) {
         totalCount
         totalUnreadCount
         idList
@@ -172,12 +172,12 @@ export const APPBAR_USER_QUERY = gql`
 
 //Fetch User and Posts
 export const USER_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: ID) {
+  query UserPosts($name: String!, $after: ID, $limit: Int) {
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
       likedBy
-      posts(limit: 4, after: $after) {
+      posts(limit: $limit, after: $after) {
         totalCount
         edges {
           node {
@@ -197,12 +197,12 @@ export const USER_POST_QUERY = gql`
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: ID) {
+  query UserPosts($name: String!, $after: ID, $limit: Int) {
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
       likedBy
-      likedPosts(limit: 4, after: $after) {
+      likedPosts(limit: $limit, after: $after) {
         totalCount
         edges {
           node {
@@ -222,8 +222,8 @@ export const USER_LIKED_POST_QUERY = gql`
 `;
 
 export const POST_RECOMMENDED_QUERY = gql`
-  query RecommendedPosts($id: ID!, $after: ID) {
-    recommendedPosts(id: $id, limit: 4, after: $after) {
+  query RecommendedPosts($id: ID!, $after: ID, $limit: Int) {
+    recommendedPosts(id: $id, limit: $limit, after: $after) {
       totalCount
       edges {
         node {
@@ -240,10 +240,10 @@ export const POST_RECOMMENDED_QUERY = gql`
 `;
 
 export const HOME_RECOMMENDED_QUERY = gql`
-  query HomeRecommended($id: ID, $after: ID) {
+  query HomeRecommended($id: ID, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      homeRecommended(after: $after, limit: 4) {
+      homeRecommended(after: $after, limit: $limit) {
         totalCount
         edges {
           node {
@@ -261,8 +261,8 @@ export const HOME_RECOMMENDED_QUERY = gql`
 `;
 
 export const FEATURED_POSTS_QUERY = gql`
-  query FeaturedPosts($after: ID) {
-    featuredPosts(after: $after, limit: 4) {
+  query FeaturedPosts($after: ID, $limit: Int) {
+    featuredPosts(after: $after, limit: $limit) {
       totalCount
       edges {
         node {
@@ -279,8 +279,8 @@ export const FEATURED_POSTS_QUERY = gql`
 `;
 
 export const NEW_POSTS_QUERY = gql`
-  query NewPosts($after: ID) {
-    newPosts(after: $after, limit: 4) {
+  query NewPosts($after: ID, $limit: Int) {
+    newPosts(after: $after, limit: $limit) {
       totalCount
       edges {
         node {
@@ -308,10 +308,10 @@ export const SETTINGS_QUERY = gql`
 `;
 
 export const COMMISSIONS_QUERY = gql`
-  query Commissions($id: ID!, $after: ID) {
+  query Commissions($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      commissions(after: $after, limit: 4) {
+      commissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage
@@ -336,10 +336,10 @@ export const COMMISSIONS_QUERY = gql`
 `;
 
 export const YOUR_COMMISSIONS_QUERY = gql`
-  query Commissions($id: ID!, $after: ID) {
+  query Commissions($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      yourCommissions(after: $after, limit: 4) {
+      yourCommissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage
@@ -364,10 +364,10 @@ export const YOUR_COMMISSIONS_QUERY = gql`
 `;
 
 export const PENDING_COMMS_QUERY = gql`
-  query PendingComms($id: ID!, $after: ID) {
+  query PendingComms($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      pendingCommissions(after: $after, limit: 4) {
+      pendingCommissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage
@@ -393,10 +393,10 @@ export const PENDING_COMMS_QUERY = gql`
 `;
 
 export const YOUR_PENDING_COMMS_QUERY = gql`
-  query YourPendingComms($id: ID!, $after: ID) {
+  query YourPendingComms($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      yourPendingCommissions(after: $after, limit: 4) {
+      yourPendingCommissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage
@@ -422,10 +422,10 @@ export const YOUR_PENDING_COMMS_QUERY = gql`
 `;
 
 export const FINISHED_COMMS_QUERY = gql`
-  query FinishedComms($id: ID!, $after: ID) {
+  query FinishedComms($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      finishedCommissions(after: $after, limit: 4) {
+      finishedCommissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage
@@ -451,10 +451,10 @@ export const FINISHED_COMMS_QUERY = gql`
 `;
 
 export const YOUR_FINISHED_COMMS_QUERY = gql`
-  query YourFinishedComms($id: ID!, $after: ID) {
+  query YourFinishedComms($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       id
-      yourFinishedCommissions(after: $after, limit: 4) {
+      yourFinishedCommissions(after: $after, limit: $limit) {
         totalCount
         pageInfo {
           hasNextPage

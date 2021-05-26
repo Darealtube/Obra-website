@@ -37,25 +37,40 @@ const Home = () => {
   const {
     data: { featuredPosts },
     fetchMore,
-  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY);
+  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY, {
+    variables: {
+      limit: 4,
+    },
+  });
   const {
     data: { newPosts },
     fetchMore: moreNewPosts,
-  } = useQuery<NewPostsData, PaginatedPostsVars>(NEW_POSTS_QUERY);
+  } = useQuery<NewPostsData, PaginatedPostsVars>(NEW_POSTS_QUERY, {
+    variables: {
+      limit: 4,
+    },
+  });
   const {
     data: { userId },
     fetchMore: moreRecommended,
   } = useQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY, {
     variables: {
       id: session.id,
+      limit: 4,
     },
   });
-  const { More } = usePagination("featuredPosts", fetchMore, featuredPosts);
-  const { More: MoreNew } = usePagination("newPosts", moreNewPosts, newPosts);
+  const { More } = usePagination("featuredPosts", fetchMore, featuredPosts, 4);
+  const { More: MoreNew } = usePagination(
+    "newPosts",
+    moreNewPosts,
+    newPosts,
+    4
+  );
   const { More: MoreRecc, hasMore } = usePagination(
     "userId",
     moreRecommended,
     userId.homeRecommended,
+    4,
     "homeRecommended"
   );
 

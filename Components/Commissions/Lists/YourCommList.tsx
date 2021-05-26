@@ -26,6 +26,7 @@ const YourCommList = ({ yourCommissions, fetchMore }: Props) => {
     "userId",
     fetchMore,
     yourCommissions,
+    4,
     "yourCommissions",
     true
   );

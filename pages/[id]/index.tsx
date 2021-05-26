@@ -53,6 +53,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
   } = useQuery<PostData, PostVars>(POST_ID_QUERY, {
     variables: {
       id: id,
+      limit: 4,
     },
   });
   const {
@@ -61,6 +62,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
   } = useQuery<RecommendedPostData, PostVars>(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
+      limit: 4,
     },
   });
   const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);

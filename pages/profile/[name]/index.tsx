@@ -27,6 +27,7 @@ const UserID = ({ name, id, alreadyLiked }: Props) => {
   } = useQuery<UserData, UserVars>(USER_POST_QUERY, {
     variables: {
       name: name,
+      limit: 4,
     },
   });
 
@@ -34,6 +35,7 @@ const UserID = ({ name, id, alreadyLiked }: Props) => {
     "userName",
     fetchMore,
     userName?.posts,
+    4,
     "posts"
   );
 

@@ -26,6 +26,7 @@ const Appbar = () => {
     {
       variables: {
         id: session?.id,
+        limit: 4,
       },
       skip: !session,
       pollInterval: 60000,

@@ -15,6 +15,7 @@ const usePagination = (
   key: string,
   fetchMore,
   info: Info,
+  limit: number,
   key2?: string,
   execute?: boolean
 ) => {
@@ -32,16 +33,18 @@ const usePagination = (
   useEffect(() => {
     if (node && isScrollable === false) {
       if (execute === true && hasMore === true) {
+        setRefetching(true);
         More();
+        setRefetching(false);
       }
       setisScrollable(node?.scrollHeight > node?.clientHeight);
     }
-  }, [execute, node, isScrollable, hasMore, page]);
+  }, [execute, node, isScrollable, hasMore]);
 
   const More = () => {
     if (!refetching) {
       fetchMore({
-        variables: { after: info?.edges.slice(-1)[0].node.id },
+        variables: { after: info?.edges.slice(-1)[0].node.id, limit: limit },
       }).then((fetchMoreResult) => {
         if (fetchMoreResult.data[`${key}`]) {
           setPage((prevpage) => prevpage + 1);
@@ -58,10 +61,10 @@ const usePagination = (
   };
 
   useEffect(() => {
-    if (info?.edges.length < page * 4 && hasMore) {
+    if (info?.edges.length < page * limit && hasMore) {
       setRefetching(true);
       fetchMore({
-        variables: { cursor: info?.edges[page * 4 - 5] },
+        variables: { after: info?.edges.slice(-1)[0].node.id, limit: 1 },
       }).then((fetchMoreResult) => {
         if (
           (key2

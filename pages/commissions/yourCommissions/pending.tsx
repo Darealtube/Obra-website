@@ -17,6 +17,7 @@ const YourPendingCommissions = () => {
     {
       variables: {
         id: session?.id,
+        limit: 4,
       },
       skip: !session,
     }

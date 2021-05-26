@@ -20,7 +20,8 @@ const RecommendedList = ({ fetchMore, recommended }: Parameters) => {
   const { More, hasMore } = usePagination(
     "recommendedPosts",
     fetchMore,
-    recommended
+    recommended,
+    4
   );
 
   return (

@@ -54,6 +54,7 @@ const PostInfo = ({
     "postId",
     fetchMore,
     postID.comments,
+    4,
     "comments",
     openComment
   );

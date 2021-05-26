@@ -27,12 +27,14 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
   } = useQuery<UserData, UserVars>(USER_LIKED_POST_QUERY, {
     variables: {
       name: name,
+      limit: 4,
     },
   });
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
     userName.likedPosts,
+    4,
     "likedPosts"
   );
 

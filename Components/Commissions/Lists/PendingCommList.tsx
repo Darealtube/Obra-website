@@ -26,6 +26,7 @@ const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
     "userId",
     fetchMore,
     yourPendingCommissions,
+    4,
     "yourPendingCommissions",
     true
   );

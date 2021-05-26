@@ -10,7 +10,6 @@ import { UserContext } from "../SettingsWrap";
 
 const SecondaryInfo = ({ open }: { open: boolean }) => {
   const user = useContext(UserContext);
-  console.log(user);
   return (
     <>
       <Collapse

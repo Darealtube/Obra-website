@@ -15,6 +15,7 @@ export interface AppbarUserData {
 
 export interface AppbarVars {
   id: string;
+  limit?: number;
 }
 
 export interface PostData {
@@ -24,6 +25,7 @@ export interface PostData {
 export interface PostVars {
   id: string;
   after?: string;
+  limit?: number;
 }
 
 export interface RecommendedPostData {
@@ -37,6 +39,7 @@ export interface UserData {
 export interface UserVars {
   name: string;
   after?: string;
+  limit?: number;
 }
 
 export interface FeaturedPostsData {
@@ -54,10 +57,12 @@ export interface HomeUserData {
 export interface HomeUserVars {
   id: string;
   after?: string;
+  limit?: number;
 }
 
 export interface PaginatedPostsVars {
   after?: string;
+  limit?: number;
 }
 
 export interface CommissionData {
@@ -67,6 +72,7 @@ export interface CommissionData {
 export interface CommissionVars {
   id: string;
   after?: string;
+  limit?: number;
 }
 
 export interface CommissionIdData {

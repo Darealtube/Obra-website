@@ -49,6 +49,7 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     "userId",
     fetchMore,
     user.userId.notifications,
+    4,
     "notifications"
   );
   const showNotif = useMediaQuery("(max-width:280px)");
@@ -109,7 +110,7 @@ const NotifPop = ({ user, fetchMore }: Props) => {
           <InfiniteScroll
             dataLength={user.userId.notifications.edges.length}
             next={More}
-            hasMore={hasMore}
+            hasMore={user.userId.notifications.pageInfo.hasNextPage}
             loader={
               <>
                 <br />

@@ -29,7 +29,6 @@ const UserID = ({ name }: Props) => {
       limit: 4,
     },
   });
-  console.log(userName.likedBy);
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,

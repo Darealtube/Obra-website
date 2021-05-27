@@ -7,10 +7,11 @@ import { UserInterface } from "../../interfaces/UserInterface";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import BrushIcon from "@material-ui/icons/Brush";
 import {
+  IS_LIKED_ARTIST,
   LIKE_ARTIST_MUTATION,
   UNLIKE_ARTIST_MUTATION,
 } from "../../apollo/apolloQueries";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
@@ -32,6 +33,13 @@ type Props = {
 const UserInfo = ({ artist, admin }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
+  const { data } = useQuery(IS_LIKED_ARTIST, {
+    variables: {
+      userID: session?.id,
+      artistName: artist.name,
+    },
+    skip: !session,
+  });
   const [liked, setLiked] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [likeArtist] =
@@ -63,8 +71,8 @@ const UserInfo = ({ artist, admin }: Props) => {
   };
 
   useEffect(() => {
-    setLiked(artist.likedBy.includes(session?.id));
-  }, [session]);
+    setLiked(data.isLikedArtist);
+  }, [session, data]);
 
   return (
     <Box className={styles.userContainer}>
@@ -113,7 +121,7 @@ const UserInfo = ({ artist, admin }: Props) => {
 
         {!admin && artist ? (
           <Container style={{ marginBottom: "16px" }}>
-            {session && (
+            {session && data && (
               <Button
                 fullWidth
                 className={liked ? styles.userOptions2 : styles.userOptions}

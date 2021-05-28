@@ -10,9 +10,10 @@ import { useSession } from "next-auth/client";
 type Props = {
   children: React.ReactNode;
   artist: UserInterface;
+  userLiked: boolean;
 };
 
-const ProfileWrap = ({ children, artist }: Props) => {
+const ProfileWrap = ({ children, artist, userLiked }: Props) => {
   const [session] = useSession();
   return (
     <div className={styles.wrapRoot}>
@@ -32,6 +33,7 @@ const ProfileWrap = ({ children, artist }: Props) => {
           children={children}
           artist={artist}
           admin={artist.id == session?.id}
+          userLiked={userLiked}
         />
         <RightInfo children={children} artist={artist} />
       </Box>

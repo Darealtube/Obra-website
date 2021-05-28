@@ -6,12 +6,17 @@ import Head from "next/head";
 import { GetStaticProps } from "next";
 import { fetchAllUsers, fetchUserandPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { USER_POST_QUERY } from "../../../apollo/apolloQueries";
+import {
+  IS_LIKED_ARTIST,
+  USER_POST_QUERY,
+} from "../../../apollo/apolloQueries";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
+import { useSession } from "next-auth/client";
+import { useEffect, useState } from "react";
 
 type Props = {
   name: string;
@@ -20,6 +25,8 @@ type Props = {
 };
 
 const UserID = ({ name }: Props) => {
+  const [session] = useSession();
+  const [userLiked, setuserLiked] = useState(false);
   const {
     data: { userName },
     fetchMore,
@@ -29,6 +36,13 @@ const UserID = ({ name }: Props) => {
       limit: 4,
     },
   });
+  const { data } = useQuery(IS_LIKED_ARTIST, {
+    variables: {
+      userID: session?.id,
+      artistName: name,
+    },
+    skip: !session,
+  });
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
@@ -36,6 +50,10 @@ const UserID = ({ name }: Props) => {
     4,
     "posts"
   );
+
+  useEffect(() => {
+    setuserLiked(data?.isLikedArtist);
+  }, [data]);
 
   return (
     <div className={styles.root}>
@@ -45,7 +63,7 @@ const UserID = ({ name }: Props) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap artist={userName}>
+      <ProfileWrap artist={userName} userLiked={userLiked}>
         {userName ? (
           <InfiniteScroll
             dataLength={userName.posts.edges.length}
@@ -103,7 +121,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       name: context.params.name,
     },
-    revalidate: 5,
   });
 };
 

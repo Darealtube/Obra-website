@@ -5,16 +5,15 @@ import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import UserInfo from "./UserInfo";
-import { useSession } from "next-auth/client";
 
 type Props = {
   children: React.ReactNode;
   artist: UserInterface;
+  admin: boolean;
   userLiked: boolean;
 };
 
-const ProfileWrap = ({ children, artist, userLiked }: Props) => {
-  const [session] = useSession();
+const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
   return (
     <div className={styles.wrapRoot}>
       <Box className={styles.backdrop}>
@@ -32,7 +31,7 @@ const ProfileWrap = ({ children, artist, userLiked }: Props) => {
         <UserInfo
           children={children}
           artist={artist}
-          admin={artist.id == session?.id}
+          admin={admin}
           userLiked={userLiked}
         />
         <RightInfo children={children} artist={artist} />

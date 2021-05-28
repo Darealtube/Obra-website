@@ -3,23 +3,16 @@ import { CssBaseline, CircularProgress } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import { CardList } from "../../../Components/CardList";
 import Head from "next/head";
-import { GetStaticProps } from "next";
-import {
-  fetchAllUsers,
-  fetchUserandLikedPosts,
-} from "../../../utils/fetchData";
+import { GetServerSideProps } from "next";
+import { fetchUserandLikedPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import {
-  IS_LIKED_ARTIST,
-  USER_LIKED_POST_QUERY,
-} from "../../../apollo/apolloQueries";
+import { USER_LIKED_POST_QUERY } from "../../../apollo/apolloQueries";
+import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
-import { useSession } from "next-auth/client";
-import { useEffect, useState } from "react";
 
 type Props = {
   name: string;
@@ -27,9 +20,7 @@ type Props = {
   alreadyLiked: boolean;
 };
 
-const UserIDLiked = ({ name }: Props) => {
-  const [session] = useSession();
-  const [userLiked, setuserLiked] = useState(false);
+const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
   const {
     data: { userName },
     fetchMore,
@@ -39,13 +30,6 @@ const UserIDLiked = ({ name }: Props) => {
       limit: 4,
     },
   });
-  const { data } = useQuery(IS_LIKED_ARTIST, {
-    variables: {
-      userID: session?.id,
-      artistName: name,
-    },
-    skip: !session,
-  });
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
@@ -53,10 +37,6 @@ const UserIDLiked = ({ name }: Props) => {
     4,
     "likedPosts"
   );
-
-  useEffect(() => {
-    setuserLiked(data?.isLikedArtist);
-  }, [data]);
 
   return (
     <div className={styles.root}>
@@ -66,7 +46,11 @@ const UserIDLiked = ({ name }: Props) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <ProfileWrap artist={userName} userLiked={userLiked}>
+      <ProfileWrap
+        artist={userName}
+        admin={userName?.id === id}
+        userLiked={alreadyLiked}
+      >
         {userName && (
           <InfiniteScroll
             dataLength={userName.likedPosts.edges.length}
@@ -96,17 +80,11 @@ const UserIDLiked = ({ name }: Props) => {
 
 /*  */
 
-export const getStaticPaths = async () => {
-  const userList = await fetchAllUsers();
-  const paths = userList.map((name) => ({
-    params: { name },
-  }));
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { data, exists } = await fetchUserandLikedPosts(
-    context.params.name as string
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const { data, exists, alreadyLiked } = await fetchUserandLikedPosts(
+    context.params.name as string,
+    session.id
   );
 
   if (!exists) {
@@ -117,7 +95,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return addApolloState(data, {
     props: {
+      session,
       name: context.params.name,
+      id: session.id as string,
+      alreadyLiked: alreadyLiked,
     },
   });
 };

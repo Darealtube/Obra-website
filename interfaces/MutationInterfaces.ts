@@ -93,6 +93,8 @@ export interface CreatePostVars {
   price: string;
   sale: string;
   author: string;
+  width: number;
+  height: number;
 }
 
 export interface AcceptCommissionData {

@@ -5,6 +5,7 @@ const useArt = (initPlaceHolder: string) => {
   const [placeholder, setPlaceholder] = useState(initPlaceHolder);
   const setArt = async (files: FileList) => {
     let url: string;
+    let width: number, height: number;
     setLoading(true);
     const fileList = files;
     const data = new FormData();
@@ -23,13 +24,15 @@ const useArt = (initPlaceHolder: string) => {
     );
     const file = await res.json();
     url = await file.secure_url;
+    width = await file.width;
+    height = await file.height;
     let reader = new FileReader();
     reader.onload = (e) => {
       setPlaceholder(e.target.result as string);
       setLoading(false);
     };
     reader.readAsDataURL(fileList[0]);
-    return { url };
+    return { url, width, height };
   };
   return { loading, setArt, placeholder };
 };

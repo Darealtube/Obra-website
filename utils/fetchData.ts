@@ -1,6 +1,5 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
-  ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
   IS_LIKED_ARTIST,
@@ -9,6 +8,7 @@ import {
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
+  TRENDING_POSTS_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -132,6 +132,18 @@ export const fetchPosts = async (id: string) => {
     query: HOME_RECOMMENDED_QUERY,
     variables: {
       id: id,
+      limit: 4,
+    },
+  });
+  return apolloClient;
+};
+
+// FOR NOW
+export const fetchTrendingPosts = async () => {
+  const apolloClient = initializeApollo();
+  await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
+    query: TRENDING_POSTS_QUERY,
+    variables: {
       limit: 4,
     },
   });

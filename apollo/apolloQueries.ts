@@ -176,7 +176,6 @@ export const USER_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
-      likedBy
       posts(limit: $limit, after: $after) {
         totalCount
         edges {
@@ -201,7 +200,6 @@ export const USER_LIKED_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
-      likedBy
       likedPosts(limit: $limit, after: $after) {
         totalCount
         edges {
@@ -479,18 +477,37 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
   }
 `;
 
+export const TRENDING_POSTS_QUERY = gql`
+  query TrendingPosts($limit: Int, $after: ID) {
+    featuredPosts(after: $after, limit: $limit) {
+      totalCount
+      edges {
+        node {
+          id
+          author {
+            ...UserInfo
+          }
+          art
+          title
+          width
+          height
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
 export const COMMISSION_COUNT_QUERY = gql`
   query CommissionCount($id: ID!) {
     userId(id: $id) {
       id
       commissionCount
     }
-  }
-`;
-
-export const ALL_USER_QUERY = gql`
-  query AllUsers {
-    allUsersList
   }
 `;
 
@@ -568,6 +585,8 @@ export const CREATE_POST_MUTATION = gql`
     $price: String!
     $sale: String!
     $author: ID!
+    $width: Int!
+    $height: Int!
   ) {
     createPost(
       date: $date
@@ -578,6 +597,8 @@ export const CREATE_POST_MUTATION = gql`
       price: $price
       sale: $sale
       author: $author
+      width: $width
+      height: $height
     )
   }
 `;

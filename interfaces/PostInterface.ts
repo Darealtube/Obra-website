@@ -15,6 +15,8 @@ export interface PostInterface {
   comments?: PostComments;
   forSale?: boolean;
   forSalePrice?: string;
+  width: number;
+  height: number;
 }
 
 export interface edges {

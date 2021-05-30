@@ -46,6 +46,10 @@ export interface FeaturedPostsData {
   featuredPosts: Posts;
 }
 
+export interface TrendingPostsData {
+  trendingPosts: Posts;
+}
+
 export interface NewPostsData {
   newPosts: Posts;
 }

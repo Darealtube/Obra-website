@@ -121,7 +121,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
       <DynamicImageDialog
         handleClose={handleClose}
         open={open}
-        postId={postId}
+        art={postId.art}
       />
     </div>
   );

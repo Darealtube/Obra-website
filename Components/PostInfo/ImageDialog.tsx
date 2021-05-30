@@ -2,15 +2,14 @@ import { Container, Dialog, IconButton } from "@material-ui/core";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
-import { PostInterface } from "../../interfaces/PostInterface";
 
 type Props = {
   handleClose: () => void;
   open: boolean;
-  postId: PostInterface;
+  art: string;
 };
 
-const ImageDialog = ({ handleClose, open, postId }: Props) => {
+const ImageDialog = ({ handleClose, open, art }: Props) => {
   return (
     <Dialog
       open={open}
@@ -35,7 +34,7 @@ const ImageDialog = ({ handleClose, open, postId }: Props) => {
         >
           <FullscreenExitIcon style={{ color: "white" }} />
         </IconButton>
-        <Image src={postId.art} layout="fill" objectFit="contain" />
+        {art != "" && <Image src={art} layout="fill" objectFit="contain" />}
       </Container>
     </Dialog>
   );

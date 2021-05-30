@@ -28,22 +28,22 @@ const initState: State = {
   price: "",
   sale: "No",
   tags: [] as string[],
+  width: 0,
+  height: 0,
 };
 
 const Create = ({ id }: { id: string }) => {
   const router = useRouter();
-  const [create] = useMutation<CreatePostData, CreatePostVars>(
-    CREATE_POST_MUTATION
-  );
+  const [create] =
+    useMutation<CreatePostData, CreatePostVars>(CREATE_POST_MUTATION);
   const [post, dispatch] = useReducer(reducer, initState);
   const { loading, setArt, placeholder } = useArt("");
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setArt((e.target as HTMLInputElement).files).then((values) => {
       dispatch({
-        type: "CHANGE",
-        field: "art",
-        payload: values.url,
+        type: "CHANGE_ART",
+        artPayload: values,
       });
     });
   };
@@ -76,6 +76,8 @@ const Create = ({ id }: { id: string }) => {
         sale: post.sale,
         date: moment().format("l"),
         tags: post.tags,
+        width: post.width,
+        height: post.height,
       },
     });
     router.push("/home");

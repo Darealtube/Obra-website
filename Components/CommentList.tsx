@@ -51,16 +51,22 @@ const CommentList = ({ comments }: Props) => {
             <ListItem alignItems="flex-start" key={index}>
               <ListItemAvatar>
                 <Image
-                  src={comment.node.author.image}
+                  src={
+                    comment.node.author
+                      ? comment.node.author.image
+                      : "/user-empty-avatar.png"
+                  }
                   width={40}
                   height={40}
                   className={styles.avatar}
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={`${comment.node.author.name} commented ${moment(
-                  comment.node.date
-                ).fromNow()}`}
+                primary={`${
+                  comment.node.author
+                    ? comment.node.author.name
+                    : "Deleted User"
+                } commented ${moment(comment.node.date).fromNow()}`}
                 secondary={
                   <React.Fragment>{comment.node.content}</React.Fragment>
                 }
@@ -71,7 +77,7 @@ const CommentList = ({ comments }: Props) => {
                   aria-label="edit"
                   onClick={handleEdit}
                   value={comment.node.id}
-                  id={comment.node.author.id}
+                  id={comment.node.author ? comment.node.author.id : ""}
                 >
                   <MoreVertIcon />
                 </IconButton>

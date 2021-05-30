@@ -73,7 +73,9 @@ const Trending = () => {
 export const getStaticProps: GetStaticProps = async () => {
   const apolloClient = await fetchTrendingPosts();
   return addApolloState(apolloClient, {
-    props: {},
+    props: {
+      default: 1,
+    },
   });
 };
 

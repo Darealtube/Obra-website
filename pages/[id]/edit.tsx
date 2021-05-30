@@ -27,6 +27,8 @@ const Create = ({ postId }: { postId: PostInterface }) => {
     price: postId.price,
     sale: postId.sale,
     tags: postId.tags as string[],
+    width: postId.width,
+    height: postId.height,
   };
   const [post, dispatch] = useReducer(reducer, initState);
   const [edit] = useMutation<EditPostData, EditPostVars>(EDIT_POST_MUTATION);

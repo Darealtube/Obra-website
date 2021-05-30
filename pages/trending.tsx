@@ -71,8 +71,8 @@ const Trending = ({ foo }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apolloClient = await fetchTrendingPosts();
-  return addApolloState(apolloClient, {
+  const data = await fetchTrendingPosts();
+  return addApolloState(data, {
     props: {
       foo: 1,
     },

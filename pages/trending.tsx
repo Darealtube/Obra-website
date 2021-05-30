@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { addApolloState } from "../apollo/apolloClient";
 import { fetchTrendingPosts } from "../utils/fetchData";
 import Head from "next/head";
@@ -70,7 +70,7 @@ const Trending = ({ foo }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const data = await fetchTrendingPosts();
   return addApolloState(data, {
     props: {

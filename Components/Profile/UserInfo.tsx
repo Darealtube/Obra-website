@@ -11,7 +11,7 @@ import {
   UNLIKE_ARTIST_MUTATION,
 } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
 import dynamic from "next/dynamic";
@@ -27,18 +27,19 @@ type Props = {
   children: React.ReactNode;
   artist: UserInterface;
   admin: boolean;
+  userLiked: boolean;
 };
 
-const UserInfo = ({ artist, admin }: Props) => {
+const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
-  const [liked, setLiked] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [liked, setLiked] = useState(userLiked);
   const [likeArtist] =
     useMutation<LikeArtistData, UnlikeLikeArtistVars>(LIKE_ARTIST_MUTATION);
   const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
     UNLIKE_ARTIST_MUTATION
   );
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -61,10 +62,6 @@ const UserInfo = ({ artist, admin }: Props) => {
   const OpenDialog = () => {
     setOpenDialog(true);
   };
-
-  useEffect(() => {
-    setLiked(artist.likedBy.includes(session?.id));
-  }, [session]);
 
   return (
     <Box className={styles.userContainer}>
@@ -113,25 +110,23 @@ const UserInfo = ({ artist, admin }: Props) => {
 
         {!admin && artist ? (
           <Container style={{ marginBottom: "16px" }}>
-            {session && (
-              <Button
-                fullWidth
-                className={liked ? styles.userOptions2 : styles.userOptions}
-                onClick={handleLike}
-              >
-                <span>
-                  <Typography align="center">
-                    <span className={styles.text}>
-                      {" "}
-                      <FavoriteBorderIcon
-                        className={liked ? styles.icon2 : styles.icon}
-                      />
-                      {liked ? "Unlike Artist" : "Like Artist"}
-                    </span>
-                  </Typography>
-                </span>
-              </Button>
-            )}
+            <Button
+              fullWidth
+              className={liked ? styles.userOptions2 : styles.userOptions}
+              onClick={handleLike}
+            >
+              <span>
+                <Typography align="center">
+                  <span className={styles.text}>
+                    {" "}
+                    <FavoriteBorderIcon
+                      className={liked ? styles.icon2 : styles.icon}
+                    />
+                    {liked ? "Unlike Artist" : "Like Artist"}
+                  </span>
+                </Typography>
+              </span>
+            </Button>
             <Link
               href={`/profile/${encodeURIComponent(artist.name)}/commission`}
             >

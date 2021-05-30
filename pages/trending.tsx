@@ -21,7 +21,7 @@ import usePagination from "../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Gridlist from "../Components/GridList";
 
-const Trending = () => {
+const Trending = ({ foo }) => {
   const {
     data: { featuredPosts },
     fetchMore,
@@ -74,7 +74,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const apolloClient = await fetchTrendingPosts();
   return addApolloState(apolloClient, {
     props: {
-      default: 1,
+      foo: 1,
     },
   });
 };

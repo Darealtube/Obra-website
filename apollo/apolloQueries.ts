@@ -37,6 +37,12 @@ export const UserInfo2 = gql`
   }
 `;
 
+export const ALL_USER_QUERY = gql`
+  query AllUsers {
+    allUsersList
+  }
+`;
+
 //Fetch all Users
 export const USER_QUERY = gql`
   query Users {
@@ -176,6 +182,7 @@ export const USER_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
+      likedBy
       posts(limit: $limit, after: $after) {
         totalCount
         edges {
@@ -200,6 +207,7 @@ export const USER_LIKED_POST_QUERY = gql`
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
+      likedBy
       likedPosts(limit: $limit, after: $after) {
         totalCount
         edges {

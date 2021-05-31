@@ -510,7 +510,8 @@ export const FEATURED_POSTS_QUERY_2 = gql`
         node {
           id
           author {
-            ...UserInfo
+            id
+            name
           }
           art
           title

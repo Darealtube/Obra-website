@@ -73,13 +73,7 @@ const Trending = () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { data, exists } = await fetchUserandPosts2("VALENTINE");
-
-  if (!exists) {
-    return {
-      notFound: true,
-    };
-  }
+  const data = await fetchUserandPosts2("VALENTINE");
 
   return addApolloState(data, {
     props: {

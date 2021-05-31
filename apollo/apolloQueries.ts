@@ -508,6 +508,8 @@ export const FEATURED_POSTS_QUERY_2 = gql`
       totalCount
       edges {
         node {
+          id
+          art
           title
           author {
             ...UserInfo

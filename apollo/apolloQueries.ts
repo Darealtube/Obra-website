@@ -525,6 +525,7 @@ export const FEATURED_POSTS_QUERY_2 = gql`
     }
   }
   ${PostInfo}
+  ${UserInfo}
 `;
 
 export const COMMISSION_COUNT_QUERY = gql`

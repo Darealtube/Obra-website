@@ -508,8 +508,12 @@ export const FEATURED_POSTS_QUERY_2 = gql`
       totalCount
       edges {
         node {
+          id
+          author {
+            ...UserInfo
+          }
+          art
           title
-          ...PostInfo
           width
           height
         }

@@ -502,6 +502,27 @@ export const TRENDING_POSTS_QUERY = gql`
   ${UserInfo}
 `;
 
+export const FEATURED_POSTS_QUERY_2 = gql`
+  query FeaturedPosts($after: ID, $limit: Int) {
+    featuredPosts(after: $after, limit: $limit) {
+      totalCount
+      edges {
+        node {
+          title
+          ...PostInfo
+          width
+          height
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+  ${PostInfo}
+`;
+
 export const COMMISSION_COUNT_QUERY = gql`
   query CommissionCount($id: ID!) {
     userId(id: $id) {

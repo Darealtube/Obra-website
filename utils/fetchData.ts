@@ -1,6 +1,7 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
   FEATURED_POSTS_QUERY,
+  FEATURED_POSTS_QUERY_2,
   HOME_RECOMMENDED_QUERY,
   IS_LIKED_ARTIST,
   IS_LIKED_POST,
@@ -142,7 +143,7 @@ export const fetchPosts = async (id: string) => {
 export const fetchTrendingPosts = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
-    query: FEATURED_POSTS_QUERY,
+    query: FEATURED_POSTS_QUERY_2,
     variables: {
       limit: 4,
     },

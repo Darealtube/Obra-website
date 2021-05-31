@@ -13,7 +13,7 @@ import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import {
-  FEATURED_POSTS_QUERY,
+  FEATURED_POSTS_QUERY_2,
   TRENDING_POSTS_QUERY,
 } from "../apollo/apolloQueries";
 import {
@@ -28,7 +28,7 @@ const Trending = () => {
   const {
     data: { featuredPosts },
     fetchMore,
-  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY, {
+  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY_2, {
     variables: {
       limit: 4,
     },

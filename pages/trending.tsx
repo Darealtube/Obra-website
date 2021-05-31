@@ -76,9 +76,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const data = await fetchUserandPosts2("VALENTINE");
 
   return addApolloState(data, {
-    props: {
-      name: "VALENTINE",
-    },
+    props: {},
   });
 };
 

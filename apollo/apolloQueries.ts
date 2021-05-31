@@ -478,31 +478,6 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
 `;
 
 export const TRENDING_POSTS_QUERY = gql`
-  query TrendingPosts($limit: Int, $after: ID) {
-    featuredPosts(after: $after, limit: $limit) {
-      totalCount
-      edges {
-        node {
-          id
-          author {
-            ...UserInfo
-          }
-          art
-          title
-          width
-          height
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-  ${UserInfo}
-`;
-
-export const FEATURED_POSTS_QUERY_2 = gql`
   query FeaturedPosts($after: ID, $limit: Int) {
     featuredPosts(after: $after, limit: $limit) {
       totalCount

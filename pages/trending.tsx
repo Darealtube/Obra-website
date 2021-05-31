@@ -73,7 +73,7 @@ const Trending = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const data = await fetchTrendingPosts();
   return addApolloState(data, {
     props: {},

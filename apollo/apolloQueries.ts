@@ -508,13 +508,10 @@ export const FEATURED_POSTS_QUERY_2 = gql`
       totalCount
       edges {
         node {
-          id
-          author {
-            id
-            name
-          }
-          art
           title
+          author {
+            ...UserInfo
+          }
           width
           height
         }
@@ -525,7 +522,7 @@ export const FEATURED_POSTS_QUERY_2 = gql`
       }
     }
   }
-  ${PostInfo}
+  ${UserInfo}
 `;
 
 export const COMMISSION_COUNT_QUERY = gql`

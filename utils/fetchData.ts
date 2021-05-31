@@ -85,19 +85,6 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
   };
 };
 
-export const fetchUserandPosts2 = async (name: string) => {
-  const apolloClient = initializeApollo();
-  await apolloClient.query<UserData, UserVars>({
-    query: USER_POST_QUERY,
-    variables: {
-      name: name,
-      limit: 4,
-    },
-  });
-
-  return apolloClient;
-};
-
 export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {
@@ -127,7 +114,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   };
 };
 
-export const fetchPosts = async (id: string) => {
+export const fetchPosts = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
     query: FEATURED_POSTS_QUERY,
@@ -138,13 +125,6 @@ export const fetchPosts = async (id: string) => {
   await apolloClient.query<NewPostsData, PaginatedPostsVars>({
     query: NEW_POSTS_QUERY,
     variables: {
-      limit: 4,
-    },
-  });
-  await apolloClient.query<HomeUserData, HomeUserVars>({
-    query: HOME_RECOMMENDED_QUERY,
-    variables: {
-      id: id,
       limit: 4,
     },
   });

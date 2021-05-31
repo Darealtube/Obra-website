@@ -50,7 +50,7 @@ const Home = () => {
       limit: 4,
     },
   });
-  const {
+  /*  const {
     data: { userId },
     fetchMore: moreRecommended,
   } = useQuery<HomeUserData, HomeUserVars>(HOME_RECOMMENDED_QUERY, {
@@ -58,7 +58,7 @@ const Home = () => {
       id: session.id,
       limit: 4,
     },
-  });
+  }); */
   const { More } = usePagination("featuredPosts", fetchMore, featuredPosts, 4);
   const { More: MoreNew } = usePagination(
     "newPosts",
@@ -66,13 +66,13 @@ const Home = () => {
     newPosts,
     4
   );
-  const { More: MoreRecc, hasMore } = usePagination(
+  /*  const { More: MoreRecc, hasMore } = usePagination(
     "userId",
     moreRecommended,
     userId.homeRecommended,
     4,
     "homeRecommended"
-  );
+  ); */
 
   return (
     <div className={styles.root}>
@@ -117,7 +117,7 @@ const Home = () => {
         <Typography variant="h4">Recommended</Typography>
         <Divider className={styles.divider} />
         <br />
-        <InfiniteScroll
+        {/* <InfiniteScroll
           dataLength={userId.homeRecommended.edges.length}
           next={MoreRecc}
           hasMore={hasMore}
@@ -133,21 +133,18 @@ const Home = () => {
           scrollThreshold={0.8}
         >
           <CardList postData={userId.homeRecommended.edges} />
-        </InfiniteScroll>
+        </InfiniteScroll> */}
         <br />
       </Container>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  const apollo = await fetchPosts(session.id);
+export const getStaticProps: GetStaticProps = async (context) => {
+  const apollo = await fetchPosts();
 
   return addApolloState(apollo, {
-    props: {
-      session,
-    },
+    props: {},
   });
 };
 

@@ -85,6 +85,24 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
   };
 };
 
+export const fetchUserandPosts2 = async (name: string) => {
+  const apolloClient = initializeApollo();
+  const {
+    data: { userName },
+  } = await apolloClient.query<UserData, UserVars>({
+    query: USER_POST_QUERY,
+    variables: {
+      name: name,
+      limit: 4,
+    },
+  });
+
+  return {
+    data: apolloClient,
+    exists: userName ? true : false,
+  };
+};
+
 export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {

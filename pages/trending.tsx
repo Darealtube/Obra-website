@@ -1,6 +1,6 @@
 import { GetServerSideProps, GetStaticProps } from "next";
 import { addApolloState } from "../apollo/apolloClient";
-import { fetchTrendingPosts } from "../utils/fetchData";
+import { fetchTrendingPosts, fetchUserandPosts2 } from "../utils/fetchData";
 import Head from "next/head";
 import {
   CssBaseline,
@@ -21,19 +21,19 @@ import usePagination from "../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Gridlist from "../Components/GridList";
 
-const Trending = ({ foo }) => {
-  const {
-    data: { featuredPosts },
-    fetchMore,
-  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(TRENDING_POSTS_QUERY, {
-    variables: {
-      limit: 4,
-    },
-  });
+const Trending = () => {
+  const { data, fetchMore } = useQuery<FeaturedPostsData, PaginatedPostsVars>(
+    TRENDING_POSTS_QUERY,
+    {
+      variables: {
+        limit: 4,
+      },
+    }
+  );
   const { More, hasMore } = usePagination(
     "featuredPosts",
     fetchMore,
-    featuredPosts,
+    data?.featuredPosts,
     4
   );
 
@@ -48,33 +48,42 @@ const Trending = ({ foo }) => {
       <Container className={styles.content}>
         <Typography variant="h4">Trending Posts</Typography>
         <Divider />
-        <InfiniteScroll
-          dataLength={featuredPosts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-          scrollThreshold={0.8}
-        >
-          <Gridlist data={featuredPosts.edges} />
-        </InfiniteScroll>
+        {data && (
+          <InfiniteScroll
+            dataLength={data?.featuredPosts.edges.length}
+            next={More}
+            hasMore={hasMore}
+            loader={
+              <>
+                <br />
+                <CircularProgress />
+              </>
+            }
+            style={{
+              overflow: "hidden",
+            }}
+            scrollThreshold={0.8}
+          >
+            <Gridlist data={data?.featuredPosts.edges} />
+          </InfiniteScroll>
+        )}
       </Container>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const data = await fetchTrendingPosts();
+export const getStaticProps: GetStaticProps = async (context) => {
+  const { data, exists } = await fetchUserandPosts2("VALENTINE");
+
+  if (!exists) {
+    return {
+      notFound: true,
+    };
+  }
+
   return addApolloState(data, {
     props: {
-      foo: 1,
+      name: "VALENTINE",
     },
   });
 };

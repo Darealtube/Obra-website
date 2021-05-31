@@ -12,7 +12,10 @@ import {
 import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
-import { TRENDING_POSTS_QUERY } from "../apollo/apolloQueries";
+import {
+  FEATURED_POSTS_QUERY,
+  TRENDING_POSTS_QUERY,
+} from "../apollo/apolloQueries";
 import {
   FeaturedPostsData,
   PaginatedPostsVars,
@@ -21,11 +24,11 @@ import usePagination from "../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Gridlist from "../Components/GridList";
 
-const Trending = ({ foo }) => {
+const Trending = () => {
   const {
     data: { featuredPosts },
     fetchMore,
-  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(TRENDING_POSTS_QUERY, {
+  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(FEATURED_POSTS_QUERY, {
     variables: {
       limit: 4,
     },
@@ -73,9 +76,7 @@ const Trending = ({ foo }) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const data = await fetchTrendingPosts();
   return addApolloState(data, {
-    props: {
-      foo: 1,
-    },
+    props: {},
   });
 };
 

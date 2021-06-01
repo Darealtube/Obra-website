@@ -1,5 +1,6 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
+  ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
   IS_LIKED_ARTIST,
@@ -9,7 +10,9 @@ import {
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
   TRENDING_POSTS_QUERY,
+  USER_GALLERY_QUERY,
   USER_ID_QUERY,
+  USER_LIKED_GALLERY_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
 } from "../apollo/apolloQueries";
@@ -200,4 +203,54 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
     exists: postId ? true : false,
     alreadyLiked: isLikedPost,
   };
+};
+
+export const fetchGallery = async (name: string) => {
+  const apolloClient = initializeApollo();
+
+  const {
+    data: { userName },
+  } = await apolloClient.query<UserData, UserVars>({
+    query: USER_GALLERY_QUERY,
+    variables: {
+      name: name,
+      limit: 4,
+    },
+  });
+
+  return {
+    data: apolloClient,
+    exists: userName ? true : false,
+  };
+};
+
+export const fetchLikedGallery = async (name: string) => {
+  const apolloClient = initializeApollo();
+
+  const {
+    data: { userName },
+  } = await apolloClient.query<UserData, UserVars>({
+    query: USER_LIKED_GALLERY_QUERY,
+    variables: {
+      name: name,
+      limit: 4,
+    },
+  });
+
+  return {
+    data: apolloClient,
+    exists: userName ? true : false,
+  };
+};
+
+export const fetchAllUsers = async () => {
+  const apolloClient = initializeApollo();
+
+  const {
+    data: { allUsersList },
+  } = await apolloClient.query({
+    query: ALL_USER_QUERY,
+  });
+
+  return allUsersList as string[];
 };

@@ -49,7 +49,9 @@ const Gridlist = ({ data }) => {
               />
             </Box>
             <GridListTileBar
-              title={`${tile.node.title} by ${tile.node.author.name}`}
+              title={`${tile.node.title} ${
+                tile.node.author ? ` by ${tile.node.author.name}` : ""
+              }`}
               titlePosition="top"
               className={styles.titleBar}
               actionIcon={

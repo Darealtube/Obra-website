@@ -477,6 +477,7 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
   }
 `;
 
+// FOR NOW
 export const TRENDING_POSTS_QUERY = gql`
   query FeaturedPosts($after: ID, $limit: Int) {
     featuredPosts(after: $after, limit: $limit) {
@@ -500,6 +501,62 @@ export const TRENDING_POSTS_QUERY = gql`
     }
   }
   ${UserInfo}
+`;
+
+export const USER_GALLERY_QUERY = gql`
+  query UserGallery($after: ID, $limit: Int, $name: String!) {
+    userName(name: $name) {
+      ...UserInfo
+      posts(limit: $limit, after: $after) {
+        totalCount
+        edges {
+          node {
+            id
+            art
+            title
+            width
+            height
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
+export const USER_LIKED_GALLERY_QUERY = gql`
+  query UserGallery($after: ID, $limit: Int, $name: String!) {
+    userName(name: $name) {
+      ...UserInfo
+      likedPosts(limit: $limit, after: $after) {
+        totalCount
+        edges {
+          node {
+            id
+            art
+            title
+            width
+            height
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
+export const ALL_USER_QUERY = gql`
+  query AllUsers {
+    allUsersList
+  }
 `;
 
 export const COMMISSION_COUNT_QUERY = gql`

@@ -21,19 +21,19 @@ import { fetchAllUsers, fetchLikedGallery } from "../../../utils/fetchData";
 import Image from "next/image";
 
 const LikedGallery = ({ name }) => {
-  const {
-    data: { userName },
-    fetchMore,
-  } = useQuery<UserData, UserVars>(USER_LIKED_GALLERY_QUERY, {
-    variables: {
-      name: name,
-      limit: 4,
-    },
-  });
+  const { data, fetchMore } = useQuery<UserData, UserVars>(
+    USER_LIKED_GALLERY_QUERY,
+    {
+      variables: {
+        name: name,
+        limit: 4,
+      },
+    }
+  );
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
-    userName?.likedPosts,
+    data?.userName.likedPosts,
     4,
     "likedPosts"
   );
@@ -47,35 +47,40 @@ const LikedGallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        <Box display="flex" alignItems="center" marginBottom={2}>
-          <Image
-            src={userName.image}
-            width={80}
-            height={80}
-            className={styles.avatar}
-          />
-          <Typography variant="h4" style={{ marginLeft: "8px" }}>
-            {name}'s Liked Gallery
-          </Typography>
-        </Box>
-        <Divider />
-        <InfiniteScroll
-          dataLength={userName?.likedPosts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-          scrollThreshold={0.8}
-        >
-          <Gridlist data={userName?.likedPosts.edges} />
-        </InfiniteScroll>
+        {data && (
+          <>
+            {" "}
+            <Box display="flex" alignItems="center" marginBottom={2}>
+              <Image
+                src={data?.userName.image}
+                width={80}
+                height={80}
+                className={styles.avatar}
+              />
+              <Typography variant="h4" style={{ marginLeft: "8px" }}>
+                {name}'s Liked Gallery
+              </Typography>
+            </Box>
+            <Divider />
+            <InfiniteScroll
+              dataLength={data?.userName?.likedPosts.edges.length}
+              next={More}
+              hasMore={hasMore}
+              loader={
+                <>
+                  <br />
+                  <CircularProgress />
+                </>
+              }
+              style={{
+                overflow: "hidden",
+              }}
+              scrollThreshold={0.8}
+            >
+              <Gridlist data={data?.userName?.likedPosts.edges} />
+            </InfiniteScroll>{" "}
+          </>
+        )}
       </Container>
     </div>
   );

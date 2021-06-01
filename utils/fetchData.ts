@@ -208,9 +208,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
 export const fetchGallery = async (name: string) => {
   const apolloClient = initializeApollo();
 
-  const {
-    data: { userName },
-  } = await apolloClient.query<UserData, UserVars>({
+  const { data } = await apolloClient.query<UserData, UserVars>({
     query: USER_GALLERY_QUERY,
     variables: {
       name: name,
@@ -220,16 +218,14 @@ export const fetchGallery = async (name: string) => {
 
   return {
     data: apolloClient,
-    exists: userName ? true : false,
+    exists: data?.userName ? true : false,
   };
 };
 
 export const fetchLikedGallery = async (name: string) => {
   const apolloClient = initializeApollo();
 
-  const {
-    data: { userName },
-  } = await apolloClient.query<UserData, UserVars>({
+  const { data } = await apolloClient.query<UserData, UserVars>({
     query: USER_LIKED_GALLERY_QUERY,
     variables: {
       name: name,
@@ -239,7 +235,7 @@ export const fetchLikedGallery = async (name: string) => {
 
   return {
     data: apolloClient,
-    exists: userName ? true : false,
+    exists: data?.userName ? true : false,
   };
 };
 

@@ -22,7 +22,7 @@ import Image from "next/image";
 
 const Gallery = ({ name }) => {
   const {
-    data: { userName },
+    data,
     fetchMore,
   } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
     variables: {
@@ -33,7 +33,7 @@ const Gallery = ({ name }) => {
   const { More, hasMore } = usePagination(
     "userName",
     fetchMore,
-    userName?.posts,
+    data?.userName.posts,
     4,
     "posts"
   );
@@ -47,9 +47,9 @@ const Gallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        <Box display="flex" alignItems="center" marginBottom={2}>
+        {data && <> <Box display="flex" alignItems="center" marginBottom={2}>
           <Image
-            src={userName.image}
+            src={data?.userName.image}
             width={80}
             height={80}
             className={styles.avatar}
@@ -60,7 +60,7 @@ const Gallery = ({ name }) => {
         </Box>
         <Divider />
         <InfiniteScroll
-          dataLength={userName.posts.edges.length}
+          dataLength={data?.userName.posts.edges.length}
           next={More}
           hasMore={hasMore}
           loader={
@@ -74,8 +74,8 @@ const Gallery = ({ name }) => {
           }}
           scrollThreshold={0.8}
         >
-          <Gridlist data={userName.posts.edges} />
-        </InfiniteScroll>
+          <Gridlist data={data?.userName.posts.edges} />
+        </InfiniteScroll> </>}
       </Container>
     </div>
   );

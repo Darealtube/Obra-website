@@ -108,14 +108,21 @@ const PostID = ({ id, alreadyLiked }: Props) => {
       <CssBaseline />
       <Appbar />
       <Grid container className={styles.grid}>
-        <PostInfo
-          postID={postId}
-          setOpen={setOpen}
-          liked={liked as boolean}
-          handleLike={handleLike}
-          fetchMore={MoreComm}
-        />
-        <RecommendedList fetchMore={MoreRecc} recommended={recommendedPosts} />
+        {postId && recommendedPosts && (
+          <>
+            <PostInfo
+              postID={postId}
+              setOpen={setOpen}
+              liked={liked as boolean}
+              handleLike={handleLike}
+              fetchMore={MoreComm}
+            />
+            <RecommendedList
+              fetchMore={MoreRecc}
+              recommended={recommendedPosts}
+            />
+          </>
+        )}
       </Grid>
 
       <DynamicImageDialog

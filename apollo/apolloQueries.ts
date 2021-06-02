@@ -624,7 +624,7 @@ export const UNLIKE_ARTIST_MUTATION = gql`
 
 export const EDIT_POST_MUTATION = gql`
   mutation EditPost(
-    $postId: ID!
+    $postId: ID
     $title: String!
     $description: String!
     $tags: [String!]

@@ -46,16 +46,6 @@ const MainItems = [
     link: "/trending",
     icon: <WhatshotIcon />,
   },
-  {
-    label: "Your Art",
-    link: "/gallery/yourArt",
-    icon: <ImageIcon />,
-  },
-  {
-    label: "Liked Arts",
-    link: "/gallery/liked",
-    icon: <FavoriteIcon />,
-  },
 ];
 
 const MoreItems = [
@@ -123,7 +113,7 @@ const DrawerItems = () => {
       <Divider />
       {MainItems.map((item) => (
         <>
-          <Link href={item.link}>
+          <Link href={item.link} key={item.link}>
             <ListItem button component="a">
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText>{item.label}</ListItemText>
@@ -131,6 +121,22 @@ const DrawerItems = () => {
           </Link>
         </>
       ))}
+      <Link href={`/gallery/${session?.user.name}/`}>
+        <ListItem button component="a">
+          <ListItemIcon>
+            <ImageIcon />
+          </ListItemIcon>
+          <ListItemText>Gallery</ListItemText>
+        </ListItem>
+      </Link>
+      <Link href={`/gallery/${session?.user.name}/liked`}>
+        <ListItem button component="a">
+          <ListItemIcon>
+            <FavoriteIcon />
+          </ListItemIcon>
+          <ListItemText>Liked Gallery</ListItemText>
+        </ListItem>
+      </Link>
       <Divider />
       <ListItem>
         <Typography variant="h5">Transactions</Typography>
@@ -138,14 +144,14 @@ const DrawerItems = () => {
       {TransactionItems.map((item) => (
         <>
           {!item.badge ? (
-            <Link href={item.link}>
+            <Link href={item.link} key={item.link}>
               <ListItem button component="a">
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText>{item.label}</ListItemText>
               </ListItem>
             </Link>
           ) : (
-            <Link href={item.link}>
+            <Link href={item.link} key={item.link}>
               <ListItem button component="a">
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <Badge
@@ -165,7 +171,7 @@ const DrawerItems = () => {
       </ListItem>
       {MoreItems.map((item) => (
         <>
-          <Link href={item.link}>
+          <Link href={item.link} key={item.link}>
             <ListItem button component="a">
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText>{item.label}</ListItemText>

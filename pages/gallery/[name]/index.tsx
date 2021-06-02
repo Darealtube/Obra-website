@@ -7,6 +7,7 @@ import {
   Divider,
   CircularProgress,
   Box,
+  Button,
 } from "@material-ui/core";
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
@@ -22,6 +23,7 @@ import Gridlist from "../../../Components/GridList";
 import { addApolloState } from "../../../apollo/apolloClient";
 import { fetchAllUsers, fetchGallery } from "../../../utils/fetchData";
 import Image from "next/image";
+import Link from "next/link";
 
 const Gallery = ({ name }) => {
   const { data, fetchMore } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
@@ -61,9 +63,19 @@ const Gallery = ({ name }) => {
                 height={80}
                 className={styles.avatar}
               />
-              <Typography variant="h4" style={{ marginLeft: "8px" }}>
+              <Typography
+                variant="h4"
+                style={{ marginLeft: "8px", flexGrow: 1 }}
+              >
                 {name}'s Gallery
               </Typography>
+
+              <Link href={`/gallery/${name}`}>
+                <Button>Gallery</Button>
+              </Link>
+              <Link href={`/gallery/${name}/liked`}>
+                <Button>Liked Gallery</Button>
+              </Link>
             </Box>
             <Divider />
             <InfiniteScroll

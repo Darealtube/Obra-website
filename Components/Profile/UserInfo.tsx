@@ -20,6 +20,7 @@ import {
   UnlikeArtistData,
   UnlikeLikeArtistVars,
 } from "../../interfaces/MutationInterfaces";
+import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
 
 const DynamicUserDrawer = dynamic(() => import("./UserDrawer"));
 
@@ -105,6 +106,18 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
                 </Typography>
               </span>
             </Button>
+            <Link href={`/gallery/${artist.name}`}>
+              <Button fullWidth className={styles.userOptions2} component="a">
+                <span>
+                  <Typography align="center">
+                    <span className={styles.text}>
+                      <PhotoAlbumIcon className={styles.icon} />
+                      Gallery
+                    </span>
+                  </Typography>
+                </span>
+              </Button>
+            </Link>
           </Container>
         )}
 

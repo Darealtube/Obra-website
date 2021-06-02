@@ -21,10 +21,7 @@ import { fetchAllUsers, fetchGallery } from "../../../utils/fetchData";
 import Image from "next/image";
 
 const Gallery = ({ name }) => {
-  const {
-    data,
-    fetchMore,
-  } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
+  const { data, fetchMore } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
     variables: {
       name: name,
       limit: 4,
@@ -42,40 +39,45 @@ const Gallery = ({ name }) => {
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{name}'s Gallery</title>
+        <title>{name ? `${name}'s Gallery` : "Gallery"}</title>
       </Head>
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        {data && <> <Box display="flex" alignItems="center" marginBottom={2}>
-          <Image
-            src={data?.userName.image}
-            width={80}
-            height={80}
-            className={styles.avatar}
-          />
-          <Typography variant="h4" style={{ marginLeft: "8px" }}>
-            {name}'s Gallery
-          </Typography>
-        </Box>
-        <Divider />
-        <InfiniteScroll
-          dataLength={data?.userName.posts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-          scrollThreshold={0.8}
-        >
-          <Gridlist data={data?.userName.posts.edges} />
-        </InfiniteScroll> </>}
+        {data && (
+          <>
+            {" "}
+            <Box display="flex" alignItems="center" marginBottom={2}>
+              <Image
+                src={data?.userName.image}
+                width={80}
+                height={80}
+                className={styles.avatar}
+              />
+              <Typography variant="h4" style={{ marginLeft: "8px" }}>
+                {name}'s Gallery
+              </Typography>
+            </Box>
+            <Divider />
+            <InfiniteScroll
+              dataLength={data?.userName.posts.edges.length}
+              next={More}
+              hasMore={hasMore}
+              loader={
+                <>
+                  <br />
+                  <CircularProgress />
+                </>
+              }
+              style={{
+                overflow: "hidden",
+              }}
+              scrollThreshold={0.8}
+            >
+              <Gridlist data={data?.userName.posts.edges} />
+            </InfiniteScroll>{" "}
+          </>
+        )}
       </Container>
     </div>
   );

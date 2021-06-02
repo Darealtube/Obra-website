@@ -42,7 +42,7 @@ const LikedGallery = ({ name }) => {
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{name}'s Liked Gallery</title>
+        <title>{name ? `${name}'s Liked Gallery` : "Liked Gallery"}</title>
       </Head>
       <CssBaseline />
       <Appbar />

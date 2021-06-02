@@ -586,6 +586,12 @@ export const USER_EXISTS = gql`
   }
 `;
 
+export const GALLERY_EXISTS = gql`
+  query GalleryExist($userName: String!) {
+    galleryExists(userName: $userName)
+  }
+`;
+
 export const IS_SAME_USER = gql`
   query SameUser($userName: String!, $userId: ID!) {
     isSameUser(userName: $userName, userId: $userId)

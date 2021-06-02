@@ -11,7 +11,10 @@ import {
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
-import { USER_GALLERY_QUERY } from "../../../apollo/apolloQueries";
+import {
+  GALLERY_EXISTS,
+  USER_GALLERY_QUERY,
+} from "../../../apollo/apolloQueries";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,6 +37,11 @@ const Gallery = ({ name }) => {
     4,
     "posts"
   );
+  const { data: exists } = useQuery(GALLERY_EXISTS, {
+    variables: {
+      userName: name,
+    },
+  });
 
   return (
     <div className={styles.root}>
@@ -44,9 +52,8 @@ const Gallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        {data && (
+        {data && exists?.galleryExists && (
           <>
-            {" "}
             <Box display="flex" alignItems="center" marginBottom={2}>
               <Image
                 src={data?.userName.image}
@@ -75,7 +82,7 @@ const Gallery = ({ name }) => {
               scrollThreshold={0.8}
             >
               <Gridlist data={data?.userName.posts.edges} />
-            </InfiniteScroll>{" "}
+            </InfiniteScroll>
           </>
         )}
       </Container>

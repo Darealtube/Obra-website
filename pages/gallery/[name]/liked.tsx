@@ -33,6 +33,7 @@ const LikedGallery = ({ name }) => {
         name: name,
         limit: 4,
       },
+      pollInterval: 5000,
     }
   );
   const { More, hasMore } = usePagination(
@@ -43,12 +44,6 @@ const LikedGallery = ({ name }) => {
     "likedPosts"
   );
 
-  const { data: exists } = useQuery(GALLERY_EXISTS, {
-    variables: {
-      userName: name,
-    },
-  });
-
   return (
     <div className={styles.root}>
       <Head>
@@ -58,7 +53,7 @@ const LikedGallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        {data && exists?.galleryExists && (
+        {data && (
           <>
             <Box display="flex" alignItems="center" marginBottom={2}>
               <Image

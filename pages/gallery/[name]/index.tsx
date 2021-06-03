@@ -31,6 +31,7 @@ const Gallery = ({ name }) => {
       name: name,
       limit: 4,
     },
+    pollInterval: 5000
   });
   const { More, hasMore } = usePagination(
     "userName",
@@ -39,11 +40,6 @@ const Gallery = ({ name }) => {
     4,
     "posts"
   );
-  const { data: exists } = useQuery(GALLERY_EXISTS, {
-    variables: {
-      userName: name,
-    },
-  });
 
   return (
     <div className={styles.root}>
@@ -54,7 +50,7 @@ const Gallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        {data && exists?.galleryExists && (
+        {data && (
           <>
             <Box display="flex" alignItems="center" marginBottom={2}>
               <Image

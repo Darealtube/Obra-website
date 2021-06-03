@@ -1,4 +1,3 @@
-import { GetStaticProps } from "next";
 import Head from "next/head";
 import {
   CssBaseline,
@@ -12,16 +11,11 @@ import {
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
-import {
-  GALLERY_EXISTS,
-  USER_GALLERY_QUERY,
-} from "../../../apollo/apolloQueries";
+import { USER_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Gridlist from "../../../Components/GridList";
-import { addApolloState } from "../../../apollo/apolloClient";
-import { fetchAllUsers, fetchGallery } from "../../../utils/fetchData";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,7 +25,6 @@ const Gallery = ({ name }) => {
       name: name,
       limit: 4,
     },
-    pollInterval: 5000
   });
   const { More, hasMore } = usePagination(
     "userName",
@@ -50,7 +43,7 @@ const Gallery = ({ name }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        {data && (
+        {data ? (
           <>
             <Box display="flex" alignItems="center" marginBottom={2}>
               <Image
@@ -92,34 +85,12 @@ const Gallery = ({ name }) => {
               <Gridlist data={data?.userName.posts.edges} />
             </InfiniteScroll>
           </>
+        ) : (
+          <CircularProgress />
         )}
       </Container>
     </div>
   );
-};
-
-export const getStaticPaths = async () => {
-  const userList = await fetchAllUsers();
-  const paths = userList.map((name) => ({
-    params: { name },
-  }));
-  return { paths, fallback: true };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { data, exists } = await fetchGallery(context.params.name as string);
-
-  if (!exists) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return addApolloState(data, {
-    props: {
-      name: context.params.name,
-    },
-  });
 };
 
 export default Gallery;

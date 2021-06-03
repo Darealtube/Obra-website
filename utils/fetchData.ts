@@ -205,40 +205,6 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   };
 };
 
-export const fetchGallery = async (name: string) => {
-  const apolloClient = initializeApollo();
-
-  const { data } = await apolloClient.query<UserData, UserVars>({
-    query: USER_GALLERY_QUERY,
-    variables: {
-      name: name,
-      limit: 4,
-    },
-  });
-
-  return {
-    data: apolloClient,
-    exists: data?.userName ? true : false,
-  };
-};
-
-export const fetchLikedGallery = async (name: string) => {
-  const apolloClient = initializeApollo();
-
-  const { data } = await apolloClient.query<UserData, UserVars>({
-    query: USER_LIKED_GALLERY_QUERY,
-    variables: {
-      name: name,
-      limit: 4,
-    },
-  });
-
-  return {
-    data: apolloClient,
-    exists: data?.userName ? true : false,
-  };
-};
-
 export const fetchAllUsers = async () => {
   const apolloClient = initializeApollo();
 

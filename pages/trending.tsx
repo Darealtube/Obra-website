@@ -1,6 +1,3 @@
-import { GetServerSideProps, GetStaticProps } from "next";
-import { addApolloState } from "../apollo/apolloClient";
-import { fetchTrendingPosts } from "../utils/fetchData";
 import Head from "next/head";
 import {
   CssBaseline,
@@ -17,24 +14,16 @@ import {
   FeaturedPostsData,
   PaginatedPostsVars,
 } from "../interfaces/QueryInterfaces";
-import usePagination from "../Hooks/usePagination";
-import InfiniteScroll from "react-infinite-scroll-component";
 import Gridlist from "../Components/GridList";
 
 const Trending = () => {
-  const {
-    data: { featuredPosts },
-    fetchMore,
-  } = useQuery<FeaturedPostsData, PaginatedPostsVars>(TRENDING_POSTS_QUERY, {
-    variables: {
-      limit: 4,
-    },
-  });
-  const { More, hasMore } = usePagination(
-    "featuredPosts",
-    fetchMore,
-    featuredPosts,
-    4
+  const { data, fetchMore } = useQuery<FeaturedPostsData, PaginatedPostsVars>(
+    TRENDING_POSTS_QUERY,
+    {
+      variables: {
+        limit: 4,
+      },
+    }
   );
 
   return (
@@ -48,33 +37,18 @@ const Trending = () => {
       <Container className={styles.content}>
         <Typography variant="h4">Trending Posts</Typography>
         <Divider />
-        <InfiniteScroll
-          dataLength={featuredPosts.edges.length}
-          next={More}
-          hasMore={hasMore}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-          }}
-          scrollThreshold={0.8}
-        >
-          <Gridlist data={featuredPosts.edges} />
-        </InfiniteScroll>
+        {data ? (
+          <Gridlist
+            data={data?.featuredPosts}
+            first={"featuredPosts"}
+            fetchMore={fetchMore}
+          />
+        ) : (
+          <CircularProgress />
+        )}
       </Container>
     </div>
   );
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const data = await fetchTrendingPosts();
-  return addApolloState(data, {
-    props: {},
-  });
 };
 
 export default Trending;

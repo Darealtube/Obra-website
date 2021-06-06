@@ -55,10 +55,10 @@ const Gallery = () => {
               </Typography>
 
               <Link href={`/gallery/${encodeURIComponent(name)}`}>
-                <Button>Gallery</Button>
+                <Button component="a">Gallery</Button>
               </Link>
               <Link href={`/gallery/${encodeURIComponent(name)}/liked`}>
-                <Button>Liked Gallery</Button>
+                <Button component="a">Liked Gallery</Button>
               </Link>
             </Box>
             <Divider />

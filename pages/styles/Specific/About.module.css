@@ -1,0 +1,20 @@
+.title {
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.container {
+  display: flex;
+  margin-top: 4;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}

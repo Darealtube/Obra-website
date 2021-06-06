@@ -39,6 +39,7 @@
     "react-number-format": "^4.5.5",
     "react-select": "^4.3.0",
     "react-select-country-list": "^2.2.3",
+    "react-visibility-sensor": "^5.1.1",
     "sharp": "^0.26.3",
     "unfetch": "^4.2.0"
   },

@@ -56,6 +56,7 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
         }
         style={{
           overflow: "hidden",
+          textAlign: "center",
         }}
         scrollThreshold={0.8}
       >

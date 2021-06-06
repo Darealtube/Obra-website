@@ -1,12 +1,20 @@
 import React from "react";
 import SettingsWrap from "../../../Components/Settings/SettingsWrap";
-import { Typography, Grid, Divider, Button, Box } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  Divider,
+  Button,
+  Box,
+  IconButton,
+} from "@material-ui/core";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import PrimaryInfo from "../../../Components/Settings/Account/PrimaryInfo";
 import Link from "next/link";
 import Head from "next/head";
+import HomeIcon from "@material-ui/icons/Home";
 
 const DynamicMoreInfo = dynamic(
   () => import("../../../Components/Settings/Account/SecondaryInfo")
@@ -27,6 +35,11 @@ const AccountSettings = () => {
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Box display="flex">
+              <Link href={"/home"}>
+                <IconButton component="a">
+                  <HomeIcon />
+                </IconButton>
+              </Link>
               <Typography variant="h4" style={{ flexGrow: 1 }}>
                 Account
               </Typography>

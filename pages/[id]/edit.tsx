@@ -11,15 +11,17 @@ import Head from "next/head";
 import { getSession } from "next-auth/client";
 import { PostInterface } from "../../interfaces/PostInterface";
 import { EDIT_POST_MUTATION } from "../../apollo/apolloQueries";
-import { useMutation } from "@apollo/client";
+import { DataProxy, useMutation } from "@apollo/client";
 import EditPostForm from "../../Components/Forms/EditPost";
 import { reducer, State } from "../../Hooks/Reducers/PostReducer";
 import {
   EditPostData,
   EditPostVars,
 } from "../../interfaces/MutationInterfaces";
+import { editPostUpdate } from "../../utils/update";
 
 const Create = ({ postId }: { postId: PostInterface }) => {
+  const router = useRouter();
   const initState: State = {
     title: postId.title,
     description: postId.description,
@@ -31,8 +33,10 @@ const Create = ({ postId }: { postId: PostInterface }) => {
     height: postId.height,
   };
   const [post, dispatch] = useReducer(reducer, initState);
-  const [edit] = useMutation<EditPostData, EditPostVars>(EDIT_POST_MUTATION);
-  const router = useRouter();
+  const [edit] = useMutation<EditPostData, EditPostVars>(EDIT_POST_MUTATION, {
+    update: (cache: DataProxy, mutationResult) =>
+      editPostUpdate(cache, mutationResult, postId.id),
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({

@@ -10,32 +10,27 @@ import {
 } from "@material-ui/core";
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { USER_LIKED_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import Gridlist from "../../../Components/GridList";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const LikedGallery = () => {
   const router = useRouter();
   const name = router.query.name as string;
-  const [getGallery, { data, fetchMore }] = useLazyQuery<UserData, UserVars>(
-    USER_LIKED_GALLERY_QUERY
-  );
-
-  useEffect(() => {
-    if (name) {
-      getGallery({
-        variables: {
-          name: name,
-          limit: 4,
-        },
-      });
+  const { data, fetchMore } = useQuery<UserData, UserVars>(
+    USER_LIKED_GALLERY_QUERY,
+    {
+      variables: {
+        name: name,
+        limit: 4,
+      },
+      skip: !name,
     }
-  }, [name]);
+  );
 
   return (
     <div className={styles.root}>
@@ -62,23 +57,12 @@ const LikedGallery = () => {
                 {name}'s Liked Gallery
               </Typography>
 
-              <Button
-                component="a"
-                onClick={() =>
-                  router.push(`/gallery/${encodeURIComponent(name)}`)
-                }
-              >
-                Gallery
-              </Button>
-
-              <Button
-                component="a"
-                onClick={() =>
-                  router.push(`/gallery/${encodeURIComponent(name)}/liked`)
-                }
-              >
-                Liked Gallery
-              </Button>
+              <Link href={`/gallery/${encodeURIComponent(name)}`}>
+                <Button component="a">Gallery</Button>
+              </Link>
+              <Link href={`/gallery/${encodeURIComponent(name)}/liked`}>
+                <Button component="a">Liked Gallery</Button>
+              </Link>
             </Box>
             <Divider />
             <Gridlist

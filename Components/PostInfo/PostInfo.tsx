@@ -11,10 +11,7 @@ import {
 import React, { useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  CREATE_COMMENT_MUTATION,
-  POST_ID_QUERY,
-} from "../../apollo/apolloQueries";
+import { CREATE_COMMENT_MUTATION } from "../../apollo/apolloQueries";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import CommentList from "../CommentList";
@@ -25,7 +22,7 @@ import Main from "./Main";
 import { useSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import { AddCommentData } from "../../interfaces/MutationInterfaces";
-import { PostData, PostVars } from "../../interfaces/QueryInterfaces";
+import { commentUpdate } from "../../utils/update";
 
 const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
 
@@ -60,31 +57,10 @@ const PostInfo = ({
   );
 
   const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
-    update: (cache: DataProxy, mutationResult) => {
-      const newComment = mutationResult.data.createComment;
-      const { postId } = cache.readQuery<PostData, PostVars>({
-        query: POST_ID_QUERY,
-        variables: { id: postID.id },
-      });
-
-      cache.writeQuery({
-        query: POST_ID_QUERY,
-        variables: { id: postID.id },
-        data: {
-          postId: {
-            ...postId,
-            comments: {
-              ...postId.comments,
-              edges: [
-                { __typeName: "CommentEdge", node: newComment },
-                ...postId.comments.edges,
-              ],
-            },
-          },
-        },
-      });
-    },
+    update: (cache: DataProxy, mutationResult) =>
+      commentUpdate(cache, mutationResult, postID.id),
   });
+
   const [comment, setComment] = useState({
     postID: postID.id,
     content: "",

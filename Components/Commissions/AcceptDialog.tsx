@@ -10,19 +10,12 @@ import {
 } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import {
-  ACCEPT_COMMISSION_MUTATION,
-  COMMISSIONS_QUERY,
-  PENDING_COMMS_QUERY,
-} from "../../apollo/apolloQueries";
+import { ACCEPT_COMMISSION_MUTATION } from "../../apollo/apolloQueries";
 import {
   AcceptCommissionData,
   AcceptCommissionVars,
 } from "../../interfaces/MutationInterfaces";
-import {
-  CommissionData,
-  CommissionVars,
-} from "../../interfaces/QueryInterfaces";
+import { acceptCommission } from "../../utils/update";
 
 type Props = {
   open: boolean;
@@ -36,52 +29,8 @@ const ConfirmDialog = ({ open, id, handleClose }: Props) => {
   const [accept] = useMutation<AcceptCommissionData, AcceptCommissionVars>(
     ACCEPT_COMMISSION_MUTATION,
     {
-      update: (cache: DataProxy, mutationResult) => {
-        const newCommission = mutationResult.data.acceptCommission;
-        const { userId } = cache.readQuery<CommissionData, CommissionVars>({
-          query: COMMISSIONS_QUERY,
-          variables: { id: session.id },
-        });
-        const { userId: userId2 } = cache.readQuery<
-          CommissionData,
-          CommissionVars
-        >({
-          query: PENDING_COMMS_QUERY,
-          variables: { id: session.id },
-        });
-        const newPending = userId2.pendingCommissions.edges.filter(
-          (commission) => commission.node.id != newCommission.id
-        );
-        cache.writeQuery({
-          query: COMMISSIONS_QUERY,
-          variables: { id: session.id },
-          data: {
-            userId: {
-              ...userId,
-              commissions: {
-                ...userId.commissions,
-                edges: [
-                  { __typename: "CommissionEdge", node: newCommission },
-                  ...userId.commissions.edges,
-                ],
-              },
-            },
-          },
-        });
-        cache.writeQuery({
-          query: PENDING_COMMS_QUERY,
-          variables: { id: session.id },
-          data: {
-            userId: {
-              ...userId2,
-              pendingCommissions: {
-                ...userId2.pendingCommissions,
-                edges: newPending,
-              },
-            },
-          },
-        });
-      },
+      update: (cache: DataProxy, mutationResult) =>
+        acceptCommission(cache, mutationResult, session.id),
     }
   );
 

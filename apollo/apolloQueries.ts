@@ -8,6 +8,8 @@ export const PostInfo = gql`
       name
       image
     }
+    title
+    description
     date
     art
     tags
@@ -634,7 +636,12 @@ export const EDIT_POST_MUTATION = gql`
       title: $title
       description: $description
       tags: $tags
-    )
+    ) {
+      id
+      title
+      description
+      tags
+    }
   }
 `;
 

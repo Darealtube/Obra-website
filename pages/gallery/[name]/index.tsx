@@ -10,31 +10,24 @@ import {
 } from "@material-ui/core";
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { USER_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import Gridlist from "../../../Components/GridList";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const Gallery = () => {
   const router = useRouter();
   const name = router.query.name as string;
-  const [getGallery, { data, fetchMore }] =
-    useLazyQuery<UserData, UserVars>(USER_GALLERY_QUERY);
-
-  useEffect(() => {
-    if (name) {
-      getGallery({
-        variables: {
-          name: name,
-          limit: 4,
-        },
-      });
-    }
-  }, [name]);
+  const { data, fetchMore } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
+    variables: {
+      name: name,
+      limit: 4,
+    },
+    skip: !name,
+  });
 
   return (
     <div className={styles.root}>
@@ -61,23 +54,12 @@ const Gallery = () => {
                 {name}'s Gallery
               </Typography>
 
-              <Button
-                component="a"
-                onClick={() =>
-                  router.push(`/gallery/${encodeURIComponent(name)}`)
-                }
-              >
-                Gallery
-              </Button>
-
-              <Button
-                component="a"
-                onClick={() =>
-                  router.push(`/gallery/${encodeURIComponent(name)}/liked`)
-                }
-              >
-                Liked Gallery
-              </Button>
+              <Link href={`/gallery/${encodeURIComponent(name)}`}>
+                <Button component="a">Gallery</Button>
+              </Link>
+              <Link href={`/gallery/${encodeURIComponent(name)}/liked`}>
+                <Button component="a">Liked Gallery</Button>
+              </Link>
             </Box>
             <Divider />
             <Gridlist

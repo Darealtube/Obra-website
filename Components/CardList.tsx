@@ -102,7 +102,6 @@ export const CardList = ({ postData }: PostData) => {
                   <CardActionArea>
                     <CardContent>
                       <Typography
-                        variant="h6"
                         color="textSecondary"
                         className={styles.title}
                       >

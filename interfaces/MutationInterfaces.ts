@@ -1,4 +1,5 @@
 import { CommentInterface } from "./CommentInterface";
+import { PostInterface } from "./PostInterface";
 import { CommissionInterface, UserInterface } from "./UserInterface";
 
 export interface ReadNotifData {
@@ -44,7 +45,7 @@ export interface UnlikeLikeArtistVars {
 }
 
 export interface EditPostData {
-  editPost: boolean;
+  editPost: PostInterface;
 }
 
 export interface EditPostVars {

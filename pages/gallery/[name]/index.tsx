@@ -54,12 +54,23 @@ const Gallery = () => {
                 {name}'s Gallery
               </Typography>
 
-              <Link href={`/gallery/${encodeURIComponent(name)}`}>
-                <Button component="a">Gallery</Button>
-              </Link>
-              <Link href={`/gallery/${encodeURIComponent(name)}/liked`}>
-                <Button component="a">Liked Gallery</Button>
-              </Link>
+              <Button
+                component="a"
+                onClick={() =>
+                  router.push(`/gallery/${encodeURIComponent(name)}`)
+                }
+              >
+                Gallery
+              </Button>
+
+              <Button
+                component="a"
+                onClick={() =>
+                  router.push(`/gallery/${encodeURIComponent(name)}/liked`)
+                }
+              >
+                Liked Gallery
+              </Button>
             </Box>
             <Divider />
             <Gridlist

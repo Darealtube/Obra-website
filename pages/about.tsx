@@ -6,6 +6,7 @@ import {
   IconButton,
   Slide,
   Button,
+  Grid,
 } from "@material-ui/core";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,15 +58,21 @@ const About = () => {
           <HomeIcon fontSize="large" />
         </IconButton>
       </Link>
-      <Container>
-        <Box
-          justifyContent="center"
-          alignItems="center"
-          display="flex"
-          flexDirection="column"
-        >
+      <Box
+        justifyContent="center"
+        alignItems="center"
+        display="flex"
+        flexDirection="column"
+      >
+        <Container>
           <Fade in={true} timeout={1500}>
-            <Box display="flex" marginTop={4} marginBottom={4}>
+            <Box
+              display="flex"
+              marginTop={4}
+              marginBottom={4}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Image src="/obra-logo.png" height={60} width={60} />
               <Typography
                 variant="h3"
@@ -208,30 +215,30 @@ const About = () => {
               </Fade>
 
               <Slide in={contactActive} timeout={200} direction="up">
-                <Box display="flex">
-                  <Box marginLeft={4} marginRight={4}>
+                <Grid container spacing={4}>
+                  <Grid item xs={12} sm={4}>
                     <Button component="a" startIcon={<MailIcon />}>
                       <Typography>ObraWeb@gmail.com</Typography>
                     </Button>
-                  </Box>
-                  <Box marginLeft={4} marginRight={4}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
                     <Button component="a" startIcon={<FacebookIcon />}>
                       <Typography>Obra</Typography>
                     </Button>
-                  </Box>
-                  <Box marginLeft={4} marginRight={4}>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
                     <Button component="a" startIcon={<TwitterIcon />}>
                       <Typography>Obra_Website</Typography>
                     </Button>
-                  </Box>
-                </Box>
+                  </Grid>
+                </Grid>
               </Slide>
             </Box>
           </VisibilitySensor>
 
           <Copyright />
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     </>
   );
 };

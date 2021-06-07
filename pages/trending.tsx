@@ -5,6 +5,7 @@ import {
   Typography,
   Divider,
   CircularProgress,
+  Box,
 } from "@material-ui/core";
 import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
@@ -44,7 +45,14 @@ const Trending = () => {
             fetchMore={fetchMore}
           />
         ) : (
-          <CircularProgress />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            marginTop={30}
+          >
+            <CircularProgress />
+          </Box>
         )}
       </Container>
     </div>

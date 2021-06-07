@@ -15,24 +15,24 @@ import Head from "next/head";
 import { getSession, signIn } from "next-auth/client";
 import { GetServerSideProps } from "next";
 
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link href="/#">Canvas</Link> {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
+
+const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  signIn("google", {
+    callbackUrl: `https://obra-website.vercel.app/home`,
+  });
+};
+
 const Login = () => {
-  function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {"Copyright © "}
-        <Link href="/#">Canvas</Link> {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  }
-
-  const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    signIn("google", {
-      callbackUrl: `https://obra-website.vercel.app/home`,
-    });
-  };
-
   return (
     <div>
       <Head>

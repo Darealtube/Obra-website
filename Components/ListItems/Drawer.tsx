@@ -35,19 +35,6 @@ function Copyright() {
   );
 }
 
-const MainItems = [
-  {
-    label: "Home",
-    link: "/home",
-    icon: <HomeIcon />,
-  },
-  {
-    label: "Trending Art",
-    link: "/trending",
-    icon: <WhatshotIcon />,
-  },
-];
-
 const MoreItems = [
   {
     label: "Settings",
@@ -71,6 +58,24 @@ const MoreItems = [
   },
 ];
 
+const TransactionItems = [
+  {
+    label: "Wallet",
+    link: "/transactions/wallet",
+    icon: <AccountBalanceWalletIcon />,
+  },
+  {
+    label: "Transaction History",
+    link: "/transactions/history",
+    icon: <ReceiptIcon />,
+  },
+  {
+    label: "Your Cart",
+    link: "/transactions/cart",
+    icon: <ShoppingCartIcon />,
+  },
+];
+
 const DrawerItems = () => {
   const [session] = useSession();
   const { data } = useQuery(COMMISSION_COUNT_QUERY, {
@@ -78,29 +83,7 @@ const DrawerItems = () => {
       id: session?.id,
     },
   });
-  const TransactionItems = [
-    {
-      label: "Commissions",
-      link: "/commissions",
-      icon: <BrushIcon />,
-      badge: data?.userId.commissionCount,
-    },
-    {
-      label: "Wallet",
-      link: "/transactions/wallet",
-      icon: <AccountBalanceWalletIcon />,
-    },
-    {
-      label: "Transaction History",
-      link: "/transactions/history",
-      icon: <ReceiptIcon />,
-    },
-    {
-      label: "Your Cart",
-      link: "/transactions/cart",
-      icon: <ShoppingCartIcon />,
-    },
-  ];
+
   return (
     <div>
       <ListItem>
@@ -111,7 +94,41 @@ const DrawerItems = () => {
         </Typography>
       </ListItem>
       <Divider />
-      {MainItems.map((item) => (
+      <Link href={"/home"}>
+        <ListItem button component="a">
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText>Home</ListItemText>
+        </ListItem>
+      </Link>
+      <ListItem button component="a" href={"/trending"}>
+        <ListItemIcon>
+          <WhatshotIcon />
+        </ListItemIcon>
+        <ListItemText>Trending</ListItemText>
+      </ListItem>
+      <ListItem button component="a" href={`/gallery/${session?.user.name}/`}>
+        <ListItemIcon>
+          <ImageIcon />
+        </ListItemIcon>
+        <ListItemText>Gallery</ListItemText>
+      </ListItem>
+      <ListItem
+        button
+        component="a"
+        href={`/gallery/${session?.user.name}/liked`}
+      >
+        <ListItemIcon>
+          <FavoriteIcon />
+        </ListItemIcon>
+        <ListItemText>Liked Gallery</ListItemText>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <Typography variant="h5">Transactions</Typography>
+      </ListItem>
+      {TransactionItems.map((item) => (
         <>
           <Link href={item.link} key={item.link}>
             <ListItem button component="a">
@@ -121,50 +138,14 @@ const DrawerItems = () => {
           </Link>
         </>
       ))}
-      <Link href={`/gallery/${session?.user.name}/`}>
-        <ListItem button component="a">
-          <ListItemIcon>
-            <ImageIcon />
-          </ListItemIcon>
-          <ListItemText>Gallery</ListItemText>
-        </ListItem>
-      </Link>
-      <Link href={`/gallery/${session?.user.name}/liked`}>
-        <ListItem button component="a">
-          <ListItemIcon>
-            <FavoriteIcon />
-          </ListItemIcon>
-          <ListItemText>Liked Gallery</ListItemText>
-        </ListItem>
-      </Link>
-      <Divider />
-      <ListItem>
-        <Typography variant="h5">Transactions</Typography>
+      <ListItem button component="a" href={"/commissions"}>
+        <ListItemIcon>
+          <BrushIcon />
+        </ListItemIcon>
+        <Badge color="secondary" badgeContent={data?.userId.commissionCount}>
+          <ListItemText>Commissions</ListItemText>
+        </Badge>
       </ListItem>
-      {TransactionItems.map((item) => (
-        <>
-          {!item.badge ? (
-            <Link href={item.link} key={item.link}>
-              <ListItem button component="a">
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText>{item.label}</ListItemText>
-              </ListItem>
-            </Link>
-          ) : (
-            <Link href={item.link} key={item.link}>
-              <ListItem button component="a">
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <Badge
-                  color="secondary"
-                  badgeContent={item.badge ? item.badge : " "}
-                >
-                  <ListItemText>{item.label}</ListItemText>
-                </Badge>
-              </ListItem>
-            </Link>
-          )}
-        </>
-      ))}
       <Divider />
       <ListItem>
         <Typography variant="h5">More</Typography>

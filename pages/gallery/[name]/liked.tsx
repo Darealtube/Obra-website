@@ -57,12 +57,18 @@ const LikedGallery = () => {
                 {name}'s Liked Gallery
               </Typography>
 
-              <a href={`/gallery/${encodeURIComponent(name)}`}>
-                <Button component="a">Gallery</Button>
-              </a>
-              <a href={`/gallery/${encodeURIComponent(name)}/liked`}>
-                <Button component="a">Liked Gallery</Button>
-              </a>
+              <Button
+                component="a"
+                href={`/gallery/${encodeURIComponent(name)}`}
+              >
+                Gallery
+              </Button>
+              <Button
+                component="a"
+                href={`/gallery/${encodeURIComponent(name)}/liked`}
+              >
+                Liked Gallery
+              </Button>
             </Box>
             <Divider />
             <Gridlist
@@ -73,7 +79,14 @@ const LikedGallery = () => {
             />
           </>
         ) : (
-          <CircularProgress />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            marginTop={30}
+          >
+            <CircularProgress />
+          </Box>
         )}
       </Container>
     </div>

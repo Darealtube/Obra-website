@@ -58,9 +58,9 @@ const Appbar = () => {
             Canvas
           </Typography>
           {/* Drawer and Logo */}
-          {user && !loading ? (
+          {session && !loading && user ? (
             <AppbarMenu user={user} fetchMore={fetchMore} />
-          ) : !user && !loading ? (
+          ) : !session && !loading ? (
             <AppbarNoUser />
           ) : (
             ""

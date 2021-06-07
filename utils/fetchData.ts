@@ -131,13 +131,16 @@ export const fetchPosts = async (id: string) => {
       limit: 4,
     },
   });
-  await apolloClient.query<HomeUserData, HomeUserVars>({
-    query: HOME_RECOMMENDED_QUERY,
-    variables: {
-      id: id,
-      limit: 4,
-    },
-  });
+
+  if (id) {
+    await apolloClient.query<HomeUserData, HomeUserVars>({
+      query: HOME_RECOMMENDED_QUERY,
+      variables: {
+        id: id,
+        limit: 4,
+      },
+    });
+  }
   return apolloClient;
 };
 

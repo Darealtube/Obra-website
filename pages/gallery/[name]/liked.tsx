@@ -57,12 +57,12 @@ const LikedGallery = () => {
                 {name}'s Liked Gallery
               </Typography>
 
-              <Link href={`/gallery/${encodeURIComponent(name)}`}>
+              <a href={`/gallery/${encodeURIComponent(name)}`}>
                 <Button component="a">Gallery</Button>
-              </Link>
-              <Link href={`/gallery/${encodeURIComponent(name)}/liked`}>
+              </a>
+              <a href={`/gallery/${encodeURIComponent(name)}/liked`}>
                 <Button component="a">Liked Gallery</Button>
-              </Link>
+              </a>
             </Box>
             <Divider />
             <Gridlist

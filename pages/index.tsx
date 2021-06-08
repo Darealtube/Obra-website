@@ -42,21 +42,31 @@ const Login = () => {
   const [reveal, setReveal] = useState(false);
 
   useEffect(() => {
-    if (!loading) {
-      setTimeout(() => {
+    let timer1;
+    if (!loading && !session) {
+      timer1 = setTimeout(() => {
         setLoad(false);
-      }, 5000);
+      }, 3000);
+    } else if (!loading && session) {
+      router.push("/home");
     }
+
+    return () => {
+      clearTimeout(timer1);
+    };
   }, [loading]);
 
   useEffect(() => {
+    let timer2;
     if (!load && !session) {
-      setTimeout(() => {
+      timer2 = setTimeout(() => {
         setReveal(true);
       }, 1000);
-    } else if (!load && session) {
-      router.push("/home");
     }
+
+    return () => {
+      clearTimeout(timer2);
+    };
   }, [load]);
 
   return (
@@ -123,7 +133,7 @@ const Login = () => {
           </Grid>
         </Fade>
       ) : (
-        <Fade in={load} timeout={3000}>
+        <Fade in={load} timeout={500}>
           <Box
             display="flex"
             height="100vh"

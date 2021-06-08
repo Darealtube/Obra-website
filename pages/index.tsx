@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Toolbar,
   CssBaseline,
@@ -8,12 +8,15 @@ import {
   Grid,
   Typography,
   Button,
+  Fade,
+  Box,
 } from "@material-ui/core";
 import PaletteIcon from "@material-ui/icons/Palette";
 import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
-import { getSession, signIn } from "next-auth/client";
+import { getSession, signIn, useSession } from "next-auth/client";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 function Copyright() {
   return (
@@ -33,79 +36,114 @@ const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
 };
 
 const Login = () => {
+  const router = useRouter();
+  const [session, loading] = useSession();
+  const [load, setLoad] = useState(true);
+  const [reveal, setReveal] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        setLoad(false);
+      }, 5000);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (!load && !session) {
+      setTimeout(() => {
+        setReveal(true);
+      }, 1000);
+    } else if (!load && session) {
+      router.push("/home");
+    }
+  }, [load]);
+
   return (
     <div>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Obra</title>
       </Head>
+      <CssBaseline />
+      {reveal ? (
+        <Fade in={reveal} timeout={1500}>
+          <Grid container className={styles.root}>
+            {/* Side Image */}
+            <Grid item xs={12} sm={4} md={7} className={styles.sideImage}>
+              <Image
+                src="https://picsum.photos/600"
+                alt="Scenery image"
+                layout="fill"
+                objectFit="cover"
+                objectPosition="center left"
+              />
+            </Grid>
+            {/* Side Image */}
 
-      <Grid container className={styles.root}>
-        <CssBaseline />
-        {/* Side Image */}
-        <Grid item xs={12} sm={4} md={7} className={styles.sideImage}>
-          <Image
-            src="https://picsum.photos/600"
-            alt="Scenery image"
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center left"
-          />
-        </Grid>
-        {/* Side Image */}
-
-        {/* Form */}
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={styles.paper}>
-            <Toolbar>
-              <PaletteIcon fontSize="large" />
-              <Typography variant="h4" color="inherit" noWrap>
-                Obra
-              </Typography>
-            </Toolbar>
-            <br />
-            <Typography variant="h5">
-              Canvas is a website that focuses on Artists, giving them an
-              opportunity to shine amidst the shame that brings upon the Art
-              Community.
-            </Typography>
-
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={styles.submit}
-              onClick={handleSignIn}
+            {/* Form */}
+            <Grid
+              item
+              xs={12}
+              sm={8}
+              md={5}
+              component={Paper}
+              elevation={6}
+              square
             >
-              Log In
-            </Button>
-          </div>
-          {/*Copyright*/}
-          <Copyright />
-          {/*Copyright*/}
-        </Grid>
-        {/* Form */}
-      </Grid>
+              <div className={styles.paper}>
+                <Toolbar>
+                  <PaletteIcon fontSize="large" />
+                  <Typography variant="h4" color="inherit" noWrap>
+                    Obra
+                  </Typography>
+                </Toolbar>
+                <br />
+                <Typography variant="h5">
+                  Canvas is a website that focuses on Artists, giving them an
+                  opportunity to shine amidst the shame that brings upon the Art
+                  Community.
+                </Typography>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={styles.submit}
+                  onClick={handleSignIn}
+                >
+                  Log In
+                </Button>
+              </div>
+              {/*Copyright*/}
+              <Copyright />
+              {/*Copyright*/}
+            </Grid>
+            {/* Form */}
+          </Grid>
+        </Fade>
+      ) : (
+        <Fade in={load} timeout={3000}>
+          <Box
+            display="flex"
+            height="100vh"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Image src="/obra-logo.png" height={60} width={60} />
+            <Typography
+              variant="h3"
+              align="center"
+              gutterBottom
+              style={{ marginTop: "8px", marginLeft: "8px" }}
+            >
+              Obra
+            </Typography>
+          </Box>
+        </Fade>
+      )}
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/home",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      session: session,
-    },
-  };
 };
 
 export default Login;

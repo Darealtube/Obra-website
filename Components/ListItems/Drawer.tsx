@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/client";
 import { COMMISSION_COUNT_QUERY } from "../../apollo/apolloQueries";
+import Image from "next/image";
 
 function Copyright() {
   return (
@@ -87,11 +88,12 @@ const DrawerItems = () => {
   return (
     <div>
       <ListItem>
-        <Typography variant="h4">
-          <span>
-            <PaletteIcon fontSize="large" /> Canvas
-          </span>
-        </Typography>
+        <ListItemIcon>
+          <Image src="/obra-logo.png" height={40} width={40} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography variant="h6">Obra</Typography>
+        </ListItemText>
       </ListItem>
       <Divider />
       <Link href={"/home"}>

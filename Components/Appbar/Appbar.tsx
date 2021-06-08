@@ -15,6 +15,7 @@ import AppbarNoUser from "./AppbarNoUser";
 import styles from "../../pages/styles/Specific/Appbar.module.css";
 import dynamic from "next/dynamic";
 import { AppbarUserData, AppbarVars } from "../../interfaces/QueryInterfaces";
+import Image from "next/image";
 
 const DynamicSwipeable = dynamic(() => import("./Drawers/Normal"));
 const DynamicDrawer = dynamic(() => import("./Drawers/Swipeable"));
@@ -54,8 +55,14 @@ const Appbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap className={styles.toolbarTitle}>
-            Canvas
+          <Image src="/obra-logo.png" height={40} width={40} />
+          <Typography
+            variant="h6"
+            noWrap
+            className={styles.toolbarTitle}
+            style={{ marginLeft: "8px" }}
+          >
+            Obra
           </Typography>
           {/* Drawer and Logo */}
           {session && !loading && user ? (

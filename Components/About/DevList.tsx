@@ -30,6 +30,9 @@ type Props = {
 
 const DevList = ({ changer, List, active, teamName }: Props) => {
   const router = useRouter();
+
+  // handleSensor accepts a dispatch and a result from VisibilitySensor as its
+  // parameters. It sets state from another component.
   const handleSensor = (
     isVisible: boolean,
     setter: Dispatch<SetStateAction<boolean>>
@@ -39,6 +42,8 @@ const DevList = ({ changer, List, active, teamName }: Props) => {
 
   return (
     <>
+    {/* Visibility Sensor will sense if the element is within the user's viewpoint or not. If it is on
+        the viewpoint, it will activate the Fade effect. */}
       <VisibilitySensor
         onChange={(isVisible) => handleSensor(isVisible, changer)}
         partialVisibility={true}

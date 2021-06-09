@@ -100,7 +100,7 @@ export default function SignIn({ Providers, csrf }) {
 // This is the recommended way for Next.js 9.3 or newer
 export async function getServerSideProps(context) {
   const Providers = await getProviders();
-  const csrf = await getCsrfToken(context);
+  const csrf = await getCsrfToken(context); // Used for email log in.
   return {
     props: { Providers, csrf },
   };

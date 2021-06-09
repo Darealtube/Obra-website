@@ -6,12 +6,9 @@ import { signIn, signOut } from "next-auth/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 
 const NoUserMenu = () => {
-  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    signOut({
-      callbackUrl: `https://obra-website.vercel.app/`,
-    });
-  };
+  // handleSignIn signs a user into the website and creates a session
+  // that will presist throughout the page, unless they log out. The
+  // Callback URL should always be set to the home page.
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     signIn(null, {
@@ -27,7 +24,7 @@ const NoUserMenu = () => {
       </ListItem>
       <Divider />
       <ListItem>
-        <Button className={styles.item} onClick={handleSignOut}>
+        <Button className={styles.item}>
           <InfoIcon className={styles.icon} /> Help
         </Button>
       </ListItem>

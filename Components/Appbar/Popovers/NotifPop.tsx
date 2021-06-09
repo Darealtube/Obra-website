@@ -43,19 +43,23 @@ const StyledBadge = withStyles((theme: Theme) =>
 )(Badge);
 
 const NotifPop = ({ user, fetchMore }: Props) => {
+  const showNotif = useMediaQuery("(max-width:280px)");
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
   const [read] = useMutation<ReadNotifData, ReadNotifVars>(READ_NOTIF);
-  const { More, hasMore } = usePagination(
+  const { More } = usePagination(
     "userId",
     fetchMore,
     user.userId.notifications,
     4,
     "notifications"
   );
-  const showNotif = useMediaQuery("(max-width:280px)");
   const [notifCount, setnotifCount] = useState(
     user?.userId.notifications.totalUnreadCount + (user.userId.newUser ? 1 : 0)
   );
+
+  // handleNotif will reset the unread notification count and it triggers once
+  // the user clicks the notification button. It also performs a "read notif" on those
+  // notifications.
   const handleNotif = (event: React.MouseEvent<HTMLButtonElement>) => {
     setnotifAnchor(event.currentTarget);
     if (notifCount > 0) {

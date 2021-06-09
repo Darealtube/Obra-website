@@ -60,7 +60,8 @@ const UserPopover = ({ profAnchor, handleProfileClose, user }: Props) => {
       </Box>
       <Divider />
       <List className={styles.menu}>
-        <Menu name={user.userId.name} />
+        <Menu name={user.userId.name} />{" "}
+        {/* List that is dropped down when you click the user avatar. */}
       </List>
     </Popover>
   );

@@ -3,7 +3,11 @@ import { USER_EXISTS } from "../apollo/apolloQueries";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import countryList from "react-select-country-list";
 
-export const userValidator = async (state, userId:string) => {
+// This is the Validator functions that we use throughout forms in our website.
+// They usually take two or more parameters including the state, and if there are
+// problems in validation, this is the right place to check.
+
+export const userValidator = async (state, userId: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userExists },
@@ -55,7 +59,7 @@ export const userValidator = async (state, userId:string) => {
   }
 };
 
-export const UserValidate1 = async (state, userId:string) => {
+export const UserValidate1 = async (state, userId: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userExists },
@@ -95,7 +99,7 @@ export const UserValidate1 = async (state, userId:string) => {
       errMessage: null,
     };
   }
-}
+};
 
 export const UserValidate2 = (state) => {
   if (state.artStyles.length > 5 || state.artStyles.length == 0) {
@@ -114,4 +118,4 @@ export const UserValidate2 = (state) => {
       errMessage: null,
     };
   }
-}
+};

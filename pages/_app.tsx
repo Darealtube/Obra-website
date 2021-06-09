@@ -7,6 +7,8 @@ import { Provider } from "next-auth/client";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../apollo/apolloClient";
 
+// This is the progress bar you see when routing to different pages.
+// These are fired during routing events.
 router.events.on("routeChangeStart", () => start());
 router.events.on("routeChangeComplete", () => done());
 router.events.on("routeChangeError", () => done());

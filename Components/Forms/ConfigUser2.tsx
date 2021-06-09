@@ -41,6 +41,9 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
     });
   };
 
+  // handleSubmit will also handle form validation that is coded by
+  // Darryl Javier. Please contribute to the validation algorithm for
+  // more.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const valid = UserValidate2(user);

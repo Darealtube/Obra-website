@@ -33,6 +33,9 @@ export const CardList = ({ postData }: PostData) => {
   const [editAnchor, seteditAnchor] = useState<null | HTMLElement>(null);
   const [targetId, settargetId] = useState<string>(null);
   const [admin, setadmin] = useState<boolean>(null);
+
+  // This opens up the popover, and the option will depend on the user if
+  // the user is the same as the author of the post.
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     seteditAnchor(e.currentTarget);
     settargetId(e.currentTarget.value);

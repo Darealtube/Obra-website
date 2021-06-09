@@ -56,6 +56,9 @@ const EditForm = () => {
     dispatch({ type: "ERROR", payload: false });
   };
 
+  // handleEditSubmit will first validate the form before submitting it
+  // to edit. This is a cache mutation, meaning that the next time you view
+  // the post, it is sure to be updated.
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const valid = await userValidator(userData, session?.id);

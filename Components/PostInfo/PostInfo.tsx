@@ -41,12 +41,20 @@ const PostInfo = ({
   liked,
   fetchMore,
 }: Parameters) => {
-  const [session] = useSession();
   const commentToggle = useMediaQuery("(max-width:768px)");
+  const [session] = useSession();
   const [openComment, setOpenComment] = useState(false);
-  const handleDrawer = () => {
-    setOpenComment(!openComment);
-  };
+  const [comment, setComment] = useState({
+    postID: postID.id,
+    content: "",
+    author: session?.id as string,
+  });
+
+  const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
+    update: (cache: DataProxy, mutationResult) =>
+      commentUpdate(cache, mutationResult, postID.id),
+  });
+
   const { More, hasMore, ref } = usePagination(
     "postId",
     fetchMore,
@@ -56,16 +64,9 @@ const PostInfo = ({
     openComment
   );
 
-  const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
-    update: (cache: DataProxy, mutationResult) =>
-      commentUpdate(cache, mutationResult, postID.id),
-  });
-
-  const [comment, setComment] = useState({
-    postID: postID.id,
-    content: "",
-    author: session?.id as string,
-  });
+  const handleDrawer = () => {
+    setOpenComment(!openComment);
+  };
 
   return (
     <Grid item xs={12} md={8} className={styles.postInfo}>

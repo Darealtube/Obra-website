@@ -35,13 +35,16 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
+  const [openDialog, setOpenDialog] = useState(false);
   const [likeArtist] =
     useMutation<LikeArtistData, UnlikeLikeArtistVars>(LIKE_ARTIST_MUTATION);
   const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
     UNLIKE_ARTIST_MUTATION
   );
-  const [openDialog, setOpenDialog] = useState(false);
 
+  // handleLike will handle like and unlike functionality. It will update
+  // the post's liked status even when the user comes out and in repeatedly.
+  // It will redirect to the signIn page when it does not have session.
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!session && !loading) {

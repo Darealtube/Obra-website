@@ -16,7 +16,7 @@ const Swipeable = ({ open, handleDrawer }: Props) => {
       onOpen={handleDrawer}
     >
       <List className={styles.list}>
-        <DrawerItems /> {/* Manage this later */}
+        <DrawerItems /> {/* Drawer List */}
       </List>
     </SwipeableDrawer>
   );

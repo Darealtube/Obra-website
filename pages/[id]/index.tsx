@@ -72,6 +72,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
     setOpen(false);
   };
 
+  // This useEffect adds the post to the view history of the user upon rendering the page.
   useEffect(() => {
     viewed({
       variables: {

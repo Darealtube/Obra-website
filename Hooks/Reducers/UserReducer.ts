@@ -28,6 +28,10 @@ export type Action = {
   message?: string;
 };
 
+// This is the reducer used in the useReducer function inside the settings page.
+// We should only use reducers on complex state in which when one field changes,
+// another does too, or on big states in general.
+
 export const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case "CHANGE":

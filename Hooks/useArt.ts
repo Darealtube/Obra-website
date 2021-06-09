@@ -1,5 +1,17 @@
 import { useState } from "react";
 
+/* 
+ useArt handles the art load when you upload a file while creating a post,
+ when changing your backdrop or avatar, and anything that requires changing
+ an image. What it does is to first set loading to true, and while it's true,
+ it calls upon the Cloudinary API in order to make a POST request that will
+ submit the image and place it there. Then, setArt will get the post data that
+ is returned by Cloudinary, namely the secure_url, the width, and the height of
+ the image. Then the FileReader will load a temporary image to be loaded client side,
+ and it will return the url, the width, and the height of the image. useArt returns
+ the setArt function, the loading state, and the placeholder (returned by FileReader). 
+ */
+
 const useArt = (initPlaceHolder: string) => {
   const [loading, setLoading] = useState(false);
   const [placeholder, setPlaceholder] = useState(initPlaceHolder);

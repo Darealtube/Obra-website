@@ -11,6 +11,28 @@ interface Info {
   totalCount: number;
 }
 
+/* 
+ usePagination handles the pagination for all of the lists that are used widely around 
+ the entire app, from posts, to commissions. usePagination accepts mainly 4 parameters, 
+ with 2 optional parameters. 
+ 
+ The first parameter, "key" accepts the main "key" of the 
+ returned data from the query (e.g. "userName","userId","postId", etc.). The second parameter,
+ "fetchMore", will accept the fetchMore function that is returned from useQuery, and it will 
+ be used here. The third parameter, "info", accepts the returned "edges" from the query (since
+ it uses a relayStylePagination). The edges consists of the actual list, extra information about
+ the list, and the list's total count. The fourth parameter, "limit", accepts the number of how 
+ many posts shall be paginated. This number must be similar to the limit variable that is passed 
+ in useQuery. 
+
+ The first optional parameter, "key2", will accept the second key if the list is inside a main information.
+ For example, a user's posts are inside either "userName" or "userId" that is passed as a "key", then their
+ "posts" will be passed as the second key, depending on the query. The second optional parameter is "execute".
+ It is a boolean that will determine if the query must execute until the element is scrollable. There is a bug in
+ InfiniteScroll component that will not paginate the list when it is smaller than the actual element, in other words,
+ unscrollable. The returned "ref" is the helper, as it will help determine if the element is scrollable or not.
+ */
+
 const usePagination = (
   key: string,
   fetchMore,
@@ -30,6 +52,9 @@ const usePagination = (
     node?.scrollHeight > node?.clientHeight
   );
 
+  // This useEffect executes More function until the element that has the
+  // ref "ref" is scrollable. It will also mark as "refetching" when it does this,
+  // and it is used in order to organize query requests.
   useEffect(() => {
     if (node && isScrollable === false) {
       if (execute === true && hasMore === true) {
@@ -41,6 +66,8 @@ const usePagination = (
     }
   }, [execute, node, isScrollable, hasMore]);
 
+  // More will only execute when the hook is not performing any other action such as execute
+  // or when a user deletes a post and needs to paginate one post in replace.
   const More = () => {
     if (!refetching) {
       fetchMore({
@@ -59,6 +86,10 @@ const usePagination = (
       });
     }
   };
+
+  // This useEffect handles the event when a user deletes something from the list while the
+  // list still has a next page of items. It will always fetch ONE more item in replace to the
+  // item deleted.
 
   useEffect(() => {
     if (info?.edges.length < page * limit && hasMore) {

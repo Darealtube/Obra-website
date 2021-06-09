@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+// This is the function used to connect to the MongoDB Database 
+// through the use of Mongoose. 
+
 async function dbConnect() {
   // check if we have a connection to the database or if it's currently
   // connecting or disconnecting (readyState 1, 2 and 3)

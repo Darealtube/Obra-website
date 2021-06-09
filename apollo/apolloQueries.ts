@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
 
+// This is where we set Client-side query requests using gql.
+// In order to know the syntax you must learn how GraphQL works.
+
 export const PostInfo = gql`
   fragment PostInfo on Post {
     id

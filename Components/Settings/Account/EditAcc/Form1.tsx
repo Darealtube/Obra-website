@@ -42,6 +42,8 @@ const Form1 = ({ user, dispatch }: Props) => {
     inputFile2.current.click();
   };
 
+  // handleArt uses the setArt custom hook developed by Darryl Javier. Go to the
+  // file in the hooks directory in order to know more about the custom hook.
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setArt((e.target as HTMLInputElement).files).then((values) => {
       dispatch({

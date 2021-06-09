@@ -27,11 +27,11 @@ const DynamicDate = dynamic(() => import("../MainPopovers/DatePopover"));
 
 const ConfigUser = ({ user, dispatch }: Props) => {
   const [session] = useSession();
+  const [dateAnchor, setdateAnchor] = useState<null | HTMLElement>(null);
   const countries: { value: string; label: string }[] = useMemo(
     () => countryList().getData(),
     []
   );
-  const [dateAnchor, setdateAnchor] = useState<null | HTMLElement>(null);
 
   const handleDate = (value: Date) => {
     dispatch({ type: "DATE_CHANGE", payload: value });
@@ -54,6 +54,8 @@ const ConfigUser = ({ user, dispatch }: Props) => {
     });
   };
 
+  // handleNext first validates the first set of requirements like the age, etc.
+  // Then it moves on to the next page where the submit button is.
   const handleNext = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const valid = await UserValidate1(user, session?.id);

@@ -10,9 +10,7 @@ import {
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
   TRENDING_POSTS_QUERY,
-  USER_GALLERY_QUERY,
   USER_ID_QUERY,
-  USER_LIKED_GALLERY_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
 } from "../apollo/apolloQueries";
@@ -28,6 +26,13 @@ import {
   HomeUserData,
   HomeUserVars,
 } from "../interfaces/QueryInterfaces";
+
+/* These are the fetch functions that are used on pages that have
+ getServerSideProps/getStaticProps. In every fetch function, it
+ should return the apolloClient (primarily), as it is passed in
+ each getServerSideProps/getStaticProps addApolloState function
+ found from the apolloClient file. This is in order to add the 
+ data into the cache. Other information could be passed as well. */
 
 export const fetchUser = async (id: string) => {
   const apolloClient = initializeApollo();

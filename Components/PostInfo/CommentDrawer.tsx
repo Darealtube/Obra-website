@@ -13,28 +13,9 @@ import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
 import CloseIcon from "@material-ui/icons/Close";
 import { edges } from "../../interfaces/CommentInterface";
-import {
-  FetchResult,
-  MutationFunctionOptions,
-  OperationVariables,
-} from "@apollo/client";
 
 interface Props {
-  comment: {
-    postID: string;
-    content: string;
-    author: string;
-  };
-  setComment: React.Dispatch<
-    React.SetStateAction<{
-      postID: string;
-      content: string;
-      author: string;
-    }>
-  >;
-  addComment: (
-    options?: MutationFunctionOptions<any, OperationVariables>
-  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
+  id: string;
   More: () => void;
   hasMore: boolean;
   comments: edges[];
@@ -44,12 +25,10 @@ interface Props {
 }
 
 const CommentDrawer = ({
-  comment,
+  id,
   More,
   hasMore,
   comments,
-  setComment,
-  addComment,
   open,
   handleDrawer,
   parentRef,
@@ -85,9 +64,7 @@ const CommentDrawer = ({
           ref={parentRef}
         >
           <CommentForm
-            comment={comment}
-            setComment={setComment}
-            addComment={addComment}
+            id={id}
           />
           <InfiniteScroll
             dataLength={comments.length}

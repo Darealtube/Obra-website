@@ -1,24 +1,28 @@
-import { MutationFunctionOptions, OperationVariables, FetchResult } from "@apollo/client";
+import { DataProxy, useMutation } from "@apollo/client";
 import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
+import { useSession } from "next-auth/client";
+import { useState } from "react";
+import { CREATE_COMMENT_MUTATION } from "../../apollo/apolloQueries";
+import { AddCommentData } from "../../interfaces/MutationInterfaces";
+import { commentUpdate } from "../../utils/update";
 
 type Comment = {
-  comment : {
-    postID: string;
-    content: string;
-    author: string;
-  }
-  setComment:React.Dispatch<
-  React.SetStateAction<{
-    postID: string;
-    content: string;
-    author: string;
-  }>
->;
-  addComment: (options?: MutationFunctionOptions<any, OperationVariables>) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>
+  id: string;
 }
 
-const CommentForm = ({ comment, setComment, addComment }: Comment) => {
+const CommentForm = ({ id }: Comment) => {
+  const [session] = useSession();
+  const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
+    update: (cache: DataProxy, mutationResult) => commentUpdate(cache, mutationResult, id),
+  });
+  
+  const [comment, setComment] = useState({
+    postID: id,
+    content: "",
+    author: session?.id as string,
+  });
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment({
       ...comment,

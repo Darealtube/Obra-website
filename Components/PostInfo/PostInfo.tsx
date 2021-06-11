@@ -1,4 +1,3 @@
-import { DataProxy, useMutation } from "@apollo/client";
 import {
   Grid,
   Typography,
@@ -11,7 +10,6 @@ import {
 import React, { useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { CREATE_COMMENT_MUTATION, POST_ID_QUERY } from "../../apollo/apolloQueries";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
 import CommentList from "../CommentList";
@@ -19,11 +17,7 @@ import CommentForm from "../Forms/CreateComment";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../../Hooks/usePagination";
 import Main from "./Main";
-import { useSession } from "next-auth/client";
 import dynamic from "next/dynamic";
-import { AddCommentData } from "../../interfaces/MutationInterfaces";
-import { commentUpdate } from "../../utils/update";
-import { PostData, PostVars } from "../../interfaces/QueryInterfaces";
 
 const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
 
@@ -43,40 +37,7 @@ const PostInfo = ({
   fetchMore,
 }: Parameters) => {
   const commentToggle = useMediaQuery("(max-width:768px)");
-  const [session] = useSession();
   const [openComment, setOpenComment] = useState(false);
-  const [comment, setComment] = useState({
-    postID: postID.id,
-    content: "",
-    author: session?.id as string,
-  });
-
-  const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
-    update: (cache: DataProxy, mutationResult) => {
-      const newComment = mutationResult.data.createComment;
-      const { postId } = cache.readQuery<PostData, PostVars>({
-        query: POST_ID_QUERY,
-        variables: { id: postID.id },
-      });
-
-      cache.writeQuery({
-        query: POST_ID_QUERY,
-        variables: { id: postID.id },
-        data: {
-          postId: {
-            ...postId,
-            comments: {
-              ...postId.comments,
-              edges: [
-                { __typeName: "CommentEdge", node: newComment },
-                ...postId.comments.edges,
-              ],
-            },
-          },
-        },
-      });
-    },
-  });
 
   const { More, hasMore, ref } = usePagination(
     "postId",
@@ -111,9 +72,7 @@ const PostInfo = ({
         ) : (
           <>
             <CommentForm
-              setComment={setComment}
-              addComment={addComment}
-              comment={comment}
+              id={postID.id}
             />
             <InfiniteScroll
               dataLength={postID.comments.edges.length}
@@ -137,9 +96,7 @@ const PostInfo = ({
       </Container>
 
       <DynamicCommentDrawer
-        setComment={setComment}
-        addComment={addComment}
-        comment={comment}
+        id={postID.id}
         More={More}
         hasMore={hasMore}
         comments={postID.comments.edges}

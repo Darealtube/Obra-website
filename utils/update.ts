@@ -53,7 +53,7 @@ export const commentUpdate = (
         comments: {
           ...postId.comments,
           edges: [
-            { __typeName: "CommentEdge", node: newComment },
+            { __typename: "CommentEdge", node: newComment },
             ...postId.comments.edges,
           ],
         },

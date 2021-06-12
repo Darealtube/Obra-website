@@ -8,7 +8,6 @@ import {
   Badge,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
-import PaletteIcon from "@material-ui/icons/Palette";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 import ImageIcon from "@material-ui/icons/Image";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -140,7 +139,8 @@ const DrawerItems = () => {
           </Link>
         </>
       ))}
-      <ListItem button component="a" href={"/commissions"}>
+      <Link href={"/commissions"}>
+      <ListItem button component="a" >
         <ListItemIcon>
           <BrushIcon />
         </ListItemIcon>
@@ -148,6 +148,7 @@ const DrawerItems = () => {
           <ListItemText>Commissions</ListItemText>
         </Badge>
       </ListItem>
+      </Link>
       <Divider />
       <ListItem>
         <Typography variant="h5">More</Typography>

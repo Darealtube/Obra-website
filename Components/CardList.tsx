@@ -101,7 +101,7 @@ export const CardList = ({ postData }: PostData) => {
                   )}
                 </Container>
 
-                <a href={`/${post.node.id}`} style={{textDecoration: "none"}}>
+                <Link href={`/${post.node.id}`}>
                   <CardActionArea>
                     <CardContent>
                       <Typography
@@ -116,7 +116,7 @@ export const CardList = ({ postData }: PostData) => {
                       ))}
                     </CardContent>
                   </CardActionArea>
-                </a>
+                </Link>
                 <CardActions>
                   <Button size="small" color="primary">
                     View

@@ -23,7 +23,6 @@ import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import { useMutation } from "@apollo/client";
 import { CREATE_COMMISSION_MUTATION } from "../../../apollo/apolloQueries";
 import { useRouter } from "next/router";
-import { addApolloState } from "../../../apollo/apolloClient";
 
 const initState = {
   title: "",
@@ -204,12 +203,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  return addApolloState(data, {
+  return  {
     props: {
+      initialApolloState: data,
       name: context.params.name,
       session,
     },
-  });
+  };
 };
 
 export default Commission;

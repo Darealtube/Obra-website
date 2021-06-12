@@ -14,7 +14,7 @@ router.events.on("routeChangeComplete", () => done());
 router.events.on("routeChangeError", () => done());
 
 export default function MyApp({ Component, pageProps }) {
-  const apolloClient = useApollo(pageProps);
+  const apolloClient = useApollo(pageProps.initialApolloState);
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");

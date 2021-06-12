@@ -139,8 +139,7 @@ const DrawerItems = () => {
           </Link>
         </>
       ))}
-      <Link href={"/commissions"}>
-      <ListItem button component="a" >
+      <ListItem button component="a" href={"/commissions"}>
         <ListItemIcon>
           <BrushIcon />
         </ListItemIcon>
@@ -148,7 +147,6 @@ const DrawerItems = () => {
           <ListItemText>Commissions</ListItemText>
         </Badge>
       </ListItem>
-      </Link>
       <Divider />
       <ListItem>
         <Typography variant="h5">More</Typography>

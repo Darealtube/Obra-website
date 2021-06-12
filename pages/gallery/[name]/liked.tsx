@@ -15,7 +15,6 @@ import { USER_LIKED_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import Gridlist from "../../../Components/GridList";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const LikedGallery = () => {

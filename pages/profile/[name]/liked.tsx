@@ -12,7 +12,6 @@ import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
-import { addApolloState } from "../../../apollo/apolloClient";
 
 type Props = {
   name: string;
@@ -93,14 +92,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  return addApolloState(data, {
+  return {
     props: {
       session,
       name: context.params.name,
       id: session.id as string,
       alreadyLiked: alreadyLiked,
+      initialApolloState: data,
     },
-  });
+  };
 };
 
 export default UserIDLiked;

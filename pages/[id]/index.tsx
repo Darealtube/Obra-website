@@ -30,7 +30,6 @@ import {
   ViewPostData,
   ViewPostVars,
 } from "../../interfaces/MutationInterfaces";
-import { addApolloState } from "../../apollo/apolloClient";
 
 const DynamicImageDialog = dynamic(
   () => import("../../Components/PostInfo/ImageDialog")
@@ -148,13 +147,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  return addApolloState(data, {
+  return {
     props: {
+      initialApolloState: data,
       session: session,
       id: context.params.id,
       alreadyLiked: alreadyLiked,
     },
-  });
+  };
 };
 
 export default PostID;

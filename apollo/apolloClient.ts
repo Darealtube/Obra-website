@@ -7,6 +7,8 @@ import {
 } from "@apollo/client";
 import { relayStylePagination } from "@apollo/client/utilities";
 
+export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
+
 let apolloClient;
 
 // Creates an HttpLink towards the website's api on https://obra-api.vercel.app.
@@ -77,7 +79,27 @@ export function initializeApollo(initialState = null) {
   return _apolloClient;
 }
 
-export function useApollo(initialState) {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+// This is to add the cache of every server's request on the cache found
+// in Apollo Client. In every page that uses getStaticProps or getServerSideProps,
+// the "apolloClient" should be passed as first parameter, then page props.
+
+export function addApolloState(
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps
+) {
+
+  if (pageProps?.props) {
+    pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
+  }
+
+  return pageProps;
+}
+
+// It memoizes the apolloClient in order for it not to repeat everytime a
+// user navigates on another page.
+
+export function useApollo(pageProps) {
+  const state = pageProps[APOLLO_STATE_PROP_NAME];
+  const store = useMemo(() => initializeApollo(state), [state]);
   return store;
 }

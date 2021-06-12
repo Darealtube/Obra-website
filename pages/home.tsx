@@ -30,6 +30,7 @@ import {
   NewPostsData,
   PaginatedPostsVars,
 } from "../interfaces/QueryInterfaces";
+import { addApolloState } from "../apollo/apolloClient";
 
 const Home = () => {
   const [session] = useSession();
@@ -146,12 +147,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const apollo = await fetchPosts(session?.id);
 
-  return  {
+  return addApolloState(apollo, {
     props: {
-      initialApolloState: apollo,
       session,
     },
-  };
+  });
 };
 
 export default Home;

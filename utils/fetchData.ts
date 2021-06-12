@@ -29,7 +29,7 @@ import {
 
 /* These are the fetch functions that are used on pages that have
  getServerSideProps/getStaticProps. In every fetch function, it
- should return apolloClient.cache.extract() (primarily), as it is passed in
+ should return apolloClient (primarily), as it is passed in
  each getServerSideProps/getStaticProps addApolloState function
  found from the apolloClient file. This is in order to add the 
  data into the cache. Other information could be passed as well. */
@@ -62,7 +62,7 @@ export const isSameUser = async (id: string, name: string) => {
     },
   });
 
-  return { data: apolloClient.cache.extract(), same: isSameUser };
+  return { data: apolloClient, same: isSameUser };
 };
 
 export const fetchUserandPosts = async (name: string, userID: string) => {
@@ -87,7 +87,7 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
   });
 
   return {
-    data: apolloClient.cache.extract(),
+    data: apolloClient,
     exists: userName ? true : false,
     alreadyLiked: isLikedArtist,
   };
@@ -116,7 +116,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   });
 
   return {
-    data: apolloClient.cache.extract(),
+    data: apolloClient,
     exists: userName ? true : false,
     alreadyLiked: isLikedArtist,
   };
@@ -146,19 +146,7 @@ export const fetchPosts = async (id: string) => {
       },
     });
   }
-  return apolloClient.cache.extract();
-};
-
-// FOR NOW
-export const fetchTrendingPosts = async () => {
-  const apolloClient = initializeApollo();
-  await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
-    query: TRENDING_POSTS_QUERY,
-    variables: {
-      limit: 4,
-    },
-  });
-  return apolloClient.cache.extract();
+  return apolloClient;
 };
 
 export const fetchAPost = async (id: string) => {
@@ -207,7 +195,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   });
 
   return {
-    data: apolloClient.cache.extract(),
+    data: apolloClient,
     exists: postId ? true : false,
     alreadyLiked: isLikedPost,
   };

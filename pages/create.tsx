@@ -134,7 +134,7 @@ const Create = ({ id }: { id: string }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const apolloClient = initializeApollo();
+
   if (!session) {
     return {
       redirect: {
@@ -143,12 +143,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const data = await fetchUser(session.id as string);
 
   return {
     props: {
-      initialApolloState: apolloClient.cache.extract(),
-      id: data.id,
+      id: session.id,
     },
   };
 };

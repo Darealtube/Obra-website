@@ -1,4 +1,4 @@
-type Options = "CHANGE" | "TAGS" | "SALE" | "CHANGE_ART";
+type Options = "CHANGE" | "TAGS" | "SALE" | "CHANGE_ART" | "ERROR";
 
 export type State = {
   title: string;
@@ -9,6 +9,8 @@ export type State = {
   tags: string[];
   width: number;
   height: number;
+  error: boolean;
+  errMessage: string;
 };
 
 type Values = {
@@ -19,10 +21,11 @@ type Values = {
 
 export type Action = {
   type: Options;
-  payload?: string | string[];
+  payload?: string | string[] | boolean;
   artPayload?: Values;
   field?: string;
   initialState?: State;
+  message?: string;
 };
 
 // This is the reducer used in the useReducer function inside the create page.
@@ -51,6 +54,12 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         sale: action.payload as string,
         ...(action.payload === "No" && { price: "" }),
+      };
+      case "ERROR":
+      return {
+        ...state,
+        error: action.payload as boolean,
+        ...(action.message && { errMessage: action.message }),
       };
     default:
       return state;

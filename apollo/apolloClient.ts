@@ -9,7 +9,7 @@ import { relayStylePagination } from "@apollo/client/utilities";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
-let apolloClient;
+let apolloClient: null | ApolloClient<NormalizedCacheObject>;
 
 // Creates an HttpLink towards the website's api on https://obra-api.vercel.app.
 // In order to work in dev environment, set the uri to http://localhost:4000/api/graphql.

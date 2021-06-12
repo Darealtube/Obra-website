@@ -1,4 +1,4 @@
-import { ListItem, Typography, Avatar, IconButton } from "@material-ui/core";
+import { ListItem, Typography, Avatar, IconButton, Box, ListItemAvatar } from "@material-ui/core";
 import { notifedges } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 import Image from "next/image";
@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useSession } from "next-auth/client";
 import Link from "next/link";
+import { Container } from "@material-ui/core";
 
 type Props = {
   notifications: notifedges[];
@@ -67,11 +68,11 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
               }
             >
               <ListItem
-                className={styles.notifitem}
                 key={notif.node.id}
                 button
                 component="a"
               >
+                <ListItemAvatar>
                 <Image
                   src={
                     notif.node.commissioner.image
@@ -82,12 +83,13 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
                   height={40}
                   className={styles.avatar}
                 />
-                <div style={{ marginLeft: "8px" }}>
+                </ListItemAvatar>
+                <Box display="flex" flexDirection="column" width="80%">
                   <Typography>{notif.node.date}</Typography>
                   <Typography className={styles.notifInfo}>
                     {notif.node.description}
                   </Typography>
-                </div>
+                </Box>
                 <IconButton id={notif.node.id} onClick={DeleteNotif}>
                   <DeleteIcon />
                 </IconButton>

@@ -14,12 +14,10 @@ const PostSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: [40, "Title is too long!"],
   },
   description: {
     type: String,
     required: true,
-    maxLength: [400, "Explain it more briefly."],
   },
   likes: {
     type: Number,

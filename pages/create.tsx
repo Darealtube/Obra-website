@@ -10,16 +10,18 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { getSession } from "next-auth/client";
 import { CREATE_POST_MUTATION } from "../apollo/apolloQueries";
-import { initializeApollo } from "../apollo/apolloClient";
 import { useMutation } from "@apollo/client";
 import PostForm from "../Components/Forms/CreatePost";
 import { reducer, State } from "../Hooks/Reducers/PostReducer";
 import useArt from "../Hooks/useArt";
-import { fetchUser } from "../utils/fetchData";
 import {
   CreatePostData,
   CreatePostVars,
 } from "../interfaces/MutationInterfaces";
+import dynamic from "next/dynamic";
+import { PostValidate } from "../utils/postValidator";
+
+const DynamicError = dynamic(()=> import("../Components/Forms/Snackbars/ConfigSnack"));
 
 const initState: State = {
   title: "",
@@ -30,13 +32,15 @@ const initState: State = {
   tags: [] as string[],
   width: 0,
   height: 0,
+  error: false,
+  errMessage: "",
 };
 
 const Create = ({ id }: { id: string }) => {
   const router = useRouter();
+  const [post, dispatch] = useReducer(reducer, initState);
   const [create] =
     useMutation<CreatePostData, CreatePostVars>(CREATE_POST_MUTATION);
-  const [post, dispatch] = useReducer(reducer, initState);
   const { loading, setArt, placeholder } = useArt("");
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,25 +70,45 @@ const Create = ({ id }: { id: string }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    create({
-      variables: {
-        author: id,
-        title: post.title,
-        description: post.description,
-        art: post.art,
-        price: post.price,
-        sale: post.sale,
-        date: moment().format("l"),
-        tags: post.tags,
-        width: post.width,
-        height: post.height,
-      },
-    });
-    router.push("/home");
+    const valid = PostValidate(post);
+
+    if (valid.error && valid.errMessage) {
+      dispatch({
+        type: "ERROR",
+        payload: valid.error,
+        message: valid.errMessage,
+      });
+    }else{
+      create({
+        variables: {
+          author: id,
+          title: post.title,
+          description: post.description,
+          art: post.art,
+          price: post.price,
+          sale: post.sale,
+          date: moment().format("l"),
+          tags: post.tags,
+          width: post.width,
+          height: post.height,
+        },
+      });
+      router.push("/home");
+    }
   };
 
   const handleNumber = (values: NumberFormatValues) => {
     dispatch({ type: "CHANGE", field: "price", payload: values.value });
+  };
+
+  const handleErrorClose = (
+    event: React.SyntheticEvent | React.MouseEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch({ type: "ERROR", payload: false });
   };
 
   return (
@@ -128,6 +152,12 @@ const Create = ({ id }: { id: string }) => {
           </div>
         </Grid>
       </Grid>
+
+      <DynamicError
+        error={post.error}
+        errMessage={post.errMessage}
+        handleErrorClose={handleErrorClose}
+      />
     </div>
   );
 };

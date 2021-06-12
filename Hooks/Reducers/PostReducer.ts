@@ -9,8 +9,8 @@ export type State = {
   tags: string[];
   width: number;
   height: number;
-  error: boolean;
-  errMessage: string;
+  error?: boolean;
+  errMessage?: string;
 };
 
 type Values = {

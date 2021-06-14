@@ -35,7 +35,7 @@ const ReportPost = ({ id }) => {
   })
 
   const {
-    data: { postId },
+    data
   } = useQuery(REPORT_POST_QUERY, {
     variables: {
       id: id,
@@ -71,7 +71,7 @@ const ReportPost = ({ id }) => {
         <title>Report Post</title>
       </Head>
       <CssBaseline />
-      <Container className={styles.root}>
+      {data && <Container className={styles.root}>
         <Grid container className={styles.root} spacing={2}>
           <Grid
             item
@@ -84,9 +84,9 @@ const ReportPost = ({ id }) => {
             }}
           >
             <Image
-              src={postId.art}
-              width={postId.width}
-              height={postId.height}
+              src={data?.postId.art}
+              width={data?.postId.width}
+              height={data?.postId.height}
             />
           </Grid>
           <Grid
@@ -162,7 +162,7 @@ const ReportPost = ({ id }) => {
             </Paper>
           </Grid>
         </Grid>
-      </Container>
+      </Container>}
     </div>
   );
 };

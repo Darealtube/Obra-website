@@ -37,7 +37,7 @@ const ReportPost = () => {
     reason: "",
   });
 
-  const { data } = useQuery(REPORT_POST_QUERY, {
+  const { data, loading } = useQuery(REPORT_POST_QUERY, {
     variables: {
       id: router.query.id,
     },
@@ -66,7 +66,7 @@ const ReportPost = () => {
   };
 
   useEffect(() => {
-    if (data) setAdmin(data?.postId.author.id == session?.id);
+    if (data && !loading) setAdmin(data?.postId.author.id == session?.id);
   }, [data, session]);
 
   return (
@@ -175,6 +175,8 @@ const ReportPost = () => {
             </Grid>
           </Grid>
         </Container>
+      ) : loading ? (
+        ""
       ) : (
         <Container>
           <Typography variant="h1">

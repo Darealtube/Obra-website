@@ -581,12 +581,6 @@ export const ALL_USER_QUERY = gql`
   }
 `;
 
-export const ALL_POST_QUERY = gql`
-  query AllPosts {
-    allPostList
-  }
-`;
-
 export const COMMISSION_COUNT_QUERY = gql`
   query CommissionCount($id: ID!) {
     userId(id: $id) {

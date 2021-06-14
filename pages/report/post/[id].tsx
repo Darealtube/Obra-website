@@ -13,19 +13,16 @@ import {
   Button,
 } from "@material-ui/core";
 import moment from "moment";
-import { GetStaticPaths, GetStaticProps } from "next";
 import { useSession } from "next-auth/client";
 import Image from "next/image";
 import { useState } from "react";
-import { addApolloState } from "../../../apollo/apolloClient";
 import { POST_REPORT_MUTATION, REPORT_POST_QUERY } from "../../../apollo/apolloQueries";
-import { fetchAllPosts, fetchReportedPost } from "../../../utils/fetchData";
 import { reasonOptions } from "../../../utils/Options";
 import styles from "../../styles/Specific/Report.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-const ReportPost = ({ id }) => {
+const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [reportPost] = useMutation(POST_REPORT_MUTATION)
@@ -38,7 +35,7 @@ const ReportPost = ({ id }) => {
     data
   } = useQuery(REPORT_POST_QUERY, {
     variables: {
-      id: id,
+      id: router.query.id,
     },
   });
 
@@ -54,9 +51,9 @@ const ReportPost = ({ id }) => {
     reportPost({
       variables:{
         senderId: session?.id,
-        reportedPostId: id,
+        reportedPostId: router.query.id,
         date: moment().format("l"),
-        title: `Post report for ${id}`,
+        title: `Post report for ${router.query.id}`,
         description: report.description,
         reason: report.reason,
       }
@@ -165,35 +162,6 @@ const ReportPost = ({ id }) => {
       </Container>}
     </div>
   );
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await fetchAllPosts();
-
-  // Get the paths we want to pre-render based on posts
-  const paths = posts.map((id) => ({
-    params: { id: id },
-  }));
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
-  return { paths, fallback: true };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { data, exists } = await fetchReportedPost(context.params.id);
-
-  if (!exists) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return addApolloState(data, {
-    props: {
-      id: context.params.id,
-    },
-  });
 };
 
 export default ReportPost;

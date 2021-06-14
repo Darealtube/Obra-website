@@ -1,6 +1,5 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
-  ALL_POST_QUERY,
   ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
@@ -10,7 +9,6 @@ import {
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
-  REPORT_POST_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -213,33 +211,3 @@ export const fetchAllUsers = async () => {
 
   return allUsersList as string[];
 };
-
-export const fetchAllPosts = async () => {
-  const apolloClient = initializeApollo();
-
-  const {
-    data: { allPostList },
-  } = await apolloClient.query({
-    query: ALL_POST_QUERY,
-  });
-
-  return allPostList as string[];
-};
-
-export const fetchReportedPost = async(id) => {
-  const apolloClient = initializeApollo();
-
-  const {
-    data: { postId },
-  } = await apolloClient.query<PostData, PostVars>({
-    query: REPORT_POST_QUERY,
-    variables: {
-      id: id,
-    },
-  });
-
-  return {
-    data: apolloClient,
-    exists: postId ? true : false,
-  };
-}

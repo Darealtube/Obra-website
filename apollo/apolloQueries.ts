@@ -299,6 +299,23 @@ export const NEW_POSTS_QUERY = gql`
   ${PostInfo}
 `;
 
+// This is for the /report page for posts.
+export const REPORT_POST_QUERY = gql`
+  query ReportPostID($id: ID!) {
+    postId(id: $id) {
+      id
+      title
+      art
+      author {
+        id
+        name
+      }
+      width
+      height
+    }
+  }
+`;
+
 export const SETTINGS_QUERY = gql`
   query Settings($id: ID!) {
     userId(id: $id) {
@@ -561,6 +578,12 @@ export const USER_LIKED_GALLERY_QUERY = gql`
 export const ALL_USER_QUERY = gql`
   query AllUsers {
     allUsersList
+  }
+`;
+
+export const ALL_POST_QUERY = gql`
+  query AllPosts {
+    allPostList
   }
 `;
 
@@ -840,5 +863,26 @@ export const READ_NOTIF = gql`
 export const VIEW_POST = gql`
   mutation ViewPost($viewed: ID!, $userId: ID!) {
     viewPost(viewed: $viewed, userId: $userId)
+  }
+`;
+
+// This is for the submit mutation
+export const POST_REPORT_MUTATION = gql`
+  mutation ReportPost(
+    $senderId: ID!
+    $reportedPostId: ID!
+    $date: String!
+    $title: String!
+    $description: String!
+    $reason: String!
+  ) {
+    sendPostReport(
+      senderId: $senderId
+      reportedPostId: $reportedPostId
+      date: $date
+      title: $title
+      description: $description
+      reason: $reason
+    )
   }
 `;

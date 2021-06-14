@@ -148,3 +148,12 @@ export const Finance = [
     twt: "https://twitter.com/jet_aimeee",
   },
 ];
+
+export const reasonOptions = [
+  "Inappropriate Art",
+  "Art with Inappropriate or Misleading Tags",
+  "Inappropriate Title or Description",
+  "Unreasonable Price",
+  "Misleading Art",
+  "Unoriginal Art"
+]

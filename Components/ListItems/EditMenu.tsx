@@ -52,11 +52,11 @@ const EditMenu = ({ id, admin, onClose, onExited }: Props) => {
           <Divider />
         </>
       )}
-      <ListItem>
+      {!admin && <ListItem button component="a" href={`/report/post/${id}`}>
         <Button className={styles.item}>
           <ContactSupportIcon className={styles.icon} /> Report
         </Button>
-      </ListItem>
+      </ListItem>}
     </div>
   );
 };

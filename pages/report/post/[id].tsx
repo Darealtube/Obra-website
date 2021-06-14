@@ -25,11 +25,13 @@ import styles from "../../styles/Specific/Report.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [reportPost] = useMutation(POST_REPORT_MUTATION);
+  const [admin, setAdmin] = useState(false);
   const [report, setReport] = useState({
     description: "",
     reason: "",
@@ -63,6 +65,10 @@ const ReportPost = () => {
     router.push("/home");
   };
 
+  useEffect(() => {
+    if (data) setAdmin(data?.postId.author.id == session?.id);
+  }, [data, session]);
+
   return (
     <div>
       <Head>
@@ -70,7 +76,7 @@ const ReportPost = () => {
         <title>Report Post</title>
       </Head>
       <CssBaseline />
-      {data && data?.postId.author.id != session.id ? (
+      {data && !admin ? (
         <Container className={styles.root}>
           <Grid container className={styles.root} spacing={2}>
             <Grid

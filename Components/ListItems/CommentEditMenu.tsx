@@ -52,10 +52,13 @@ const CommentEditMenu = ({ id, admin, onClose, onExited }: Props) => {
           <Divider />
         </>
       )}
+
       <ListItem>
-        <Button className={styles.item}>
-          <ContactSupportIcon className={styles.icon} /> Report
-        </Button>
+        <Link href={`/report/comment/${id}`}>
+          <Button className={styles.item} component="a">
+            <ContactSupportIcon className={styles.icon} /> Report
+          </Button>
+        </Link>
       </ListItem>
     </div>
   );

@@ -8,23 +8,25 @@ import {
 } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import { REPORT_POST_QUERY } from "../../../apollo/apolloQueries";
+import {
+  COMMENT_ID_QUERY,
+  REPORT_POST_QUERY,
+} from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import ReportForm from "../../../Components/Forms/ReportPost";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
 const DynamicReportForm = dynamic(
-  () => import("../../../Components/Forms/ReportPost")
+  () => import("../../../Components/Forms/ReportComment")
 );
 
 const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [admin, setAdmin] = useState(false);
-  const { data, loading } = useQuery(REPORT_POST_QUERY, {
+  const { data, loading } = useQuery(COMMENT_ID_QUERY, {
     variables: {
       id: router.query.id,
     },
@@ -32,8 +34,8 @@ const ReportPost = () => {
   });
 
   useEffect(() => {
-    if (data?.postId && !loading)
-      setAdmin(data?.postId.author.id == session?.id);
+    if (data?.commentId && !loading)
+      setAdmin(data?.commentId.author.id == session?.id);
   }, [data, session]);
 
   return (
@@ -43,8 +45,8 @@ const ReportPost = () => {
         <title>Report Post</title>
       </Head>
       <CssBaseline />
-      {data?.postId && !admin ? (
-        <DynamicReportForm data={data?.postId} />
+      {data?.commentId && !admin ? (
+        <DynamicReportForm data={data?.commentId} />
       ) : loading ? (
         <Box
           display="flex"
@@ -55,7 +57,7 @@ const ReportPost = () => {
         >
           <CircularProgress />
         </Box>
-      ) : data?.postId && admin ? (
+      ) : data?.commentId && admin ? (
         <Box
           display="flex"
           justifyContent="center"

@@ -1,0 +1,63 @@
+.wrapRoot {
+  width: 100vw;
+  height: 100vh;
+}
+
+.reportList {
+  height: 75vh;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.grid{
+  height: 100vh;
+  width: 100vw;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100vh;
+  width: 50vw;
+}
+
+.paper{
+  width: 80%;
+  height: 80%;
+  overflow: auto;
+  overflow-wrap: break-word;
+}
+
+.comment{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-align: center;
+}
+
+.commentitem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.commentPaper {
+  max-width: 80vw;
+  max-height: 40vh;
+  overflow: auto;
+  overflow-wrap: break-word;
+  margin: 8px 8px 8px 8px;
+}

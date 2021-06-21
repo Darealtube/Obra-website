@@ -3,12 +3,16 @@ import {
   ALL_USER_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
+  IS_ADMIN,
   IS_LIKED_ARTIST,
   IS_LIKED_POST,
   IS_SAME_USER,
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
+  REPORTED_COMMENTS_QUERY,
+  REPORTED_POSTS_QUERY,
+  REPORT_ID_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -211,3 +215,69 @@ export const fetchAllUsers = async () => {
 
   return allUsersList as string[];
 };
+
+export const fetchPostReports = async (id: string) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: REPORTED_POSTS_QUERY,
+    variables: {
+      limit: 4,
+    },
+  });
+
+  const {
+    data: { isAdmin },
+  } = await apolloClient.query({
+    query: IS_ADMIN,
+    variables: {
+      id: id,
+    },
+  });
+
+  return { data: apolloClient, isAdmin };
+};
+
+export const fetchCommentReports = async (id: string) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: REPORTED_COMMENTS_QUERY,
+    variables: {
+      limit: 4,
+    },
+  });
+
+  const {
+    data: { isAdmin },
+  } = await apolloClient.query({
+    query: IS_ADMIN,
+    variables: {
+      id: id,
+    },
+  });
+
+  return { data: apolloClient, isAdmin };
+};
+
+export const fetchReportId = async (id:string, reportedId: string) => {
+  const apolloClient = initializeApollo();
+
+  const report = await apolloClient.query({
+    query: REPORT_ID_QUERY,
+    variables: {
+      reportedId: reportedId
+    }
+  })
+
+  const {
+    data: { isAdmin },
+  } = await apolloClient.query({
+    query: IS_ADMIN,
+    variables: {
+      id: id,
+    },
+  });
+
+  return { data: apolloClient, exists: report? true : false, isAdmin}
+}

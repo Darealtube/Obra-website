@@ -10,6 +10,7 @@ export const PostInfo = gql`
       id
       name
       image
+      email
     }
     title
     description
@@ -135,6 +136,23 @@ export const COMMISSION_ID_QUERY = gql`
       height
       sampleArt
       description
+    }
+  }
+`;
+
+export const COMMENT_ID_QUERY = gql`
+  query CommentID($id: ID!){
+    commentId(id: $id) {
+      id
+      author {
+        id
+        name
+        image
+        email
+       }
+      content
+      date
+      postID
     }
   }
 `;
@@ -590,6 +608,115 @@ export const COMMISSION_COUNT_QUERY = gql`
   }
 `;
 
+export const REPORTED_POSTS_QUERY = gql`
+  query ReportedPost($after: ID, $limit: Int) {
+    reports(after: $after, limit: $limit, type: "Post") {
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          senderId {
+            ...UserInfo
+          }
+          reportedId {
+            ... on Post {
+              id
+              author {
+                id
+                email
+              }
+            }
+          }
+          date
+          title
+          description
+          reason
+        }
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
+export const REPORTED_COMMENTS_QUERY = gql`
+  query ReportedComment($after: ID, $limit: Int) {
+    reports(after: $after, limit: $limit, type: "Comment") {
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          senderId {
+            ...UserInfo
+          }
+          reportedId {
+            ... on Comment {
+              id
+              author {
+                id
+                name
+                image
+                email
+              }
+              content
+              date
+              postID
+            }
+          }
+          date
+          title
+          description
+          reason
+        }
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
+export const REPORT_ID_QUERY = gql`
+  query ReportID($reportedId: ID!) {
+    reportId(reportedId: $reportedId) {
+      id
+      senderId {
+        ...UserInfo
+      }
+      reportedId {
+        ... on Post {
+          ...PostInfo
+          price
+        }
+        ... on Comment {
+          id
+          author {
+            id
+            name
+            image
+            email
+          }
+          content
+          date
+          postID
+        }
+      }
+      date
+      title
+      description
+      reason
+      type
+    }
+  }
+  ${UserInfo}
+  ${PostInfo}
+`;
+
 export const IS_LIKED_ARTIST = gql`
   query islikedArtist($userID: ID!, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
@@ -599,6 +726,12 @@ export const IS_LIKED_ARTIST = gql`
 export const IS_LIKED_POST = gql`
   query islikedPost($userID: ID!, $postID: ID!) {
     isLikedPost(userID: $userID, postID: $postID)
+  }
+`;
+
+export const IS_ADMIN = gql`
+  query isAdmin($id: ID!) {
+    isAdmin(id: $id)
   }
 `;
 
@@ -758,6 +891,12 @@ export const DELETE_COMMISSION_MUTATION = gql`
   }
 `;
 
+export const DELETE_REPORT_MUTATION = gql`
+  mutation DeleteReport($reportId: ID!) {
+    deleteReport(reportId: $reportId)
+  }
+`;
+
 export const ACCEPT_COMMISSION_MUTATION = gql`
   mutation AcceptCommission($commissionId: ID!, $message: String) {
     acceptCommission(commissionId: $commissionId, message: $message) {
@@ -861,19 +1000,39 @@ export const VIEW_POST = gql`
 `;
 
 // This is for the submit mutation
-export const POST_REPORT_MUTATION = gql`
-  mutation ReportPost(
+export const REPORT_MUTATION = gql`
+  mutation Report(
     $senderId: ID!
-    $reportedPostId: ID!
+    $reportedId: ID!
+    $type: String!
     $date: String!
     $title: String!
     $description: String!
     $reason: String!
   ) {
-    sendPostReport(
+    sendReport(
       senderId: $senderId
-      reportedPostId: $reportedPostId
+      reportedId: $reportedId
+      type: $type
       date: $date
+      title: $title
+      description: $description
+      reason: $reason
+    )
+  }
+`;
+
+export const WARN_MUTATION = gql`
+  mutation WarnPost(
+    $reportId: ID!
+    $reportedEmail: String!
+    $title: String!
+    $description: String!
+    $reason: String!
+  ) {
+    sendWarning(
+      reportId: $reportId
+      reportedEmail: $reportedEmail
       title: $title
       description: $description
       reason: $reason

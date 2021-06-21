@@ -30,8 +30,10 @@ function createApolloClient() {
         Query: {
           fields: {
             // relayStylePagination is a kind of cursor-based pagination that uses similar syntax
-            // to Relay. It uses nodes and edges in order to paginate through a list.
+            // to Relay. It uses nodes and edges in order to paginate through a list. DO NOT FORGET TO 
+            // SET A NEW FIELD HERE IF THERE IS AN ADDED QUERY THAT RETURNS EDGES OR USES RELAY STYLE PAGINATION.
             // Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination
+            reports: relayStylePagination(),
             featuredPosts: relayStylePagination(),
             posts: relayStylePagination(),
             newPosts: relayStylePagination(),

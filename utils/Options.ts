@@ -157,3 +157,10 @@ export const reasonOptions = [
   "Misleading Art",
   "Unoriginal Art"
 ]
+
+export const commentReasonOptions = [
+  "Inappropriate language",
+  "Racist, Sexist, Homophobic, etc. display of comment",
+  "Toxic behavior",
+  "Spam",
+]

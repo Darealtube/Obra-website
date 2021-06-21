@@ -38,7 +38,7 @@ const usePagination = (
   fetchMore,
   info: Info,
   limit: number,
-  key2?: string,
+  key2?: string | null,
   execute?: boolean
 ) => {
   const [page, setPage] = useState(1);

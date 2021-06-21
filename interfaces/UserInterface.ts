@@ -27,6 +27,7 @@ export interface UserInterface {
   pendingCommissions: Commissions;
   yourPendingCommissions: Commissions;
   yourFinishedCommissions: Commissions;
+  admin: boolean;
   // More to come
 }
 

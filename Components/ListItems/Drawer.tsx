@@ -82,6 +82,8 @@ const DrawerItems = () => {
     variables: {
       id: session?.id,
     },
+    skip: !session,
+    pollInterval: 60000,
   });
 
   return (

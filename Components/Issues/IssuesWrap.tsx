@@ -4,11 +4,16 @@ import {
   Button,
   Divider,
   IconButton,
+  Badge,
 } from "@material-ui/core";
 import Link from "next/link";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import { useQuery } from "@apollo/client";
+import { REPORT_COUNT_QUERY } from "../../apollo/apolloQueries";
 
 const IssuesWrap = () => {
+  const { data } = useQuery(REPORT_COUNT_QUERY);
+
   return (
     <>
       <Box display="flex">
@@ -29,27 +34,55 @@ const IssuesWrap = () => {
         flexWrap="wrap"
       >
         <Link href="/issues/post">
-          <Button
-            variant="outlined"
-            component="a"
+          <Badge
+            color="secondary"
+            badgeContent={data?.reportCount.postReport}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
           >
-            <Typography style={{ wordWrap: "break-word" }}>
-              Post Reports
-            </Typography>
-          </Button>
+            <Button variant="outlined" component="a">
+              <Typography style={{ wordWrap: "break-word" }}>
+                Post Reports
+              </Typography>
+            </Button>
+          </Badge>
         </Link>
         <Link href="/issues/comment">
-        <Button variant="outlined" component="a" style={{ marginRight: "4px", marginLeft: "4px" }}>
-          <Typography style={{ wordWrap: "break-word"}}>
-            Comment Reports
-          </Typography>
-        </Button>
+          <Badge
+            color="secondary"
+            badgeContent={data?.reportCount.commentReport}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            <Button
+              variant="outlined"
+              component="a"
+              style={{ marginRight: "4px", marginLeft: "4px" }}
+            >
+              <Typography style={{ wordWrap: "break-word" }}>
+                Comment Reports
+              </Typography>
+            </Button>
+          </Badge>
         </Link>
-        <Button variant="outlined">
-          <Typography style={{ wordWrap: "break-word" }}>
-            User Reports
-          </Typography>
-        </Button>
+        <Badge
+          color="secondary"
+          badgeContent={data?.reportCount.userReport}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          <Button variant="outlined">
+            <Typography style={{ wordWrap: "break-word" }}>
+              User Reports
+            </Typography>
+          </Button>
+        </Badge>
       </Box>
     </>
   );

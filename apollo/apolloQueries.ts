@@ -141,7 +141,7 @@ export const COMMISSION_ID_QUERY = gql`
 `;
 
 export const COMMENT_ID_QUERY = gql`
-  query CommentID($id: ID!){
+  query CommentID($id: ID!) {
     commentId(id: $id) {
       id
       author {
@@ -149,7 +149,7 @@ export const COMMENT_ID_QUERY = gql`
         name
         image
         email
-       }
+      }
       content
       date
       postID
@@ -162,6 +162,7 @@ export const APPBAR_USER_QUERY = gql`
   query UserAppbarID($id: ID!, $after: ID, $limit: Int) {
     userId(id: $id) {
       ...UserInfo
+      admin
       email
       newUser
       tutorial
@@ -604,6 +605,17 @@ export const COMMISSION_COUNT_QUERY = gql`
     userId(id: $id) {
       id
       commissionCount
+    }
+  }
+`;
+
+export const REPORT_COUNT_QUERY = gql`
+  query ReportCount{
+    reportCount{
+      totalCount
+      postReport
+      commentReport
+      userReport
     }
   }
 `;

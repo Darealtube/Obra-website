@@ -51,7 +51,7 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
           <div>
             <Typography>Obra </Typography>
             <Typography className={styles.notifInfo}>
-              Hey! It seems like you haven't completely configured your account.
+              Hey! It seems like you haven&apos;t completely configured your account.
               Please finish configuring your account in order for you to
               complete your information!
             </Typography>
@@ -66,6 +66,8 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
                   ? `/commissions/${notif.node.commissionId}`
                   : ``
               }
+              key={notif.node.id}
+              passHref
             >
               <ListItem
                 key={notif.node.id}
@@ -82,6 +84,7 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
                   width={40}
                   height={40}
                   className={styles.avatar}
+                  alt={"Commissioner Image"}
                 />
                 </ListItemAvatar>
                 <Box display="flex" flexDirection="column" width="80%">

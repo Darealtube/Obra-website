@@ -13,6 +13,7 @@ const PrimaryInfo = () => {
           src={user.backdrop ? user.backdrop : "/user-empty-backdrop.jpg"}
           layout="fill"
           objectFit="contain"
+          alt={"User Backdrop"}
         />
       </Grid>
 
@@ -22,6 +23,7 @@ const PrimaryInfo = () => {
           layout="fill"
           objectFit="contain"
           className={styles.avatar}
+          alt={"User Image"}
         />
       </Grid>
       <Grid item xs={6} sm={10}></Grid>

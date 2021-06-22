@@ -58,7 +58,7 @@ const MobileComm = ({
             marginBottom={4}
             flexWrap="wrap"
           >
-            <Link href="/commissions">
+            <Link href="/commissions" passHref>
               <Button
                 variant="outlined"
                 component="a"

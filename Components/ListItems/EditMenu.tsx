@@ -37,7 +37,7 @@ const EditMenu = ({ id, admin, onClose, onExited }: Props) => {
       {admin && (
         <>
           <ListItem>
-            <Link href={`/${id}/edit`}>
+            <Link href={`/${id}/edit`} passHref>
               <Button className={styles.item} component="a">
                 <MeetingRoomIcon className={styles.icon} /> Edit
               </Button>

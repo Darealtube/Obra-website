@@ -17,7 +17,7 @@ const IssuesWrap = () => {
   return (
     <>
       <Box display="flex">
-        <Link href="/home">
+        <Link href="/home" passHref>
           <IconButton component="a">
             <KeyboardBackspaceIcon />
           </IconButton>
@@ -33,7 +33,7 @@ const IssuesWrap = () => {
         marginBottom={4}
         flexWrap="wrap"
       >
-        <Link href="/issues/post">
+        <Link href="/issues/post" passHref>
           <Badge
             color="secondary"
             badgeContent={data?.reportCount.postReport}
@@ -49,7 +49,7 @@ const IssuesWrap = () => {
             </Button>
           </Badge>
         </Link>
-        <Link href="/issues/comment">
+        <Link href="/issues/comment" passHref>
           <Badge
             color="secondary"
             badgeContent={data?.reportCount.commentReport}

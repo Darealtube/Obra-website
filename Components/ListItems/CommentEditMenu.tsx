@@ -37,7 +37,7 @@ const CommentEditMenu = ({ id, admin, onClose, onExited }: Props) => {
       {admin && (
         <>
           <ListItem>
-            <Link href={`/${id}/edit`}>
+            <Link href={`/${id}/edit`} passHref>
               <Button component="a" className={styles.item}>
                 <MeetingRoomIcon className={styles.icon} /> Edit
               </Button>
@@ -54,7 +54,7 @@ const CommentEditMenu = ({ id, admin, onClose, onExited }: Props) => {
       )}
 
       <ListItem>
-        <Link href={`/report/comment/${id}`}>
+        <Link href={`/report/comment/${id}`} passHref>
           <Button className={styles.item} component="a">
             <ContactSupportIcon className={styles.icon} /> Report
           </Button>

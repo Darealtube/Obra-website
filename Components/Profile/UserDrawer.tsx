@@ -35,6 +35,7 @@ const UserDrawer = ({ artist, setOpen, open }: Props) => {
                 src={artist.image ? artist.image : "/user-empty-avatar.png"}
                 layout="fill"
                 objectFit="contain"
+                alt={"No User Image"}
               />
             </Box>
           ) : (

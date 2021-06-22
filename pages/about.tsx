@@ -53,7 +53,7 @@ const About = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>About Us</title>
       </Head>
-      <Link href="/home">
+      <Link href="/home" passHref>
         <IconButton component="a">
           <HomeIcon fontSize="large" />
         </IconButton>
@@ -73,7 +73,7 @@ const About = () => {
               justifyContent="center"
               alignItems="center"
             >
-              <Image src="/obra-logo.png" height={60} width={60} />
+              <Image src="/obra-logo.png" height={60} width={60} alt={"Obra Logo"} />
               <Typography
                 variant="h3"
                 align="center"

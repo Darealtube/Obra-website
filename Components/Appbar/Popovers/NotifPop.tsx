@@ -80,7 +80,7 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     setnotifCount(
       user.userId.notifications.totalUnreadCount + (user.userId.newUser ? 1 : 0)
     );
-  }, [user.userId.notifications.totalUnreadCount]);
+  }, [user.userId.notifications.totalUnreadCount, user.userId.newUser]);
 
   return (
     <>

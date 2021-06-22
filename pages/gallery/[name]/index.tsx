@@ -34,7 +34,6 @@ const Gallery = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{name ? `${name}'s Gallery` : "Gallery"}</title>
       </Head>
-      <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
         {data && name ? (
@@ -45,12 +44,13 @@ const Gallery = () => {
                 width={80}
                 height={80}
                 className={styles.avatar}
+                alt={"User Avatar"}
               />
               <Typography
                 variant="h4"
                 style={{ marginLeft: "8px", flexGrow: 1 }}
               >
-                {name}'s Gallery
+                {name}&apos;s Gallery
               </Typography>
 
               <Button

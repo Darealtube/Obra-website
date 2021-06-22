@@ -78,6 +78,7 @@ const ReportCommentForm = ({ data }) => {
                     width={40}
                     height={40}
                     className={styles.avatar}
+                    alt={"Author Image"}
                   />
                 </ListItemAvatar>
                 <ListItemText
@@ -110,10 +111,10 @@ const ReportCommentForm = ({ data }) => {
                 Report Comment
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Note: You are about to report a user's comment. Please provide a
+                Note: You are about to report a user&apos;s comment. Please provide a
                 sensible and a reasonable description of what exactly is the
                 cause of this report, and provide an understandable reason.
-                Reporting a comment that is allowed by Obra's standards will, in
+                Reporting a comment that is allowed by Obra&apos;s standards will, in
                 some cases, lead to a warning to your account.
               </Typography>
 

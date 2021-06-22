@@ -16,7 +16,7 @@ const EditAccount = () => {
           <Typography variant="h4" style={{ flexGrow: 1 }}>
             Account
           </Typography>
-          <Link href="/settings/account/">
+          <Link href="/settings/account/" passHref>
             <Button>Cancel</Button>
           </Link>
         </Box>

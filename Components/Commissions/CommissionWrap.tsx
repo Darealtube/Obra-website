@@ -41,6 +41,7 @@ const CommissionWrap = ({ children }) => {
     <div>
       {mobile ? (
         <DynamicMobileComm
+          // eslint-disable-next-line react/no-children-prop
           children={children}
           userId={data?.userId}
           loading={loading}
@@ -49,6 +50,7 @@ const CommissionWrap = ({ children }) => {
         />
       ) : (
         <DynamicNormalComm
+          // eslint-disable-next-line react/no-children-prop
           children={children}
           userId={data?.userId}
           loading={loading}
@@ -64,12 +66,12 @@ const CommissionWrap = ({ children }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Link href="/commissions/yourCommissions/">
+        <Link href="/commissions/yourCommissions/" passHref>
           <MenuItem button onClick={handleClose}>
             General
           </MenuItem>
         </Link>
-        <Link href="/commissions/yourCommissions/pending">
+        <Link href="/commissions/yourCommissions/pending" passHref>
           <MenuItem button onClick={handleClose}>
             Pending
           </MenuItem>

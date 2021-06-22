@@ -90,14 +90,14 @@ const DrawerItems = () => {
     <div>
       <ListItem>
         <ListItemIcon>
-          <Image src="/obra-logo.png" height={40} width={40} />
+          <Image src="/obra-logo.png" height={40} width={40} alt={"Obra Logo"} />
         </ListItemIcon>
         <ListItemText>
           <Typography variant="h6">Obra</Typography>
         </ListItemText>
       </ListItem>
       <Divider />
-      <Link href={"/home"}>
+      <Link href={"/home"} passHref>
         <ListItem button component="a">
           <ListItemIcon>
             <HomeIcon />
@@ -133,7 +133,7 @@ const DrawerItems = () => {
       </ListItem>
       {TransactionItems.map((item) => (
         <>
-          <Link href={item.link} key={item.link}>
+          <Link href={item.link} key={item.link} passHref>
             <ListItem button component="a">
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText>{item.label}</ListItemText>
@@ -155,7 +155,7 @@ const DrawerItems = () => {
       </ListItem>
       {MoreItems.map((item) => (
         <>
-          <Link href={item.link} key={item.link}>
+          <Link href={item.link} key={item.link} passHref>
             <ListItem button component="a">
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText>{item.label}</ListItemText>

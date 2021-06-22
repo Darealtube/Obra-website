@@ -109,6 +109,7 @@ const ReportList = ({ reports, fetchMore }) => {
                     width={40}
                     height={40}
                     className={styles.avatar}
+                    alt={"Report Sender Image"}
                   />
                 </ListItemAvatar>
                 <Box
@@ -140,7 +141,7 @@ const ReportList = ({ reports, fetchMore }) => {
                         : { display: "block" }
                     }
                   >
-                    <Link href={`/issues/${report.node.id}`}>
+                    <Link href={`/issues/${report.node.id}`} passHref>
                       <Button>View</Button>
                     </Link>
                     <Button

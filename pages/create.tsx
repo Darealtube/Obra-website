@@ -129,6 +129,7 @@ const Create = ({ id }: { id: string }) => {
                 layout="fill"
                 objectFit="contain"
                 objectPosition="center"
+                alt={"Art Image or Placeholder"}
               />
             ) : loading ? (
               <CircularProgress />

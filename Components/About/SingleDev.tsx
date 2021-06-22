@@ -49,6 +49,7 @@ const SingleDev = ({ changer, active, role, image, name, fb, twt }: Props) => {
                   width={180}
                   height={180}
                   className={styles.avatar}
+                  alt={"Developer Image"}
                 />
                 <Typography variant="h6">{name}</Typography>
                 {fb && (

@@ -33,12 +33,12 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
   return (
     <div>
       <IconButton>
-        <Link href={`/create`}>
+        <Link href={`/create`} passHref>
           <Palette fontSize="large" htmlColor="white" />
         </Link>
       </IconButton>
       {user.userId.admin && <IconButton>
-        <Link href={`/issues/post/`}>
+        <Link href={`/issues/post/`} passHref>
           <Badge color="secondary" badgeContent={data?.reportCount.totalCount}>
             <PriorityHighIcon fontSize="large" htmlColor="white" />
           </Badge>
@@ -52,6 +52,7 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
             width={40}
             height={40}
             className={styles.avatar}
+            alt={"User Image"}
           />
         ) : (
           <Avatar src="" />

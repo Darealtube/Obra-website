@@ -40,6 +40,7 @@ const CommissionData = ({
           }
           layout="fill"
           objectFit="contain"
+          alt={"Commission Sample Art"}
         />
       </Grid>
     </Grid>

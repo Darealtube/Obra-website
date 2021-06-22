@@ -14,8 +14,7 @@ import {
 import PaletteIcon from "@material-ui/icons/Palette";
 import styles from "./styles/General/Login.module.css";
 import Head from "next/head";
-import { getSession, signIn, useSession } from "next-auth/client";
-import { GetServerSideProps } from "next";
+import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
 function Copyright() {
@@ -140,7 +139,7 @@ const Login = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Image src="/obra-logo.png" height={60} width={60} />
+            <Image src="/obra-logo.png" height={60} width={60} alt={"Obra Logo"} />
             <Typography
               variant="h3"
               align="center"

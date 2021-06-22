@@ -22,6 +22,7 @@ const Main = ({ postID, handleLike, liked, setOpen }: Props) => {
             layout="fill"
             objectFit="contain"
             onClick={() => setOpen(true)}
+            alt={"Art Image"}
           />
         )}
       </Grid>

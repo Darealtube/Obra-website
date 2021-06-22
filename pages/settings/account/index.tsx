@@ -35,7 +35,7 @@ const AccountSettings = () => {
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Box display="flex">
-              <Link href={"/home"}>
+              <Link href={"/home"} passHref>
                 <IconButton component="a">
                   <HomeIcon />
                 </IconButton>
@@ -43,7 +43,7 @@ const AccountSettings = () => {
               <Typography variant="h4" style={{ flexGrow: 1 }}>
                 Account
               </Typography>
-              <Link href={"/settings/account/edit"}>
+              <Link href={"/settings/account/edit"} passHref>
                 <Button component="a">Edit</Button>
               </Link>
             </Box>

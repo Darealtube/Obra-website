@@ -41,6 +41,7 @@ const UserPopover = ({ profAnchor, handleProfileClose, user }: Props) => {
             width={45}
             height={45}
             className={styles.avatar}
+            alt={"User Image"}
           />
         ) : (
           <Avatar src="" />

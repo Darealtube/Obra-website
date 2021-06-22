@@ -86,7 +86,7 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
           >
             {pendingCommissions &&
               pendingCommissions.edges.map((commission) => (
-                <Link href={`/commissions/${commission.node.id}`}>
+                <Link href={`/commissions/${commission.node.id}`} key={commission.node.id} passHref>
                   <ListItem
                     divider
                     key={commission.node.id}
@@ -103,6 +103,7 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
                         width={40}
                         height={40}
                         className={styles.avatar}
+                        alt={"Commissioner Image"}
                       />
                     </ListItemAvatar>
                     <ListItemText

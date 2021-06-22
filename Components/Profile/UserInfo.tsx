@@ -77,6 +77,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
             }
             layout="fill"
             objectFit="contain"
+            alt={"User Image"}
           />
         </Box>
         <br />
@@ -109,7 +110,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
                 </Typography>
               </span>
             </Button>
-            <Link href={`/gallery/${artist.name}`}>
+            <Link href={`/gallery/${artist.name}`} passHref>
               <Button fullWidth className={styles.userOptions2} component="a">
                 <span>
                   <Typography align="center">
@@ -145,6 +146,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
             </Button>
             <Link
               href={`/profile/${encodeURIComponent(artist.name)}/commission`}
+              passHref
             >
               <Button fullWidth className={styles.userOptions} component="a">
                 <span>
@@ -160,7 +162,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Container>
         ) : (
           <>
-            <Link href={`/settings/account/`}>
+            <Link href={`/settings/account/`} passHref>
               <Button fullWidth className={styles.userOptions} component="a">
                 <span>
                   <Typography align="center">

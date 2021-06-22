@@ -19,7 +19,7 @@ const NormalComm = ({ children, userId, loading, fetchMore, handleClick }) => {
         <Grid item xs={8}>
           <Container>
             <Box display="flex">
-              <Link href="/home">
+              <Link href="/home" passHref>
                 <IconButton component="a">
                   <KeyboardBackspaceIcon />
                 </IconButton>
@@ -35,7 +35,7 @@ const NormalComm = ({ children, userId, loading, fetchMore, handleClick }) => {
               marginBottom={4}
               flexWrap="wrap"
             >
-              <Link href="/commissions">
+              <Link href="/commissions" passHref>
                 <Button
                   variant="outlined"
                   component="a"

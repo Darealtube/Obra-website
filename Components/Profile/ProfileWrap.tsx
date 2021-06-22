@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import React from "react";
 import { Box } from "@material-ui/core";
 import RightInfo from "./RightInfo";
@@ -25,6 +26,7 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
           }
           layout="fill"
           objectFit="cover"
+          alt={"Backdrop Image"}
         />
       </Box>
       <Box className={styles.information}>

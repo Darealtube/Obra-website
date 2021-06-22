@@ -69,6 +69,7 @@ const DevList = ({ changer, List, active, teamName }: Props) => {
                         width={120}
                         height={120}
                         className={styles.avatar}
+                        alt={"Developer Image"}
                       />
                       <Typography variant="h6">{dev.name}</Typography>
                       {dev.fb && (

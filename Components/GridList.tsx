@@ -74,6 +74,7 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
                   src={tile.node.art}
                   width={tile.node.width}
                   height={tile.node.height}
+                  alt={"Art Image"}
                 />
               </Box>
               <GridListTileBar
@@ -83,7 +84,7 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
                 titlePosition="top"
                 className={styles.titleBar}
                 actionIcon={
-                  <Link href={`/${tile.node.id}`}>
+                  <Link href={`/${tile.node.id}`} passHref>
                     <IconButton>
                       <VisibilityIcon />
                     </IconButton>

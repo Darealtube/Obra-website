@@ -28,6 +28,7 @@ const PostReport = ({ report, handleReportOpen, handleOpen }: ReportProps) => {
                 src={report.reportedId.art}
                 layout="fill"
                 objectFit="contain"
+                alt={"Author Image"}
               />
             </Box>
           </Grid>

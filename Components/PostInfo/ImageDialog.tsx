@@ -34,7 +34,7 @@ const ImageDialog = ({ handleClose, open, art }: Props) => {
         >
           <FullscreenExitIcon style={{ color: "white" }} />
         </IconButton>
-        {art != "" && <Image src={art} layout="fill" objectFit="contain" />}
+        {art != "" && <Image src={art} layout="fill" objectFit="contain" alt={"Art Image"} />}
       </Container>
     </Dialog>
   );

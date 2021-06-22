@@ -7,20 +7,31 @@ import { Provider } from "next-auth/client";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../apollo/apolloClient";
 
-// This is the progress bar you see when routing to different pages.
-// These are fired during routing events.
-router.events.on("routeChangeStart", () => start());
-router.events.on("routeChangeComplete", () => done());
-router.events.on("routeChangeError", () => done());
-
 export default function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps);
-  useEffect(() => {
+  /* useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+  }, []); */
+
+  useEffect(() => {
+    const handleRouteStart = () => {
+      start();
+    };
+    const handleRouteEnd = () => {
+      done();
+    };
+    router.events.on("routeChangeStart", handleRouteStart);
+    router.events.on("routeChangeComplete", handleRouteEnd);
+    router.events.on("routeChangeError", handleRouteEnd);
+    return () => {
+      router.events.off("routeChangeStart", handleRouteStart);
+      router.events.off("routeChangeComplete", handleRouteEnd);
+      router.events.off("routeChangeError", handleRouteEnd);
+    };
   }, []);
 
   return (

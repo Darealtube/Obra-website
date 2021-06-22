@@ -88,6 +88,7 @@ const Create = ({ postId }: { postId: PostInterface }) => {
               layout="fill"
               objectFit="contain"
               objectPosition="center"
+              alt={"Art Image"}
             />
           </div>
           {/* Art Display */}

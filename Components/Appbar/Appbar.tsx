@@ -55,7 +55,7 @@ const Appbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Image src="/obra-logo.png" height={40} width={40} />
+          <Image src="/obra-logo.png" height={40} width={40} alt={"Obra Logo"} />
           <Typography
             variant="h6"
             noWrap

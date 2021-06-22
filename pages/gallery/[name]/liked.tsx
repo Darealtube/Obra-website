@@ -37,7 +37,6 @@ const LikedGallery = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{name ? `${name}'s Liked Gallery` : "Liked Gallery"}</title>
       </Head>
-      <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
         {data && name ? (
@@ -48,12 +47,13 @@ const LikedGallery = () => {
                 width={80}
                 height={80}
                 className={styles.avatar}
+                alt={"User Avatar"}
               />
               <Typography
                 variant="h4"
                 style={{ marginLeft: "8px", flexGrow: 1 }}
               >
-                {name}'s Liked Gallery
+                {name}&apos;s Liked Gallery
               </Typography>
 
               <Button

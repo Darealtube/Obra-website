@@ -11,9 +11,9 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: null | ApolloClient<NormalizedCacheObject>;
 
-// Creates an HttpLink towards the website's api on https://obra-api.vercel.app/api/grphql.
+// Creates an HttpLink towards the website's api on https://obra-api.vercel.app/api/graphql.
 // In order to work in dev environment, set the uri to http://localhost:4000/api/graphql.
-// Before pushing to main, make sure to set it back to https://obra-api.vercel.app/api/grphql.
+// Before pushing to main, make sure to set it back to https://obra-api.vercel.app/api/graphql.
 
 function createApolloClient() {
   return new ApolloClient({

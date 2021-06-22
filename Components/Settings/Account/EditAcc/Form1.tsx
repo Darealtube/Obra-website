@@ -69,7 +69,7 @@ const Form1 = ({ user, dispatch }: Props) => {
       <Grid item xs={12} className={styles.backdrop}>
         {!backdropLoading ? (
           <>
-            <Image src={backdrop} layout="fill" objectFit="cover" />
+            <Image src={backdrop} layout="fill" objectFit="cover" alt={"Backdrop Image"} />
             <IconButton onClick={handleBackdropClick}>
               <PhotoCameraIcon />
             </IconButton>
@@ -94,6 +94,7 @@ const Form1 = ({ user, dispatch }: Props) => {
               layout="fill"
               objectFit="contain"
               className={styles.avatar}
+              alt={"User Image Placeholder"}
             />
             <IconButton onClick={handleAvatarClick}>
               <PhotoCameraIcon />

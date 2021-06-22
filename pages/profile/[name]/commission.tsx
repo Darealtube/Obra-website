@@ -162,7 +162,7 @@ const Commission = ({ name }: { name: string }) => {
             <Grid item xs={12} className={styles.sample}>
               {!loading ? (
                 <>
-                  <Image src={placeholder} layout="fill" objectFit="cover" />
+                  <Image src={placeholder} layout="fill" objectFit="cover" alt={"Art Commission Placeholder"} />
                   <IconButton onClick={handleArtClick}>
                     <PhotoCameraIcon />
                   </IconButton>

@@ -65,12 +65,14 @@ export const CardList = ({ postData }: PostData) => {
                         href={`/profile/${encodeURIComponent(
                           post.node.author.name
                         )}`}
+                        passHref
                       >
                         <Image
                           src={post.node.author.image}
                           width={40}
                           height={40}
                           className={styles.avatar}
+                          alt={"Author Image"}
                         />
                       </Link>
                     ) : (
@@ -97,11 +99,12 @@ export const CardList = ({ postData }: PostData) => {
                       src={post.node.art}
                       layout="fill"
                       objectFit="contain"
+                      alt={"Art Image"}
                     />
                   )}
                 </Container>
 
-                <Link href={`/${post.node.id}`}>
+                <Link href={`/${post.node.id}`} passHref>
                   <CardActionArea>
                     <CardContent>
                       <Typography

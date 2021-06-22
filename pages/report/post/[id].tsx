@@ -34,7 +34,7 @@ const ReportPost = () => {
   useEffect(() => {
     if (data?.postId && !loading)
       setAdmin(data?.postId.author.id == session?.id);
-  }, [data, session]);
+  }, [data, session, loading]);
 
   return (
     <div>
@@ -65,9 +65,9 @@ const ReportPost = () => {
           flexDirection="column"
         >
           <Typography variant="h6" align="center">
-            Sorry, but it doesn't make sense to report your own art.
+            Sorry, but it doesn&apos;t make sense to report your own art.
           </Typography>
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a">Go back home</Button>
           </Link>
         </Box>
@@ -83,7 +83,7 @@ const ReportPost = () => {
           <Typography variant="h6" align="center">
             This post either does not exist or has been deleted by the author.
           </Typography>
-          <Link href="/">
+          <Link href="/" passHref>
             <Button component="a">Go back home</Button>
           </Link>
         </Box>

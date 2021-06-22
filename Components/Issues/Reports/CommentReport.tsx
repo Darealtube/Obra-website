@@ -39,6 +39,7 @@ const CommentReport = ({
                     width={40}
                     height={40}
                     className={styles.avatar}
+                    alt={"Author Image"}
                   />
                 </ListItemAvatar>
                 <ListItemText

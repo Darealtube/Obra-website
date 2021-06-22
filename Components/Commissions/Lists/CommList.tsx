@@ -56,7 +56,7 @@ const CommList = ({ commissions, fetchMore }: Props) => {
           >
             {commissions &&
               commissions.edges.map((commission) => (
-                <Link href={`/commissions/${commission.node.id}`}>
+                <Link href={`/commissions/${commission.node.id}`} passHref key={commission.node.id}>
                   <ListItem
                     divider
                     key={commission.node.id}
@@ -74,6 +74,7 @@ const CommList = ({ commissions, fetchMore }: Props) => {
                         width={40}
                         height={40}
                         className={styles.avatar}
+                        alt={"Commissioner Image"}
                       />
                     </ListItemAvatar>
                     <ListItemText

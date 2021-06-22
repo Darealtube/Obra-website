@@ -66,7 +66,7 @@ const ReportForm = ({ data }) => {
             alignItems: "center",
           }}
         >
-          <Image src={data.art} width={data.width} height={data.height} objectFit="contain" />
+          <Image src={data.art} width={data.width} height={data.height} objectFit="contain" alt={"Author Image"} />
         </Grid>
         <Grid
           item
@@ -84,10 +84,10 @@ const ReportForm = ({ data }) => {
                 Report Post
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Note: You are about to report an artist's post. Please provide a
+                Note: You are about to report an artist&apos;s post. Please provide a
                 sensible and a reasonable description of what exactly is the
                 cause of this report, and provide an understandable reason.
-                Reporting a post that is allowed by Obra's standards will, in
+                Reporting a post that is allowed by Obra&apos;s standards will, in
                 some cases, lead to a warning to your account.
               </Typography>
 

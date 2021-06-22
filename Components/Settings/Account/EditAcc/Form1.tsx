@@ -18,9 +18,10 @@ import styles from "../../../../pages/styles/General/Settings.module.css";
 type Props = {
   user: State;
   dispatch: React.Dispatch<Action>;
+  disableSubmit: boolean;
 };
 
-const Form1 = ({ user, dispatch }: Props) => {
+const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
   const inputFile = useRef<HTMLInputElement>();
   const inputFile2 = useRef<HTMLInputElement>();
   const { loading, setArt, placeholder } = useArt(user.placeholder);
@@ -112,7 +113,7 @@ const Form1 = ({ user, dispatch }: Props) => {
         />
       </Grid>
       <Grid item xs={6} sm={10}>
-        <Button type="submit" variant="outlined" style={{ float: "right" }}>
+        <Button type="submit" variant="outlined" style={{ float: "right" }} disabled={disableSubmit}>
           Save
         </Button>
       </Grid>

@@ -1,9 +1,7 @@
-import { NumberFormatValues } from "react-number-format";
 import React, { useReducer } from "react";
 import { CssBaseline, Paper, Grid } from "@material-ui/core";
 import Appbar from "../../Components/Appbar/Appbar";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import styles from "../styles/General/Create.module.css";
 import { fetchAPost } from "../../utils/fetchData";
 import { GetServerSideProps } from "next";
@@ -21,7 +19,6 @@ import {
 import { editPostUpdate } from "../../utils/update";
 
 const Create = ({ postId }: { postId: PostInterface }) => {
-  const router = useRouter();
   const initState: State = {
     title: postId.title,
     description: postId.description,
@@ -37,39 +34,6 @@ const Create = ({ postId }: { postId: PostInterface }) => {
     update: (cache: DataProxy, mutationResult) =>
       editPostUpdate(cache, mutationResult, postId.id),
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "CHANGE",
-      field: (e.target as HTMLInputElement).name,
-      payload: (e.target as HTMLInputElement).value,
-    });
-  };
-
-  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    edit({
-      variables: {
-        postId: postId.id,
-        title: post.title,
-        description: post.description,
-        tags: post.tags,
-      },
-    });
-    router.push("/home");
-  };
-
-  const handleNumber = (values: NumberFormatValues) => {
-    dispatch({ type: "CHANGE", field: "price", payload: values.value });
-  };
-
-  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
-  };
 
   return (
     <div className={styles.root}>
@@ -97,11 +61,9 @@ const Create = ({ postId }: { postId: PostInterface }) => {
           <div className={styles.paper}>
             <EditPostForm
               post={post}
-              handleSale={handleSale}
-              handleSubmit={handleSubmit}
-              handleChange={handleChange}
-              handleTags={handleTags}
-              handleNumber={handleNumber}
+              dispatch={dispatch}
+              id={postId.id}
+              edit={edit}
             />
           </div>
         </Grid>

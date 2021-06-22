@@ -9,14 +9,7 @@ import { useApollo } from "../apollo/apolloClient";
 
 export default function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps);
-  /* useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []); */
-
+  
   useEffect(() => {
     const handleRouteStart = () => {
       start();

@@ -5,7 +5,10 @@ import { NextApiResponse, NextApiRequest } from "next";
 // It requires a signature and a timestamp because we are using a
 // "signed" one.
 
-export default async (_req: NextApiRequest, res: NextApiResponse) => {
+const cloudinaryHandler = async (
+  _req: NextApiRequest,
+  res: NextApiResponse
+) => {
   // Must be UNIX format
   const timestamp = Math.round(new Date().getTime() / 1000);
 
@@ -20,3 +23,5 @@ export default async (_req: NextApiRequest, res: NextApiResponse) => {
   res.statusCode = 200;
   res.json({ signature, timestamp });
 };
+
+export default cloudinaryHandler;

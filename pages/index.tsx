@@ -53,7 +53,7 @@ const Login = () => {
     return () => {
       clearTimeout(timer1);
     };
-  }, [loading]);
+  }, [loading, router, session]);
 
   useEffect(() => {
     let timer2;
@@ -66,7 +66,7 @@ const Login = () => {
     return () => {
       clearTimeout(timer2);
     };
-  }, [load]);
+  }, [load, session]);
 
   return (
     <div>
@@ -139,7 +139,12 @@ const Login = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Image src="/obra-logo.png" height={60} width={60} alt={"Obra Logo"} />
+            <Image
+              src="/obra-logo.png"
+              height={60}
+              width={60}
+              alt={"Obra Logo"}
+            />
             <Typography
               variant="h3"
               align="center"

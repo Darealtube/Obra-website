@@ -80,6 +80,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
         viewed: id,
       },
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {

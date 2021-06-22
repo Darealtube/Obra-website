@@ -1,10 +1,7 @@
-import { NumberFormatValues } from "react-number-format";
 import React, { useReducer } from "react";
 import { CssBaseline, Paper, Grid, CircularProgress } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import Image from "next/image";
-import moment from "moment";
-import { useRouter } from "next/router";
 import styles from "./styles/General/Create.module.css";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -19,9 +16,10 @@ import {
   CreatePostVars,
 } from "../interfaces/MutationInterfaces";
 import dynamic from "next/dynamic";
-import { PostValidate } from "../utils/postValidator";
 
-const DynamicError = dynamic(()=> import("../Components/Forms/Snackbars/ConfigSnack"));
+const DynamicError = dynamic(
+  () => import("../Components/Forms/Snackbars/ConfigSnack")
+);
 
 const initState: State = {
   title: "",
@@ -37,69 +35,10 @@ const initState: State = {
 };
 
 const Create = ({ id }: { id: string }) => {
-  const router = useRouter();
   const [post, dispatch] = useReducer(reducer, initState);
   const [create] =
     useMutation<CreatePostData, CreatePostVars>(CREATE_POST_MUTATION);
   const { loading, setArt, placeholder } = useArt("");
-
-  const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setArt((e.target as HTMLInputElement).files).then((values) => {
-      dispatch({
-        type: "CHANGE_ART",
-        artPayload: values,
-      });
-    });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "CHANGE",
-      field: (e.target as HTMLInputElement).name,
-      payload: (e.target as HTMLInputElement).value,
-    });
-  };
-
-  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
-  };
-
-  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const valid = PostValidate(post);
-
-    if (valid.error && valid.errMessage) {
-      dispatch({
-        type: "ERROR",
-        payload: valid.error,
-        message: valid.errMessage,
-      });
-    }else{
-      create({
-        variables: {
-          author: id,
-          title: post.title,
-          description: post.description,
-          art: post.art,
-          price: post.price,
-          sale: post.sale,
-          date: moment().format("l"),
-          tags: post.tags,
-          width: post.width,
-          height: post.height,
-        },
-      });
-      router.push("/home");
-    }
-  };
-
-  const handleNumber = (values: NumberFormatValues) => {
-    dispatch({ type: "CHANGE", field: "price", payload: values.value });
-  };
 
   const handleErrorClose = (
     event: React.SyntheticEvent | React.MouseEvent,
@@ -143,12 +82,10 @@ const Create = ({ id }: { id: string }) => {
           <div className={styles.paper}>
             <PostForm
               post={post}
-              handleSale={handleSale}
-              handleSubmit={handleSubmit}
-              handleChange={handleChange}
-              handleArt={handleArt}
-              handleTags={handleTags}
-              handleNumber={handleNumber}
+              create={create}
+              id={id}
+              setArt={setArt}
+              dispatch={dispatch}
             />
           </div>
         </Grid>

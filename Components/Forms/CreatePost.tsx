@@ -10,30 +10,89 @@ import {
   TextField,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
+import moment from "moment";
+import { useRouter } from "next/router";
 import React from "react";
+import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { State } from "../../Hooks/Reducers/PostReducer";
+import { Action, State } from "../../Hooks/Reducers/PostReducer";
 import styles from "../../pages/styles/General/Create.module.css";
+import { PostValidate } from "../../utils/postValidator";
 
 interface Props {
   post: State;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleArt: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-  handleTags: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleNumber: (values: NumberFormatValues) => void;
-  handleSale: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setArt: (files: FileList) => Promise<{
+    url: string;
+    width: number;
+    height: number;
+  }>;
+  dispatch: React.Dispatch<Action>;
+  create: any;
+  id: string;
 }
 
-const PostForm = ({
-  post,
-  handleSubmit,
-  handleChange,
-  handleArt,
-  handleTags,
-  handleNumber,
-  handleSale,
-}: Props) => {
+const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
+  const router = useRouter();
+  const [disabled, setDisabled] = useState(false);
+
+  const handleNumber = (values: NumberFormatValues) => {
+    dispatch({ type: "CHANGE", field: "price", payload: values.value });
+  };
+
+  const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setArt((e.target as HTMLInputElement).files).then((values) => {
+      dispatch({
+        type: "CHANGE_ART",
+        artPayload: values,
+      });
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
+    });
+  };
+
+  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
+  };
+
+  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setDisabled(true);
+    const valid = PostValidate(post);
+    if (valid.error && valid.errMessage) {
+      dispatch({
+        type: "ERROR",
+        payload: valid.error,
+        message: valid.errMessage,
+      });
+      setDisabled(false);
+    } else {
+      create({
+        variables: {
+          author: id,
+          title: post.title,
+          description: post.description,
+          art: post.art,
+          price: post.price,
+          sale: post.sale,
+          date: moment().format("l"),
+          tags: post.tags,
+          width: post.width,
+          height: post.height,
+        },
+      });
+      router.push("/home");
+    }
+  };
   return (
     <>
       {/* Form */}
@@ -136,6 +195,7 @@ const PostForm = ({
               variant="outlined"
               color="primary"
               startIcon={<Palette />}
+              disabled={disabled}
             >
               Publish
             </Button>

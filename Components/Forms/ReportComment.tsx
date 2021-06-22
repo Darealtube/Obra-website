@@ -12,7 +12,7 @@ import {
   Button,
   ListItem,
   ListItemAvatar,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import moment from "moment";
 import { useSession } from "next-auth/client";
@@ -27,6 +27,7 @@ const ReportCommentForm = ({ data }) => {
   const router = useRouter();
   const [session] = useSession();
   const [Report] = useMutation(REPORT_MUTATION);
+  const [disabled, setDisabled] = useState(false);
   const [report, setReport] = useState({
     description: "",
     reason: "",
@@ -41,6 +42,7 @@ const ReportCommentForm = ({ data }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisabled(true);
     Report({
       variables: {
         senderId: session?.id,
@@ -83,15 +85,12 @@ const ReportCommentForm = ({ data }) => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={`${
-                    data.author
-                      ? data.author.name
-                      : "Deleted User"
+                    data.author ? data.author.name : "Deleted User"
                   } commented ${data.date}`}
                   secondary={<>{data.content}</>}
                 />
               </ListItem>
-              on this post:{" "}
-              {`http://localhost:3000/${data.postID}`}
+              on this post: {`http://localhost:3000/${data.postID}`}
             </Container>
           </Paper>
         </Grid>
@@ -111,11 +110,12 @@ const ReportCommentForm = ({ data }) => {
                 Report Comment
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Note: You are about to report a user&apos;s comment. Please provide a
-                sensible and a reasonable description of what exactly is the
-                cause of this report, and provide an understandable reason.
-                Reporting a comment that is allowed by Obra&apos;s standards will, in
-                some cases, lead to a warning to your account.
+                Note: You are about to report a user&apos;s comment. Please
+                provide a sensible and a reasonable description of what exactly
+                is the cause of this report, and provide an understandable
+                reason. Reporting a comment that is allowed by Obra&apos;s
+                standards will, in some cases, lead to a warning to your
+                account.
               </Typography>
 
               <Box marginTop={4}>
@@ -161,7 +161,11 @@ const ReportCommentForm = ({ data }) => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Button type="submit" variant="outlined">
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      disabled={disabled}
+                    >
                       Submit Report Issue
                     </Button>
                   </Box>

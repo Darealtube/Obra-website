@@ -4,34 +4,61 @@ import {
   FormControlLabel,
   FormLabel,
   Grid,
-  Input,
   Radio,
   RadioGroup,
   TextField,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
+import { useRouter } from "next/router";
 import React from "react";
+import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { State } from "../../Hooks/Reducers/PostReducer";
+import { Action, State } from "../../Hooks/Reducers/PostReducer";
 import styles from "../../pages/styles/General/Create.module.css";
 
 interface Props {
   post: State;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTags: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleNumber: (values: NumberFormatValues) => void;
-  handleSale: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  dispatch: React.Dispatch<Action>;
+  edit: any;
+  id: string;
 }
 
-const EditPostForm = ({
-  post,
-  handleSubmit,
-  handleChange,
-  handleTags,
-  handleNumber,
-  handleSale,
-}: Props) => {
+const EditPostForm = ({ post, dispatch, edit, id }: Props) => {
+  const router = useRouter();
+  const [disabled, setDisabled] = useState(false);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: "CHANGE",
+      field: (e.target as HTMLInputElement).name,
+      payload: (e.target as HTMLInputElement).value,
+    });
+  };
+
+  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setDisabled(true);
+    edit({
+      variables: {
+        postId: id,
+        title: post.title,
+        description: post.description,
+        tags: post.tags,
+      },
+    });
+    router.push("/home");
+  };
+
+  const handleNumber = (values: NumberFormatValues) => {
+    dispatch({ type: "CHANGE", field: "price", payload: values.value });
+  };
+
+  const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
+  };
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -128,6 +155,7 @@ const EditPostForm = ({
               variant="outlined"
               color="primary"
               startIcon={<Palette />}
+              disabled={disabled}
             >
               Edit
             </Button>

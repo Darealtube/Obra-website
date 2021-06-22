@@ -9,7 +9,7 @@ import {
   Container,
 } from "@material-ui/core";
 import styles from "../../pages/styles/General/Configure.module.css";
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
@@ -33,6 +33,7 @@ type Props = {
 const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
   const router = useRouter();
   const [session] = useSession();
+  const [disabled, setDisabled] = useState(false);
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
     dispatch({
       type: "CHANGE",
@@ -46,6 +47,7 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
   // more.
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisabled(true);
     const valid = UserValidate2(user);
     if (valid.error && valid.errMessage) {
       dispatch({
@@ -53,6 +55,7 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
         payload: valid.error,
         message: valid.errMessage,
       });
+      setDisabled(false);
     } else {
       configUser({
         variables: {
@@ -185,7 +188,13 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
           </Grid>
           <Grid item xs={6}></Grid>
           <Grid item xs={12}>
-            <Button type="submit" variant="outlined" color="primary" fullWidth>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="primary"
+              fullWidth
+              disabled={disabled}
+            >
               Create Account
             </Button>
           </Grid>

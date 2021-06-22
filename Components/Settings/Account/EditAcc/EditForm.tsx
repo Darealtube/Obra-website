@@ -14,12 +14,14 @@ import Form2 from "./Form2";
 import { userValidator } from "../../../../utils/userValidator";
 import dynamic from "next/dynamic";
 import { editUserUpdate } from "../../../../utils/update";
+import { useState } from "react";
 
 const DynamicSnack = dynamic(
   () => import("../../../Forms/Snackbars/ConfigSnack")
 );
 
 const EditForm = () => {
+  const [disabled, setDisabled] = useState(false);
   const [session] = useSession();
   const user: UserInterface = useContext(UserContext);
   const router = useRouter();
@@ -61,6 +63,7 @@ const EditForm = () => {
   // the post, it is sure to be updated.
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisabled(true)
     const valid = await userValidator(userData, session?.id);
     if (valid.error && valid.errMessage) {
       dispatch({
@@ -68,6 +71,7 @@ const EditForm = () => {
         payload: valid.error,
         message: valid.errMessage,
       });
+      setDisabled(false)
     } else {
       editUser({
         variables: {
@@ -93,11 +97,11 @@ const EditForm = () => {
     <>
       <form onSubmit={handleEditSubmit}>
         <Grid container spacing={4}>
-          <Form1 user={userData} dispatch={dispatch} />
+          <Form1 user={userData} dispatch={dispatch} disableSubmit={disabled} />
           <Form3 user={userData} dispatch={dispatch} />
           <Form2 user={userData} dispatch={dispatch} />
         </Grid>
-      </form>
+      </form> 
       <DynamicSnack
         error={userData.error}
         errMessage={userData.errMessage}

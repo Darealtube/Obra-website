@@ -1,13 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+
+// For more information on each option (and a full list of options) go to
+// https://next-auth.js.org/configuration/options
 
 // This is the endpoint in which ALL the session handling is found.
 // The Providers are the list of ways on how the users could log in,
 // and we could add more. The Database is set to our MONGODB URI link,
 // and other options. Know more: https://next-auth.js.org/configuration/options
 
-const options = {
+export default NextAuth({
   providers: [
     Providers.Google({
       clientId: process.env.GOOGLE_CLIENT_ID_2,
@@ -28,11 +30,8 @@ const options = {
   database: process.env.MONGODB_URI,
   secret: process.env.AUTH_CLIENT_SECRET,
   callbacks: {
-    signIn: async (user, account, profile) => {
-      return Promise.resolve(true);
-    },
     session: async (session, user) => {
-      session.id = user.id;
+      session.id = user.id as string;
       return Promise.resolve(session);
     },
   },
@@ -40,7 +39,4 @@ const options = {
     signIn: "/auth/signin",
     newUser: "/configure",
   },
-};
-
-export default (req: NextApiRequest, res: NextApiResponse) =>
-  NextAuth(req, res, options);
+});

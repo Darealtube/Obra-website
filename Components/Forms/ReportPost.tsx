@@ -25,6 +25,7 @@ const ReportForm = ({ data }) => {
   const router = useRouter();
   const [session] = useSession();
   const [Report] = useMutation(REPORT_MUTATION);
+  const [disabled, setDisabled] = useState(false);
   const [report, setReport] = useState({
     description: "",
     reason: "",
@@ -39,6 +40,7 @@ const ReportForm = ({ data }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisabled(true);
     Report({
       variables: {
         senderId: session?.id,
@@ -66,7 +68,13 @@ const ReportForm = ({ data }) => {
             alignItems: "center",
           }}
         >
-          <Image src={data.art} width={data.width} height={data.height} objectFit="contain" alt={"Author Image"} />
+          <Image
+            src={data.art}
+            width={data.width}
+            height={data.height}
+            objectFit="contain"
+            alt={"Author Image"}
+          />
         </Grid>
         <Grid
           item
@@ -84,11 +92,12 @@ const ReportForm = ({ data }) => {
                 Report Post
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Note: You are about to report an artist&apos;s post. Please provide a
-                sensible and a reasonable description of what exactly is the
-                cause of this report, and provide an understandable reason.
-                Reporting a post that is allowed by Obra&apos;s standards will, in
-                some cases, lead to a warning to your account.
+                Note: You are about to report an artist&apos;s post. Please
+                provide a sensible and a reasonable description of what exactly
+                is the cause of this report, and provide an understandable
+                reason. Reporting a post that is allowed by Obra&apos;s
+                standards will, in some cases, lead to a warning to your
+                account.
               </Typography>
 
               <Box marginTop={4}>
@@ -134,7 +143,11 @@ const ReportForm = ({ data }) => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Button type="submit" variant="outlined">
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      disabled={disabled}
+                    >
                       Submit Report Issue
                     </Button>
                   </Box>

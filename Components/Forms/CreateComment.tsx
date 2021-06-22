@@ -9,20 +9,21 @@ import { commentUpdate } from "../../utils/update";
 
 type Comment = {
   id: string;
-}
+};
 
 const CommentForm = ({ id }: Comment) => {
   const [session] = useSession();
   const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
-    update: (cache: DataProxy, mutationResult) => commentUpdate(cache, mutationResult, id),
+    update: (cache: DataProxy, mutationResult) =>
+      commentUpdate(cache, mutationResult, id),
   });
-  
+  const [disabled, setDisabled] = useState(false);
   const [comment, setComment] = useState({
     postID: id,
     content: "",
     author: session?.id as string,
   });
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment({
       ...comment,
@@ -32,6 +33,7 @@ const CommentForm = ({ id }: Comment) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisabled(true);
     addComment({
       variables: {
         author: comment.author,
@@ -43,6 +45,7 @@ const CommentForm = ({ id }: Comment) => {
       ...comment,
       content: "",
     });
+    setDisabled(false);
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -59,7 +62,7 @@ const CommentForm = ({ id }: Comment) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
-              <IconButton type="submit">
+              <IconButton type="submit" disabled={disabled}>
                 <SendIcon />
               </IconButton>
             </InputAdornment>

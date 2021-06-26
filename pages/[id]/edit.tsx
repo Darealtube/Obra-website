@@ -85,6 +85,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  if (session.id != postId.author.id) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       postId,

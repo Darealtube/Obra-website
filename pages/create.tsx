@@ -1,11 +1,10 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { CssBaseline, Paper, Grid, CircularProgress } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import Image from "next/image";
 import styles from "./styles/General/Create.module.css";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { getSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { CREATE_POST_MUTATION } from "../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import PostForm from "../Components/Forms/CreatePost";
@@ -16,9 +15,14 @@ import {
   CreatePostVars,
 } from "../interfaces/MutationInterfaces";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 
 const DynamicError = dynamic(
   () => import("../Components/Forms/Snackbars/ConfigSnack")
+);
+
+const DynamicNoSessDialog = dynamic(
+  () => import("../Components/MainPopovers/NoSessionDialog")
 );
 
 const initState: State = {
@@ -35,9 +39,12 @@ const initState: State = {
 };
 
 const Create = ({ id }: { id: string }) => {
+  const [session, sessload] = useSession();
+  const [noSess, setnoSess] = useState(false);
   const [post, dispatch] = useReducer(reducer, initState);
-  const [create] =
-    useMutation<CreatePostData, CreatePostVars>(CREATE_POST_MUTATION);
+  const [create] = useMutation<CreatePostData, CreatePostVars>(
+    CREATE_POST_MUTATION
+  );
   const { loading, setArt, placeholder } = useArt("");
 
   const handleErrorClose = (
@@ -49,6 +56,12 @@ const Create = ({ id }: { id: string }) => {
     }
     dispatch({ type: "ERROR", payload: false });
   };
+
+  useEffect(() => {
+    if (!session && !sessload) {
+      setnoSess(true);
+    }
+  }, [session, sessload]);
 
   return (
     <div className={styles.root}>
@@ -80,13 +93,15 @@ const Create = ({ id }: { id: string }) => {
         </Grid>
         <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
           <div className={styles.paper}>
-            <PostForm
-              post={post}
-              create={create}
-              id={id}
-              setArt={setArt}
-              dispatch={dispatch}
-            />
+            {!noSess && (
+              <PostForm
+                post={post}
+                create={create}
+                id={id}
+                setArt={setArt}
+                dispatch={dispatch}
+              />
+            )}
           </div>
         </Grid>
       </Grid>
@@ -96,27 +111,9 @@ const Create = ({ id }: { id: string }) => {
         errMessage={post.errMessage}
         handleErrorClose={handleErrorClose}
       />
+      <DynamicNoSessDialog open={noSess} />
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/api/auth/signin",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      id: session.id,
-    },
-  };
 };
 
 export default Create;

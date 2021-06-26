@@ -1,0 +1,19 @@
+.root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.paper {
+  height: 80vh;
+  width: 80vw;
+  overflow: auto;
+}
+
+.videoItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

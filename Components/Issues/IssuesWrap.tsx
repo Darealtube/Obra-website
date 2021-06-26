@@ -83,6 +83,26 @@ const IssuesWrap = () => {
             </Typography>
           </Button>
         </Badge>
+        <Link href="/issues/bug" passHref>
+          <Badge
+            color="secondary"
+            badgeContent={data?.reportCount.bugReport}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+          >
+            <Button
+              variant="outlined"
+              component="a"
+              style={{ marginRight: "4px", marginLeft: "4px" }}
+            >
+              <Typography style={{ wordWrap: "break-word" }}>
+                Bug Reports
+              </Typography>
+            </Button>
+          </Badge>
+        </Link>
       </Box>
     </>
   );

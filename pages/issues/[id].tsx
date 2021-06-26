@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import PostReport from "../../Components/Issues/Reports/PostReport";
 import CommentReport from "../../Components/Issues/Reports/CommentReport";
+import BugReport from "../../Components/Issues/Reports/BugReport";
 
 const DynamicDeleteDialog = dynamic(
   () => import("../../Components/Issues/DeleteDialog")
@@ -30,9 +31,9 @@ const ReportID = ({ id }) => {
 
   const Report = {
     id,
-    email: data?.reportId?.reportedId.author.email
-      ? data?.reportId?.reportedId.author.email
-      : data?.reportId?.reportedId.email,
+    email: data?.reportId?.reportedId?.author?.email
+      ? data?.reportId?.reportedId?.author?.email
+      : data?.reportId?.reportedId?.email,
     reason: data?.reportId?.reason,
   };
 
@@ -55,6 +56,7 @@ const ReportID = ({ id }) => {
   return (
     <>
       <div className={styles.wrapRoot}>
+        <CssBaseline/>
         <Head>
           <meta
             name="viewport"
@@ -62,7 +64,6 @@ const ReportID = ({ id }) => {
           />
           <title>Issue Details</title>
         </Head>
-        <CssBaseline />
         {data?.reportId && data?.reportId?.type === "Post" ? (
           <PostReport
             report={data?.reportId}
@@ -75,9 +76,12 @@ const ReportID = ({ id }) => {
             handleOpen={handleOpen}
             handleReportOpen={handleReportOpen}
           />
-        ) : (
-          ""
-        )}
+        ) : data?.reportId?.type === "Bug" ? (
+          <BugReport
+          report={data?.reportId}
+          handleOpen={handleOpen}
+          />
+        ): ""}
         <DynamicReportDialog
           open={reportDialog}
           handleClose={handleReportClose}

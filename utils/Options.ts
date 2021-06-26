@@ -155,12 +155,19 @@ export const reasonOptions = [
   "Inappropriate Title or Description",
   "Unreasonable Price",
   "Misleading Art",
-  "Unoriginal Art"
-]
+  "Unoriginal Art",
+];
 
 export const commentReasonOptions = [
   "Inappropriate language",
   "Racist, Sexist, Homophobic, etc. display of comment",
   "Toxic behavior",
   "Spam",
-]
+];
+
+export const bugOptions = [
+  "Website Breaking Bug",
+  "Website UI Bug / Design Bug",
+  "Minor Bug",
+  "Functionality Bug",
+];

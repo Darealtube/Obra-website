@@ -168,6 +168,7 @@ export const editPostUpdate = (
       id: newUser.id,
       title: newUser.title,
       description: newUser.description,
+      tags: newUser.tags,
     },
   });
 };

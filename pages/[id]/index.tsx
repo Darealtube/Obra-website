@@ -74,14 +74,16 @@ const PostID = ({ id, alreadyLiked }: Props) => {
 
   // This useEffect adds the post to the view history of the user upon rendering the page.
   useEffect(() => {
-    viewed({
-      variables: {
-        userId: session?.id,
-        viewed: id,
-      },
-    });
+    if(session && !loading){
+      viewed({
+        variables: {
+          userId: session?.id,
+          viewed: id,
+        },
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [session, loading]);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -140,7 +142,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const { data, exists, alreadyLiked } = await InitializePostInfo(
     context.params.id as string,
-    session.id
+    session ? session.id : null
   );
 
   if (exists === false) {

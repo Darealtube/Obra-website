@@ -1,6 +1,8 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
   ALL_USER_QUERY,
+  BUG_REPORTS_QUERY,
+  EDIT_POST_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
   IS_ADMIN,
@@ -79,15 +81,17 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
       limit: 4,
     },
   });
-  const {
-    data: { isLikedArtist },
-  } = await apolloClient.query({
-    query: IS_LIKED_ARTIST,
-    variables: {
-      userID: userID,
-      artistName: name,
-    },
-  });
+
+    const {
+      data: { isLikedArtist },
+    } = await apolloClient.query({
+      query: IS_LIKED_ARTIST,
+      variables: {
+        userID: userID,
+        artistName: name,
+      },
+    });
+  
 
   return {
     data: apolloClient,
@@ -157,12 +161,12 @@ export const fetchAPost = async (id: string) => {
   const {
     data: { postId },
   } = await apolloClient.query<PostData, PostVars>({
-    query: POST_ID_QUERY,
+    query: EDIT_POST_QUERY,
     variables: {
       id: id,
-      limit: 4,
     },
   });
+
   if (!postId) {
     return null;
   }
@@ -243,6 +247,28 @@ export const fetchCommentReports = async (id: string) => {
 
   await apolloClient.query({
     query: REPORTED_COMMENTS_QUERY,
+    variables: {
+      limit: 4,
+    },
+  });
+
+  const {
+    data: { isAdmin },
+  } = await apolloClient.query({
+    query: IS_ADMIN,
+    variables: {
+      id: id,
+    },
+  });
+
+  return { data: apolloClient, isAdmin };
+};
+
+export const fetchBugReports = async (id: string) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: BUG_REPORTS_QUERY,
     variables: {
       limit: 4,
     },

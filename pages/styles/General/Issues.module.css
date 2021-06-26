@@ -15,7 +15,7 @@
   border-radius: 50%;
 }
 
-.grid{
+.grid {
   height: 100vh;
   width: 100vw;
 }
@@ -30,14 +30,14 @@
   width: 50vw;
 }
 
-.paper{
+.paper {
   width: 80%;
   height: 80%;
   overflow: auto;
   overflow-wrap: break-word;
 }
 
-.comment{
+.comment {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,4 +60,18 @@
   overflow: auto;
   overflow-wrap: break-word;
   margin: 8px 8px 8px 8px;
+}
+
+.bugContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.bugItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

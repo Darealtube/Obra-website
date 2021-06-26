@@ -318,6 +318,24 @@ export const NEW_POSTS_QUERY = gql`
   ${PostInfo}
 `;
 
+export const EDIT_POST_QUERY = gql`
+  query EditPostInfo($id: ID!){
+    postId(id: $id) {
+      id
+      title
+      art
+      author {
+        id
+        name
+      }
+      sale
+      price
+      tags
+      description
+    }
+  }
+`
+
 // This is for the /report page for posts.
 export const REPORT_POST_QUERY = gql`
   query ReportPostID($id: ID!) {
@@ -610,12 +628,13 @@ export const COMMISSION_COUNT_QUERY = gql`
 `;
 
 export const REPORT_COUNT_QUERY = gql`
-  query ReportCount{
-    reportCount{
+  query ReportCount {
+    reportCount {
       totalCount
       postReport
       commentReport
       userReport
+      bugReport
     }
   }
 `;
@@ -693,6 +712,32 @@ export const REPORTED_COMMENTS_QUERY = gql`
   ${UserInfo}
 `;
 
+export const BUG_REPORTS_QUERY = gql`
+  query BugReports($after: ID, $limit: Int) {
+    reports(after: $after, limit: $limit, type: "Bug") {
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          senderId {
+            ...UserInfo
+          }
+          date
+          description
+          reason
+          bugVid
+          vidFormat
+        }
+      }
+    }
+  }
+  ${UserInfo}
+`;
+
 export const REPORT_ID_QUERY = gql`
   query ReportID($reportedId: ID!) {
     reportId(reportedId: $reportedId) {
@@ -723,6 +768,8 @@ export const REPORT_ID_QUERY = gql`
       description
       reason
       type
+      bugVid
+      vidFormat
     }
   }
   ${UserInfo}
@@ -730,19 +777,19 @@ export const REPORT_ID_QUERY = gql`
 `;
 
 export const IS_LIKED_ARTIST = gql`
-  query islikedArtist($userID: ID!, $artistName: String!) {
+  query islikedArtist($userID: ID, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
   }
 `;
 
 export const IS_LIKED_POST = gql`
-  query islikedPost($userID: ID!, $postID: ID!) {
+  query islikedPost($userID: ID, $postID: ID!) {
     isLikedPost(userID: $userID, postID: $postID)
   }
 `;
 
 export const IS_ADMIN = gql`
-  query isAdmin($id: ID!) {
+  query isAdmin($id: ID) {
     isAdmin(id: $id)
   }
 `;
@@ -1015,12 +1062,14 @@ export const VIEW_POST = gql`
 export const REPORT_MUTATION = gql`
   mutation Report(
     $senderId: ID!
-    $reportedId: ID!
+    $reportedId: ID
     $type: String!
     $date: String!
-    $title: String!
+    $title: String
     $description: String!
     $reason: String!
+    $bugVid: String
+    $vidFormat: String
   ) {
     sendReport(
       senderId: $senderId
@@ -1030,6 +1079,8 @@ export const REPORT_MUTATION = gql`
       title: $title
       description: $description
       reason: $reason
+      bugVid: $bugVid
+      vidFormat: $vidFormat
     )
   }
 `;

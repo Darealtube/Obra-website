@@ -90,7 +90,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const { data, alreadyLiked, exists } = await fetchUserandPosts(
     context.params.name as string,
-    session.id
+    session ? session.id : null
   );
 
   if (!exists) {
@@ -103,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       session,
       name: context.params.name,
-      id: session.id as string,
+      id: session ? session.id : null,
       alreadyLiked: alreadyLiked,
     },
   });

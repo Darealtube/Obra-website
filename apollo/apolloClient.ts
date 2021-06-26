@@ -30,7 +30,7 @@ function createApolloClient() {
         Query: {
           fields: {
             // relayStylePagination is a kind of cursor-based pagination that uses similar syntax
-            // to Relay. It uses nodes and edges in order to paginate through a list. DO NOT FORGET TO 
+            // to Relay. It uses nodes and edges in order to paginate through a list. DO NOT FORGET TO
             // SET A NEW FIELD HERE IF THERE IS AN ADDED QUERY THAT RETURNS EDGES OR USES RELAY STYLE PAGINATION.
             // Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination
             reports: relayStylePagination(),
@@ -63,7 +63,6 @@ function createApolloClient() {
 // Initializes Apollo Client. This should be used before every request backend
 // such as ```await apolloClient.query. This should not be changed in any way.
 
-
 export function initializeApollo(initialState = null) {
   const _apolloClient: null | ApolloClient<NormalizedCacheObject> =
     apolloClient ?? createApolloClient();
@@ -89,7 +88,6 @@ export function addApolloState(
   client: ApolloClient<NormalizedCacheObject>,
   pageProps
 ) {
-
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }

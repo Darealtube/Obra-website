@@ -9,9 +9,16 @@ import {
   CommissionData,
   CommissionVars,
 } from "../../../interfaces/QueryInterfaces";
+import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
+
+const DynamicNoSessDialog = dynamic(
+  () => import("../../../Components/MainPopovers/NoSessionDialog")
+);
 
 const YourPendingCommissions = () => {
-  const [session] = useSession();
+  const [session, sessload] = useSession();
+  const [noSess, setnoSess] = useState(false);
   const { data, fetchMore, loading } = useQuery<CommissionData, CommissionVars>(
     YOUR_PENDING_COMMS_QUERY,
     {
@@ -22,6 +29,12 @@ const YourPendingCommissions = () => {
       skip: !session,
     }
   );
+
+  useEffect(() => {
+    if (!session && !sessload) {
+      setnoSess(true);
+    }
+  }, [session, sessload]);
 
   return (
     <>
@@ -38,6 +51,7 @@ const YourPendingCommissions = () => {
           />
         )}
       </CommissionWrap>
+      <DynamicNoSessDialog open={noSess} />
     </>
   );
 };

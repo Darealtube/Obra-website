@@ -90,7 +90,12 @@ const DrawerItems = () => {
     <div>
       <ListItem>
         <ListItemIcon>
-          <Image src="/obra-logo.png" height={40} width={40} alt={"Obra Logo"} />
+          <Image
+            src="/obra-logo.png"
+            height={40}
+            width={40}
+            alt={"Obra Logo"}
+          />
         </ListItemIcon>
         <ListItemText>
           <Typography variant="h6">Obra</Typography>
@@ -111,44 +116,59 @@ const DrawerItems = () => {
         </ListItemIcon>
         <ListItemText>Trending</ListItemText>
       </ListItem>
-      <ListItem button component="a" href={`/gallery/${session?.user.name}/`}>
-        <ListItemIcon>
-          <ImageIcon />
-        </ListItemIcon>
-        <ListItemText>Gallery</ListItemText>
-      </ListItem>
-      <ListItem
-        button
-        component="a"
-        href={`/gallery/${session?.user.name}/liked`}
-      >
-        <ListItemIcon>
-          <FavoriteIcon />
-        </ListItemIcon>
-        <ListItemText>Liked Gallery</ListItemText>
-      </ListItem>
-      <Divider />
-      <ListItem>
-        <Typography variant="h5">Transactions</Typography>
-      </ListItem>
-      {TransactionItems.map((item) => (
+      {session && (
         <>
-          <Link href={item.link} key={item.link} passHref>
-            <ListItem button component="a">
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText>{item.label}</ListItemText>
-            </ListItem>
-          </Link>
+          <ListItem
+            button
+            component="a"
+            href={`/gallery/${session?.user.name}/`}
+          >
+            <ListItemIcon>
+              <ImageIcon />
+            </ListItemIcon>
+            <ListItemText>Gallery</ListItemText>
+          </ListItem>
+          <ListItem
+            button
+            component="a"
+            href={`/gallery/${session?.user.name}/liked`}
+          >
+            <ListItemIcon>
+              <FavoriteIcon />
+            </ListItemIcon>
+            <ListItemText>Liked Gallery</ListItemText>
+          </ListItem>
         </>
-      ))}
-      <ListItem button component="a" href={"/commissions"}>
-        <ListItemIcon>
-          <BrushIcon />
-        </ListItemIcon>
-        <Badge color="secondary" badgeContent={data?.userId.commissionCount}>
-          <ListItemText>Commissions</ListItemText>
-        </Badge>
-      </ListItem>
+      )}
+      {session && (
+        <>
+          <Divider />
+          <ListItem>
+            <Typography variant="h5">Transactions</Typography>
+          </ListItem>
+          {TransactionItems.map((item) => (
+            <>
+              <Link href={item.link} key={item.link} passHref>
+                <ListItem button component="a">
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.label}</ListItemText>
+                </ListItem>
+              </Link>
+            </>
+          ))}
+          <ListItem button component="a" href={"/commissions"}>
+            <ListItemIcon>
+              <BrushIcon />
+            </ListItemIcon>
+            <Badge
+              color="secondary"
+              badgeContent={data?.userId.commissionCount}
+            >
+              <ListItemText>Commissions</ListItemText>
+            </Badge>
+          </ListItem>
+        </>
+      )}
       <Divider />
       <ListItem>
         <Typography variant="h5">More</Typography>
@@ -167,19 +187,37 @@ const DrawerItems = () => {
       <ListItem>
         <Grid container spacing={2}>
           <Grid item>
-            <Typography>About</Typography>
+            <Link href="/about" passHref>
+              <a style={{textDecoration: "none", color: "inherit"}}>
+                <Typography>About</Typography>
+              </a>
+            </Link>
           </Grid>
           <Grid item>
-            <Typography>Terms and Conditions</Typography>
+            <Link href="/about" passHref>
+              <a style={{textDecoration: "none", color: "inherit"}}>
+                <Typography>Terms and Conditions</Typography>
+              </a>
+            </Link>
           </Grid>
           <Grid item>
-            <Typography>Developers</Typography>
+            <Link href="/about#developers" passHref>
+              <a style={{textDecoration: "none", color: "inherit"}}>
+                <Typography>Developers</Typography>
+              </a>
+            </Link>
           </Grid>
           <Grid item>
-            <Typography>Contact Us</Typography>
+            <Link href="/about#contacts" passHref>
+              <a style={{textDecoration: "none", color: "inherit"}}>
+                <Typography>Contact Us</Typography>
+              </a>
+            </Link>
           </Grid>
           <Grid item>
-            <Typography>Canvas Tutorial</Typography>
+            <a style={{textDecoration: "none", color: "inherit"}}>
+              <Typography>Canvas Tutorial</Typography>
+            </a>
           </Grid>
         </Grid>
       </ListItem>

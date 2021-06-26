@@ -47,6 +47,7 @@ const CommentForm = ({ id }: Comment) => {
     });
     setDisabled(false);
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <TextField
@@ -55,14 +56,15 @@ const CommentForm = ({ id }: Comment) => {
         fullWidth
         value={comment.content}
         id="content"
-        label="Comment"
+        label={session ? "Comment" : "Sign In to comment on posts."}
         name="content"
         multiline={true}
         onChange={handleChange}
+        disabled={!session}
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
-              <IconButton type="submit" disabled={disabled}>
+              <IconButton type="submit" disabled={disabled || !session}>
                 <SendIcon />
               </IconButton>
             </InputAdornment>

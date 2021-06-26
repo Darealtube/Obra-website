@@ -38,7 +38,7 @@ const initState: State = {
   errMessage: "",
 };
 
-const Create = ({ id }: { id: string }) => {
+const Create = () => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
   const [post, dispatch] = useReducer(reducer, initState);
@@ -97,7 +97,7 @@ const Create = ({ id }: { id: string }) => {
               <PostForm
                 post={post}
                 create={create}
-                id={id}
+                id={session?.id}
                 setArt={setArt}
                 dispatch={dispatch}
               />

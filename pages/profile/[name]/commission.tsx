@@ -39,7 +39,7 @@ const Commission = () => {
     e.preventDefault();
     commissionArtist({
       variables: {
-        artistName: name,
+        artistName: router.query.name,
         userId: session?.id,
         title: commission.title,
         description: commission.description,

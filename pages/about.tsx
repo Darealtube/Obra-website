@@ -134,7 +134,7 @@ const About = () => {
             }}
             partialVisibility={true}
           >
-            <Box textAlign="center" marginBottom={12}>
+            <Box textAlign="center" marginBottom={12} id="developers">
               <Fade in={teamActive} timeout={2500}>
                 <Typography
                   variant="h2"
@@ -202,7 +202,7 @@ const About = () => {
             }}
             partialVisibility={true}
           >
-            <Box textAlign="center" marginBottom={18} marginTop={6}>
+            <Box textAlign="center" marginBottom={18} marginTop={6} id="contacts">
               <Fade in={contactActive} timeout={2500}>
                 <Typography
                   variant="h2"

@@ -18,9 +18,10 @@ const NotAllowedDialog = ({ open }: { open: boolean }) => {
         <DialogContent>
           <DialogContentText>
             You get this message when you try to either commission yourself,
-            report yourself, or edit another user&apos;s content. You are not
-            allowed to access this content because you&apos;re either
-            unauthorized or doesn&apos;t make sense to access this content.
+            report yourself, or edit another user&apos;s content or information.
+            You are not allowed to access this content because you&apos;re
+            either unauthorized or doesn&apos;t make sense to access this
+            content.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

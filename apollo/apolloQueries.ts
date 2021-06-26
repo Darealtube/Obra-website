@@ -129,6 +129,9 @@ export const COMMISSION_ID_QUERY = gql`
         name
         image
       }
+      toArtist {
+        id
+      }
       dateIssued
       title
       deadline
@@ -319,7 +322,7 @@ export const NEW_POSTS_QUERY = gql`
 `;
 
 export const EDIT_POST_QUERY = gql`
-  query EditPostInfo($id: ID!){
+  query EditPostInfo($id: ID!) {
     postId(id: $id) {
       id
       title
@@ -334,7 +337,7 @@ export const EDIT_POST_QUERY = gql`
       description
     }
   }
-`
+`;
 
 // This is for the /report page for posts.
 export const REPORT_POST_QUERY = gql`

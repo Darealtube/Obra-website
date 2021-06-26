@@ -1,6 +1,6 @@
 import CommissionWrap from "../../Components/Commissions/CommissionWrap";
 import Head from "next/head";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline, Box } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { COMMISSION_ID_QUERY } from "../../apollo/apolloQueries";
 import CommissionData from "../../Components/Commissions/CommissionData";
@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/client";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
+import { CircularProgress } from "@material-ui/core";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../Components/MainPopovers/NoAccessDialog")
@@ -41,14 +42,13 @@ const CommissionID = () => {
       setnoSess(true);
     }
 
-    if (
-      !noSess &&
-      (session.id != data?.commissionId.fromUser.id ||
-        session.id != data?.commissionId.toArtist.id)
-    ) {
+    let allowed = session?.id == data?.commissionId.toArtist.id;
+    let allowed2 = session?.id == data?.commissionId.fromUser.id;
+
+    if (!noSess && !loading && !allowed && !allowed2) {
       setnotAllowed(true);
     }
-  }, [session, sessload, data, noSess]);
+  }, [session, sessload, data, noSess, loading]);
 
   return (
     <>
@@ -57,13 +57,20 @@ const CommissionID = () => {
         <title>Commission</title>
       </Head>
       <CssBaseline />
-      <CommissionWrap>
-        {data && !loading ? (
+      {data && !loading && !noSess && !notAllowed ? (
+        <CommissionWrap>
           <CommissionData commission={data.commissionId} />
-        ) : (
-          ""
-        )}
-      </CommissionWrap>
+        </CommissionWrap>
+      ) : (
+        <Box
+          height="100vh"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <DynamicNotAllowedDialog open={notAllowed} />
       <DynamicNoSessDialog open={noSess} />
     </>

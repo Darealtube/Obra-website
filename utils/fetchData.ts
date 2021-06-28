@@ -82,16 +82,15 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
     },
   });
 
-    const {
-      data: { isLikedArtist },
-    } = await apolloClient.query({
-      query: IS_LIKED_ARTIST,
-      variables: {
-        userID: userID,
-        artistName: name,
-      },
-    });
-  
+  const {
+    data: { isLikedArtist },
+  } = await apolloClient.query({
+    query: IS_LIKED_ARTIST,
+    variables: {
+      userID: userID,
+      artistName: name,
+    },
+  });
 
   return {
     data: apolloClient,
@@ -184,13 +183,17 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
       limit: 4,
     },
   });
-  await apolloClient.query<RecommendedPostData, PostVars>({
-    query: POST_RECOMMENDED_QUERY,
-    variables: {
-      id: id,
-      limit: 4,
-    },
-  });
+
+  if (postId) {
+    await apolloClient.query<RecommendedPostData, PostVars>({
+      query: POST_RECOMMENDED_QUERY,
+      variables: {
+        id: id,
+        limit: 4,
+      },
+    });
+  }
+
   const {
     data: { isLikedPost },
   } = await apolloClient.query({
@@ -286,15 +289,17 @@ export const fetchBugReports = async (id: string) => {
   return { data: apolloClient, isAdmin };
 };
 
-export const fetchReportId = async (id:string, reportedId: string) => {
+export const fetchReportId = async (id: string, reportedId: string) => {
   const apolloClient = initializeApollo();
 
-  const report = await apolloClient.query({
+  const {
+    data: { reportId },
+  } = await apolloClient.query({
     query: REPORT_ID_QUERY,
     variables: {
-      reportedId: reportedId
-    }
-  })
+      reportedId: reportedId,
+    },
+  });
 
   const {
     data: { isAdmin },
@@ -305,5 +310,5 @@ export const fetchReportId = async (id:string, reportedId: string) => {
     },
   });
 
-  return { data: apolloClient, exists: report? true : false, isAdmin}
-}
+  return { data: apolloClient, exists: reportId ? true : false, isAdmin };
+};

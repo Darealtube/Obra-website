@@ -1,22 +1,22 @@
 import React, { useReducer } from "react";
 import { CssBaseline, Paper, Grid } from "@material-ui/core";
-import Appbar from "../../Components/Appbar/Appbar";
+import Appbar from "../../../Components/Appbar/Appbar";
 import Image from "next/image";
-import styles from "../styles/General/Create.module.css";
-import { fetchAPost } from "../../utils/fetchData";
+import styles from "../../styles/General/Create.module.css";
+import { fetchAPost } from "../../../utils/fetchData";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { getSession } from "next-auth/client";
-import { PostInterface } from "../../interfaces/PostInterface";
-import { EDIT_POST_MUTATION } from "../../apollo/apolloQueries";
+import { PostInterface } from "../../../interfaces/PostInterface";
+import { EDIT_POST_MUTATION } from "../../../apollo/apolloQueries";
 import { DataProxy, useMutation } from "@apollo/client";
-import EditPostForm from "../../Components/Forms/EditPost";
-import { reducer, State } from "../../Hooks/Reducers/PostReducer";
+import EditPostForm from "../../../Components/Forms/EditPost";
+import { reducer, State } from "../../../Hooks/Reducers/PostReducer";
 import {
   EditPostData,
   EditPostVars,
-} from "../../interfaces/MutationInterfaces";
-import { editPostUpdate } from "../../utils/update";
+} from "../../../interfaces/MutationInterfaces";
+import { editPostUpdate } from "../../../utils/update";
 
 const Create = ({ postId }: { postId: PostInterface }) => {
   const initState: State = {

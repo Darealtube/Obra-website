@@ -124,31 +124,33 @@ export const editUserUpdate = (
   id: string
 ) => {
   const newUser = mutationResult.data.editUser;
-  cache.writeFragment({
-    id: `User:${id}`,
-    fragment: UserInfo,
-    data: {
-      id: newUser.id,
-      name: newUser.name,
-      image: newUser.image,
-    },
-  });
-  cache.writeFragment({
-    id: `User:${id}`,
-    fragment: UserInfo2,
-    data: {
-      email: newUser.email,
-      backdrop: newUser.backdrop,
-      userBio: newUser.userBio,
-      birthday: newUser.birthday,
-      country: newUser.country,
-      phone: newUser.phone,
-      artLevel: newUser.artLevel,
-      artStyles: newUser.artStyles,
-      artKinds: newUser.artKinds,
-      age: newUser.age,
-    },
-  });
+  if (newUser) {
+    cache.writeFragment({
+      id: `User:${id}`,
+      fragment: UserInfo,
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        image: newUser.image,
+      },
+    });
+    cache.writeFragment({
+      id: `User:${id}`,
+      fragment: UserInfo2,
+      data: {
+        email: newUser.email,
+        backdrop: newUser.backdrop,
+        userBio: newUser.userBio,
+        birthday: newUser.birthday,
+        country: newUser.country,
+        phone: newUser.phone,
+        artLevel: newUser.artLevel,
+        artStyles: newUser.artStyles,
+        artKinds: newUser.artKinds,
+        age: newUser.age,
+      },
+    });
+  }
 };
 
 export const editPostUpdate = (
@@ -161,14 +163,16 @@ export const editPostUpdate = (
   id: string
 ) => {
   const newUser = mutationResult.data.editPost;
-  cache.writeFragment({
-    id: `Post:${id}`,
-    fragment: PostInfo,
-    data: {
-      id: newUser.id,
-      title: newUser.title,
-      description: newUser.description,
-      tags: newUser.tags,
-    },
-  });
+  if (newUser) {
+    cache.writeFragment({
+      id: `Post:${id}`,
+      fragment: PostInfo,
+      data: {
+        id: newUser.id,
+        title: newUser.title,
+        description: newUser.description,
+        tags: newUser.tags,
+      },
+    });
+  }
 };

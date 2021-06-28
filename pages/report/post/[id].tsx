@@ -2,8 +2,6 @@ import { useQuery } from "@apollo/client";
 import {
   CssBaseline,
   CircularProgress,
-  Typography,
-  Button,
   Box,
 } from "@material-ui/core";
 import { useSession } from "next-auth/client";
@@ -12,9 +10,9 @@ import { REPORT_POST_QUERY } from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import ReportForm from "../../../Components/Forms/ReportPost";
-import Link from "next/link";
 import dynamic from "next/dynamic";
+import DefaultErrorPage from "next/error";
+import { PostData, PostVars } from "../../../interfaces/QueryInterfaces";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportPost")
@@ -24,9 +22,9 @@ const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [admin, setAdmin] = useState(false);
-  const { data, loading } = useQuery(REPORT_POST_QUERY, {
+  const { data, loading } = useQuery<PostData, PostVars>(REPORT_POST_QUERY, {
     variables: {
-      id: router.query.id,
+      id: router.query.id as string,
     },
     skip: !router.query.id,
   });
@@ -43,9 +41,12 @@ const ReportPost = () => {
         <title>Report Post</title>
       </Head>
       <CssBaseline />
-      {data?.postId && !admin ? (
+      {(!data?.postId && !loading && router.query.id) ||
+      (data?.postId && admin && !loading) ? (
+        <DefaultErrorPage statusCode={404} />
+      ) : data?.postId && !admin && !loading ? (
         <DynamicReportForm data={data?.postId} />
-      ) : loading ? (
+      ) : (
         <Box
           display="flex"
           justifyContent="center"
@@ -54,38 +55,6 @@ const ReportPost = () => {
           width="100vw"
         >
           <CircularProgress />
-        </Box>
-      ) : data?.postId && admin ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          width="100vw"
-          flexDirection="column"
-        >
-          <Typography variant="h6" align="center">
-            Sorry, but it doesn&apos;t make sense to report your own art.
-          </Typography>
-          <Link href="/" passHref>
-            <Button component="a">Go back home</Button>
-          </Link>
-        </Box>
-      ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          width="100vw"
-          flexDirection="column"
-        >
-          <Typography variant="h6" align="center">
-            This post either does not exist or has been deleted by the author.
-          </Typography>
-          <Link href="/" passHref>
-            <Button component="a">Go back home</Button>
-          </Link>
         </Box>
       )}
     </div>

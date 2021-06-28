@@ -84,7 +84,7 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
                 titlePosition="top"
                 className={styles.titleBar}
                 actionIcon={
-                  <Link href={`/${tile.node.id}`} passHref>
+                  <Link href={`/posts/${tile.node.id}`} passHref>
                     <IconButton>
                       <VisibilityIcon />
                     </IconButton>

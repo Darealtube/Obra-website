@@ -16,11 +16,12 @@ import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
 import Gridlist from "../../../Components/GridList";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import DefaultErrorPage from "next/error";
 
 const LikedGallery = () => {
   const router = useRouter();
   const name = router.query.name as string;
-  const { data, fetchMore } = useQuery<UserData, UserVars>(
+  const { data, fetchMore, loading } = useQuery<UserData, UserVars>(
     USER_LIKED_GALLERY_QUERY,
     {
       variables: {
@@ -39,7 +40,11 @@ const LikedGallery = () => {
       </Head>
       <Appbar />
       <Container className={styles.content}>
-        {data && name ? (
+        {!data?.userName && name && !loading ? (
+          <>
+            <DefaultErrorPage statusCode={404} />
+          </>
+        ) : data && name ? (
           <>
             <Box display="flex" alignItems="center" marginBottom={2}>
               <Image

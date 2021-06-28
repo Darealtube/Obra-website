@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import DefaultErrorPage from "next/error";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportComment")
@@ -42,12 +43,15 @@ const ReportPost = () => {
     <div>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Report Post</title>
+        <title>Report Comment</title>
       </Head>
       <CssBaseline />
-      {data?.commentId && !admin ? (
+      {(!data?.commentId && !loading && router.query.id) ||
+      (data?.commentId && admin && !loading) ? (
+        <DefaultErrorPage statusCode={404} />
+      ) : data?.commentId && !admin && !loading ? (
         <DynamicReportForm data={data?.commentId} />
-      ) : loading ? (
+      ) : (
         <Box
           display="flex"
           justifyContent="center"
@@ -56,38 +60,6 @@ const ReportPost = () => {
           width="100vw"
         >
           <CircularProgress />
-        </Box>
-      ) : data?.commentId && admin ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          width="100vw"
-          flexDirection="column"
-        >
-          <Typography variant="h6" align="center">
-            Sorry, but it doesn&apos;t make sense to report your own art.
-          </Typography>
-          <Link href="/" passHref>
-            <Button component="a">Go back home</Button>
-          </Link>
-        </Box>
-      ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100vh"
-          width="100vw"
-          flexDirection="column"
-        >
-          <Typography variant="h6" align="center">
-            This post either does not exist or has been deleted by the author.
-          </Typography>
-          <Link href="/" passHref>
-            <Button component="a">Go back home</Button>
-          </Link>
         </Box>
       )}
     </div>

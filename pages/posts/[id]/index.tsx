@@ -1,9 +1,9 @@
-import Appbar from "../../Components/Appbar/Appbar";
+import Appbar from "../../../Components/Appbar/Appbar";
 import { CssBaseline, Grid } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import styles from "../styles/Specific/Post.module.css";
+import styles from "../../styles/Specific/Post.module.css";
 import Head from "next/head";
-import { InitializePostInfo } from "../../utils/fetchData";
+import { InitializePostInfo } from "../../../utils/fetchData";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/client";
 import {
@@ -12,28 +12,28 @@ import {
   POST_RECOMMENDED_QUERY,
   UNLIKE_MUTATION,
   VIEW_POST,
-} from "../../apollo/apolloQueries";
+} from "../../../apollo/apolloQueries";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import PostInfo from "../../Components/PostInfo/PostInfo";
-import RecommendedList from "../../Components/PostInfo/RecommendedList";
+import PostInfo from "../../../Components/PostInfo/PostInfo";
+import RecommendedList from "../../../Components/PostInfo/RecommendedList";
 import dynamic from "next/dynamic";
 import {
   PostData,
   PostVars,
   RecommendedPostData,
-} from "../../interfaces/QueryInterfaces";
+} from "../../../interfaces/QueryInterfaces";
 import {
   LikeData,
   UnlikeLikeVars,
   UnlikeData,
   ViewPostData,
   ViewPostVars,
-} from "../../interfaces/MutationInterfaces";
-import { addApolloState } from "../../apollo/apolloClient";
+} from "../../../interfaces/MutationInterfaces";
+import { addApolloState } from "../../../apollo/apolloClient";
 
 const DynamicImageDialog = dynamic(
-  () => import("../../Components/PostInfo/ImageDialog")
+  () => import("../../../Components/PostInfo/ImageDialog")
 );
 
 type Props = {

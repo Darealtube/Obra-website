@@ -104,7 +104,7 @@ export const CardList = ({ postData }: PostData) => {
                   )}
                 </Container>
 
-                <Link href={`/${post.node.id}`} passHref>
+                <Link href={`/posts/${post.node.id}`} passHref>
                   <CardActionArea>
                     <CardContent>
                       <Typography

@@ -14,6 +14,7 @@ import { useSession } from "next-auth/client";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { CircularProgress } from "@material-ui/core";
+import DefaultErrorPage from "next/error";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../Components/MainPopovers/NoAccessDialog")
@@ -42,13 +43,15 @@ const CommissionID = () => {
       setnoSess(true);
     }
 
-    let allowed = session?.id == data?.commissionId.toArtist.id;
-    let allowed2 = session?.id == data?.commissionId.fromUser.id;
+    if (data?.commissionId) {
+      let allowed = session?.id == data?.commissionId?.toArtist.id;
+      let allowed2 = session?.id == data?.commissionId?.fromUser.id;
 
-    if (!noSess && !loading && !allowed && !allowed2) {
-      setnotAllowed(true);
+      if (!noSess && !loading && !allowed && !allowed2) {
+        setnotAllowed(true);
+      }
     }
-  }, [session, sessload, data, noSess, loading]);
+  }, [session, sessload, data, noSess, loading, router]);
 
   return (
     <>
@@ -57,7 +60,11 @@ const CommissionID = () => {
         <title>Commission</title>
       </Head>
       <CssBaseline />
-      {data && !loading && !noSess && !notAllowed ? (
+      {!data?.commissionId && !sessload && !loading ? (
+        <>
+          <DefaultErrorPage statusCode={404} />
+        </>
+      ) : data?.commissionId && !loading && !noSess && !notAllowed ? (
         <CommissionWrap>
           <CommissionData commission={data.commissionId} />
         </CommissionWrap>

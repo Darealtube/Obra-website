@@ -13,6 +13,7 @@ import {
 import styles from "../../../pages/styles/General/Issues.module.css";
 import Image from "next/image";
 import moment from "moment";
+import Link from "next/link";
 
 type ReportProps = {
   report: any;
@@ -51,8 +52,15 @@ const CommentReport = ({
                   secondary={<>{report.reportedId.content}</>}
                 />
               </ListItem>
-              on this post:{" "}
-              {`http://localhost:3000/${report.reportedId.postID}`}
+              on this post:
+              <Link
+                href={`http://localhost:3000/posts/${report.reportedId.postID}`}
+                passHref
+              >
+                <a style={{ textDecoration: "none", color: "inherit" }}>
+                  {`http://localhost:3000/posts/${report.reportedId.postID}`}
+                </a>
+              </Link>
             </Container>
           </Paper>
         </Grid>
@@ -95,7 +103,10 @@ const CommentReport = ({
                   Content: {report.reportedId.content}
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Date sent: {moment(report.reportedId.date).format('MMMM Do YYYY, h:mm a')}
+                  Date sent:{" "}
+                  {moment(report.reportedId.date).format(
+                    "MMMM Do YYYY, h:mm a"
+                  )}
                 </Typography>
               </Box>
 

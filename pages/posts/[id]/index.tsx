@@ -7,14 +7,11 @@ import { InitializePostInfo } from "../../../utils/fetchData";
 import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/client";
 import {
-  LIKE_MUTATION,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
-  UNLIKE_MUTATION,
   VIEW_POST,
 } from "../../../apollo/apolloQueries";
 import { useMutation, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
 import PostInfo from "../../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../../Components/PostInfo/RecommendedList";
 import dynamic from "next/dynamic";
@@ -24,16 +21,17 @@ import {
   RecommendedPostData,
 } from "../../../interfaces/QueryInterfaces";
 import {
-  LikeData,
-  UnlikeLikeVars,
-  UnlikeData,
   ViewPostData,
   ViewPostVars,
 } from "../../../interfaces/MutationInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
+import useGraphError from "../../../Hooks/useGraphError";
 
 const DynamicImageDialog = dynamic(
   () => import("../../../Components/PostInfo/ImageDialog")
+);
+const DynamicErrSnack = dynamic(
+  () => import("../../../Components/Forms/Snackbars/ConfigSnack")
 );
 
 type Props = {
@@ -42,11 +40,14 @@ type Props = {
 };
 
 const PostID = ({ id, alreadyLiked }: Props) => {
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
   const [session, loading] = useSession();
-  const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
-  const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
+  const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
+  const [open, setOpen] = useState(false);
+  const {
+    err: { errMessage, error },
+    handleError,
+    closeError,
+  } = useGraphError();
   const {
     data: { postId },
     fetchMore: MoreComm,
@@ -65,8 +66,6 @@ const PostID = ({ id, alreadyLiked }: Props) => {
       limit: 4,
     },
   });
-  const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
-  const [liked, setLiked] = useState(alreadyLiked);
 
   const handleClose = () => {
     setOpen(false);
@@ -74,7 +73,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
 
   // This useEffect adds the post to the view history of the user upon rendering the page.
   useEffect(() => {
-    if(session && !loading){
+    if (session && !loading) {
       viewed({
         variables: {
           userId: session?.id,
@@ -82,26 +81,8 @@ const PostID = ({ id, alreadyLiked }: Props) => {
         },
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, loading]);
-
-  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!session && !loading) {
-      router.replace("/api/auth/signin");
-    }
-    if (!liked) {
-      like({
-        variables: { postId: postId.id, userID: session?.id },
-      });
-      setLiked(true);
-    } else {
-      unlike({
-        variables: { postId: postId.id, userID: session?.id },
-      });
-      setLiked(false);
-    }
-  };
 
   return (
     <div className={styles.root}>
@@ -117,9 +98,9 @@ const PostID = ({ id, alreadyLiked }: Props) => {
             <PostInfo
               postID={postId}
               setOpen={setOpen}
-              liked={liked as boolean}
-              handleLike={handleLike}
               fetchMore={MoreComm}
+              alreadyLiked={alreadyLiked}
+              handleError={handleError}
             />
             <RecommendedList
               fetchMore={MoreRecc}
@@ -133,6 +114,11 @@ const PostID = ({ id, alreadyLiked }: Props) => {
         handleClose={handleClose}
         open={open}
         art={postId.art}
+      />
+      <DynamicErrSnack
+        error={error}
+        errMessage={errMessage}
+        handleErrorClose={closeError}
       />
     </div>
   );

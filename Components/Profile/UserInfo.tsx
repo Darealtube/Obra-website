@@ -10,7 +10,7 @@ import {
   LIKE_ARTIST_MUTATION,
   UNLIKE_ARTIST_MUTATION,
 } from "../../apollo/apolloQueries";
-import { useMutation } from "@apollo/client";
+import { ApolloError, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
@@ -29,17 +29,39 @@ type Props = {
   artist: UserInterface;
   admin: boolean;
   userLiked: boolean;
+  errDisabled: boolean;
+  handleError: (error: ApolloError, timeout?: number) => void;
 };
 
-const UserInfo = ({ artist, admin, userLiked }: Props) => {
+const UserInfo = ({
+  artist,
+  admin,
+  userLiked,
+  errDisabled,
+  handleError,
+}: Props) => {
   const router = useRouter();
+  const [disabled, setDisabled] = useState(false);
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
   const [openDialog, setOpenDialog] = useState(false);
-  const [likeArtist] =
-    useMutation<LikeArtistData, UnlikeLikeArtistVars>(LIKE_ARTIST_MUTATION);
+  const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(
+    LIKE_ARTIST_MUTATION,
+    {
+      onError: (error) => {
+        setLiked(false);
+        handleError(error, 8000);
+      },
+    }
+  );
   const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
-    UNLIKE_ARTIST_MUTATION
+    UNLIKE_ARTIST_MUTATION,
+    {
+      onError: (error) => {
+        setLiked(true);
+        handleError(error, 8000);
+      },
+    }
   );
 
   // handleLike will handle like and unlike functionality. It will update
@@ -51,15 +73,23 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
       router.replace("/api/auth/signin");
     }
     if (!liked) {
+      setLiked(true);
+      setDisabled(true);
       likeArtist({
         variables: { artistID: artist.id, userID: session.id },
+        update: () => {
+          setDisabled(false);
+        },
       });
-      setLiked(true);
     } else {
+      setLiked(false);
+      setDisabled(true);
       unlikeArtist({
         variables: { artistID: artist.id, userID: session.id },
+        update: () => {
+          setDisabled(false);
+        },
       });
-      setLiked(false);
     }
   };
 
@@ -131,6 +161,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
               fullWidth
               className={liked ? styles.userOptions2 : styles.userOptions}
               onClick={handleLike}
+              disabled={disabled || errDisabled}
             >
               <span>
                 <Typography align="center">

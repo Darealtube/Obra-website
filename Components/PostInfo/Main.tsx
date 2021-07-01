@@ -1,18 +1,81 @@
+import { ApolloError, useMutation } from "@apollo/client";
 import { Grid, Typography, Chip, Button } from "@material-ui/core";
+import { useSession } from "next-auth/client";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
+import { useState } from "react";
+import { LIKE_MUTATION, UNLIKE_MUTATION } from "../../apollo/apolloQueries";
+import {
+  LikeData,
+  UnlikeLikeVars,
+  UnlikeData,
+} from "../../interfaces/MutationInterfaces";
 import { PostInterface } from "../../interfaces/PostInterface";
 
 import styles from "../../pages/styles/Specific/Post.module.css";
 
 type Props = {
   postID: PostInterface;
-  handleLike: (e: React.MouseEvent<HTMLButtonElement>) => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  liked: boolean;
+  alreadyLiked: boolean;
+  handleError: (error: ApolloError) => void;
 };
 
-const Main = ({ postID, handleLike, liked, setOpen }: Props) => {
+const Main = ({ postID, setOpen, alreadyLiked, handleError }: Props) => {
+  const router = useRouter();
+  const [disabled, setDisabled] = useState(false);
+  const [liked, setLiked] = useState(alreadyLiked);
+  const [session, loading] = useSession();
+
+  const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION, {
+    onError: (error) => {
+      setLiked(false);
+      setDisabled(true);
+      handleError(error);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 8000);
+    },
+  });
+  const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION, {
+    onError: (error) => {
+      setLiked(true);
+      setDisabled(true);
+      handleError(error);
+      setTimeout(() => {
+        setDisabled(false);
+      }, 8000);
+    },
+  });
+
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!session && !loading) {
+      router.replace("/api/auth/signin");
+    }
+
+    if (!liked) {
+      setLiked(true);
+      setDisabled(true);
+      like({
+        variables: { postId: postID.id, userID: session?.id },
+        update: () => {
+          setDisabled(false);
+        },
+      });
+    } else {
+      setLiked(false);
+      setDisabled(true);
+      unlike({
+        variables: { postId: postID.id, userID: session?.id },
+        update: () => {
+          setDisabled(false);
+        },
+      });
+    }
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={6} className={styles.artContainer}>
@@ -55,6 +118,7 @@ const Main = ({ postID, handleLike, liked, setOpen }: Props) => {
             <Button
               onClick={handleLike}
               style={liked === true ? { color: "red" } : { color: "inherit" }}
+              disabled={disabled}
             >
               LIKE
             </Button>

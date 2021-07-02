@@ -9,21 +9,13 @@ import { commentUpdate } from "../../utils/update";
 
 type Comment = {
   id: string;
-  handleError: any;
 };
 
-const CommentForm = ({ id, handleError }: Comment) => {
+const CommentForm = ({ id }: Comment) => {
   const [session] = useSession();
   const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
     update: (cache: DataProxy, mutationResult) =>
       commentUpdate(cache, mutationResult, id),
-    onError: (error) => {
-      setDisabled(true);
-      handleError(error);
-      setTimeout(() => {
-        setDisabled(false);
-      }, 30000);
-    },
   });
   const [disabled, setDisabled] = useState(false);
   const [comment, setComment] = useState({

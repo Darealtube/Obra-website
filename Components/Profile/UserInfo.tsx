@@ -10,7 +10,7 @@ import {
   LIKE_ARTIST_MUTATION,
   UNLIKE_ARTIST_MUTATION,
 } from "../../apollo/apolloQueries";
-import { ApolloError, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
@@ -29,39 +29,19 @@ type Props = {
   artist: UserInterface;
   admin: boolean;
   userLiked: boolean;
-  errDisabled: boolean;
-  handleError: (error: ApolloError, timeout?: number) => void;
 };
 
-const UserInfo = ({
-  artist,
-  admin,
-  userLiked,
-  errDisabled,
-  handleError,
-}: Props) => {
+const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const router = useRouter();
   const [disabled, setDisabled] = useState(false);
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
   const [openDialog, setOpenDialog] = useState(false);
   const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(
-    LIKE_ARTIST_MUTATION,
-    {
-      onError: (error) => {
-        setLiked(false);
-        handleError(error, 8000);
-      },
-    }
+    LIKE_ARTIST_MUTATION
   );
   const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
-    UNLIKE_ARTIST_MUTATION,
-    {
-      onError: (error) => {
-        setLiked(true);
-        handleError(error, 8000);
-      },
-    }
+    UNLIKE_ARTIST_MUTATION
   );
 
   // handleLike will handle like and unlike functionality. It will update
@@ -161,7 +141,7 @@ const UserInfo = ({
               fullWidth
               className={liked ? styles.userOptions2 : styles.userOptions}
               onClick={handleLike}
-              disabled={disabled || errDisabled}
+              disabled={disabled}
             >
               <span>
                 <Typography align="center">

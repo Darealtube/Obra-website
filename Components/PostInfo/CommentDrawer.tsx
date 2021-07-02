@@ -13,7 +13,6 @@ import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
 import CloseIcon from "@material-ui/icons/Close";
 import { edges } from "../../interfaces/CommentInterface";
-import { ApolloError } from "@apollo/client";
 
 interface Props {
   id: string;
@@ -23,7 +22,6 @@ interface Props {
   open: boolean;
   handleDrawer: () => void;
   parentRef: (node: HTMLElement) => void;
-  handleError: (error: ApolloError) => void;
 }
 
 const CommentDrawer = ({
@@ -34,7 +32,6 @@ const CommentDrawer = ({
   open,
   handleDrawer,
   parentRef,
-  handleError,
 }: Props) => {
   return (
     <div>
@@ -66,7 +63,7 @@ const CommentDrawer = ({
           id="Scrollable"
           ref={parentRef}
         >
-          <CommentForm id={id} handleError={handleError} />
+          <CommentForm id={id} />
           <InfiniteScroll
             dataLength={comments.length}
             next={More}

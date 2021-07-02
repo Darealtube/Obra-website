@@ -25,13 +25,9 @@ import {
   ViewPostVars,
 } from "../../../interfaces/MutationInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
-import useGraphError from "../../../Hooks/useGraphError";
 
 const DynamicImageDialog = dynamic(
   () => import("../../../Components/PostInfo/ImageDialog")
-);
-const DynamicErrSnack = dynamic(
-  () => import("../../../Components/Forms/Snackbars/ConfigSnack")
 );
 
 type Props = {
@@ -43,11 +39,6 @@ const PostID = ({ id, alreadyLiked }: Props) => {
   const [session, loading] = useSession();
   const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
   const [open, setOpen] = useState(false);
-  const {
-    err: { errMessage, error },
-    handleError,
-    closeError,
-  } = useGraphError();
   const {
     data: { postId },
     fetchMore: MoreComm,
@@ -100,7 +91,6 @@ const PostID = ({ id, alreadyLiked }: Props) => {
               setOpen={setOpen}
               fetchMore={MoreComm}
               alreadyLiked={alreadyLiked}
-              handleError={handleError}
             />
             <RecommendedList
               fetchMore={MoreRecc}
@@ -114,11 +104,6 @@ const PostID = ({ id, alreadyLiked }: Props) => {
         handleClose={handleClose}
         open={open}
         art={postId.art}
-      />
-      <DynamicErrSnack
-        error={error}
-        errMessage={errMessage}
-        handleErrorClose={closeError}
       />
     </div>
   );

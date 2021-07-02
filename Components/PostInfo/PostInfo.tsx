@@ -18,7 +18,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../../Hooks/usePagination";
 import Main from "./Main";
 import dynamic from "next/dynamic";
-import { ApolloError } from "@apollo/client";
 
 const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
 
@@ -27,7 +26,6 @@ type Parameters = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   fetchMore: any;
   alreadyLiked: boolean;
-  handleError: (error: ApolloError) => void;
 };
 
 const PostInfo = ({
@@ -35,7 +33,6 @@ const PostInfo = ({
   setOpen,
   fetchMore,
   alreadyLiked,
-  handleError,
 }: Parameters) => {
   const commentToggle = useMediaQuery("(max-width:768px)");
   const [openComment, setOpenComment] = useState(false);
@@ -60,7 +57,6 @@ const PostInfo = ({
           postID={postID}
           setOpen={setOpen}
           alreadyLiked={alreadyLiked}
-          handleError={handleError}
         />
         <br />
         <br />
@@ -72,7 +68,7 @@ const PostInfo = ({
           </IconButton>
         ) : (
           <>
-            <CommentForm id={postID.id} handleError={handleError} />
+            <CommentForm id={postID.id} />
             <InfiniteScroll
               dataLength={postID.comments.edges.length}
               next={More}
@@ -102,7 +98,6 @@ const PostInfo = ({
         open={openComment}
         handleDrawer={handleDrawer}
         parentRef={ref}
-        handleError={handleError}
       />
     </Grid>
   );

@@ -1,4 +1,4 @@
-import { ApolloError, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Grid, Typography, Chip, Button } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import Image from "next/image";
@@ -19,35 +19,16 @@ type Props = {
   postID: PostInterface;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   alreadyLiked: boolean;
-  handleError: (error: ApolloError) => void;
 };
 
-const Main = ({ postID, setOpen, alreadyLiked, handleError }: Props) => {
+const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
   const router = useRouter();
   const [disabled, setDisabled] = useState(false);
   const [liked, setLiked] = useState(alreadyLiked);
   const [session, loading] = useSession();
 
-  const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION, {
-    onError: (error) => {
-      setLiked(false);
-      setDisabled(true);
-      handleError(error);
-      setTimeout(() => {
-        setDisabled(false);
-      }, 8000);
-    },
-  });
-  const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION, {
-    onError: (error) => {
-      setLiked(true);
-      setDisabled(true);
-      handleError(error);
-      setTimeout(() => {
-        setDisabled(false);
-      }, 8000);
-    },
-  });
+  const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
+  const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

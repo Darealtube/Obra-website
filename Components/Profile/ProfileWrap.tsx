@@ -7,7 +7,6 @@ import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import UserInfo from "./UserInfo";
 import dynamic from "next/dynamic";
-import useGraphError from "../../Hooks/useGraphError";
 
 type Props = {
   children: React.ReactNode;
@@ -19,12 +18,6 @@ type Props = {
 const DynamicErrSnack = dynamic(() => import("../Forms/Snackbars/ConfigSnack"));
 
 const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
-  const {
-    err: { errMessage, error, errDisabled },
-    handleError,
-    closeError,
-  } = useGraphError();
-
   return (
     <div className={styles.wrapRoot}>
       <Box className={styles.backdrop}>
@@ -45,16 +38,9 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
           artist={artist}
           admin={admin}
           userLiked={userLiked}
-          errDisabled={errDisabled}
-          handleError={handleError}
         />
         <RightInfo children={children} artist={artist} />
       </Box>
-      <DynamicErrSnack
-        error={error}
-        errMessage={errMessage}
-        handleErrorClose={closeError}
-      />
     </div>
   );
 };

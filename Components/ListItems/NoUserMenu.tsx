@@ -2,7 +2,7 @@ import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import { signIn, signOut } from "next-auth/client";
+import { signIn } from "next-auth/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 
 const NoUserMenu = () => {

@@ -7,7 +7,6 @@ import { useMutation } from "@apollo/client";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useSession } from "next-auth/client";
 import Link from "next/link";
-import { Container } from "@material-ui/core";
 
 type Props = {
   notifications: notifedges[];

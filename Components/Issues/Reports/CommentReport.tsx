@@ -5,7 +5,6 @@ import {
   Typography,
   Paper,
   Button,
-  CssBaseline,
   ListItem,
   ListItemText,
   ListItemAvatar,

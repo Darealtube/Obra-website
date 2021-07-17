@@ -11,9 +11,9 @@ import styles from "./styles/General/Home.module.css";
 import { CardList } from "../Components/CardList";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/client";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
@@ -22,7 +22,6 @@ import {
 import { fetchPosts } from "../utils/fetchData";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../Hooks/usePagination";
-import { useEffect } from "react";
 import {
   FeaturedPostsData,
   HomeUserData,

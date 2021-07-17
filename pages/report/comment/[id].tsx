@@ -2,20 +2,16 @@ import { useQuery } from "@apollo/client";
 import {
   CssBaseline,
   CircularProgress,
-  Typography,
-  Button,
   Box,
 } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
 import {
   COMMENT_ID_QUERY,
-  REPORT_POST_QUERY,
 } from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import DefaultErrorPage from "next/error";
 

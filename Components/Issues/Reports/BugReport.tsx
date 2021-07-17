@@ -5,7 +5,6 @@ import {
   Typography,
   Paper,
   Button,
-  CssBaseline,
 } from "@material-ui/core";
 import styles from "../../../pages/styles/General/Issues.module.css";
 

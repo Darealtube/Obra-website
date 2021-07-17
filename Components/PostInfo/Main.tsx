@@ -8,7 +8,7 @@ import { useState } from "react";
 import {
   ADD_CART_MUTATION,
   LIKE_MUTATION,
-  REMOVE_FROM_CART_MUTATION,
+  UNADD_TO_CART_MUTATION,
   UNLIKE_MUTATION,
 } from "../../apollo/apolloQueries";
 import {
@@ -24,17 +24,18 @@ type Props = {
   postID: PostInterface;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   alreadyLiked: boolean;
+  alreadyAdded: boolean;
 };
 
-const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
+const Main = ({ postID, setOpen, alreadyLiked, alreadyAdded }: Props) => {
   const router = useRouter();
   const [disabled, setDisabled] = useState(false);
   const [cartDisabled, setCartDisabled] = useState(false);
   const [liked, setLiked] = useState(alreadyLiked);
-  const [added, setAdded] = useState(false);
+  const [added, setAdded] = useState(alreadyAdded);
   const [session, loading] = useSession();
   const [addtoCart] = useMutation(ADD_CART_MUTATION);
-  const [removeFromCart] = useMutation(REMOVE_FROM_CART_MUTATION);
+  const [removeFromCart] = useMutation(UNADD_TO_CART_MUTATION);
   const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
   const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
 
@@ -144,13 +145,15 @@ const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Button
-              onClick={handleCart}
-              style={added === true ? { color: "red" } : { color: "inherit" }}
-              disabled={cartDisabled}
-            >
-              ADD
-            </Button>
+            {postID.sale == "Yes" && (
+              <Button
+                onClick={handleCart}
+                style={added === true ? { color: "red" } : { color: "inherit" }}
+                disabled={cartDisabled}
+              >
+                ADD
+              </Button>
+            )}
           </Grid>
           <Grid item xs={4}>
             <Button>SHARE</Button>

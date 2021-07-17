@@ -26,9 +26,16 @@ type Parameters = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   fetchMore: any;
   alreadyLiked: boolean;
+  alreadyAdded: boolean;
 };
 
-const PostInfo = ({ postID, setOpen, fetchMore, alreadyLiked }: Parameters) => {
+const PostInfo = ({
+  postID,
+  setOpen,
+  fetchMore,
+  alreadyLiked,
+  alreadyAdded,
+}: Parameters) => {
   const commentToggle = useMediaQuery("(max-width:768px)");
   const [openComment, setOpenComment] = useState(false);
 
@@ -48,7 +55,12 @@ const PostInfo = ({ postID, setOpen, fetchMore, alreadyLiked }: Parameters) => {
   return (
     <Grid item xs={12} md={8} className={styles.postInfo}>
       <Container>
-        <Main postID={postID} setOpen={setOpen} alreadyLiked={alreadyLiked} />
+        <Main
+          postID={postID}
+          setOpen={setOpen}
+          alreadyLiked={alreadyLiked}
+          alreadyAdded={alreadyAdded}
+        />
         <br />
         <br />
         <Typography variant="overline">Comments</Typography>

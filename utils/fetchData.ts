@@ -7,7 +7,7 @@ import {
   HOME_RECOMMENDED_QUERY,
   IS_ADMIN,
   IS_LIKED_ARTIST,
-  IS_LIKED_POST,
+  IS_LIKED_OR_ADDED_POST,
   IS_SAME_USER,
   NEW_POSTS_QUERY,
   POST_ID_QUERY,
@@ -181,9 +181,9 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   }
 
   const {
-    data: { isLikedPost },
+    data: { isLikedorAddedPost },
   } = await apolloClient.query({
-    query: IS_LIKED_POST,
+    query: IS_LIKED_OR_ADDED_POST,
     variables: {
       postID: id,
       userID: sessionId,
@@ -193,7 +193,8 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   return {
     data: apolloClient,
     exists: postId ? true : false,
-    alreadyLiked: isLikedPost,
+    alreadyLiked: isLikedorAddedPost.isLiked as boolean,
+    alreadyAdded: isLikedorAddedPost.isAdded as boolean,
   };
 };
 

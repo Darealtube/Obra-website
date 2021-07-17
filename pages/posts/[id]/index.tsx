@@ -33,9 +33,10 @@ const DynamicImageDialog = dynamic(
 type Props = {
   id: string;
   alreadyLiked: boolean;
+  alreadyAdded: boolean;
 };
 
-const PostID = ({ id, alreadyLiked }: Props) => {
+const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   const [session, loading] = useSession();
   const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
   const [open, setOpen] = useState(false);
@@ -91,6 +92,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
               setOpen={setOpen}
               fetchMore={MoreComm}
               alreadyLiked={alreadyLiked}
+              alreadyAdded={alreadyAdded}
             />
             <RecommendedList
               fetchMore={MoreRecc}
@@ -111,7 +113,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const { data, exists, alreadyLiked } = await InitializePostInfo(
+  const { data, exists, alreadyLiked, alreadyAdded } = await InitializePostInfo(
     context.params.id as string,
     session ? session.id : null
   );
@@ -127,6 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       session: session,
       id: context.params.id,
       alreadyLiked: alreadyLiked,
+      alreadyAdded: alreadyAdded,
     },
   });
 };

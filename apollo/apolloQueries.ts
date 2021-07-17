@@ -855,9 +855,12 @@ export const IS_LIKED_ARTIST = gql`
   }
 `;
 
-export const IS_LIKED_POST = gql`
-  query islikedPost($userID: ID, $postID: ID!) {
-    isLikedPost(userID: $userID, postID: $postID)
+export const IS_LIKED_OR_ADDED_POST = gql`
+  query LikedorAdded($userID: ID, $postID: ID!) {
+    isLikedorAddedPost(userID: $userID, postID: $postID) {
+      isLiked
+      isAdded
+    }
   }
 `;
 
@@ -1222,6 +1225,12 @@ export const WARN_MUTATION = gql`
 export const ADD_CART_MUTATION = gql`
   mutation AddToCart($userID: ID!, $postID: ID, $cost: Float) {
     addToCart(userID: $userID, postID: $postID, cost: $cost)
+  }
+`;
+
+export const UNADD_TO_CART_MUTATION = gql`
+  mutation UnaddToCart($userID: ID!, $postID: ID) {
+    unaddToCart(userID: $userID, postID: $postID)
   }
 `;
 

@@ -17,12 +17,12 @@ type Parameters = {
 };
 
 const RecommendedList = ({ fetchMore, recommended }: Parameters) => {
-  const { More, hasMore } = usePagination(
-    "recommendedPosts",
+  const { More, hasMore } = usePagination({
+    key: "recommendedPosts",
     fetchMore,
-    recommended,
-    4
-  );
+    info: recommended,
+    limit: 4,
+  });
 
   return (
     <Grid item xs={12} md={4} className={styles.recommended}>

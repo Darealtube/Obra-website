@@ -56,3 +56,31 @@
 .avatar {
   border-radius: 50%;
 }
+
+.price {
+  width: 100%;
+  height: 3em;
+}
+
+.priceContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.finishedItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  overflow: auto;
+}
+
+.finishedArt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 40vh;
+}

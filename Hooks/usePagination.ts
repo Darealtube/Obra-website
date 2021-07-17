@@ -33,14 +33,25 @@ interface Info {
  unscrollable. The returned "ref" is the helper, as it will help determine if the element is scrollable or not.
  */
 
-const usePagination = (
-  key: string,
+type usePaginationProps = {
+  key: string;
+  fetchMore: any;
+  info: Info;
+  limit: number;
+  key2?: string;
+  executeWhileUnscrollable?: boolean;
+  onDeleteLimit?: number;
+};
+
+const usePagination = ({
+  key,
   fetchMore,
-  info: Info,
-  limit: number,
-  key2?: string | null,
-  execute?: boolean
-) => {
+  info,
+  limit,
+  key2,
+  executeWhileUnscrollable,
+  onDeleteLimit,
+}: usePaginationProps) => {
   const [page, setPage] = useState(1);
   const [hasMore, sethasMore] = useState(info?.pageInfo.hasNextPage);
   const [refetching, setRefetching] = useState(false);
@@ -57,21 +68,21 @@ const usePagination = (
   // and it is used in order to organize query requests.
   useEffect(() => {
     if (node && isScrollable === false) {
-      if (execute === true && hasMore === true) {
+      if (executeWhileUnscrollable === true && hasMore === true) {
         setRefetching(true);
         More();
         setRefetching(false);
       }
       setisScrollable(node?.scrollHeight > node?.clientHeight);
     }
-  }, [execute, node, isScrollable, hasMore]);
+  }, [executeWhileUnscrollable, node, isScrollable, hasMore]);
 
   // More will only execute when the hook is not performing any other action such as execute
   // or when a user deletes a post and needs to paginate one post in replace.
   const More = () => {
     if (!refetching) {
       fetchMore({
-        variables: { after: info?.edges.slice(-1)[0].node.id, limit: limit },
+        variables: { after: info?.edges.slice(-1)[0]?.node.id, limit: limit },
       }).then((fetchMoreResult) => {
         if (fetchMoreResult.data[`${key}`]) {
           setPage((prevpage) => prevpage + 1);
@@ -95,7 +106,10 @@ const usePagination = (
     if (info?.edges.length < page * limit && hasMore) {
       setRefetching(true);
       fetchMore({
-        variables: { after: info?.edges.slice(-1)[0].node.id, limit: 1 },
+        variables: {
+          after: info?.edges.slice(-1)[0]?.node.id,
+          limit: onDeleteLimit ? onDeleteLimit : 1,
+        },
       }).then((fetchMoreResult) => {
         if (
           (key2

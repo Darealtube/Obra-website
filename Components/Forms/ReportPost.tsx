@@ -69,7 +69,7 @@ const ReportForm = ({ data }) => {
           }}
         >
           <Image
-            src={data.art}
+            src={data.watermarkArt}
             width={data.width}
             height={data.height}
             objectFit="contain"

@@ -72,7 +72,7 @@ const CommentList = ({ comments }: Props) => {
                     : "Deleted User"
                 } commented ${moment(comment.node.date).fromNow()}`}
                 secondary={
-                  <React.Fragment>{comment.node.content}</React.Fragment>
+                  <>{comment.node.content}</>
                 }
               />
               <ListItemSecondaryAction>

@@ -6,6 +6,7 @@ export interface PostInterface {
   author?: UserInterface;
   date: string;
   art: string;
+  watermarkArt: string;
   tags: string[];
   title: string;
   description: string;

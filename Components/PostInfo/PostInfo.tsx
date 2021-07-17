@@ -28,23 +28,18 @@ type Parameters = {
   alreadyLiked: boolean;
 };
 
-const PostInfo = ({
-  postID,
-  setOpen,
-  fetchMore,
-  alreadyLiked,
-}: Parameters) => {
+const PostInfo = ({ postID, setOpen, fetchMore, alreadyLiked }: Parameters) => {
   const commentToggle = useMediaQuery("(max-width:768px)");
   const [openComment, setOpenComment] = useState(false);
 
-  const { More, hasMore, ref } = usePagination(
-    "postId",
+  const { More, hasMore, ref } = usePagination({
+    key: "postId",
     fetchMore,
-    postID.comments,
-    4,
-    "comments",
-    openComment
-  );
+    info: postID.comments,
+    limit: 4,
+    key2: "comments",
+    executeWhileUnscrollable: true,
+  });
 
   const handleDrawer = () => {
     setOpenComment(!openComment);
@@ -53,11 +48,7 @@ const PostInfo = ({
   return (
     <Grid item xs={12} md={8} className={styles.postInfo}>
       <Container>
-        <Main
-          postID={postID}
-          setOpen={setOpen}
-          alreadyLiked={alreadyLiked}
-        />
+        <Main postID={postID} setOpen={setOpen} alreadyLiked={alreadyLiked} />
         <br />
         <br />
         <Typography variant="overline">Comments</Typography>

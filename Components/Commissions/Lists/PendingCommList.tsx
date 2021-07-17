@@ -22,14 +22,14 @@ type Props = {
 
 const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
   const mobile = useMediaQuery("(max-width: 768px)");
-  const { More, hasMore, ref } = usePagination(
-    "userId",
+  const { More, hasMore, ref } = usePagination({
+    key: "userId",
     fetchMore,
-    yourPendingCommissions,
-    4,
-    "yourPendingCommissions",
-    true
-  );
+    info: yourPendingCommissions,
+    limit: 4,
+    key2: "yourPendingCommissions",
+    executeWhileUnscrollable: true,
+  });
 
   return (
     <>
@@ -54,7 +54,11 @@ const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
           >
             {yourPendingCommissions &&
               yourPendingCommissions.edges.map((commission) => (
-                <Link href={`/commissions/${commission.node.id}`} key={commission.node.id} passHref>
+                <Link
+                  href={`/commissions/${commission.node.id}`}
+                  key={commission.node.id}
+                  passHref
+                >
                   <ListItem
                     divider
                     key={commission.node.id}
@@ -81,16 +85,23 @@ const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
                       secondary={
                         mobile
                           ? `${commission.node.description}. 
-                             Deadline on ${moment(
-                               commission.node.deadline
-                             ).format("l")}`
+                                ${
+                                  commission.node.deadline
+                                    ? `Deadline: ${moment(
+                                        commission.node.deadline
+                                      ).format("l")}`
+                                    : `No Deadline`
+                                }`
                           : `${commission.node.description}`
                       }
                       style={{ flexGrow: 1 }}
                     />
                     {!mobile && (
                       <Typography>
-                        Deadline: {moment(commission.node.deadline).format("l")}
+                        Deadline:{" "}
+                        {commission.node.deadline
+                          ? moment(commission.node.deadline).format("l")
+                          : "No Deadline"}
                       </Typography>
                     )}
                   </ListItem>

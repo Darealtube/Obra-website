@@ -16,6 +16,7 @@ const cloudinaryHandler = async (
   const signature = cloudinary.utils.api_sign_request(
     {
       timestamp: timestamp,
+      eager: "w_400,h_400,g_south_east,x_5,y_5,l_obra_watermark,o_76",
     },
     process.env.CLOUDINARY_SECRET //API Secret (MUST BE HIDDEN IN ENV)
   );

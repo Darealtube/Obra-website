@@ -86,3 +86,13 @@ export interface CommissionIdData {
 export interface CommissionIdVars {
   id: string;
 }
+
+export interface UserIdData {
+  userId: UserInterface;
+}
+
+export interface UserIdVars {
+  id: string;
+  after?: string;
+  limit?: number;
+}

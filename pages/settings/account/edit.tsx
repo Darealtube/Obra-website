@@ -3,8 +3,18 @@ import EditForm from "../../../Components/Settings/Account/EditAcc/EditForm";
 import { Box, Typography, Divider, Button } from "@material-ui/core";
 import Link from "next/link";
 import Head from "next/head";
+import { useSession } from "next-auth/client";
+import { useMutation, DataProxy } from "@apollo/client";
+import { EDIT_USER_MUTATION } from "../../../apollo/apolloQueries";
+import { EditUserData } from "../../../interfaces/MutationInterfaces";
+import { editUserUpdate } from "../../../utils/update";
 
 const EditAccount = () => {
+  const [session] = useSession();
+  const [editUser] = useMutation<EditUserData>(EDIT_USER_MUTATION, {
+    update: (cache: DataProxy, mutationResult) =>
+      editUserUpdate(cache, mutationResult, session?.id),
+  });
   return (
     <>
       <Head>
@@ -22,7 +32,7 @@ const EditAccount = () => {
         </Box>
         <br />
         <Divider />
-        <EditForm />
+        <EditForm editUser={editUser} />
       </SettingsWrap>
     </>
   );

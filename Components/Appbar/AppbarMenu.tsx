@@ -1,4 +1,4 @@
-import { IconButton, Avatar, Badge } from "@material-ui/core";
+import { IconButton, Avatar, Badge, useMediaQuery } from "@material-ui/core";
 import { Palette } from "@material-ui/icons";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,6 +19,7 @@ type Prop = {
 };
 
 const AppbarMenu = ({ user, fetchMore }: Prop) => {
+  const XSmall = useMediaQuery("(max-width: 402px)");
   const { data } = useQuery(REPORT_COUNT_QUERY, {
     skip: !user.userId.admin,
     pollInterval: 6000,
@@ -37,13 +38,18 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
           <Palette fontSize="large" htmlColor="white" />
         </Link>
       </IconButton>
-      {user.userId.admin && <IconButton>
-        <Link href={`/issues/post/`} passHref>
-          <Badge color="secondary" badgeContent={data?.reportCount.totalCount}>
-            <PriorityHighIcon fontSize="large" htmlColor="white" />
-          </Badge>
-        </Link>
-      </IconButton>}
+      {user.userId.admin && !XSmall && (
+        <IconButton>
+          <Link href={`/issues/post/`} passHref>
+            <Badge
+              color="secondary"
+              badgeContent={data?.reportCount.totalCount}
+            >
+              <PriorityHighIcon fontSize="large" htmlColor="white" />
+            </Badge>
+          </Link>
+        </IconButton>
+      )}
       <DynamicNotifPop user={user} fetchMore={fetchMore} />
       <IconButton onClick={handleProfile}>
         {user.userId.image ? (

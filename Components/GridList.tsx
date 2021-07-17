@@ -30,7 +30,13 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
   const key2exist = second && second != "" ? second : null;
-  const { More, hasMore } = usePagination(first, fetchMore, data, 4, key2exist);
+  const { More, hasMore } = usePagination({
+    key: first,
+    fetchMore,
+    info: data,
+    limit: 4,
+    key2: key2exist,
+  });
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
     setOpen(true);
@@ -68,10 +74,10 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
                 justifyContent="center"
                 alignItems="center"
                 onClick={handleOpen}
-                id={tile.node.art}
+                id={tile.node.watermarkArt}
               >
                 <Image
-                  src={tile.node.art}
+                  src={tile.node.watermarkArt}
                   width={tile.node.width}
                   height={tile.node.height}
                   alt={"Art Image"}

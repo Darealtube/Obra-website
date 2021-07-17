@@ -2,7 +2,7 @@ import { initializeApollo } from "../apollo/apolloClient";
 import {
   ALL_USER_QUERY,
   BUG_REPORTS_QUERY,
-  EDIT_POST_QUERY,
+  CART_QUERY,
   FEATURED_POSTS_QUERY,
   HOME_RECOMMENDED_QUERY,
   IS_ADMIN,
@@ -18,6 +18,7 @@ import {
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
+  YOUR_FINISHED_COMMS_QUERY,
 } from "../apollo/apolloQueries";
 import {
   FeaturedPostsData,
@@ -30,6 +31,8 @@ import {
   UserVars,
   HomeUserData,
   HomeUserVars,
+  UserIdData,
+  UserIdVars,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the fetch functions that are used on pages that have
@@ -153,23 +156,6 @@ export const fetchPosts = async (id: string) => {
     });
   }
   return apolloClient;
-};
-
-export const fetchAPost = async (id: string) => {
-  const apolloClient = initializeApollo();
-  const {
-    data: { postId },
-  } = await apolloClient.query<PostData, PostVars>({
-    query: EDIT_POST_QUERY,
-    variables: {
-      id: id,
-    },
-  });
-
-  if (!postId) {
-    return null;
-  }
-  return postId;
 };
 
 export const InitializePostInfo = async (id: string, sessionId: string) => {
@@ -311,4 +297,32 @@ export const fetchReportId = async (id: string, reportedId: string) => {
   });
 
   return { data: apolloClient, exists: reportId ? true : false, isAdmin };
+};
+
+export const fetchCart = async (sessionId: string) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: CART_QUERY,
+    variables: {
+      id: sessionId,
+      limit: 4,
+    },
+  });
+
+  return apolloClient;
+};
+
+export const fetchFinishedComms = async (sessionId: string) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query<UserIdData, UserIdVars>({
+    query: YOUR_FINISHED_COMMS_QUERY,
+    variables: {
+      id: sessionId,
+      limit: 4,
+    },
+  });
+
+  return apolloClient;
 };

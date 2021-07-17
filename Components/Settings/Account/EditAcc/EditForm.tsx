@@ -4,23 +4,19 @@ import { UserInterface } from "../../../../interfaces/UserInterface";
 import { UserContext } from "../../../../Components/Settings/SettingsWrap";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
-import { DataProxy, useMutation } from "@apollo/client";
-import { EDIT_USER_MUTATION } from "../../../../apollo/apolloQueries";
-import { EditUserData } from "../../../../interfaces/MutationInterfaces";
 import { reducer, State } from "../../../../Hooks/Reducers/UserReducer";
 import Form1 from "./Form1";
 import Form3 from "./Form3";
 import Form2 from "./Form2";
 import { userValidator } from "../../../../utils/userValidator";
 import dynamic from "next/dynamic";
-import { editUserUpdate } from "../../../../utils/update";
 import { useState } from "react";
 
 const DynamicSnack = dynamic(
   () => import("../../../Forms/Snackbars/ConfigSnack")
 );
 
-const EditForm = () => {
+const EditForm = ({editUser}) => {
   const [disabled, setDisabled] = useState(false);
   const [session] = useSession();
   const user: UserInterface = useContext(UserContext);
@@ -43,10 +39,6 @@ const EditForm = () => {
     errMessage: "",
   };
   const [userData, dispatch] = useReducer(reducer, initState);
-  const [editUser] = useMutation<EditUserData>(EDIT_USER_MUTATION, {
-    update: (cache: DataProxy, mutationResult) =>
-      editUserUpdate(cache, mutationResult, session?.id),
-  });
 
   const handleErrorClose = (
     event: React.SyntheticEvent | React.MouseEvent,

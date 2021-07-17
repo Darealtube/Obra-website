@@ -16,6 +16,7 @@ export const PostInfo = gql`
     description
     date
     art
+    watermarkArt
     tags
   }
 `;
@@ -40,6 +41,16 @@ export const UserInfo2 = gql`
     artStyles
     artKinds
     backdrop
+  }
+`;
+
+export const UserInfo3 = gql`
+  fragment UserInfo3 on User {
+    commissionPoster
+    commissionRates {
+      type
+      price
+    }
   }
 `;
 
@@ -88,7 +99,6 @@ export const POST_ID_QUERY = gql`
     postId(id: $id) {
       id
       title
-      art
       author {
         id
         name
@@ -97,6 +107,7 @@ export const POST_ID_QUERY = gql`
       price
       tags
       description
+      watermarkArt
       comments(after: $after, limit: $limit) {
         totalCount
         edges {
@@ -132,6 +143,10 @@ export const COMMISSION_ID_QUERY = gql`
       toArtist {
         id
       }
+      finished
+      accepted
+      price
+      rates
       dateIssued
       title
       deadline
@@ -327,6 +342,7 @@ export const EDIT_POST_QUERY = gql`
       id
       title
       art
+      watermarkArt
       author {
         id
         name
@@ -346,6 +362,7 @@ export const REPORT_POST_QUERY = gql`
       id
       title
       art
+      watermarkArt
       author {
         id
         name
@@ -361,10 +378,25 @@ export const SETTINGS_QUERY = gql`
     userId(id: $id) {
       ...UserInfo
       ...UserInfo2
+      ...UserInfo3
     }
   }
   ${UserInfo}
   ${UserInfo2}
+  ${UserInfo3}
+`;
+
+export const USER_COMM_INFO_QUERY = gql`
+  query CommissionInfo($name: String!) {
+    userName(name: $name) {
+      id
+      commissionRates {
+        type
+        price
+      }
+      commissionPoster
+    }
+  }
 `;
 
 export const COMMISSIONS_QUERY = gql`
@@ -388,6 +420,7 @@ export const COMMISSIONS_QUERY = gql`
             dateIssued
             title
             deadline
+            description
           }
         }
       }
@@ -416,6 +449,7 @@ export const YOUR_COMMISSIONS_QUERY = gql`
             dateIssued
             title
             deadline
+            description
           }
         }
       }
@@ -530,8 +564,11 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
             }
             dateIssued
             title
-            deadline
             description
+            price
+            finishedArt
+            finishedwatermarkArt
+            message
           }
         }
       }
@@ -548,6 +585,7 @@ export const TRENDING_POSTS_QUERY = gql`
         node {
           id
           art
+          watermarkArt
           title
           author {
             ...UserInfo
@@ -575,6 +613,7 @@ export const USER_GALLERY_QUERY = gql`
           node {
             id
             art
+            watermarkArt
             title
             width
             height
@@ -600,6 +639,7 @@ export const USER_LIKED_GALLERY_QUERY = gql`
           node {
             id
             art
+            watermarkArt
             title
             width
             height
@@ -779,6 +819,36 @@ export const REPORT_ID_QUERY = gql`
   ${PostInfo}
 `;
 
+export const CART_QUERY = gql`
+  query CartQuery($id: ID!, $after: ID, $limit: Int) {
+    userId(id: $id) {
+      id
+      cart(limit: $limit, after: $after) {
+        idList
+        totalCost
+        totalCount
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            cost
+            postID {
+              id
+              title
+              art
+              watermarkArt
+              description
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const IS_LIKED_ARTIST = gql`
   query islikedArtist($userID: ID, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
@@ -867,6 +937,7 @@ export const CREATE_POST_MUTATION = gql`
     $title: String!
     $description: String!
     $art: String!
+    $watermarkArt: String!
     $price: String!
     $sale: String!
     $author: ID!
@@ -884,6 +955,7 @@ export const CREATE_POST_MUTATION = gql`
       author: $author
       width: $width
       height: $height
+      watermarkArt: $watermarkArt
     )
   }
 `;
@@ -914,7 +986,9 @@ export const CREATE_COMMISSION_MUTATION = gql`
     $sampleArt: String!
     $height: Int!
     $width: Int!
-    $deadline: Int!
+    $deadline: Int
+    $price: Float!
+    $rates: [String]!
   ) {
     commissionArtist(
       artistName: $artistName
@@ -925,6 +999,8 @@ export const CREATE_COMMISSION_MUTATION = gql`
       height: $height
       width: $width
       deadline: $deadline
+      price: $price
+      rates: $rates
     )
   }
 `;
@@ -973,6 +1049,22 @@ export const ACCEPT_COMMISSION_MUTATION = gql`
       deadline
       description
     }
+  }
+`;
+
+export const FINISH_COMMISSION_MUTATION = gql`
+  mutation FinishCommission(
+    $commissionId: ID!
+    $message: String!
+    $finishedArt: String!
+    $finishedwatermarkArt: String!
+  ) {
+    finishCommission(
+      commissionId: $commissionId
+      message: $message
+      finishedArt: $finishedArt
+      finishedwatermarkArt: $finishedwatermarkArt
+    )
   }
 `;
 
@@ -1049,6 +1141,27 @@ export const EDIT_USER_MUTATION = gql`
   }
 `;
 
+export const EDIT_COMMISSION_SETTINGS_MUTATION = gql`
+  mutation EditCommSettings(
+    $userId: ID!
+    $commissionPoster: String!
+    $commissionRates: [RatesInput]
+  ) {
+    editUserComm(
+      userId: $userId
+      commissionPoster: $commissionPoster
+      commissionRates: $commissionRates
+    ) {
+      id
+      commissionPoster
+      commissionRates {
+        type
+        price
+      }
+    }
+  }
+`;
+
 export const READ_NOTIF = gql`
   mutation ReadNotif($notifArray: [ID!]) {
     readNotif(notifArray: $notifArray)
@@ -1103,5 +1216,29 @@ export const WARN_MUTATION = gql`
       description: $description
       reason: $reason
     )
+  }
+`;
+
+export const ADD_CART_MUTATION = gql`
+  mutation AddToCart($userID: ID!, $postID: ID, $cost: Float) {
+    addToCart(userID: $userID, postID: $postID, cost: $cost)
+  }
+`;
+
+export const REMOVE_FROM_CART_MUTATION = gql`
+  mutation RemoveFromCart($userID: ID!, $itemID: ID) {
+    removeFromCart(userID: $userID, itemID: $itemID) {
+      totalCost
+      idList
+    }
+  }
+`;
+
+export const REMOVE_SELECTED_FROM_CART_MUTATION = gql`
+  mutation RemoveSelectedFromCart($userID: ID!, $selected: [ID]) {
+    removeSelectedFromCart(userID: $userID, selected: $selected) {
+      totalCost
+      idList
+    }
   }
 `;

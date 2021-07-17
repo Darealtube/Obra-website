@@ -4,6 +4,7 @@ export type State = {
   title: string;
   description: string;
   art: string;
+  watermarkArt: string;
   price: string;
   sale: string;
   tags: string[];
@@ -17,6 +18,7 @@ type Values = {
   url: string;
   width: number;
   height: number;
+  watermarkUrl: string;
 };
 
 export type Action = {
@@ -40,6 +42,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         art: action.artPayload.url,
+        watermarkArt: action.artPayload.watermarkUrl,
         width: action.artPayload.width,
         height: action.artPayload.height,
       };

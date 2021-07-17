@@ -10,21 +10,33 @@ import {
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useReducer } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { Action, State } from "../../Hooks/Reducers/PostReducer";
+import { Action, State, reducer } from "../../Hooks/Reducers/PostReducer";
+import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
 
 interface Props {
-  post: State;
-  dispatch: React.Dispatch<Action>;
+  postId: PostInterface;
   edit: any;
   id: string;
 }
 
-const EditPostForm = ({ post, dispatch, edit, id }: Props) => {
+const EditPostForm = ({ edit, id, postId }: Props) => {
+  const initState: State = {
+    title: postId.title,
+    description: postId.description,
+    art: postId.art,
+    watermarkArt: postId.watermarkArt,
+    price: postId.price,
+    sale: postId.sale,
+    tags: postId.tags as string[],
+    width: postId.width,
+    height: postId.height,
+  };
   const router = useRouter();
+  const [post, dispatch] = useReducer(reducer, initState);
   const [disabled, setDisabled] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({

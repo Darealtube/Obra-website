@@ -29,6 +29,7 @@ const initState: State = {
   title: "",
   description: "",
   art: "",
+  watermarkArt: "",
   price: "",
   sale: "No",
   tags: [] as string[],

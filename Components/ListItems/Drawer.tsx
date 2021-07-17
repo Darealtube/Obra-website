@@ -42,8 +42,8 @@ const MoreItems = [
     icon: <SettingsIcon />,
   },
   {
-    label: "Report",
-    link: "/help/report",
+    label: "Report a Bug",
+    link: "/bugreport",
     icon: <EmojiFlagsIcon />,
   },
   {
@@ -61,7 +61,7 @@ const MoreItems = [
 const TransactionItems = [
   {
     label: "Wallet",
-    link: "/transactions/wallet",
+    link: "/wallet",
     icon: <AccountBalanceWalletIcon />,
   },
   {
@@ -71,7 +71,7 @@ const TransactionItems = [
   },
   {
     label: "Your Cart",
-    link: "/transactions/cart",
+    link: "/cart/",
     icon: <ShoppingCartIcon />,
   },
 ];

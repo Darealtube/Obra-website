@@ -96,7 +96,7 @@ export const CardList = ({ postData }: PostData) => {
                 <Container component="div" className={styles.artContainer}>
                   {post.node.art && (
                     <Image
-                      src={post.node.art}
+                      src={post.node.watermarkArt}
                       layout="fill"
                       objectFit="contain"
                       alt={"Art Image"}

@@ -5,7 +5,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
-import { LIKE_MUTATION, UNLIKE_MUTATION } from "../../apollo/apolloQueries";
+import {
+  ADD_CART_MUTATION,
+  LIKE_MUTATION,
+  REMOVE_FROM_CART_MUTATION,
+  UNLIKE_MUTATION,
+} from "../../apollo/apolloQueries";
 import {
   LikeData,
   UnlikeLikeVars,
@@ -24,9 +29,12 @@ type Props = {
 const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
   const router = useRouter();
   const [disabled, setDisabled] = useState(false);
+  const [cartDisabled, setCartDisabled] = useState(false);
   const [liked, setLiked] = useState(alreadyLiked);
+  const [added, setAdded] = useState(false);
   const [session, loading] = useSession();
-
+  const [addtoCart] = useMutation(ADD_CART_MUTATION);
+  const [removeFromCart] = useMutation(REMOVE_FROM_CART_MUTATION);
   const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
   const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
 
@@ -57,12 +65,43 @@ const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
     }
   };
 
+  const handleCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!session && !loading) {
+      router.replace("/api/auth/signin");
+    }
+
+    if (!added) {
+      setAdded(true);
+      setCartDisabled(true);
+      addtoCart({
+        variables: {
+          postID: postID.id,
+          userID: session?.id,
+          cost: +postID.price,
+        },
+        update: () => {
+          setCartDisabled(false);
+        },
+      });
+    } else {
+      setAdded(false);
+      setCartDisabled(true);
+      removeFromCart({
+        variables: { postID: postID.id, userID: session?.id },
+        update: () => {
+          setCartDisabled(false);
+        },
+      });
+    }
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={6} className={styles.artContainer}>
-        {postID.art && (
+        {postID.watermarkArt && (
           <Image
-            src={postID.art}
+            src={postID.watermarkArt}
             layout="fill"
             objectFit="contain"
             onClick={() => setOpen(true)}
@@ -105,7 +144,13 @@ const Main = ({ postID, setOpen, alreadyLiked }: Props) => {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Button>ADD</Button>
+            <Button
+              onClick={handleCart}
+              style={added === true ? { color: "red" } : { color: "inherit" }}
+              disabled={cartDisabled}
+            >
+              ADD
+            </Button>
           </Grid>
           <Grid item xs={4}>
             <Button>SHARE</Button>

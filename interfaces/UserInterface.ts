@@ -26,9 +26,18 @@ export interface UserInterface {
   yourCommissions: Commissions;
   pendingCommissions: Commissions;
   yourPendingCommissions: Commissions;
-  yourFinishedCommissions: Commissions;
+  yourFinishedCommissions: FinishedCommissions;
   admin: boolean;
+  cart: CartItems;
+  commissionPoster: string;
+  commissionRates: Rates[];
   // More to come
+}
+
+export interface Rates {
+  __typename?: string;
+  type: string;
+  price: number;
 }
 
 export interface UserData {
@@ -57,6 +66,30 @@ export interface CommissionInterface {
   dateIssued: string;
   accepted: boolean;
   finished: boolean;
+  price: number;
+  rates: string[];
+  finishedArt: string;
+  finishedwatermarkArt: string;
+  message: string;
+}
+
+export interface CartInterface {
+  id: string;
+  postID: PostInterface;
+  dateAdded: string;
+  cost: number;
+}
+
+export interface cartedges {
+  node: CartInterface;
+}
+
+export interface CartItems {
+  edges: cartedges[];
+  pageInfo: PageInfo;
+  totalCount: number;
+  totalCost: number;
+  idList: string[];
 }
 
 export interface commissionedges {
@@ -64,6 +97,12 @@ export interface commissionedges {
 }
 
 export interface Commissions {
+  edges: commissionedges[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export interface FinishedCommissions {
   edges: commissionedges[];
   pageInfo: PageInfo;
   totalCount: number;

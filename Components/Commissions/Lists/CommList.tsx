@@ -22,14 +22,14 @@ type Props = {
 };
 
 const CommList = ({ commissions, fetchMore }: Props) => {
-  const { More, hasMore, ref } = usePagination(
-    "userId",
+  const { More, hasMore, ref } = usePagination({
+    key: "userId",
     fetchMore,
-    commissions,
-    4,
-    "commissions",
-    true
-  );
+    info: commissions,
+    limit: 4,
+    key2: "commissions",
+    executeWhileUnscrollable: true,
+  });
 
   return (
     <>
@@ -56,7 +56,11 @@ const CommList = ({ commissions, fetchMore }: Props) => {
           >
             {commissions &&
               commissions.edges.map((commission) => (
-                <Link href={`/commissions/${commission.node.id}`} passHref key={commission.node.id}>
+                <Link
+                  href={`/commissions/${commission.node.id}`}
+                  passHref
+                  key={commission.node.id}
+                >
                   <ListItem
                     divider
                     key={commission.node.id}
@@ -85,7 +89,10 @@ const CommList = ({ commissions, fetchMore }: Props) => {
                       style={{ flexGrow: 1, wordWrap: "break-word" }}
                     />
                     <Typography>
-                      Deadline: {moment(commission.node.deadline).format("l")}{" "}
+                      Deadline:{" "}
+                      {commission.node.deadline
+                        ? moment(commission.node.deadline).format("l")
+                        : "No Deadline"}
                     </Typography>
                   </ListItem>
                 </Link>

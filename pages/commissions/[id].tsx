@@ -51,7 +51,7 @@ const CommissionID = () => {
         setnotAllowed(true);
       }
     }
-  }, [session, sessload, data, noSess, loading, router]);
+  }, [session, sessload, data, noSess, loading]);
 
   return (
     <>
@@ -66,7 +66,10 @@ const CommissionID = () => {
         </>
       ) : data?.commissionId && !loading && !noSess && !notAllowed ? (
         <CommissionWrap>
-          <CommissionData commission={data.commissionId} />
+          <CommissionData
+            commission={data.commissionId}
+            sessionId={session?.id}
+          />
         </CommissionWrap>
       ) : (
         <Box

@@ -34,14 +34,14 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
   const [open, setOpen] = useState(false);
   const [acceptOpen, setAcceptOpen] = useState(false);
   const [targetId, settargetId] = useState("");
-  const { More, hasMore, ref } = usePagination(
-    "userId",
+  const { More, hasMore, ref } = usePagination({
+    key: "userId",
     fetchMore,
-    pendingCommissions,
-    4,
-    "pendingCommissions",
-    true
-  );
+    info: pendingCommissions,
+    limit: 4,
+    key2: "pendingCommissions",
+    executeWhileUnscrollable: true,
+  });
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
     settargetId(e.currentTarget.id);
@@ -86,7 +86,11 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
           >
             {pendingCommissions &&
               pendingCommissions.edges.map((commission) => (
-                <Link href={`/commissions/${commission.node.id}`} key={commission.node.id} passHref>
+                <Link
+                  href={`/commissions/${commission.node.id}`}
+                  key={commission.node.id}
+                  passHref
+                >
                   <ListItem
                     divider
                     key={commission.node.id}
@@ -113,9 +117,13 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
                       secondary={
                         mobile
                           ? `${commission.node.description}. 
-                               Deadline on ${moment(
-                                 commission.node.deadline
-                               ).format("l")}`
+                                ${
+                                  commission.node.deadline
+                                    ? `Deadline: ${moment(
+                                        commission.node.deadline
+                                      ).format("l")}`
+                                    : `No Deadline`
+                                }`
                           : `${commission.node.description}`
                       }
                       style={{ flexGrow: 1 }}
@@ -134,7 +142,9 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
                       {!mobile && (
                         <Typography>
                           Deadline:{" "}
-                          {moment(commission.node.deadline).format("l")}
+                          {commission.node.deadline
+                            ? moment(commission.node.deadline).format("l")
+                            : "No Deadline"}
                         </Typography>
                       )}
                       <IconButton

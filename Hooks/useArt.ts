@@ -16,8 +16,7 @@ const useArt = (initPlaceHolder: string) => {
   const [loading, setLoading] = useState(false);
   const [placeholder, setPlaceholder] = useState(initPlaceHolder);
   const setArt = async (files: FileList) => {
-    let url: string;
-    let width: number, height: number;
+    let url: string, watermarkUrl: string, width: number, height: number;
     setLoading(true);
     const fileList = files;
     const data = new FormData();
@@ -26,6 +25,10 @@ const useArt = (initPlaceHolder: string) => {
     data.append("signature", signature); // Signature
     data.append("timestamp", timestamp); // Timestamp
     data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
+    data.append(
+      "eager",
+      "w_400,h_400,g_south_east,x_5,y_5,l_obra_watermark,o_76"
+    );
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
       {
@@ -36,6 +39,7 @@ const useArt = (initPlaceHolder: string) => {
     );
     const file = await res.json();
     url = await file.secure_url;
+    watermarkUrl = await file.eager[0].secure_url;
     width = await file.width;
     height = await file.height;
     let reader = new FileReader();
@@ -44,7 +48,7 @@ const useArt = (initPlaceHolder: string) => {
       setLoading(false);
     };
     reader.readAsDataURL(fileList[0]);
-    return { url, width, height };
+    return { url, watermarkUrl, width, height };
   };
   return { loading, setArt, placeholder };
 };

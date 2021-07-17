@@ -103,7 +103,7 @@ const PostID = ({ id, alreadyLiked }: Props) => {
       <DynamicImageDialog
         handleClose={handleClose}
         open={open}
-        art={postId.art}
+        art={postId.watermarkArt}
       />
     </div>
   );

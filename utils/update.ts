@@ -1,11 +1,13 @@
-import { DataProxy, FetchResult } from "@apollo/client";
+import { ApolloCache, DataProxy, FetchResult } from "@apollo/client";
 import {
+  CART_QUERY,
   COMMISSIONS_QUERY,
   PENDING_COMMS_QUERY,
   PostInfo,
   POST_ID_QUERY,
   UserInfo,
   UserInfo2,
+  UserInfo3,
 } from "../apollo/apolloQueries";
 import {
   AcceptCommissionData,
@@ -114,6 +116,35 @@ export const acceptCommission = (
   });
 };
 
+export const finishCommissionUpdate = (
+  cache: DataProxy,
+  id: string,
+  commissionId: string
+) => {
+  const { userId } = cache.readQuery<CommissionData, CommissionVars>({
+    query: COMMISSIONS_QUERY,
+    variables: { id: id },
+  });
+
+  const newCommList = userId.commissions.edges.filter(
+    (commission) => commission.node.id != commissionId
+  );
+
+  cache.writeQuery({
+    query: COMMISSIONS_QUERY,
+    variables: { id: id },
+    data: {
+      userId: {
+        ...userId,
+        commissions: {
+          ...userId.commissions,
+          edges: newCommList,
+        },
+      },
+    },
+  });
+};
+
 export const editUserUpdate = (
   cache: DataProxy,
   mutationResult: FetchResult<
@@ -153,6 +184,29 @@ export const editUserUpdate = (
   }
 };
 
+export const editUserCommSettingUpdate = (
+  cache: DataProxy,
+  mutationResult: FetchResult<
+    EditUserData,
+    Record<string, any>,
+    Record<string, any>
+  >,
+  id: string
+) => {
+  const newUser = mutationResult.data.editUser;
+  if (newUser) {
+    cache.writeFragment({
+      id: `User:${id}`,
+      fragment: UserInfo3,
+      data: {
+        id: newUser.id,
+        commissionPoster: newUser.commissionPoster,
+        commissionRates: newUser.commissionRates,
+      },
+    });
+  }
+};
+
 export const editPostUpdate = (
   cache: DataProxy,
   mutationResult: FetchResult<
@@ -172,6 +226,74 @@ export const editPostUpdate = (
         title: newUser.title,
         description: newUser.description,
         tags: newUser.tags,
+      },
+    });
+  }
+};
+
+export const removeCartUpdate = (
+  cache: ApolloCache<any>,
+  mutationResult,
+  id: string,
+  itemID: string
+) => {
+  const removeResult = mutationResult.data.removeFromCart;
+  const { userId } = cache.readQuery({
+    query: CART_QUERY,
+    variables: { id: id },
+  });
+
+  cache.evict({ id: `Cart:${itemID}` });
+  cache.gc();
+
+  if (!removeResult.optimistic) {
+    cache.writeQuery({
+      query: CART_QUERY,
+      variables: { id: id },
+      data: {
+        userId: {
+          ...userId,
+          cart: {
+            ...userId.cart,
+            totalCost: removeResult.totalCost,
+            idList: removeResult.idList,
+          },
+        },
+      },
+    });
+  }
+};
+
+export const removeSelectedUpdate = (
+  cache: DataProxy,
+  mutationResult,
+  id: string,
+  selected: string[]
+) => {
+  const removeResult = mutationResult.data.removeSelectedFromCart;
+  const { userId } = cache.readQuery({
+    query: CART_QUERY,
+    variables: { id: id },
+  });
+
+  const newCart = userId.cart.edges.filter(
+    (item) => !selected.includes(item.node.id)
+  );
+
+  if (!removeResult.optimistic) {
+    cache.writeQuery({
+      query: CART_QUERY,
+      variables: { id: id },
+      data: {
+        userId: {
+          ...userId,
+          cart: {
+            ...userId.cart,
+            totalCost: removeResult.totalCost,
+            idList: removeResult.idList,
+            edges: newCart,
+          },
+        },
       },
     });
   }

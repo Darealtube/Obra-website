@@ -30,13 +30,13 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
       limit: 4,
     },
   });
-  const { More, hasMore } = usePagination(
-    "userName",
+  const { More, hasMore } = usePagination({
+    key: "userName",
     fetchMore,
-    userName.likedPosts,
-    4,
-    "likedPosts"
-  );
+    info: userName.likedPosts,
+    limit: 4,
+    key2: "likedPosts",
+  });
 
   return (
     <div className={styles.root}>

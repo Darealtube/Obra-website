@@ -60,20 +60,28 @@ const Home = () => {
     },
     skip: !session,
   });
-  const { More } = usePagination("featuredPosts", fetchMore, featuredPosts, 4);
-  const { More: MoreNew } = usePagination(
-    "newPosts",
-    moreNewPosts,
-    newPosts,
-    4
-  );
-  const { More: MoreRecc, hasMore } = usePagination(
-    "userId",
-    moreRecommended,
-    data?.userId.homeRecommended,
-    4,
-    "homeRecommended"
-  );
+  
+  const { More } = usePagination({
+    key: "featuredPosts",
+    fetchMore,
+    info: featuredPosts,
+    limit: 4,
+  });
+  
+  const { More: MoreNew } = usePagination({
+    key: "newPosts",
+    fetchMore: moreNewPosts,
+    info: newPosts,
+    limit: 4,
+  });
+
+  const { More: MoreRecc, hasMore } = usePagination({
+    key: "userId",
+    fetchMore: moreRecommended,
+    info: data?.userId.homeRecommended,
+    limit: 4,
+    key2: "homeRecommended",
+  });
 
   return (
     <div className={styles.root}>

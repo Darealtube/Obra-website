@@ -34,14 +34,13 @@ const ReportList = ({ reports, fetchMore }) => {
   const [reportDialog, setreportDialog] = useState(false);
   const [targetId, setTargetId] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState(false);
-  const { More, ref, hasMore } = usePagination(
-    "reports",
+  const { More, ref, hasMore } = usePagination({
+    key: "reports",
     fetchMore,
-    reports,
-    4,
-    null,
-    true
-  );
+    info: reports,
+    limit: 4,
+    executeWhileUnscrollable: true,
+  });
 
   const handleClose = () => {
     setDeleteDialog(false);

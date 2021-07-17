@@ -46,7 +46,7 @@ const LikedGallery = () => {
           </>
         ) : data && name ? (
           <>
-            <Box display="flex" alignItems="center" marginBottom={2}>
+            <Box display="flex" marginBottom={2}>
               <Image
                 src={data?.userName.image}
                 width={80}

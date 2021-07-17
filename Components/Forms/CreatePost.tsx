@@ -23,6 +23,7 @@ interface Props {
   post: State;
   setArt: (files: FileList) => Promise<{
     url: string;
+    watermarkUrl: string;
     width: number;
     height: number;
   }>;
@@ -40,12 +41,14 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
   };
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setArt((e.target as HTMLInputElement).files).then((values) => {
-      dispatch({
-        type: "CHANGE_ART",
-        artPayload: values,
+    if (e.target.files.length != 0) {
+      setArt((e.target as HTMLInputElement).files).then((values) => {
+        dispatch({
+          type: "CHANGE_ART",
+          artPayload: values,
+        });
       });
-    });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +85,7 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
           title: post.title,
           description: post.description,
           art: post.art,
+          watermarkArt: post.watermarkArt,
           price: post.price,
           sale: post.sale,
           date: moment().format("l"),

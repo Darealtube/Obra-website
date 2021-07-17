@@ -46,13 +46,13 @@ const NotifPop = ({ user, fetchMore }: Props) => {
   const showNotif = useMediaQuery("(max-width:280px)");
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
   const [read] = useMutation<ReadNotifData, ReadNotifVars>(READ_NOTIF);
-  const { More } = usePagination(
-    "userId",
-    fetchMore,
-    user.userId.notifications,
-    4,
-    "notifications"
-  );
+  const { More } = usePagination({
+    key: "userId",
+    fetchMore: fetchMore,
+    info: user.userId.notifications,
+    limit: 4,
+    key2: "notifications",
+  });
   const [notifCount, setnotifCount] = useState(
     user?.userId.notifications.totalUnreadCount + (user.userId.newUser ? 1 : 0)
   );

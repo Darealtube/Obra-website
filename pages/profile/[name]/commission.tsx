@@ -1,24 +1,22 @@
-import { Paper, CssBaseline } from "@material-ui/core";
+import {
+  Paper,
+  CssBaseline,
+  Grid,
+  Box,
+  useMediaQuery,
+  Button,
+} from "@material-ui/core";
 import styles from "../../styles/Specific/Commission.module.css";
 import Image from "next/image";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { CREATE_COMMISSION_MUTATION } from "../../../apollo/apolloQueries";
 import { useRouter } from "next/router";
 import CommissionForm from "../../../Components/Commissions/CommissionForm";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
-
-const initState = {
-  title: "",
-  description: "",
-  sampleArt: "",
-  height: 0,
-  width: 0,
-  deadline: 3,
-};
+import { useQuery } from "@apollo/client";
+import { USER_COMM_INFO_QUERY } from "../../../apollo/apolloQueries";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")
@@ -26,31 +24,23 @@ const DynamicNotAllowedDialog = dynamic(
 const DynamicNoSessDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoSessionDialog")
 );
+const DynamicPosterDialog = dynamic(
+  () => import("../../../Components/PostInfo/ImageDialog")
+);
 
 const Commission = () => {
   const [session, loading] = useSession();
   const [notAllowed, setnotAllowed] = useState(false);
   const [noSess, setnoSess] = useState(false);
+  const [posterOpen, setPosterOpen] = useState(false);
   const router = useRouter();
-  const [commissionArtist] = useMutation(CREATE_COMMISSION_MUTATION);
-  const [commission, setCommission] = useState(initState);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    commissionArtist({
-      variables: {
-        artistName: router.query.name,
-        userId: session?.id,
-        title: commission.title,
-        description: commission.description,
-        width: +commission.width,
-        height: +commission.height,
-        deadline: commission.deadline,
-        sampleArt: commission.sampleArt,
-      },
-    });
-    router.push("/");
-  };
+  const { data } = useQuery(USER_COMM_INFO_QUERY, {
+    variables: {
+      name: router.query.name,
+    },
+    skip: !router.query.name,
+  });
+  const Small = useMediaQuery("(max-width: 960px)");
 
   useEffect(() => {
     if (!session && !loading) {
@@ -61,6 +51,14 @@ const Commission = () => {
       setnotAllowed(true);
     }
   }, [session, router, loading, noSess]);
+
+  const handlePosterOpen = () => {
+    setPosterOpen(true);
+  };
+
+  const handlePosterClose = () => {
+    setPosterOpen(false);
+  };
 
   return (
     <div className={styles.root}>
@@ -76,19 +74,79 @@ const Commission = () => {
         objectFit="cover"
         objectPosition="center left"
       />
-      <Paper elevation={6} className={styles.paper}>
-        {!notAllowed && !noSess && !loading && (
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <CommissionForm
-              commission={commission}
-              setCommission={setCommission}
-              name={router.query.name as string}
-            />
-          </form>
-        )}
-      </Paper>
+
+      <Grid
+        container
+        spacing={2}
+        style={{ height: "100%", width: "100%", backgroundColor: "black" }}
+      >
+        <Grid
+          item
+          xs={12}
+          md={6}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Paper elevation={6} className={styles.paper}>
+            {!notAllowed && !noSess && !loading && data?.userName && (
+              <CommissionForm
+                name={router.query.name as string}
+                commissionRates={data?.userName.commissionRates}
+              />
+            )}
+          </Paper>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {!Small ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              width="100%"
+              height="80vh"
+              zIndex={100}
+              position="relative"
+            >
+              {data?.userName && (
+                <Image
+                  src={data?.userName.commissionPoster}
+                  layout="fill"
+                  objectFit="contain"
+                  alt={"Commission Poster"}
+                  onClick={handlePosterOpen}
+                />
+              )}
+            </Box>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handlePosterOpen}
+            >
+              Show {router.query.name}&apos;s Commission Poster
+            </Button>
+          )}
+        </Grid>
+      </Grid>
+
       <DynamicNotAllowedDialog open={notAllowed} />
       <DynamicNoSessDialog open={noSess} />
+      <DynamicPosterDialog
+        open={posterOpen}
+        handleClose={handlePosterClose}
+        art={data?.userName.commissionPoster}
+      />
     </div>
   );
 };

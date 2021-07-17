@@ -145,7 +145,7 @@ const Main = ({ postID, setOpen, alreadyLiked, alreadyAdded }: Props) => {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            {postID.sale == "Yes" && postID.author.id == session?.id && (
+            {postID.sale == "Yes" && postID.author.id != session?.id && (
               <Button
                 onClick={handleCart}
                 style={added === true ? { color: "red" } : { color: "inherit" }}

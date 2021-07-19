@@ -86,7 +86,7 @@ const Form2 = ({ user, dispatch }: Props) => {
           color="primary"
           variant="contained"
         >
-          {moment(user.birthday).format("l")}
+          {user.birthday ? moment(user.birthday).format("l") : "No Birthday"}
         </Button>
         <Divider />
       </Grid>
@@ -108,7 +108,9 @@ const Form2 = ({ user, dispatch }: Props) => {
         handleClose={handleCalendarClose}
         handleDate={handleDate}
         dateAnchor={dateAnchor}
-        initValue={moment(user.birthday).toDate()}
+        initValue={
+          user.birthday ? moment(user.birthday).toDate() : moment().toDate()
+        }
       />
     </>
   );

@@ -250,6 +250,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const apollo = await fetchCart(session.id);
 
+  if (!session) {
+    return {
+      redirect: "/auth/signin",
+      permanent: false,
+    };
+  }
+
   return addApolloState(apollo, {
     props: {
       session,

@@ -150,6 +150,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const apollo = await fetchFinishedComms(session.id);
 
+  if (!session) {
+    return {
+      redirect: "/auth/signin",
+      permanent: false,
+    };
+  }
+
   return addApolloState(apollo, {
     props: {
       session,

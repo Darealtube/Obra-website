@@ -12,7 +12,6 @@ import {
   Select,
   Button,
 } from "@material-ui/core";
-import moment from "moment";
 import { useSession } from "next-auth/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -46,7 +45,6 @@ const ReportForm = ({ data }) => {
         senderId: session?.id,
         reportedId: router.query.id,
         type: "Post",
-        date: moment().format("l"),
         title: `Post report for ${router.query.id}`,
         description: report.description,
         reason: report.reason,

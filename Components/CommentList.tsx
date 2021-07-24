@@ -70,10 +70,8 @@ const CommentList = ({ comments }: Props) => {
                   comment.node.author
                     ? comment.node.author.name
                     : "Deleted User"
-                } commented ${moment(comment.node.date).fromNow()}`}
-                secondary={
-                  <>{comment.node.content}</>
-                }
+                } commented ${comment.node.date}`}
+                secondary={<>{comment.node.content}</>}
               />
               <ListItemSecondaryAction>
                 <IconButton

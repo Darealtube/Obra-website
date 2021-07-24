@@ -8,7 +8,6 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import Image from "next/image";
-import moment from "moment";
 import styles from "../../../pages/styles/Specific/Commission.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../../../Hooks/usePagination";
@@ -79,17 +78,13 @@ const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
                       />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={`${commission.node.title}  issued by ${
-                        commission.node.fromUser.name
-                      } at ${moment(commission.node.dateIssued).format("l")}`}
+                      primary={`${commission.node.title}  issued by ${commission.node.fromUser.name} at ${commission.node.dateIssued}`}
                       secondary={
                         mobile
                           ? `${commission.node.description}. 
                                 ${
                                   commission.node.deadline
-                                    ? `Deadline: ${moment(
-                                        commission.node.deadline
-                                      ).format("l")}`
+                                    ? `Deadline: ${commission.node.deadline}`
                                     : `No Deadline`
                                 }`
                           : `${commission.node.description}`
@@ -100,7 +95,7 @@ const PendingCommList = ({ yourPendingCommissions, fetchMore }: Props) => {
                       <Typography>
                         Deadline:{" "}
                         {commission.node.deadline
-                          ? moment(commission.node.deadline).format("l")
+                          ? commission.node.deadline
                           : "No Deadline"}
                       </Typography>
                     )}

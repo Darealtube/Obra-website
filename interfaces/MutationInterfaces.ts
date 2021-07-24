@@ -86,7 +86,6 @@ export interface CreatePostData {
 }
 
 export interface CreatePostVars {
-  date: string;
   tags: string[];
   title: string;
   description: string;

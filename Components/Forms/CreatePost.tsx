@@ -10,7 +10,6 @@ import {
   TextField,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
-import moment from "moment";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
@@ -88,7 +87,6 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
           watermarkArt: post.watermarkArt,
           price: post.price,
           sale: post.sale,
-          date: moment().format("l"),
           tags: post.tags,
           width: post.width,
           height: post.height,

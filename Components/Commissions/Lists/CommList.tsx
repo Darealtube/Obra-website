@@ -9,7 +9,6 @@ import {
   Divider,
 } from "@material-ui/core";
 import Image from "next/image";
-import moment from "moment";
 import styles from "../../../pages/styles/Specific/Commission.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../../../Hooks/usePagination";
@@ -83,15 +82,13 @@ const CommList = ({ commissions, fetchMore }: Props) => {
                     </ListItemAvatar>
                     <ListItemText
                       primary={commission.node.title}
-                      secondary={`Issued ${moment(
-                        commission.node.dateIssued
-                      ).format("l")}`}
+                      secondary={`Issued ${commission.node.dateIssued} `}
                       style={{ flexGrow: 1, wordWrap: "break-word" }}
                     />
                     <Typography>
                       Deadline:{" "}
                       {commission.node.deadline
-                        ? moment(commission.node.deadline).format("l")
+                        ? commission.node.deadline
                         : "No Deadline"}
                     </Typography>
                   </ListItem>

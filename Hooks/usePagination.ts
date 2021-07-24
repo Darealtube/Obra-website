@@ -107,7 +107,7 @@ const usePagination = ({
       setRefetching(true);
       fetchMore({
         variables: {
-          after: info?.edges.slice(-1)[0]?.node.id,
+          after: info?.pageInfo.endCursor,
           limit: onDeleteLimit ? onDeleteLimit : 1,
         },
       }).then((fetchMoreResult) => {

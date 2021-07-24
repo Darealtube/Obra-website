@@ -14,7 +14,6 @@ import { useState } from "react";
 import { Box } from "@material-ui/core";
 import useVideo from "../../Hooks/useVideo";
 import { useSession } from "next-auth/client";
-import moment from "moment";
 import router from "next/router";
 
 const BugReportForm = ({ reportBug }) => {
@@ -52,7 +51,6 @@ const BugReportForm = ({ reportBug }) => {
       variables: {
         senderId: session?.id,
         type: "Bug",
-        date: moment().format("l"),
         description: bugReport.description,
         reason: bugReport.reason,
         bugVid: bugReport.video,

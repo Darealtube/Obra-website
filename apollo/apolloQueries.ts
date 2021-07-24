@@ -935,7 +935,6 @@ export const EDIT_POST_MUTATION = gql`
 
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost(
-    $date: String!
     $tags: [String]
     $title: String!
     $description: String!
@@ -948,7 +947,6 @@ export const CREATE_POST_MUTATION = gql`
     $height: Int!
   ) {
     createPost(
-      date: $date
       tags: $tags
       title: $title
       description: $description
@@ -1183,7 +1181,6 @@ export const REPORT_MUTATION = gql`
     $senderId: ID!
     $reportedId: ID
     $type: String!
-    $date: String!
     $title: String
     $description: String!
     $reason: String!
@@ -1194,7 +1191,6 @@ export const REPORT_MUTATION = gql`
       senderId: $senderId
       reportedId: $reportedId
       type: $type
-      date: $date
       title: $title
       description: $description
       reason: $reason

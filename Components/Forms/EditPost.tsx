@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import React, { useReducer } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { Action, State, reducer } from "../../Hooks/Reducers/PostReducer";
+import { State, reducer } from "../../Hooks/Reducers/PostReducer";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
 

@@ -11,7 +11,6 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";
 import Image from "next/image";
-import moment from "moment";
 import styles from "../../../pages/styles/General/Issues.module.css";
 import usePagination from "../../../Hooks/usePagination";
 import CloseIcon from "@material-ui/icons/Close";
@@ -120,9 +119,7 @@ const ReportList = ({ reports, fetchMore }) => {
                 >
                   <Box width={mobileDiv ? "100%" : "70%"} flexGrow={1}>
                     <ListItemText
-                      primary={`${report.node.title}  issued by ${
-                        report.node.senderId.name
-                      } at ${moment(report.node.date).format("l")}`}
+                      primary={`${report.node.title}  issued by ${report.node.senderId.name} at ${report.node.date}`}
                       secondary={`${report.node.description}`}
                       style={{ wordBreak: "break-word" }}
                     />

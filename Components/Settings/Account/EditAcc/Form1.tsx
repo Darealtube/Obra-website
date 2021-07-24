@@ -7,7 +7,7 @@ import {
   Divider,
   Button,
 } from "@material-ui/core";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import Image from "next/image";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
@@ -24,6 +24,7 @@ type Props = {
 const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
   const inputFile = useRef<HTMLInputElement>();
   const inputFile2 = useRef<HTMLInputElement>();
+  const [disabledWhileArt, setDisabledWhileArt] = useState(false);
   const { loading, setArt, placeholder } = useArt(user.placeholder);
   const {
     loading: backdropLoading,
@@ -47,6 +48,7 @@ const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
   // file in the hooks directory in order to know more about the custom hook.
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
+      setDisabledWhileArt(true);
       setArt((e.target as HTMLInputElement).files).then((values) => {
         dispatch({
           type: "CHANGE",
@@ -58,13 +60,17 @@ const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
   };
 
   const handleBackdrop = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBackdrop((e.target as HTMLInputElement).files).then((values) => {
-      dispatch({
-        type: "CHANGE",
-        field: "backdrop",
-        payload: values.url,
+    if (e.target.files.length != 0) {
+      setDisabledWhileArt(true);
+      setBackdrop((e.target as HTMLInputElement).files).then((values) => {
+        dispatch({
+          type: "CHANGE",
+          field: "backdrop",
+          payload: values.url,
+        });
+        setDisabledWhileArt(false);
       });
-    });
+    }
   };
 
   return (
@@ -124,7 +130,7 @@ const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
           type="submit"
           variant="outlined"
           style={{ float: "right" }}
-          disabled={disableSubmit}
+          disabled={disableSubmit || disabledWhileArt}
         >
           Save
         </Button>

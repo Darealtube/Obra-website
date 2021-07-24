@@ -41,11 +41,13 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
+      setDisabled(true);
       setArt((e.target as HTMLInputElement).files).then((values) => {
         dispatch({
           type: "CHANGE_ART",
           artPayload: values,
         });
+        setDisabled(false);
       });
     }
   };

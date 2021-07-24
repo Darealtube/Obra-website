@@ -43,6 +43,7 @@ type Props = {
 const CommissionForm = ({ name, commissionRates }: Props) => {
   const router = useRouter();
   const [session] = useSession();
+  const [disableSubmit, setDisableSubmit] = useState(false);
   const inputFile = useRef<HTMLInputElement>();
   const { loading, setArt, placeholder } = useArt("/user-empty-backdrop.jpg");
   const [commissionArtist] = useMutation(CREATE_COMMISSION_MUTATION);
@@ -55,6 +56,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
     let prices = selectedRates.map((price) => +price[1]);
     let finalPrice = prices.reduce((a, b) => a + b);
     let finalRates = selectedRates.map((rate) => rate[0]);
+    setDisableSubmit(true);
     commissionArtist({
       variables: {
         artistName: router.query.name,
@@ -80,11 +82,13 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
   };
   const handleArt = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
+      setDisableSubmit(true);
       setArt((e.target as HTMLInputElement).files).then((values) => {
         setCommission({
           ...commission,
           sampleArt: values.url,
         });
+        setDisableSubmit(false);
       });
     }
   };
@@ -260,7 +264,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth type="submit" variant="outlined">
+            <Button fullWidth type="submit" variant="outlined" disabled={disableSubmit}>
               Submit Commission
             </Button>
           </Grid>

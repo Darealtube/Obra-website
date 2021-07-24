@@ -1,23 +1,35 @@
-import { ListItem, Typography, Avatar, IconButton, Box, ListItemAvatar } from "@material-ui/core";
+import {
+  ListItem,
+  Typography,
+  Avatar,
+  IconButton,
+  Box,
+  ListItemAvatar,
+} from "@material-ui/core";
 import { notifedges } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 import Image from "next/image";
-import { DELETE_NOTIF_MUTATION } from "../../apollo/apolloQueries";
-import { useMutation } from "@apollo/client";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { useSession } from "next-auth/client";
 import Link from "next/link";
+import { useSession } from "next-auth/client";
+import { useMutation } from "@apollo/client";
+import { DELETE_NOTIF_MUTATION } from "../../apollo/apolloQueries";
 
 type Props = {
   notifications: notifedges[];
   newUser: boolean;
-  setNotifCount: any;
+  deleteDisabled: boolean;
+  resetNotif: () => void;
 };
 
-const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
+const Notification = ({
+  notifications,
+  newUser,
+  deleteDisabled,
+  resetNotif,
+}: Props) => {
   const [session] = useSession();
   const [deleteNotif] = useMutation(DELETE_NOTIF_MUTATION);
-
   const DeleteNotif = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -29,9 +41,8 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
         cache.gc();
       },
     });
-    setNotifCount(0);
+    resetNotif();
   };
-
   return (
     <div>
       <ListItem className={styles.notifitem}>
@@ -50,9 +61,9 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
           <div>
             <Typography>Obra </Typography>
             <Typography className={styles.notifInfo}>
-              Hey! It seems like you haven&apos;t completely configured your account.
-              Please finish configuring your account in order for you to
-              complete your information!
+              Hey! It seems like you haven&apos;t completely configured your
+              account. Please finish configuring your account in order for you
+              to complete your information!
             </Typography>
           </div>
         </ListItem>
@@ -68,23 +79,19 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
               key={notif.node.id}
               passHref
             >
-              <ListItem
-                key={notif.node.id}
-                button
-                component="a"
-              >
+              <ListItem key={notif.node.id} button component="a">
                 <ListItemAvatar>
-                <Image
-                  src={
-                    notif.node.commissioner.image
-                      ? notif.node.commissioner.image
-                      : "/user-empty-avatar.png"
-                  }
-                  width={40}
-                  height={40}
-                  className={styles.avatar}
-                  alt={"Commissioner Image"}
-                />
+                  <Image
+                    src={
+                      notif.node.commissioner.image
+                        ? notif.node.commissioner.image
+                        : "/user-empty-avatar.png"
+                    }
+                    width={40}
+                    height={40}
+                    className={styles.avatar}
+                    alt={"Commissioner Image"}
+                  />
                 </ListItemAvatar>
                 <Box display="flex" flexDirection="column" width="80%">
                   <Typography>{notif.node.date}</Typography>
@@ -92,7 +99,11 @@ const Notification = ({ notifications, newUser, setNotifCount }: Props) => {
                     {notif.node.description}
                   </Typography>
                 </Box>
-                <IconButton id={notif.node.id} onClick={DeleteNotif}>
+                <IconButton
+                  id={notif.node.id}
+                  onClick={DeleteNotif}
+                  disabled={deleteDisabled}
+                >
                   <DeleteIcon />
                 </IconButton>
               </ListItem>

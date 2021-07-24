@@ -51,6 +51,7 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
     user.commissionPoster ? user.commissionPoster : ""
   );
   const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [disableSubmit, setDisableSubmit] = useState(false);
   const { loading, setArt, placeholder } = useArt(
     user.commissionPoster ? user.commissionPoster : "/user-empty-backdrop.jpg"
   );
@@ -80,8 +81,10 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
 
   const handleArt = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
+      setDisableSubmit(true)
       setArt((e.target as HTMLInputElement).files).then((values) => {
         setCommissionPoster(values.url);
+        setDisableSubmit(false)
       });
     }
   };
@@ -92,6 +95,7 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setDisableSubmit(true);
     editCommSettings({
       variables: {
         userId: session?.id,
@@ -101,8 +105,6 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
     });
     router.push("/settings/commissionInfo/");
   };
-
-  console.log(rows, commissionPoster);
 
   return (
     <>
@@ -189,7 +191,7 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
             xs={12}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            <Button variant="outlined" type="submit">
+            <Button variant="outlined" type="submit" disabled={disableSubmit}>
               Save Changes
             </Button>
           </Grid>

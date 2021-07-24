@@ -23,7 +23,9 @@ import {
   ReadNotifData,
   ReadNotifVars,
 } from "../../../interfaces/MutationInterfaces";
-import { READ_NOTIF } from "../../../apollo/apolloQueries";
+import {
+  READ_NOTIF,
+} from "../../../apollo/apolloQueries";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 
 type Props = {
@@ -44,9 +46,10 @@ const StyledBadge = withStyles((theme: Theme) =>
 
 const NotifPop = ({ user, fetchMore }: Props) => {
   const showNotif = useMediaQuery("(max-width:280px)");
+  const [disabled, setDisabled] = useState(false);
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
   const [read] = useMutation<ReadNotifData, ReadNotifVars>(READ_NOTIF);
-  const { More } = usePagination({
+  const { More, refetching } = usePagination({
     key: "userId",
     fetchMore: fetchMore,
     info: user.userId.notifications,
@@ -76,11 +79,23 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     setnotifAnchor(null);
   };
 
+  const handleResetNotif = () => {
+    setnotifCount(0);
+  };
+
   useEffect(() => {
     setnotifCount(
       user.userId.notifications.totalUnreadCount + (user.userId.newUser ? 1 : 0)
     );
   }, [user.userId.notifications.totalUnreadCount, user.userId.newUser]);
+
+  useEffect(() => {
+    if (refetching) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [refetching]);
 
   return (
     <>
@@ -133,7 +148,8 @@ const NotifPop = ({ user, fetchMore }: Props) => {
               notifications={
                 user.userId ? user.userId.notifications.edges : null
               }
-              setNotifCount={setnotifCount}
+              deleteDisabled={disabled}
+              resetNotif={handleResetNotif}
             />
           </InfiniteScroll>
         </List>

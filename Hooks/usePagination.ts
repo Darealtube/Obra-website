@@ -123,7 +123,7 @@ const usePagination = ({
     }
   }, [info?.edges.length, hasMore]);
 
-  return { More, hasMore, ref };
+  return { More, hasMore, ref, refetching };
 };
 
 export default usePagination;

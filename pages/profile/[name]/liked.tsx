@@ -11,7 +11,7 @@ import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import usePagination from "../../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
+import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
 
 type Props = {
@@ -24,7 +24,7 @@ const UserIDLiked = ({ name, id, alreadyLiked }: Props) => {
   const {
     data: { userName },
     fetchMore,
-  } = useQuery<UserData, UserVars>(USER_LIKED_POST_QUERY, {
+  } = useQuery<UserData, QueryNameVars>(USER_LIKED_POST_QUERY, {
     variables: {
       name: name,
       limit: 4,

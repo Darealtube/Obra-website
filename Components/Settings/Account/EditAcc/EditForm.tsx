@@ -16,7 +16,7 @@ const DynamicSnack = dynamic(
   () => import("../../../Forms/Snackbars/ConfigSnack")
 );
 
-const EditForm = ({editUser}) => {
+const EditForm = ({ editUser }: { editUser: any }) => {
   const [disabled, setDisabled] = useState(false);
   const [session] = useSession();
   const user: UserInterface = useContext(UserContext);
@@ -55,7 +55,7 @@ const EditForm = ({editUser}) => {
   // the post, it is sure to be updated.
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setDisabled(true)
+    setDisabled(true);
     const valid = await userValidator(userData, session?.id);
     if (valid.error && valid.errMessage) {
       dispatch({
@@ -63,7 +63,7 @@ const EditForm = ({editUser}) => {
         payload: valid.error,
         message: valid.errMessage,
       });
-      setDisabled(false)
+      setDisabled(false);
     } else {
       editUser({
         variables: {
@@ -93,7 +93,7 @@ const EditForm = ({editUser}) => {
           <Form3 user={userData} dispatch={dispatch} />
           <Form2 user={userData} dispatch={dispatch} />
         </Grid>
-      </form> 
+      </form>
       <DynamicSnack
         error={userData.error}
         errMessage={userData.errMessage}

@@ -15,13 +15,20 @@ import { useMutation } from "@apollo/client";
 import { EDIT_COMMISSION_SETTINGS_MUTATION } from "../../../apollo/apolloQueries";
 import { useSession } from "next-auth/client";
 import { editUserCommSettingUpdate } from "../../../utils/update";
+import {
+  EditUserCommData,
+  EditUserCommVars,
+} from "../../../interfaces/MutationInterfaces";
 
 const CommSettingsEdit = () => {
   const [session] = useSession();
-  const [editCommSettings] = useMutation(EDIT_COMMISSION_SETTINGS_MUTATION, {
-    update: (cache, mutationResult) =>
-      editUserCommSettingUpdate(cache, mutationResult, session?.id),
-  });
+  const [editCommSettings] = useMutation<EditUserCommData, EditUserCommVars>(
+    EDIT_COMMISSION_SETTINGS_MUTATION,
+    {
+      update: (cache, mutationResult) =>
+        editUserCommSettingUpdate(cache, mutationResult, session?.id),
+    }
+  );
 
   return (
     <>

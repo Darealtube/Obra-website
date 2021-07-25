@@ -11,7 +11,7 @@ import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import { USER_GALLERY_QUERY } from "../../../apollo/apolloQueries";
-import { UserData, UserVars } from "../../../interfaces/QueryInterfaces";
+import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import Gridlist from "../../../Components/GridList";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -20,7 +20,7 @@ import DefaultErrorPage from "next/error";
 const Gallery = () => {
   const router = useRouter();
   const name = router.query.name as string;
-  const { data, fetchMore, loading } = useQuery<UserData, UserVars>(USER_GALLERY_QUERY, {
+  const { data, fetchMore, loading } = useQuery<UserData, QueryNameVars>(USER_GALLERY_QUERY, {
     variables: {
       name: name,
       limit: 4,

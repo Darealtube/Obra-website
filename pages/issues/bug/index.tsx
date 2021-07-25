@@ -9,15 +9,16 @@ import IssuesWrap from "../../../Components/Issues/IssuesWrap";
 import { useQuery } from "@apollo/client";
 import { BUG_REPORTS_QUERY } from "../../../apollo/apolloQueries";
 import BugReportList from "../../../Components/Issues/Lists/BugReportList";
+import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
 
 const BugReports = () => {
   const {
     data: { reports },
     fetchMore,
-  } = useQuery(BUG_REPORTS_QUERY, {
+  } = useQuery<ReportData,ReportVars>(BUG_REPORTS_QUERY, {
     variables: {
       limit: 4,
-    },
+    }, 
   });
 
   return (

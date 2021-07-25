@@ -1,19 +1,17 @@
 import { useQuery } from "@apollo/client";
-import {
-  CssBaseline,
-  CircularProgress,
-  Box,
-} from "@material-ui/core";
+import { CssBaseline, CircularProgress, Box } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import {
-  COMMENT_ID_QUERY,
-} from "../../../apollo/apolloQueries";
+import { COMMENT_ID_QUERY } from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import DefaultErrorPage from "next/error";
+import {
+  CommentIdData,
+  QueryIdVars,
+} from "../../../interfaces/QueryInterfaces";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportComment")
@@ -23,12 +21,15 @@ const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [admin, setAdmin] = useState(false);
-  const { data, loading } = useQuery(COMMENT_ID_QUERY, {
-    variables: {
-      id: router.query.id,
-    },
-    skip: !router.query.id,
-  });
+  const { data, loading } = useQuery<CommentIdData, QueryIdVars>(
+    COMMENT_ID_QUERY,
+    {
+      variables: {
+        id: router.query.id as string,
+      },
+      skip: !router.query.id,
+    }
+  );
 
   useEffect(() => {
     if (data?.commentId && !loading)

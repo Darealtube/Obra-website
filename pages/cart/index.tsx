@@ -25,7 +25,7 @@ import {
   REMOVE_SELECTED_FROM_CART_MUTATION,
   REMOVE_FROM_CART_MUTATION,
 } from "../../apollo/apolloQueries";
-import { UserIdData, UserIdVars } from "../../interfaces/QueryInterfaces";
+import { QueryIdVars, UserIdData } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useState } from "react";
@@ -33,21 +33,29 @@ import Appbar from "../../Components/Appbar/Appbar";
 import usePagination from "../../Hooks/usePagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { removeCartUpdate, removeSelectedUpdate } from "../../utils/update";
+import {
+  CartRemoveData,
+  CartRemoveSelectedData,
+  CartRemoveVars,
+} from "../../interfaces/MutationInterfaces";
 
-const Cart = ({ id }) => {
+const Cart = ({ id }: { id: string }) => {
   const LaptopL = useMediaQuery("(max-width: 1236px)");
   const Laptop = useMediaQuery("(max-width: 1100px)");
   const Small = useMediaQuery("(max-width: 959px)");
   const [totalPrice, setTotalPrice] = useState(0);
   const [selected, setSelected] = useState([]);
-  const [removeFromCart] = useMutation(REMOVE_FROM_CART_MUTATION);
-  const [removeSelectedFromCart] = useMutation(
-    REMOVE_SELECTED_FROM_CART_MUTATION
+  const [removeFromCart] = useMutation<CartRemoveData, CartRemoveVars>(
+    REMOVE_FROM_CART_MUTATION
   );
+  const [removeSelectedFromCart] = useMutation<
+    CartRemoveSelectedData,
+    CartRemoveVars
+  >(REMOVE_SELECTED_FROM_CART_MUTATION);
   const {
     data: { userId },
     fetchMore,
-  } = useQuery<UserIdData, UserIdVars>(CART_QUERY, {
+  } = useQuery<UserIdData, QueryIdVars>(CART_QUERY, {
     variables: {
       limit: 4,
       id: id,

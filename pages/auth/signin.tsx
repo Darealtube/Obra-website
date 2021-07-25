@@ -1,4 +1,4 @@
-import { getCsrfToken, getProviders, signIn } from "next-auth/client";
+import { ClientSafeProvider, getCsrfToken, getProviders, signIn } from "next-auth/client";
 import { useRouter } from "next/router";
 import {
   Paper,
@@ -13,7 +13,12 @@ import {
 import styles from "../styles/General/Login.module.css";
 import Head from "next/head";
 
-export default function SignIn({ Providers, csrf }) {
+type Props = {
+  Providers: Record<string, ClientSafeProvider>;
+  csrf: string;
+}
+
+const SignIn = ({ Providers, csrf }: Props) => {
   const router = useRouter();
 
   return (
@@ -105,3 +110,5 @@ export async function getServerSideProps(context) {
     props: { Providers, csrf },
   };
 }
+
+export default SignIn;

@@ -17,7 +17,7 @@ import RecommendedList from "../../../Components/PostInfo/RecommendedList";
 import dynamic from "next/dynamic";
 import {
   PostData,
-  PostVars,
+  QueryIdVars,
   RecommendedPostData,
 } from "../../../interfaces/QueryInterfaces";
 import {
@@ -43,7 +43,7 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   const {
     data: { postId },
     fetchMore: MoreComm,
-  } = useQuery<PostData, PostVars>(POST_ID_QUERY, {
+  } = useQuery<PostData, QueryIdVars>(POST_ID_QUERY, {
     variables: {
       id: id,
       limit: 4,
@@ -52,7 +52,7 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   const {
     data: { recommendedPosts },
     fetchMore: MoreRecc,
-  } = useQuery<RecommendedPostData, PostVars>(POST_RECOMMENDED_QUERY, {
+  } = useQuery<RecommendedPostData, QueryIdVars>(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
       limit: 4,

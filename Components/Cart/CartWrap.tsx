@@ -1,5 +1,4 @@
 import {
-  CssBaseline,
   Button,
   Container,
   Typography,
@@ -10,13 +9,18 @@ import {
 import styles from "../../pages/styles/General/Cart.module.css";
 import CartSummary from "./CartSummary";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
 
 const DynamicMobileSummary = dynamic(() => import("./CartSummaryDrawer"));
 
-const CartWrap = ({ children, totalPrice }) => {
+type Props = {
+  children: ReactNode;
+  totalPrice: number;
+}
+
+const CartWrap = ({ children, totalPrice }: Props) => {
   const Small = useMediaQuery("(max-width: 960px)");
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [finalCost, setFinalCost] = useState(totalPrice);

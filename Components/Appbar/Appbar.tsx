@@ -14,7 +14,7 @@ import AppbarMenu from "./AppbarMenu";
 import AppbarNoUser from "./AppbarNoUser";
 import styles from "../../pages/styles/Specific/Appbar.module.css";
 import dynamic from "next/dynamic";
-import { AppbarUserData, AppbarVars } from "../../interfaces/QueryInterfaces";
+import { AppbarUserData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
 
 const DynamicSwipeable = dynamic(() => import("./Drawers/Normal"));
@@ -22,7 +22,7 @@ const DynamicDrawer = dynamic(() => import("./Drawers/Swipeable"));
 
 const Appbar = () => {
   const [session, loading] = useSession();
-  const { data: user, fetchMore } = useQuery<AppbarUserData, AppbarVars>(
+  const { data: user, fetchMore } = useQuery<AppbarUserData, QueryIdVars>(
     APPBAR_USER_QUERY,
     {
       variables: {

@@ -15,8 +15,19 @@ import { Box } from "@material-ui/core";
 import useVideo from "../../Hooks/useVideo";
 import { useSession } from "next-auth/client";
 import router from "next/router";
+import {
+  MutationFunctionOptions,
+  OperationVariables,
+  FetchResult,
+} from "@apollo/client";
 
-const BugReportForm = ({ reportBug }) => {
+type Prop = {
+  reportBug: (
+    options?: MutationFunctionOptions<any, OperationVariables>
+  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
+};
+
+const BugReportForm = ({ reportBug }: Prop) => {
   const [session] = useSession();
   const [bugReport, setbugReport] = useState({
     description: "",

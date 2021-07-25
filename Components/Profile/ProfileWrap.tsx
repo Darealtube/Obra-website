@@ -6,7 +6,6 @@ import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import UserInfo from "./UserInfo";
-import dynamic from "next/dynamic";
 
 type Props = {
   children: React.ReactNode;
@@ -14,8 +13,6 @@ type Props = {
   admin: boolean;
   userLiked: boolean;
 };
-
-const DynamicErrSnack = dynamic(() => import("../Forms/Snackbars/ConfigSnack"));
 
 const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
   return (

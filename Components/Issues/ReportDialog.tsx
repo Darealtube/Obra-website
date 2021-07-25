@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { WARN_MUTATION } from "../../apollo/apolloQueries";
+import { WarnVars } from "../../interfaces/MutationInterfaces";
 
 interface ReportProps {
   id: string;
@@ -28,7 +29,7 @@ type Props = {
 const ReportDialog = ({ open, handleClose, report, push }: Props) => {
   const router = useRouter();
   const [description, setDescription] = useState("");
-  const [warn] = useMutation(WARN_MUTATION);
+  const [warn] = useMutation<boolean, WarnVars>(WARN_MUTATION);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDescription(e.target.value);
   };

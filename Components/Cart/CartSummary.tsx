@@ -10,7 +10,12 @@ import {
 } from "@material-ui/core";
 import styles from "../../pages/styles/General/Cart.module.css";
 
-const CartSummary = ({ totalPrice, finalCost }) => {
+type Props = {
+  totalPrice: number;
+  finalCost: number;
+};
+
+const CartSummary = ({ totalPrice, finalCost }: Props) => {
   return (
     <Grid item sm={12} md={4} className={styles.cartSummary}>
       <Paper elevation={6} className={styles.summaryPaper}>

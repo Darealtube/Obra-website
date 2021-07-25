@@ -25,9 +25,9 @@ import usePagination from "../Hooks/usePagination";
 import {
   FeaturedPostsData,
   HomeUserData,
-  HomeUserVars,
   NewPostsData,
   PaginatedPostsVars,
+  QueryIdVars,
 } from "../interfaces/QueryInterfaces";
 import { addApolloState } from "../apollo/apolloClient";
 
@@ -51,7 +51,7 @@ const Home = () => {
   });
   const { data, fetchMore: moreRecommended } = useQuery<
     HomeUserData,
-    HomeUserVars
+    QueryIdVars
   >(HOME_RECOMMENDED_QUERY, {
     variables: {
       id: session?.id,

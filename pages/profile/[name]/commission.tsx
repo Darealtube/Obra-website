@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useQuery } from "@apollo/client";
 import { USER_COMM_INFO_QUERY } from "../../../apollo/apolloQueries";
+import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")
@@ -34,9 +35,9 @@ const Commission = () => {
   const [noSess, setnoSess] = useState(false);
   const [posterOpen, setPosterOpen] = useState(false);
   const router = useRouter();
-  const { data } = useQuery(USER_COMM_INFO_QUERY, {
+  const { data } = useQuery<UserData, QueryNameVars>(USER_COMM_INFO_QUERY, {
     variables: {
-      name: router.query.name,
+      name: router.query.name as string,
     },
     skip: !router.query.name,
   });

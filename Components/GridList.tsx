@@ -14,13 +14,14 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../Hooks/usePagination";
+import { Posts } from "../interfaces/UserInterface";
 
 const DynamicImage = dynamic(
   () => import("../Components/PostInfo/ImageDialog")
 );
 
 type Props = {
-  data: any;
+  data: Posts;
   first?: string;
   fetchMore: any;
   second?: string;

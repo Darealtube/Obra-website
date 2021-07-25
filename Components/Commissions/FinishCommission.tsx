@@ -18,6 +18,7 @@ import {
   OperationVariables,
 } from "@apollo/client";
 import { useRouter } from "next/router";
+import { FinishCommissionVars } from "../../interfaces/MutationInterfaces";
 
 const FinishCommission = ({
   open,
@@ -27,8 +28,8 @@ const FinishCommission = ({
   open: boolean;
   commissionId: string;
   finishCommission: (
-    options?: MutationFunctionOptions<any, OperationVariables>
-  ) => Promise<FetchResult<any, Record<string, any>, Record<string, any>>>;
+    options?: MutationFunctionOptions<boolean, FinishCommissionVars>
+  ) => Promise<FetchResult<boolean, Record<string, any>, Record<string, any>>>;
 }) => {
   const router = useRouter();
   const artFile = useRef<HTMLInputElement>();
@@ -42,7 +43,7 @@ const FinishCommission = ({
 
   const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
-      setDisabled(true)
+      setDisabled(true);
       setArt((e.target as HTMLInputElement).files).then((values) => {
         setImages({
           finishedArt: values.url,

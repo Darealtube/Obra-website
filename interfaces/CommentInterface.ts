@@ -6,6 +6,7 @@ export interface CommentInterface {
   content: string;
   picture: string;
   date: string;
+  postID: string;
 }
 
 export interface edges {

@@ -1,31 +1,32 @@
+import { CommentInterface } from "./CommentInterface";
 import { PostInterface, RecommendedPosts } from "./PostInterface";
+import { ReportInterface, Reports } from "./ReportInterface";
 import { CommissionInterface, Posts, UserInterface } from "./UserInterface";
 
 export interface SettingsData {
   userId: UserInterface;
 }
 
-export interface SettingsVars {
-  id: string;
-}
-
 export interface AppbarUserData {
   userId: UserInterface;
-}
-
-export interface AppbarVars {
-  id: string;
-  limit?: number;
 }
 
 export interface PostData {
   postId: PostInterface;
 }
 
-export interface PostVars {
-  id: string;
-  after?: string;
-  limit?: number;
+export interface isLikedorAddedData {
+  isLikedorAddedPost: LikedorAdded;
+}
+
+interface LikedorAdded {
+  isLiked: boolean;
+  isAdded: boolean;
+}
+
+export interface isLikedorAddedVars {
+  postID: string;
+  userID: string;
 }
 
 export interface RecommendedPostData {
@@ -34,12 +35,6 @@ export interface RecommendedPostData {
 
 export interface UserData {
   userName: UserInterface;
-}
-
-export interface UserVars {
-  name: string;
-  after?: string;
-  limit?: number;
 }
 
 export interface FeaturedPostsData {
@@ -58,12 +53,6 @@ export interface HomeUserData {
   userId: UserInterface;
 }
 
-export interface HomeUserVars {
-  id: string;
-  after?: string;
-  limit?: number;
-}
-
 export interface PaginatedPostsVars {
   after?: string;
   limit?: number;
@@ -73,26 +62,44 @@ export interface CommissionData {
   userId: UserInterface;
 }
 
-export interface CommissionVars {
-  id: string;
-  after?: string;
-  limit?: number;
-}
-
 export interface CommissionIdData {
   commissionId: CommissionInterface;
-}
-
-export interface CommissionIdVars {
-  id: string;
 }
 
 export interface UserIdData {
   userId: UserInterface;
 }
 
-export interface UserIdVars {
+export interface CommentIdData {
+  commentId: CommentInterface;
+}
+
+export interface ReportData {
+  reports: Reports;
+}
+
+export interface ReportIdData {
+  reportId: ReportInterface;
+}
+
+export interface ReportIdVars {
+  reportedId: string;
+}
+
+export interface ReportVars {
+  after?: string;
+  limit?: number;
+  type?: string;
+}
+
+export interface QueryIdVars {
   id: string;
+  after?: string;
+  limit?: number;
+}
+
+export interface QueryNameVars {
+  name: string;
   after?: string;
   limit?: number;
 }

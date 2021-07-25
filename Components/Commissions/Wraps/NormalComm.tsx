@@ -11,8 +11,24 @@ import styles from "../../../pages/styles/Specific/Commission.module.css";
 import CommList from "../Lists/CommList";
 import Link from "next/link";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import { ReactNode } from "react";
+import { UserInterface } from "../../../interfaces/UserInterface";
 
-const NormalComm = ({ children, userId, loading, fetchMore, handleClick }) => {
+type Props = {
+  children: ReactNode;
+  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  loading: boolean;
+  userId: UserInterface;
+  fetchMore: any;
+};
+
+const NormalComm = ({
+  children,
+  userId,
+  loading,
+  fetchMore,
+  handleClick,
+}: Props) => {
   return (
     <div>
       <Grid container className={styles.wrapRoot}>

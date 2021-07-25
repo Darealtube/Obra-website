@@ -19,7 +19,7 @@ import { addApolloState } from "../../apollo/apolloClient";
 import { fetchFinishedComms } from "../../utils/fetchData";
 import { useQuery } from "@apollo/client";
 import { YOUR_FINISHED_COMMS_QUERY } from "../../apollo/apolloQueries";
-import { UserIdData, UserIdVars } from "../../interfaces/QueryInterfaces";
+import { QueryIdVars, UserIdData } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
 import Appbar from "../../Components/Appbar/Appbar";
 import usePagination from "../../Hooks/usePagination";
@@ -29,7 +29,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { useState } from "react";
 import Link from "next/link";
 
-const FinishedCommissionCart = ({ id }) => {
+const FinishedCommissionCart = ({ id }: {id: string;}) => {
   const LaptopL = useMediaQuery("(max-width: 1236px)");
   const Small = useMediaQuery("(max-width: 959px)");
   const [selected, setSelected] = useState("");
@@ -38,7 +38,7 @@ const FinishedCommissionCart = ({ id }) => {
   const {
     data: { userId },
     fetchMore,
-  } = useQuery<UserIdData, UserIdVars>(YOUR_FINISHED_COMMS_QUERY, {
+  } = useQuery<UserIdData, QueryIdVars>(YOUR_FINISHED_COMMS_QUERY, {
     variables: {
       limit: 4,
       id: id,

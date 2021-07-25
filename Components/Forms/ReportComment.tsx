@@ -19,13 +19,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { REPORT_MUTATION } from "../../apollo/apolloQueries";
+import { CommentInterface } from "../../interfaces/CommentInterface";
+import { ReportVars } from "../../interfaces/MutationInterfaces";
 import styles from "../../pages/styles/Specific/Report.module.css";
 import { commentReasonOptions } from "../../utils/Options";
 
-const ReportCommentForm = ({ data }) => {
+const ReportCommentForm = ({ data }: { data: CommentInterface }) => {
   const router = useRouter();
   const [session] = useSession();
-  const [Report] = useMutation(REPORT_MUTATION);
+  const [Report] = useMutation<boolean, ReportVars>(REPORT_MUTATION);
   const [disabled, setDisabled] = useState(false);
   const [report, setReport] = useState({
     description: "",
@@ -45,7 +47,7 @@ const ReportCommentForm = ({ data }) => {
     Report({
       variables: {
         senderId: session?.id,
-        reportedId: router.query.id,
+        reportedId: router.query.id as string,
         type: "Comment",
         title: `Comment report for ${router.query.id}`,
         description: report.description,

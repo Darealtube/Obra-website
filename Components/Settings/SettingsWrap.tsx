@@ -4,7 +4,7 @@ import { useSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import React, { ReactNode, useEffect, useState } from "react";
 import { SETTINGS_QUERY } from "../../apollo/apolloQueries";
-import { SettingsData, SettingsVars } from "../../interfaces/QueryInterfaces";
+import { QueryIdVars, SettingsData } from "../../interfaces/QueryInterfaces";
 import { UserInterface } from "../../interfaces/UserInterface";
 import SettingList from "../ListItems/SettingList";
 
@@ -17,7 +17,7 @@ const DynamicNoSessDialog = dynamic(
 const SettingsWrap = ({ children }: { children: ReactNode }) => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
-  const { data, loading } = useQuery<SettingsData, SettingsVars>(
+  const { data, loading } = useQuery<SettingsData, QueryIdVars>(
     SETTINGS_QUERY,
     {
       variables: { 

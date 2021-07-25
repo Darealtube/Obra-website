@@ -6,10 +6,11 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
+import { ReportInterface } from "../../../interfaces/ReportInterface";
 import styles from "../../../pages/styles/General/Issues.module.css";
 
 type ReportProps = {
-  report: any;
+  report: ReportInterface;
   handleOpen: () => void;
 };
 

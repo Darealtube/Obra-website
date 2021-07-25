@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useState } from "react";
 import { FINISH_COMMISSION_MUTATION } from "../../apollo/apolloQueries";
+import { FinishCommissionVars } from "../../interfaces/MutationInterfaces";
 import { CommissionInterface } from "../../interfaces/UserInterface";
 import styles from "../../pages/styles/Specific/Commission.module.css";
 import { finishCommissionUpdate } from "../../utils/update";
@@ -18,11 +19,14 @@ const CommissionData = ({
   sessionId: string;
 }) => {
   const [finishComm, setfinishComm] = useState(false);
-  const [finishCommission] = useMutation(FINISH_COMMISSION_MUTATION, {
-    update: (cache: DataProxy) => {
-      finishCommissionUpdate(cache, sessionId, commission.id);
-    },
-  });
+  const [finishCommission] = useMutation<boolean, FinishCommissionVars>(
+    FINISH_COMMISSION_MUTATION,
+    {
+      update: (cache: DataProxy) => {
+        finishCommissionUpdate(cache, sessionId, commission.id);
+      },
+    }
+  );
   const handleFinish = () => {
     setfinishComm(!finishComm);
   };

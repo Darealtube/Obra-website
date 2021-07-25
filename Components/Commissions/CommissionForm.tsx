@@ -23,6 +23,7 @@ import { useSession } from "next-auth/client";
 import { useMutation } from "@apollo/client";
 import { CREATE_COMMISSION_MUTATION } from "../../apollo/apolloQueries";
 import { Rates } from "../../interfaces/UserInterface";
+import { CommissionArtistVars } from "../../interfaces/MutationInterfaces";
 
 const initState = {
   title: "",
@@ -46,7 +47,9 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
   const [disableSubmit, setDisableSubmit] = useState(false);
   const inputFile = useRef<HTMLInputElement>();
   const { loading, setArt, placeholder } = useArt("/user-empty-backdrop.jpg");
-  const [commissionArtist] = useMutation(CREATE_COMMISSION_MUTATION);
+  const [commissionArtist] = useMutation<boolean, CommissionArtistVars>(
+    CREATE_COMMISSION_MUTATION
+  );
   const [commission, setCommission] = useState(initState);
   const [deadDisabled, setDeadDisabled] = useState(false);
 
@@ -59,7 +62,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
     setDisableSubmit(true);
     commissionArtist({
       variables: {
-        artistName: router.query.name,
+        artistName: router.query.name as string,
         userId: session?.id,
         title: commission.title,
         description: commission.description,
@@ -264,7 +267,12 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth type="submit" variant="outlined" disabled={disableSubmit}>
+            <Button
+              fullWidth
+              type="submit"
+              variant="outlined"
+              disabled={disableSubmit}
+            >
               Submit Commission
             </Button>
           </Grid>

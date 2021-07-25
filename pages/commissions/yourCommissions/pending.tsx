@@ -6,8 +6,7 @@ import { YOUR_PENDING_COMMS_QUERY } from "../../../apollo/apolloQueries";
 import { useSession } from "next-auth/client";
 import PendingCommList from "../../../Components/Commissions/Lists/PendingCommList";
 import {
-  CommissionData,
-  CommissionVars,
+  CommissionData, QueryIdVars,
 } from "../../../interfaces/QueryInterfaces";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
@@ -19,7 +18,7 @@ const DynamicNoSessDialog = dynamic(
 const YourPendingCommissions = () => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
-  const { data, fetchMore, loading } = useQuery<CommissionData, CommissionVars>(
+  const { data, fetchMore, loading } = useQuery<CommissionData, QueryIdVars>(
     YOUR_PENDING_COMMS_QUERY,
     {
       variables: {

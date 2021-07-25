@@ -25,14 +25,18 @@ import {
   NewPostsData,
   PaginatedPostsVars,
   PostData,
-  PostVars,
   RecommendedPostData,
   UserData,
-  UserVars,
   HomeUserData,
-  HomeUserVars,
   UserIdData,
-  UserIdVars,
+  QueryNameVars,
+  QueryIdVars,
+  isLikedorAddedData,
+  isLikedorAddedVars,
+  ReportData,
+  ReportVars,
+  ReportIdData,
+  ReportIdVars,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the fetch functions that are used on pages that have
@@ -77,7 +81,7 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
-  } = await apolloClient.query<UserData, UserVars>({
+  } = await apolloClient.query<UserData, QueryNameVars>({
     query: USER_POST_QUERY,
     variables: {
       name: name,
@@ -106,7 +110,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
-  } = await apolloClient.query<UserData, UserVars>({
+  } = await apolloClient.query<UserData, QueryNameVars>({
     query: USER_LIKED_POST_QUERY,
     variables: {
       name: name,
@@ -147,7 +151,7 @@ export const fetchPosts = async (id: string) => {
   });
 
   if (id) {
-    await apolloClient.query<HomeUserData, HomeUserVars>({
+    await apolloClient.query<HomeUserData, QueryIdVars>({
       query: HOME_RECOMMENDED_QUERY,
       variables: {
         id: id,
@@ -162,7 +166,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { postId },
-  } = await apolloClient.query<PostData, PostVars>({
+  } = await apolloClient.query<PostData, QueryIdVars>({
     query: POST_ID_QUERY,
     variables: {
       id: id,
@@ -171,7 +175,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   });
 
   if (postId) {
-    await apolloClient.query<RecommendedPostData, PostVars>({
+    await apolloClient.query<RecommendedPostData, QueryIdVars>({
       query: POST_RECOMMENDED_QUERY,
       variables: {
         id: id,
@@ -182,7 +186,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
 
   const {
     data: { isLikedorAddedPost },
-  } = await apolloClient.query({
+  } = await apolloClient.query<isLikedorAddedData, isLikedorAddedVars>({
     query: IS_LIKED_OR_ADDED_POST,
     variables: {
       postID: id,
@@ -213,7 +217,7 @@ export const fetchAllUsers = async () => {
 export const fetchPostReports = async (id: string) => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
+  await apolloClient.query<ReportData, ReportVars>({
     query: REPORTED_POSTS_QUERY,
     variables: {
       limit: 4,
@@ -235,7 +239,7 @@ export const fetchPostReports = async (id: string) => {
 export const fetchCommentReports = async (id: string) => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
+  await apolloClient.query<ReportData, ReportVars>({
     query: REPORTED_COMMENTS_QUERY,
     variables: {
       limit: 4,
@@ -257,7 +261,7 @@ export const fetchCommentReports = async (id: string) => {
 export const fetchBugReports = async (id: string) => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
+  await apolloClient.query<ReportData, ReportVars>({
     query: BUG_REPORTS_QUERY,
     variables: {
       limit: 4,
@@ -281,7 +285,7 @@ export const fetchReportId = async (id: string, reportedId: string) => {
 
   const {
     data: { reportId },
-  } = await apolloClient.query({
+  } = await apolloClient.query<ReportIdData, ReportIdVars>({
     query: REPORT_ID_QUERY,
     variables: {
       reportedId: reportedId,
@@ -303,7 +307,7 @@ export const fetchReportId = async (id: string, reportedId: string) => {
 export const fetchCart = async (sessionId: string) => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
+  await apolloClient.query<UserIdData, QueryIdVars>({
     query: CART_QUERY,
     variables: {
       id: sessionId,
@@ -317,7 +321,7 @@ export const fetchCart = async (sessionId: string) => {
 export const fetchFinishedComms = async (sessionId: string) => {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query<UserIdData, UserIdVars>({
+  await apolloClient.query<UserIdData, QueryIdVars>({
     query: YOUR_FINISHED_COMMS_QUERY,
     variables: {
       id: sessionId,

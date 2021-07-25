@@ -17,11 +17,17 @@ import CloseIcon from "@material-ui/icons/Close";
 import { Box } from "@material-ui/core";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { Reports } from "../../../interfaces/ReportInterface";
 
 const DynamicDeleteDialog = dynamic(() => import("../DeleteDialog"));
 const DynamicReportDialog = dynamic(() => import("../ReportDialog"));
 
-const ReportList = ({ reports, fetchMore }) => {
+type Props = {
+  reports: Reports;
+  fetchMore: any;
+}
+
+const ReportList = ({ reports, fetchMore }: Props) => {
   const mobile = useMediaQuery("(max-width: 1020px)");
   const mobileDiv = useMediaQuery("(max-width: 586px)");
   const smallMobileDiv = useMediaQuery("(max-width: 369px)");

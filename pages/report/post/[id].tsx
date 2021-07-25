@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import DefaultErrorPage from "next/error";
-import { PostData, PostVars } from "../../../interfaces/QueryInterfaces";
+import { PostData, QueryIdVars } from "../../../interfaces/QueryInterfaces";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportPost")
@@ -22,7 +22,7 @@ const ReportPost = () => {
   const router = useRouter();
   const [session] = useSession();
   const [admin, setAdmin] = useState(false);
-  const { data, loading } = useQuery<PostData, PostVars>(REPORT_POST_QUERY, {
+  const { data, loading } = useQuery<PostData, QueryIdVars>(REPORT_POST_QUERY, {
     variables: {
       id: router.query.id as string,
     },

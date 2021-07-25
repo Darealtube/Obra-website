@@ -25,7 +25,7 @@ import { editPostUpdate } from "../../../utils/update";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import DefaultErrorPage from "next/error";
-import { PostData, PostVars } from "../../../interfaces/QueryInterfaces";
+import { PostData, QueryIdVars } from "../../../interfaces/QueryInterfaces";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")
@@ -39,7 +39,7 @@ const Edit = () => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
   const [notAllowed, setnotAllowed] = useState(false);
-  const { data, loading } = useQuery<PostData, PostVars>(EDIT_POST_QUERY, {
+  const { data, loading } = useQuery<PostData, QueryIdVars>(EDIT_POST_QUERY, {
     variables: {
       id: router.query.id as string,
     },

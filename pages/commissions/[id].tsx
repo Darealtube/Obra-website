@@ -6,8 +6,7 @@ import { COMMISSION_ID_QUERY } from "../../apollo/apolloQueries";
 import CommissionData from "../../Components/Commissions/CommissionData";
 import { useRouter } from "next/router";
 import {
-  CommissionIdData,
-  CommissionIdVars,
+  CommissionIdData, QueryIdVars,
 } from "../../interfaces/QueryInterfaces";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
@@ -28,7 +27,7 @@ const CommissionID = () => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
   const [notAllowed, setnotAllowed] = useState(false);
-  const { data, loading } = useQuery<CommissionIdData, CommissionIdVars>(
+  const { data, loading } = useQuery<CommissionIdData, QueryIdVars>(
     COMMISSION_ID_QUERY,
     {
       variables: {

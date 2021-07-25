@@ -12,6 +12,7 @@ import { useState } from "react";
 import PostReport from "../../Components/Issues/Reports/PostReport";
 import CommentReport from "../../Components/Issues/Reports/CommentReport";
 import BugReport from "../../Components/Issues/Reports/BugReport";
+import { ReportIdData, ReportIdVars } from "../../interfaces/QueryInterfaces";
 
 const DynamicDeleteDialog = dynamic(
   () => import("../../Components/Issues/DeleteDialog")
@@ -23,7 +24,7 @@ const DynamicReportDialog = dynamic(
 const ReportID = ({ id }) => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [reportDialog, setreportDialog] = useState(false);
-  const { data } = useQuery(REPORT_ID_QUERY, {
+  const { data } = useQuery<ReportIdData, ReportIdVars>(REPORT_ID_QUERY, {
     variables: {
       reportedId: id,
     },
@@ -56,7 +57,7 @@ const ReportID = ({ id }) => {
   return (
     <>
       <div className={styles.wrapRoot}>
-        <CssBaseline/>
+        <CssBaseline />
         <Head>
           <meta
             name="viewport"
@@ -77,11 +78,10 @@ const ReportID = ({ id }) => {
             handleReportOpen={handleReportOpen}
           />
         ) : data?.reportId?.type === "Bug" ? (
-          <BugReport
-          report={data?.reportId}
-          handleOpen={handleOpen}
-          />
-        ): ""}
+          <BugReport report={data?.reportId} handleOpen={handleOpen} />
+        ) : (
+          ""
+        )}
         <DynamicReportDialog
           open={reportDialog}
           handleClose={handleReportClose}

@@ -7,13 +7,14 @@ import { useSession } from "next-auth/client";
 import BugReportForm from "../Components/Forms/ReportBug";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { ReportVars } from "../interfaces/MutationInterfaces";
 
 const DynamicNoSessDialog = dynamic(
   () => import("../Components/MainPopovers/NoSessionDialog")
 );
 
 const BugReport = () => {
-  const [reportBug] = useMutation(REPORT_MUTATION);
+  const [reportBug] = useMutation<boolean, ReportVars>(REPORT_MUTATION);
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
 

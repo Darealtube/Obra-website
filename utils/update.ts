@@ -13,13 +13,14 @@ import {
   AcceptCommissionData,
   AddCommentData,
   EditPostData,
+  EditUserCommData,
   EditUserData,
 } from "../interfaces/MutationInterfaces";
 import {
   CommissionData,
-  CommissionVars,
   PostData,
-  PostVars,
+  QueryIdVars,
+  UserIdData,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the update functions used for useMutations. In order to update
@@ -41,7 +42,7 @@ export const commentUpdate = (
   id: string
 ) => {
   const newComment = mutationResult.data.createComment;
-  const { postId } = cache.readQuery<PostData, PostVars>({
+  const { postId } = cache.readQuery<PostData, QueryIdVars>({
     query: POST_ID_QUERY,
     variables: { id: id },
   });
@@ -74,11 +75,11 @@ export const acceptCommission = (
   id: string
 ) => {
   const newCommission = mutationResult.data.acceptCommission;
-  const { userId } = cache.readQuery<CommissionData, CommissionVars>({
+  const { userId } = cache.readQuery<CommissionData, QueryIdVars>({
     query: COMMISSIONS_QUERY,
     variables: { id: id },
   });
-  const { userId: userId2 } = cache.readQuery<CommissionData, CommissionVars>({
+  const { userId: userId2 } = cache.readQuery<CommissionData, QueryIdVars>({
     query: PENDING_COMMS_QUERY,
     variables: { id: id },
   });
@@ -121,7 +122,7 @@ export const finishCommissionUpdate = (
   id: string,
   commissionId: string
 ) => {
-  const { userId } = cache.readQuery<CommissionData, CommissionVars>({
+  const { userId } = cache.readQuery<CommissionData, QueryIdVars>({
     query: COMMISSIONS_QUERY,
     variables: { id: id },
   });
@@ -187,13 +188,13 @@ export const editUserUpdate = (
 export const editUserCommSettingUpdate = (
   cache: DataProxy,
   mutationResult: FetchResult<
-    EditUserData,
+    EditUserCommData,
     Record<string, any>,
     Record<string, any>
   >,
   id: string
 ) => {
-  const newUser = mutationResult.data.editUser;
+  const newUser = mutationResult.data.editUserComm;
   if (newUser) {
     cache.writeFragment({
       id: `User:${id}`,
@@ -238,7 +239,7 @@ export const removeCartUpdate = (
   itemID: string
 ) => {
   const removeResult = mutationResult.data.removeFromCart;
-  const { userId } = cache.readQuery({
+  const { userId } = cache.readQuery<UserIdData, QueryIdVars>({
     query: CART_QUERY,
     variables: { id: id },
   });
@@ -271,7 +272,7 @@ export const removeSelectedUpdate = (
   selected: string[]
 ) => {
   const removeResult = mutationResult.data.removeSelectedFromCart;
-  const { userId } = cache.readQuery({
+  const { userId } = cache.readQuery<UserIdData, QueryIdVars>({
     query: CART_QUERY,
     variables: { id: id },
   });

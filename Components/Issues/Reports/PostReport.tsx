@@ -9,9 +9,10 @@ import {
 } from "@material-ui/core";
 import styles from "../../../pages/styles/General/Issues.module.css";
 import Image from "next/image";
+import { ReportInterface } from "../../../interfaces/ReportInterface";
 
 type ReportProps = {
-  report: any;
+  report: ReportInterface;
   handleReportOpen: () => void;
   handleOpen: () => void;
 };

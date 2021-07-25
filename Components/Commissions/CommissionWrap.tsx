@@ -1,24 +1,23 @@
 import { useQuery } from "@apollo/client";
 import { Menu, MenuItem, useMediaQuery } from "@material-ui/core";
 import { useSession } from "next-auth/client";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { COMMISSIONS_QUERY } from "../../apollo/apolloQueries";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
-  CommissionData,
-  CommissionVars,
+  CommissionData, QueryIdVars,
 } from "../../interfaces/QueryInterfaces";
 
 const DynamicNormalComm = dynamic(() => import("./Wraps/NormalComm"));
 const DynamicMobileComm = dynamic(() => import("./Wraps/MobileComm"));
 
-const CommissionWrap = ({ children }) => {
+const CommissionWrap = ({ children }: {children: ReactNode}) => {
   const mobile = useMediaQuery("(max-width: 700px)");
   const [session] = useSession();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { data, fetchMore, loading } = useQuery<CommissionData, CommissionVars>(
+  const { data, fetchMore, loading } = useQuery<CommissionData, QueryIdVars>(
     COMMISSIONS_QUERY,
     {
       variables: {

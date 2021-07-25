@@ -15,6 +15,7 @@ import {
   LikeData,
   UnlikeLikeVars,
   UnlikeData,
+  addUnaddToCartVars,
 } from "../../interfaces/MutationInterfaces";
 import { PostInterface } from "../../interfaces/PostInterface";
 
@@ -34,8 +35,12 @@ const Main = ({ postID, setOpen, alreadyLiked, alreadyAdded }: Props) => {
   const [liked, setLiked] = useState(alreadyLiked);
   const [added, setAdded] = useState(alreadyAdded);
   const [session, loading] = useSession();
-  const [addtoCart] = useMutation(ADD_CART_MUTATION);
-  const [removeFromCart] = useMutation(UNADD_TO_CART_MUTATION);
+  const [addtoCart] = useMutation<boolean, addUnaddToCartVars>(
+    ADD_CART_MUTATION
+  );
+  const [removeFromCart] = useMutation<boolean, addUnaddToCartVars>(
+    UNADD_TO_CART_MUTATION
+  );
   const [like] = useMutation<LikeData, UnlikeLikeVars>(LIKE_MUTATION);
   const [unlike] = useMutation<UnlikeData, UnlikeLikeVars>(UNLIKE_MUTATION);
 

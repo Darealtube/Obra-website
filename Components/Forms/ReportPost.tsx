@@ -1,6 +1,5 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
-  CssBaseline,
   Grid,
   Paper,
   Container,
@@ -17,13 +16,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { REPORT_MUTATION } from "../../apollo/apolloQueries";
+import { ReportVars } from "../../interfaces/MutationInterfaces";
+import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Report.module.css";
 import { reasonOptions } from "../../utils/Options";
 
-const ReportForm = ({ data }) => {
+const ReportForm = ({ data }: { data: PostInterface }) => {
   const router = useRouter();
   const [session] = useSession();
-  const [Report] = useMutation(REPORT_MUTATION);
+  const [Report] = useMutation<boolean, ReportVars>(REPORT_MUTATION);
   const [disabled, setDisabled] = useState(false);
   const [report, setReport] = useState({
     description: "",
@@ -43,7 +44,7 @@ const ReportForm = ({ data }) => {
     Report({
       variables: {
         senderId: session?.id,
-        reportedId: router.query.id,
+        reportedId: router.query.id as string,
         type: "Post",
         title: `Post report for ${router.query.id}`,
         description: report.description,

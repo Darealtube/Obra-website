@@ -12,9 +12,10 @@ import {
 import styles from "../../../pages/styles/General/Issues.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { ReportInterface } from "../../../interfaces/ReportInterface";
 
 type ReportProps = {
-  report: any;
+  report: ReportInterface;
   handleReportOpen: () => void;
   handleOpen: () => void;
 };

@@ -105,3 +105,84 @@ export interface AcceptCommissionVars {
   commissionId: string;
   message?: string;
 }
+
+export interface CommissionArtistVars {
+  artistName: string;
+  userId: string;
+  title: string;
+  description: string;
+  sampleArt: string;
+  height: number;
+  width: number;
+  deadline?: number;
+  price: number;
+  rates: string[];
+}
+
+export interface FinishCommissionVars {
+  commissionId: string;
+  finishedArt: string;
+  message: string;
+  finishedwatermarkArt: string;
+}
+
+export interface ReportVars {
+  senderId: string;
+  reportedId?: string;
+  type: string;
+  title?: string;
+  description: string;
+  reason: string;
+  bugVid?: string;
+  vidFormat?: string;
+}
+
+export interface WarnVars {
+  reportId: string;
+  reportedEmail: string;
+  title: string;
+  description: string;
+  reason: string;
+}
+
+export interface addUnaddToCartVars {
+  userID: string;
+  postID?: string;
+  cost?: number;
+}
+
+export interface CartRemoveVars {
+  userID: string;
+  itemID?: string;
+  selected?: string[];
+}
+
+export interface CartRemoveSelectedData {
+  removeSelectedFromCart: CartRemoveResult;
+}
+
+export interface CartRemoveData {
+  removeFromCart: CartRemoveResult;
+}
+
+interface CartRemoveResult {
+  __typename?: string;
+  optimistic?: boolean;
+  idList: string[];
+  totalCost: number;
+}
+
+export interface EditUserCommVars {
+  userId: string;
+  commissionPoster: string;
+  commissionRates: RatesInput[];
+}
+
+export interface EditUserCommData {
+  editUserComm: UserInterface;
+}
+
+interface RatesInput {
+  type: string;
+  price: number;
+}

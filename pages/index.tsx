@@ -101,28 +101,54 @@ const Login = () => {
               square
             >
               <div className={styles.paper}>
-                <Toolbar>
+                <Box display="flex">
                   <PaletteIcon fontSize="large" />
                   <Typography variant="h4" color="inherit" noWrap>
                     Obra
                   </Typography>
-                </Toolbar>
+                </Box>
                 <br />
-                <Typography variant="h5">
-                  Canvas is a website that focuses on Artists, giving them an
-                  opportunity to shine amidst the shame that brings upon the Art
-                  Community.
-                </Typography>
+                <Box>
+                  <Typography variant="h5" gutterBottom>
+                    Canvas is a website that focuses on Artists, giving them an
+                    opportunity to shine amidst the shame that brings upon the
+                    Art Community.
+                  </Typography>
+                  <Box marginTop={4}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={styles.submit}
+                      onClick={handleSignIn}
+                    >
+                      Log In
+                    </Button>
+                  </Box>
+                </Box>
 
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={styles.submit}
-                  onClick={handleSignIn}
-                >
-                  Log In
-                </Button>
+                <Box marginTop={8}>
+                  <Typography variant="h5" gutterBottom>
+                    Or if you are just here to look at art and other posts,
+                    proceed as a guest or an unknown user. Keep in mind that you
+                    will not be able to like/dislike, perform transaction
+                    related functions (like adding to carts, and commissioning).
+                  </Typography>
+
+                  <Box marginTop={4}>
+                    <Link passHref href={"/home"}>
+                      <Button
+                        component="a"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={styles.submit}
+                      >
+                        Proceed as Guest
+                      </Button>
+                    </Link>
+                  </Box>
+                </Box>
               </div>
               {/*Copyright*/}
               <Copyright />

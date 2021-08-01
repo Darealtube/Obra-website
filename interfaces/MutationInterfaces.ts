@@ -90,6 +90,7 @@ export interface CreatePostVars {
   title: string;
   description: string;
   art: string;
+  watermarkArt: string;
   price: string;
   sale: string;
   author: string;

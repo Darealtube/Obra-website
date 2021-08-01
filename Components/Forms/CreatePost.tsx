@@ -1,5 +1,8 @@
 import {
+  Box,
   Button,
+  Chip,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -8,48 +11,36 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
-import { useRouter } from "next/router";
+import { Autocomplete } from "@material-ui/lab";
 import React from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { Action, State } from "../../Hooks/Reducers/PostReducer";
+import useTag from "../../Hooks/useTag";
 import styles from "../../pages/styles/General/Create.module.css";
-import { PostValidate } from "../../utils/postValidator";
 
 interface Props {
   post: State;
-  setArt: (files: FileList) => Promise<{
-    url: string;
-    watermarkUrl: string;
-    width: number;
-    height: number;
-  }>;
+  disabled: boolean;
   dispatch: React.Dispatch<Action>;
-  create: any;
-  id: string;
+  handleArt: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
-  const router = useRouter();
-  const [disabled, setDisabled] = useState(false);
-
+const PostForm = ({
+  post,
+  disabled,
+  dispatch,
+  handleArt,
+  handleSubmit,
+}: Props) => {
+  const [open, setOpen] = useState(false);
+  const { loading, options } = useTag(post.tagInput, open);
   const handleNumber = (values: NumberFormatValues) => {
     dispatch({ type: "CHANGE", field: "price", payload: values.value });
-  };
-
-  const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files.length != 0) {
-      setDisabled(true);
-      setArt((e.target as HTMLInputElement).files).then((values) => {
-        dispatch({
-          type: "CHANGE_ART",
-          artPayload: values,
-        });
-        setDisabled(false);
-      });
-    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,41 +51,32 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
     });
   };
 
-  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
-  };
-
   const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setDisabled(true);
-    const valid = PostValidate(post);
-    if (valid.error && valid.errMessage) {
-      dispatch({
-        type: "ERROR",
-        payload: valid.error,
-        message: valid.errMessage,
-      });
-      setDisabled(false);
-    } else {
-      create({
-        variables: {
-          author: id,
-          title: post.title,
-          description: post.description,
-          art: post.art,
-          watermarkArt: post.watermarkArt,
-          price: post.price,
-          sale: post.sale,
-          tags: post.tags,
-          width: post.width,
-          height: post.height,
-        },
-      });
-      router.push("/home");
+  const handleTagActive = () => {
+    setOpen(!open);
+  };
+
+  const handleTagInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    newInputValue
+  ) => {
+    dispatch({ type: "CHANGE", payload: newInputValue, field: "tagInput" });
+  };
+
+  const handleTagChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    newValue
+  ) => {
+    dispatch({ type: "CHANGE", payload: newValue, field: "tags" });
+  };
+
+  const handleCustomTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "," || event.key === "Enter") {
+      event.preventDefault();
+      dispatch({ type: "CUSTOM_TAG" });
     }
   };
   return (
@@ -177,19 +159,51 @@ const PostForm = ({ post, setArt, dispatch, create, id }: Props) => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="tags"
-              label="Tags"
-              name="tags"
-              color="secondary"
-              placeholder="Seperate tags with comma (,) and input atleast 1 Tag"
-              rows={2}
-              multiline={true}
-              onChange={handleTags}
-              required
+            <Autocomplete
+              id="asynchronous-demo"
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) => option.name === value.name}
+              filterSelectedOptions
+              onOpen={handleTagActive}
+              onClose={handleTagActive}
+              blurOnSelect={true}
+              multiple
+              value={post.tags}
+              onChange={handleTagChange}
+              inputValue={post.tagInput}
+              onInputChange={handleTagInput}
+              onKeyPress={handleCustomTag}
+              options={options}
+              loading={loading}
+              noOptionsText={<Typography>No Tags Found...</Typography>}
+              renderOption={(option) => (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Typography noWrap>{option.name} </Typography>
+                  <Chip
+                    label={`${option.artCount} art(s) with this tag`}
+                    size="small"
+                    style={{ marginLeft: "12px" }}
+                  />
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Tags or Input with , or Enter after word/phrase."
+                  variant="outlined"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={12}>

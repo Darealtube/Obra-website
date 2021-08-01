@@ -217,16 +217,16 @@ export const editPostUpdate = (
   >,
   id: string
 ) => {
-  const newUser = mutationResult.data.editPost;
-  if (newUser) {
+  const newPost = mutationResult.data.editPost;
+  if (newPost) {
     cache.writeFragment({
       id: `Post:${id}`,
       fragment: PostInfo,
       data: {
-        id: newUser.id,
-        title: newUser.title,
-        description: newUser.description,
-        tags: newUser.tags,
+        id: newPost.id,
+        title: newPost.title,
+        description: newPost.description,
+        tags: newPost.tags.map((tag) => tag.name),
       },
     });
   }

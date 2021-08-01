@@ -16,6 +16,8 @@ import {
 } from "../interfaces/MutationInterfaces";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import { PostValidate } from "../utils/postValidator";
+import { useRouter } from "next/router";
 
 const DynamicError = dynamic(
   () => import("../Components/Forms/Snackbars/ConfigSnack")
@@ -32,7 +34,8 @@ const initState: State = {
   watermarkArt: "",
   price: "",
   sale: "No",
-  tags: [] as string[],
+  tags: [],
+  tagInput: "",
   width: 0,
   height: 0,
   error: false,
@@ -46,6 +49,8 @@ const Create = () => {
   const [create] = useMutation<CreatePostData, CreatePostVars>(
     CREATE_POST_MUTATION
   );
+  const router = useRouter();
+  const [disabled, setDisabled] = useState(true);
   const { loading, setArt, placeholder } = useArt("");
 
   const handleErrorClose = (
@@ -56,6 +61,49 @@ const Create = () => {
       return;
     }
     dispatch({ type: "ERROR", payload: false });
+  };
+
+  const handleArt = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files.length != 0) {
+      setDisabled(true);
+      setArt((e.target as HTMLInputElement).files).then((values) => {
+        dispatch({
+          type: "CHANGE_ART",
+          artPayload: values,
+        });
+        setDisabled(false);
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setDisabled(true);
+    const valid = PostValidate(post);
+    if (valid.error && valid.errMessage) {
+      dispatch({
+        type: "ERROR",
+        payload: valid.error,
+        message: valid.errMessage,
+      });
+      setDisabled(false);
+    } else {
+      create({
+        variables: {
+          author: session?.id,
+          title: post.title,
+          description: post.description,
+          art: post.art,
+          watermarkArt: post.watermarkArt,
+          price: post.price,
+          sale: post.sale,
+          tags: post.tags.map((tag) => tag.name),
+          width: post.width,
+          height: post.height,
+        },
+      });
+      router.push("/home");
+    }
   };
 
   useEffect(() => {
@@ -97,10 +145,10 @@ const Create = () => {
             {!noSess && (
               <PostForm
                 post={post}
-                create={create}
-                id={session?.id}
-                setArt={setArt}
+                handleArt={handleArt}
+                handleSubmit={handleSubmit}
                 dispatch={dispatch}
+                disabled={disabled}
               />
             )}
           </div>

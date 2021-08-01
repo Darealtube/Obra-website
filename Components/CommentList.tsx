@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import styles from "../pages/styles/Specific/Post.module.css";
 import { edges } from "../interfaces/CommentInterface";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import moment from "moment";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/client";
 

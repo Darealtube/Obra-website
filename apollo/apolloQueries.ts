@@ -17,7 +17,9 @@ export const PostInfo = gql`
     date
     art
     watermarkArt
-    tags
+    tags {
+      name
+    }
   }
 `;
 
@@ -105,7 +107,9 @@ export const POST_ID_QUERY = gql`
       }
       sale
       price
-      tags
+      tags {
+        name
+      }
       description
       watermarkArt
       comments(after: $after, limit: $limit) {
@@ -349,7 +353,10 @@ export const EDIT_POST_QUERY = gql`
       }
       sale
       price
-      tags
+      tags {
+        name
+        artCount
+      }
       description
     }
   }
@@ -849,6 +856,15 @@ export const CART_QUERY = gql`
   }
 `;
 
+export const SEARCH_TAGS_QUERY = gql`
+  query SearchTag($tag: String) {
+    searchTags(tag: $tag) {
+      name
+      artCount
+    }
+  }
+`;
+
 export const IS_LIKED_ARTIST = gql`
   query islikedArtist($userID: ID, $artistName: String!) {
     isLikedArtist(userID: $userID, artistName: $artistName)
@@ -928,7 +944,9 @@ export const EDIT_POST_MUTATION = gql`
       id
       title
       description
-      tags
+      tags {
+        name
+      }
     }
   }
 `;

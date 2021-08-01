@@ -1,3 +1,4 @@
+import { Tag } from "../Hooks/Reducers/PostReducer";
 import { CommentInterface } from "./CommentInterface";
 import { UserInterface } from "./UserInterface";
 
@@ -7,7 +8,7 @@ export interface PostInterface {
   date: string;
   art: string;
   watermarkArt: string;
-  tags: string[];
+  tags: Tag[];
   title: string;
   description: string;
   sale?: string;

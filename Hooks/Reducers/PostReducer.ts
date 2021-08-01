@@ -1,4 +1,4 @@
-type Options = "CHANGE" | "TAGS" | "SALE" | "CHANGE_ART" | "ERROR";
+type Options = "CHANGE" | "CUSTOM_TAG" | "SALE" | "CHANGE_ART" | "ERROR";
 
 export type State = {
   title: string;
@@ -7,11 +7,12 @@ export type State = {
   watermarkArt: string;
   price: string;
   sale: string;
-  tags: string[];
+  tags: Tag[] | string[];
   width: number;
   height: number;
   error?: boolean;
   errMessage?: string;
+  tagInput?: string;
 };
 
 type Values = {
@@ -19,6 +20,11 @@ type Values = {
   width: number;
   height: number;
   watermarkUrl: string;
+};
+
+export type Tag = {
+  name: string;
+  artCount: number;
 };
 
 export type Action = {
@@ -46,19 +52,29 @@ export const reducer = (state: State, action: Action): State => {
         width: action.artPayload.width,
         height: action.artPayload.height,
       };
-    case "TAGS":
-      const tags = (action.payload as string)
-        .split(",")
-        .map((tag) => tag.replace(/\s+/, ""))
-        .filter((tag) => tag !== "");
-      return { ...state, tags };
+    case "CUSTOM_TAG":
+      let tagList = state.tags.map((tag) => tag.name);
+      if (
+        !tagList.includes(state.tagInput.trim().toUpperCase()) &&
+        state.tagInput.trim().length > 0
+      ) {
+        return {
+          ...state,
+          tags: [
+            ...state.tags,
+            { name: state.tagInput.trim().toUpperCase(), artCount: 0 },
+          ] as Tag[],
+        };
+      } else {
+        return { ...state, tagInput: "" };
+      }
     case "SALE":
       return {
         ...state,
         sale: action.payload as string,
         ...(action.payload === "No" && { price: "" }),
       };
-      case "ERROR":
+    case "ERROR":
       return {
         ...state,
         error: action.payload as boolean,

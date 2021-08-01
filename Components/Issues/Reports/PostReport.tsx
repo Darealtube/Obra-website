@@ -71,7 +71,11 @@ const PostReport = ({ report, handleReportOpen, handleOpen }: ReportProps) => {
                     Description: {report.reportedId.description}
                   </Typography>
                   <Typography variant="h6" gutterBottom>
-                    Tags: {report.reportedId.tags.join(", ").toString()}{" "}
+                    Tags:{" "}
+                    {report.reportedId.tags
+                      .map((tag) => tag.name)
+                      .join(", ")
+                      .toString()}{" "}
                   </Typography>
                 </Box>
 

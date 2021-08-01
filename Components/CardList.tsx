@@ -115,7 +115,7 @@ export const CardList = ({ postData }: PostData) => {
                       </Typography>
                       <br />
                       {post.node.tags.map((tag, index) => (
-                        <Chip key={index} label={tag} className={styles.tag} />
+                        <Chip key={index} label={tag.name} className={styles.tag} />
                       ))}
                     </CardContent>
                   </CardActionArea>

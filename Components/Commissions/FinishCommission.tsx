@@ -15,7 +15,6 @@ import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import {
   FetchResult,
   MutationFunctionOptions,
-  OperationVariables,
 } from "@apollo/client";
 import { useRouter } from "next/router";
 import { FinishCommissionVars } from "../../interfaces/MutationInterfaces";

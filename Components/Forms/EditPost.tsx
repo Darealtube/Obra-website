@@ -1,5 +1,8 @@
 import {
+  Box,
   Button,
+  Chip,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -7,13 +10,16 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
+import { Autocomplete } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import React, { useReducer } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { State, reducer } from "../../Hooks/Reducers/PostReducer";
+import useTag from "../../Hooks/useTag";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
 
@@ -31,12 +37,15 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
     watermarkArt: postId.watermarkArt,
     price: postId.price,
     sale: postId.sale,
-    tags: postId.tags as string[],
+    tags: postId.tags,
+    tagInput: "",
     width: postId.width,
     height: postId.height,
   };
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [post, dispatch] = useReducer(reducer, initState);
+  const { loading, options } = useTag(post.tagInput, open);
   const [disabled, setDisabled] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -46,8 +55,29 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
     });
   };
 
-  const handleTags = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: "TAGS", payload: (e.target as HTMLInputElement).value });
+  const handleTagActive = () => {
+    setOpen(!open);
+  };
+
+  const handleTagInput = (
+    _e: React.ChangeEvent<HTMLInputElement>,
+    newInputValue
+  ) => {
+    dispatch({ type: "CHANGE", payload: newInputValue, field: "tagInput" });
+  };
+
+  const handleTagChange = (
+    _event: React.ChangeEvent<HTMLInputElement>,
+    newValue
+  ) => {
+    dispatch({ type: "CHANGE", payload: newValue, field: "tags" });
+  };
+
+  const handleCustomTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "," || event.key === "Enter") {
+      event.preventDefault();
+      dispatch({ type: "CUSTOM_TAG" });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,7 +88,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
         postId: id,
         title: post.title,
         description: post.description,
-        tags: post.tags,
+        tags: post.tags.map((tag) => tag.name),
       },
     });
     router.push("/home");
@@ -84,6 +114,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               label="Title"
               name="title"
               color="primary"
+              required
               onChange={handleChange}
               defaultValue={post.title}
             />
@@ -101,6 +132,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               rows={8}
               multiline={true}
               rowsMax={4}
+              required
               onChange={handleChange}
               defaultValue={post.description}
             />
@@ -145,19 +177,52 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="tags"
-              label="Tags"
-              name="tags"
-              color="secondary"
-              placeholder="Seperate tags with comma (,) and input atleast 1 Tag"
-              rows={2}
-              multiline={true}
-              onChange={handleTags}
-              defaultValue={post.tags}
+            <Autocomplete
+              id="asynchronous-demo"
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) => option.name === value.name}
+              filterSelectedOptions
+              onOpen={handleTagActive}
+              onClose={handleTagActive}
+              blurOnSelect={true}
+              multiple
+              value={post.tags}
+              onChange={handleTagChange}
+              inputValue={post.tagInput}
+              onInputChange={handleTagInput}
+              onKeyPress={handleCustomTag}
+              options={options}
+              loading={loading}
+              noOptionsText={<Typography>No Tags Found...</Typography>}
+              renderOption={(option) => (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Typography noWrap>{option.name} </Typography>
+                  <Chip
+                    label={`${option.artCount} art(s) with this tag`}
+                    size="small"
+                    style={{ marginLeft: "12px" }}
+                  />
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  label="Select Tags or Input with , or Enter after word/phrase."
+                  variant="outlined"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={12}>

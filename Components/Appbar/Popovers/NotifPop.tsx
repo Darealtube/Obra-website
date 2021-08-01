@@ -6,11 +6,8 @@ import {
   Box,
   CircularProgress,
   IconButton,
-  createStyles,
-  withStyles,
   Badge,
   useMediaQuery,
-  Theme,
 } from "@material-ui/core";
 import Notification from "../../ListItems/Notification";
 import styles from "../../../pages/styles/Specific/Appbar.module.css";
@@ -23,26 +20,13 @@ import {
   ReadNotifData,
   ReadNotifVars,
 } from "../../../interfaces/MutationInterfaces";
-import {
-  READ_NOTIF,
-} from "../../../apollo/apolloQueries";
+import { READ_NOTIF } from "../../../apollo/apolloQueries";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
 
 type Props = {
   user: AppbarUserData;
   fetchMore: any;
 };
-
-const StyledBadge = withStyles((theme: Theme) =>
-  createStyles({
-    badge: {
-      right: 6,
-      top: 6,
-      border: `2px solid #3f51b5`,
-      padding: "0 4px",
-    },
-  })
-)(Badge);
 
 const NotifPop = ({ user, fetchMore }: Props) => {
   const showNotif = useMediaQuery("(max-width:280px)");
@@ -103,9 +87,9 @@ const NotifPop = ({ user, fetchMore }: Props) => {
         onClick={handleNotif}
         style={showNotif ? { display: "none" } : { display: "inline-flex" }}
       >
-        <StyledBadge badgeContent={notifCount} color="secondary">
+        <Badge badgeContent={notifCount} color="secondary">
           <NotificationImportantIcon fontSize="large" htmlColor="white" />
-        </StyledBadge>
+        </Badge>
       </IconButton>
       <Popover
         anchorEl={notifAnchor}

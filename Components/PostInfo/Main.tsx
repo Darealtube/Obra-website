@@ -132,7 +132,7 @@ const Main = ({ postID, setOpen, alreadyLiked, alreadyAdded }: Props) => {
           </Grid>
           <Grid item xs={12}>
             {postID.tags?.map((tag) => {
-              <Chip label={tag} className={styles.tag}></Chip>;
+              <Chip label={tag.name} className={styles.tag}></Chip>;
             })}
           </Grid>
           <Grid item xs={12}>

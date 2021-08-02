@@ -22,7 +22,6 @@ const CardPopover = ({
       keepMounted
       open={Boolean(editAnchor)}
       onClose={handleEditClose}
-      onExited={handleEditExit}
       anchorOrigin={{
         vertical: "top",
         horizontal: "left",
@@ -31,7 +30,9 @@ const CardPopover = ({
         vertical: "top",
         horizontal: "right",
       }}
-    >
+      TransitionProps={{
+        onExited: handleEditExit
+      }}>
       <List>
         <EditMenu
           id={targetId}

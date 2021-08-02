@@ -158,7 +158,7 @@ const ReportList = ({ reports, fetchMore }: Props) => {
                     >
                       Send Report
                     </Button>
-                    <IconButton value={report.node.id} onClick={handleOpen}>
+                    <IconButton value={report.node.id} onClick={handleOpen} size="large">
                       <CloseIcon />
                     </IconButton>
                   </Box>

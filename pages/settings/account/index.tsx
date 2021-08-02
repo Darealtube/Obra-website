@@ -25,47 +25,45 @@ const AccountSettings = () => {
   const handleMore = () => {
     setMoreInfo((prevmoreInfo) => !prevmoreInfo);
   };
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Account</title>
-      </Head>
-      <SettingsWrap>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <Box display="flex">
-              <Link href={"/home"} passHref>
-                <IconButton component="a">
-                  <HomeIcon />
-                </IconButton>
-              </Link>
-              <Typography variant="h4" style={{ flexGrow: 1 }}>
-                Account
-              </Typography>
-              <Link href={"/settings/account/edit"} passHref>
-                <Button component="a">Edit</Button>
-              </Link>
-            </Box>
-            <br />
-            <Divider />
-          </Grid>
-          <PrimaryInfo />
-          <Grid item xs={12}>
-            <Button
-              fullWidth
-              onClick={handleMore}
-              endIcon={!moreInfo ? <ExpandMore /> : <ExpandLess />}
-            >
-              More Information
-            </Button>
-            <Divider />
-          </Grid>
-          <DynamicMoreInfo open={moreInfo} />
+  return <>
+    <Head>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <title>Account</title>
+    </Head>
+    <SettingsWrap>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Box display="flex">
+            <Link href={"/home"} passHref>
+              <IconButton component="a" size="large">
+                <HomeIcon />
+              </IconButton>
+            </Link>
+            <Typography variant="h4" style={{ flexGrow: 1 }}>
+              Account
+            </Typography>
+            <Link href={"/settings/account/edit"} passHref>
+              <Button component="a">Edit</Button>
+            </Link>
+          </Box>
+          <br />
+          <Divider />
         </Grid>
-      </SettingsWrap>
-    </>
-  );
+        <PrimaryInfo />
+        <Grid item xs={12}>
+          <Button
+            fullWidth
+            onClick={handleMore}
+            endIcon={!moreInfo ? <ExpandMore /> : <ExpandLess />}
+          >
+            More Information
+          </Button>
+          <Divider />
+        </Grid>
+        <DynamicMoreInfo open={moreInfo} />
+      </Grid>
+    </SettingsWrap>
+  </>;
 };
 
 export default AccountSettings;

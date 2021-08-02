@@ -22,8 +22,8 @@ const EditAccount = () => {
         <title>Edit Account</title>
       </Head>
       <SettingsWrap>
-        <Box display="flex">
-          <Typography variant="h4" style={{ flexGrow: 1 }}>
+        <Box display="flex" marginBottom={4}>
+          <Typography variant="h4" sx={{ flexGrow: 1 }}>
             Account
           </Typography>
           <Link href="/settings/account/" passHref>

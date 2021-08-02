@@ -13,12 +13,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete } from "@material-ui/core";
 import { useRouter } from "next/router";
 import React, { useReducer } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { State, reducer } from "../../Hooks/Reducers/PostReducer";
+import { State, reducer, Tag } from "../../Hooks/Reducers/PostReducer";
 import useTag from "../../Hooks/useTag";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
@@ -131,7 +131,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               color="primary"
               rows={8}
               multiline={true}
-              rowsMax={4}
+              maxRows={4}
               required
               onChange={handleChange}
               defaultValue={post.description}
@@ -180,7 +180,9 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
             <Autocomplete
               id="asynchronous-demo"
               getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => option.name === value.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               filterSelectedOptions
               onOpen={handleTagActive}
               onClose={handleTagActive}
@@ -194,7 +196,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               options={options}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
-              renderOption={(option) => (
+              renderOption={(_props, option: Tag, _status) => (
                 <Box display="flex" justifyContent="center" alignItems="center">
                   <Typography noWrap>{option.name} </Typography>
                   <Chip

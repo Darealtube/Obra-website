@@ -9,7 +9,6 @@ import { useApollo } from "../apollo/apolloClient";
 
 export default function MyApp({ Component, pageProps }) {
   const apolloClient = useApollo(pageProps);
-  
   useEffect(() => {
     const handleRouteStart = () => {
       start();

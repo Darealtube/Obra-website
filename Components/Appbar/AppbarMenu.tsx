@@ -33,13 +33,13 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
   };
   return (
     <div>
-      <IconButton>
+      <IconButton size="large">
         <Link href={`/create`} passHref>
           <Palette fontSize="large" htmlColor="white" />
         </Link>
       </IconButton>
       {user.userId.admin && !XSmall && (
-        <IconButton>
+        <IconButton size="large">
           <Link href={`/issues/post/`} passHref>
             <Badge
               color="secondary"
@@ -51,7 +51,7 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
         </IconButton>
       )}
       <DynamicNotifPop user={user} fetchMore={fetchMore} />
-      <IconButton onClick={handleProfile}>
+      <IconButton onClick={handleProfile} size="large">
         {user.userId.image ? (
           <Image
             src={user.userId.image}

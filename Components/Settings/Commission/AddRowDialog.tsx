@@ -54,65 +54,63 @@ const AddRowDialog = ({ open, handleCloseDialog, handleAddRow }: Props) => {
     handleCloseDialog();
   };
 
-  return (
-    <>
-      <Dialog open={open} disableBackdropClick disableEscapeKeyDown>
-        <DialogTitle style={{ textAlign: "center" }}>Add Row</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  margin="none"
-                  required
-                  fullWidth
-                  id="type"
-                  label="Type of Art"
-                  placeholder="Leave a message on how you should be contacted about the
-              price, and how you will transfer the art."
-                  name="type"
-                  color="primary"
-                  inputProps={{ maxLength: 40 }}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={6}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <NumberFormat
-                  value={rowInfo.price}
-                  displayType={"input"}
-                  thousandSeparator
-                  prefix={"₱"}
-                  inputMode="numeric"
-                  allowNegative={false}
-                  isNumericString
-                  onValueChange={handleNumber}
-                  style={{ height: "90%", width: "100%" }}
-                  required
-                />
-              </Grid>
+  return <>
+    <Dialog open={open} disableEscapeKeyDown>
+      <DialogTitle style={{ textAlign: "center" }}>Add Row</DialogTitle>
+      <form onSubmit={handleSubmit}>
+        <DialogContent>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                variant="outlined"
+                margin="none"
+                required
+                fullWidth
+                id="type"
+                label="Type of Art"
+                placeholder="Leave a message on how you should be contacted about the
+            price, and how you will transfer the art."
+                name="type"
+                color="primary"
+                inputProps={{ maxLength: 40 }}
+                onChange={handleChange}
+              />
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button color="primary" type="submit">
-              Add Row
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </>
-  );
+            <Grid
+              item
+              xs={6}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <NumberFormat
+                value={rowInfo.price}
+                displayType={"input"}
+                thousandSeparator
+                prefix={"₱"}
+                inputMode="numeric"
+                allowNegative={false}
+                isNumericString
+                onValueChange={handleNumber}
+                style={{ height: "90%", width: "100%" }}
+                required
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button color="primary" type="submit">
+            Add Row
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  </>;
 };
 
 export default AddRowDialog;

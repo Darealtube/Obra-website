@@ -64,7 +64,7 @@ const CommentForm = ({ id }: Comment) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
-              <IconButton type="submit" disabled={disabled || !session}>
+              <IconButton type="submit" disabled={disabled || !session} size="large">
                 <SendIcon />
               </IconButton>
             </InputAdornment>

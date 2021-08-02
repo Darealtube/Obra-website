@@ -20,13 +20,16 @@ import DefaultErrorPage from "next/error";
 const Gallery = () => {
   const router = useRouter();
   const name = router.query.name as string;
-  const { data, fetchMore, loading } = useQuery<UserData, QueryNameVars>(USER_GALLERY_QUERY, {
-    variables: {
-      name: name,
-      limit: 4,
-    },
-    skip: !name,
-  });
+  const { data, fetchMore, loading } = useQuery<UserData, QueryNameVars>(
+    USER_GALLERY_QUERY,
+    {
+      variables: {
+        name: name,
+        limit: 4,
+      },
+      skip: !name,
+    }
+  );
 
   return (
     <div className={styles.root}>
@@ -35,14 +38,19 @@ const Gallery = () => {
         <title>{name ? `${name}'s Gallery` : "Gallery"}</title>
       </Head>
       <Appbar />
-      <Container className={styles.content}>
+      <Container className={styles.content} sx={{ marginTop: "80px" }}>
         {!data?.userName && name && !loading ? (
           <>
             <DefaultErrorPage statusCode={404} />
           </>
         ) : data?.userName && name ? (
           <>
-            <Box display="flex" marginBottom={2}>
+            <Box
+              display="flex"
+              marginBottom={2}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Image
                 src={data?.userName.image}
                 width={80}

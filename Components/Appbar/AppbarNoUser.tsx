@@ -16,7 +16,7 @@ const AppbarNoUser = () => {
 
   return (
     <div>
-      <IconButton onClick={handleProfile}>
+      <IconButton onClick={handleProfile} size="large">
         <Avatar src="" />
       </IconButton>
       <DynamicNoUserPop

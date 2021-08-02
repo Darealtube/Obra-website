@@ -7,6 +7,7 @@ import {
   InputLabel,
   Chip,
   Container,
+  SelectChangeEvent,
 } from "@material-ui/core";
 import styles from "../../pages/styles/General/Configure.module.css";
 import React, { useState } from "react";
@@ -34,7 +35,8 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
   const router = useRouter();
   const [session] = useSession();
   const [disabled, setDisabled] = useState(false);
-  const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+
+  const handleChange = (e: SelectChangeEvent<string[] | string>) => {
     dispatch({
       type: "CHANGE",
       field: (e.target as HTMLInputElement).name,

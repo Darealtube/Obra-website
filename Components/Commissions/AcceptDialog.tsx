@@ -50,46 +50,44 @@ const ConfirmDialog = ({ open, id, handleClose }: Props) => {
     setMessage(e.target.value);
   };
 
-  return (
-    <>
-      <Dialog open={open} disableBackdropClick disableEscapeKeyDown>
-        <DialogTitle>Are you sure?</DialogTitle>
-        <form onSubmit={handleAccept}>
-          <DialogContent>
-            <DialogContentText>
-              Please leave a message on how you should be contacted about the
-              price, and how you will transfer the art.
-            </DialogContentText>
-            <TextField
-              variant="outlined"
-              margin="none"
-              required
-              fullWidth
-              id="message"
-              label="Message"
-              placeholder="Leave a message on how you should be contacted about the
-              price, and how you will transfer the art."
-              name="message"
-              color="primary"
-              inputProps={{ maxLength: 100, minLength: 20 }}
-              rows={3}
-              multiline={true}
-              rowsMax={4}
-              onChange={handleChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button color="primary" type="submit">
-              Accept Commission
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </>
-  );
+  return <>
+    <Dialog open={open} disableEscapeKeyDown>
+      <DialogTitle>Are you sure?</DialogTitle>
+      <form onSubmit={handleAccept}>
+        <DialogContent>
+          <DialogContentText>
+            Please leave a message on how you should be contacted about the
+            price, and how you will transfer the art.
+          </DialogContentText>
+          <TextField
+            variant="outlined"
+            margin="none"
+            required
+            fullWidth
+            id="message"
+            label="Message"
+            placeholder="Leave a message on how you should be contacted about the
+            price, and how you will transfer the art."
+            name="message"
+            color="primary"
+            inputProps={{ maxLength: 100, minLength: 20 }}
+            rows={3}
+            multiline={true}
+            maxRows={4}
+            onChange={handleChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button color="primary" type="submit">
+            Accept Commission
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  </>;
 };
 
 export default ConfirmDialog;

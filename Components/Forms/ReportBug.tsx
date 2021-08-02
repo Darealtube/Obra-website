@@ -101,7 +101,7 @@ const BugReportForm = ({ reportBug }: Prop) => {
               color="primary"
               rows={8}
               multiline={true}
-              rowsMax={10}
+              maxRows={10}
               onChange={handleChange}
             />
           </Box>

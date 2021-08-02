@@ -64,86 +64,84 @@ const FinishedCommissionCart = ({ id }: {id: string;}) => {
     }
   };
 
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Finished Commissions</title>
-      </Head>
-      <Appbar />
-      <CssBaseline />
-      <CartWrap totalPrice={totalPrice}>
-        <List className={styles.artCart} id="artCart" ref={ref}>
-          <InfiniteScroll
-            dataLength={userId.yourFinishedCommissions.edges.length}
-            next={More}
-            hasMore={hasMore}
-            loader={
-              <>
-                <br />
-                <CircularProgress />
-              </>
-            }
-            style={{
-              overflow: "hidden",
-              textAlign: "center",
-            }}
-            scrollThreshold={0.6}
-            scrollableTarget="artCart"
-          >
-            {userId.yourFinishedCommissions.edges.map((item) => (
-              <>
-                <ListItem key={item.node.id} style={{ display: "flex" }}>
-                  <Box>
-                    <ListItemAvatar>
-                      <Image
-                        src={item.node.finishedwatermarkArt}
-                        width={400}
-                        height={200}
-                        className={styles.avatar}
-                        alt={"Author Image"}
-                      />
-                    </ListItemAvatar>
-                  </Box>
-
-                  <ListItemText
-                    style={{
-                      marginLeft: "12px",
-                      flexGrow: 1,
-                    }}
-                    primary={item.node.title}
-                    secondary={<>{item.node.message}</>}
-                  />
-
-                  <Box
-                    className={styles.cartActions}
-                    style={
-                      LaptopL && !Small
-                        ? { flexDirection: "column" }
-                        : { flexDirection: "row" }
-                    }
-                  >
-                    <Link href={`/commissions/${item.node.id}`} passHref>
-                      <IconButton component="a">
-                        <VisibilityIcon />
-                      </IconButton>
-                    </Link>
-                    <Checkbox
-                      color="primary"
-                      id={item.node.id}
-                      value={item.node.price}
-                      onChange={handleSelect}
-                      checked={selected == item.node.id}
+  return <>
+    <Head>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <title>Finished Commissions</title>
+    </Head>
+    <Appbar />
+    <CssBaseline />
+    <CartWrap totalPrice={totalPrice}>
+      <List className={styles.artCart} id="artCart" ref={ref}>
+        <InfiniteScroll
+          dataLength={userId.yourFinishedCommissions.edges.length}
+          next={More}
+          hasMore={hasMore}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+          scrollThreshold={0.6}
+          scrollableTarget="artCart"
+        >
+          {userId.yourFinishedCommissions.edges.map((item) => (
+            <>
+              <ListItem key={item.node.id} style={{ display: "flex" }}>
+                <Box>
+                  <ListItemAvatar>
+                    <Image
+                      src={item.node.finishedwatermarkArt}
+                      width={400}
+                      height={200}
+                      className={styles.avatar}
+                      alt={"Author Image"}
                     />
-                  </Box>
-                </ListItem>
-              </>
-            ))}
-          </InfiniteScroll>
-        </List>
-      </CartWrap>
-    </>
-  );
+                  </ListItemAvatar>
+                </Box>
+
+                <ListItemText
+                  style={{
+                    marginLeft: "12px",
+                    flexGrow: 1,
+                  }}
+                  primary={item.node.title}
+                  secondary={<>{item.node.message}</>}
+                />
+
+                <Box
+                  className={styles.cartActions}
+                  style={
+                    LaptopL && !Small
+                      ? { flexDirection: "column" }
+                      : { flexDirection: "row" }
+                  }
+                >
+                  <Link href={`/commissions/${item.node.id}`} passHref>
+                    <IconButton component="a" size="large">
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Link>
+                  <Checkbox
+                    color="primary"
+                    id={item.node.id}
+                    value={item.node.price}
+                    onChange={handleSelect}
+                    checked={selected == item.node.id}
+                  />
+                </Box>
+              </ListItem>
+            </>
+          ))}
+        </InfiniteScroll>
+      </List>
+    </CartWrap>
+  </>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

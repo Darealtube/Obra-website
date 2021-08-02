@@ -119,7 +119,7 @@ const BugReportList = ({ reports, fetchMore }: Props) => {
                     <Link href={`/issues/${report.node.id}`} passHref>
                       <Button component="a">View</Button>
                     </Link>
-                    <IconButton value={report.node.id} onClick={handleOpen}>
+                    <IconButton value={report.node.id} onClick={handleOpen} size="large">
                       <CloseIcon />
                     </IconButton>
                   </Box>

@@ -62,110 +62,105 @@ const PendingList = ({ pendingCommissions, fetchMore }: Props) => {
     setAcceptOpen(false);
   };
 
-  return (
-    <>
-      <div className={styles.list2} ref={ref} id="pendingList">
-        <List>
-          <InfiniteScroll
-            dataLength={pendingCommissions.edges.length}
-            next={More}
-            hasMore={hasMore}
-            loader={
-              <>
-                <br />
-                <CircularProgress />
-              </>
-            }
-            style={{
-              overflow: "hidden",
-              textAlign: "center",
-            }}
-            scrollThreshold={0.9}
-            scrollableTarget="pendingList"
-          >
-            {pendingCommissions &&
-              pendingCommissions.edges.map((commission) => (
-                <Link
-                  href={`/commissions/${commission.node.id}`}
+  return <>
+    <div className={styles.list2} ref={ref} id="pendingList">
+      <List>
+        <InfiniteScroll
+          dataLength={pendingCommissions.edges.length}
+          next={More}
+          hasMore={hasMore}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+          scrollThreshold={0.9}
+          scrollableTarget="pendingList"
+        >
+          {pendingCommissions &&
+            pendingCommissions.edges.map((commission) => (
+              <Link
+                href={`/commissions/${commission.node.id}`}
+                key={commission.node.id}
+                passHref
+              >
+                <ListItem
+                  divider
                   key={commission.node.id}
-                  passHref
+                  component="a"
+                  ContainerComponent="div"
                 >
-                  <ListItem
-                    divider
-                    key={commission.node.id}
-                    component="a"
-                    ContainerComponent="div"
-                  >
-                    <ListItemAvatar>
-                      <Image
-                        src={
-                          commission.node.fromUser.image
-                            ? commission.node.fromUser.image
-                            : "/user-empty-avatar.png"
-                        }
-                        width={40}
-                        height={40}
-                        className={styles.avatar}
-                        alt={"Commissioner Image"}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`${commission.node.title}  issued by ${commission.node.fromUser.name} at ${commission.node.dateIssued}`}
-                      secondary={
-                        mobile
-                          ? `${commission.node.description}. 
-                                ${
-                                  commission.node.deadline
-                                    ? `Deadline: ${commission.node.deadline}`
-                                    : `No Deadline`
-                                }`
-                          : `${commission.node.description}`
+                  <ListItemAvatar>
+                    <Image
+                      src={
+                        commission.node.fromUser.image
+                          ? commission.node.fromUser.image
+                          : "/user-empty-avatar.png"
                       }
-                      style={{ flexGrow: 1 }}
+                      width={40}
+                      height={40}
+                      className={styles.avatar}
+                      alt={"Commissioner Image"}
                     />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={`${commission.node.title}  issued by ${commission.node.fromUser.name} at ${commission.node.dateIssued}`}
+                    secondary={
+                      mobile
+                        ? `${commission.node.description}. 
+                              ${
+                                commission.node.deadline
+                                  ? `Deadline: ${commission.node.deadline}`
+                                  : `No Deadline`
+                              }`
+                        : `${commission.node.description}`
+                    }
+                    style={{ flexGrow: 1 }}
+                  />
 
-                    <ListItemSecondaryAction
-                      style={
-                        mobile
-                          ? {
-                              display: "flex",
-                              flexDirection: "column",
-                            }
-                          : { display: "block" }
-                      }
-                    >
-                      {!mobile && (
-                        <Typography>
-                          Deadline:{" "}
-                          {commission.node.deadline
-                            ? commission.node.deadline
-                            : "No Deadline"}
-                        </Typography>
-                      )}
-                      <IconButton
-                        id={commission.node.id}
-                        onClick={handleAcceptOpen}
-                      >
-                        <CheckIcon style={{ color: "green" }} />
-                      </IconButton>
-                      <IconButton id={commission.node.id} onClick={handleOpen}>
-                        <CloseIcon color="secondary" />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </Link>
-              ))}
-          </InfiniteScroll>
-        </List>
-      </div>
-      <DynamicDialog open={open} handleClose={handleClose} id={targetId} />
-      <AcceptDialog
-        open={acceptOpen}
-        handleClose={handleAcceptClose}
-        id={targetId}
-      />
-    </>
-  );
+                  <ListItemSecondaryAction
+                    style={
+                      mobile
+                        ? {
+                            display: "flex",
+                            flexDirection: "column",
+                          }
+                        : { display: "block" }
+                    }
+                  >
+                    {!mobile && (
+                      <Typography>
+                        Deadline:{" "}
+                        {commission.node.deadline
+                          ? commission.node.deadline
+                          : "No Deadline"}
+                      </Typography>
+                    )}
+                    <IconButton id={commission.node.id} onClick={handleAcceptOpen} size="large">
+                      <CheckIcon style={{ color: "green" }} />
+                    </IconButton>
+                    <IconButton id={commission.node.id} onClick={handleOpen} size="large">
+                      <CloseIcon color="secondary" />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </Link>
+            ))}
+        </InfiniteScroll>
+      </List>
+    </div>
+    <DynamicDialog open={open} handleClose={handleClose} id={targetId} />
+    <AcceptDialog
+      open={acceptOpen}
+      handleClose={handleAcceptClose}
+      id={targetId}
+    />
+  </>;
 };
 
 export default PendingList;

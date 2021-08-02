@@ -4,14 +4,12 @@
 }
 
 .content {
-  margin-top: 80px;
   display: flex;
   flex-direction: column;
 }
 
 .listRoot {
   display: "flex";
-  flex-wrap: wrap;
 }
 
 .listTile {

@@ -106,104 +106,102 @@ const CommSettingsEditForm = ({ editCommSettings }: Props) => {
     router.push("/settings/commissionInfo/");
   };
 
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <Grid
-          container
-          spacing={2}
-          style={{ display: "flex", marginTop: "8px" }}
-        >
-          <Grid item xs={12} md={6}>
-            <Typography gutterBottom align="center" variant="h4">
-              Commission Poster
-            </Typography>
-            <Box
-              position="relative"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="80vh"
-            >
-              {!loading ? (
-                <>
-                  <Image
-                    src={placeholder}
-                    layout="fill"
-                    objectFit="contain"
-                    alt={"Commission Poster Placeholder"}
-                  />
-                  <IconButton onClick={handleArtClick}>
-                    <PhotoCameraIcon />
-                  </IconButton>
-                </>
-              ) : (
-                <CircularProgress />
-              )}
-              <input
-                type="file"
-                id="sampleArt"
-                name="sampleArt"
-                ref={inputFile}
-                style={{ display: "none" }}
-                onChange={handleArt}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography gutterBottom align="center" variant="h4">
-              Commission Rates
-            </Typography>
-            <TableContainer component={Paper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center"></TableCell>
-                    <TableCell align="center">Type of Art</TableCell>
-                    <TableCell align="center">Price</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row, index) => (
-                    <TableRow key={row.type}>
-                      <TableCell align="center">
-                        <IconButton value={index} onClick={handleDeleteRow}>
-                          <RemoveIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="center">{row.type}</TableCell>
-                      <TableCell align="center">{row.price}</TableCell>
-                    </TableRow>
-                  ))}
-                  <TableRow>
-                    <TableCell align="center" colSpan={3}>
-                      <IconButton onClick={handleOpenDialog}>
-                        <AddRoundedIcon />
+  return <>
+    <form onSubmit={handleSubmit}>
+      <Grid
+        container
+        spacing={2}
+        style={{ display: "flex", marginTop: "8px" }}
+      >
+        <Grid item xs={12} md={6}>
+          <Typography gutterBottom align="center" variant="h4">
+            Commission Poster
+          </Typography>
+          <Box
+            position="relative"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="80vh"
+          >
+            {!loading ? (
+              <>
+                <Image
+                  src={placeholder}
+                  layout="fill"
+                  objectFit="contain"
+                  alt={"Commission Poster Placeholder"}
+                />
+                <IconButton onClick={handleArtClick} size="large">
+                  <PhotoCameraIcon />
+                </IconButton>
+              </>
+            ) : (
+              <CircularProgress />
+            )}
+            <input
+              type="file"
+              id="sampleArt"
+              name="sampleArt"
+              ref={inputFile}
+              style={{ display: "none" }}
+              onChange={handleArt}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography gutterBottom align="center" variant="h4">
+            Commission Rates
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center"></TableCell>
+                  <TableCell align="center">Type of Art</TableCell>
+                  <TableCell align="center">Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <TableRow key={row.type}>
+                    <TableCell align="center">
+                      <IconButton value={index} onClick={handleDeleteRow} size="large">
+                        <RemoveIcon />
                       </IconButton>
                     </TableCell>
+                    <TableCell align="center">{row.type}</TableCell>
+                    <TableCell align="center">{row.price}</TableCell>
                   </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Button variant="outlined" type="submit" disabled={disableSubmit}>
-              Save Changes
-            </Button>
-          </Grid>
+                ))}
+                <TableRow>
+                  <TableCell align="center" colSpan={3}>
+                    <IconButton onClick={handleOpenDialog} size="large">
+                      <AddRoundedIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
-      </form>
-      <DynamicAddRowDialog
-        open={addDialogOpen}
-        handleCloseDialog={handleCloseDialog}
-        handleAddRow={handleAddRow}
-      />
-    </>
-  );
+        <Grid
+          item
+          xs={12}
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <Button variant="outlined" type="submit" disabled={disableSubmit}>
+            Save Changes
+          </Button>
+        </Grid>
+      </Grid>
+    </form>
+    <DynamicAddRowDialog
+      open={addDialogOpen}
+      handleCloseDialog={handleCloseDialog}
+      handleAddRow={handleAddRow}
+    />
+  </>;
 };
 
 export default CommSettingsEditForm;

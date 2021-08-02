@@ -47,200 +47,198 @@ const About = () => {
   const [humanActive, setHumanActive] = useState(false);
   const [contactActive, setContactActive] = useState(false);
 
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>About Us</title>
-      </Head>
-      <Link href="/home" passHref>
-        <IconButton component="a">
-          <HomeIcon fontSize="large" />
-        </IconButton>
-      </Link>
-      <Box
-        justifyContent="center"
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-      >
-        <Container>
-          <Fade in={true} timeout={1500}>
-            <Box
-              display="flex"
-              marginTop={4}
-              marginBottom={4}
-              justifyContent="center"
-              alignItems="center"
+  return <>
+    <Head>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <title>About Us</title>
+    </Head>
+    <Link href="/home" passHref>
+      <IconButton component="a" size="large">
+        <HomeIcon fontSize="large" />
+      </IconButton>
+    </Link>
+    <Box
+      justifyContent="center"
+      alignItems="center"
+      display="flex"
+      flexDirection="column"
+    >
+      <Container>
+        <Fade in={true} timeout={1500}>
+          <Box
+            display="flex"
+            marginTop={4}
+            marginBottom={4}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Image src="/obra-logo.png" height={60} width={60} alt={"Obra Logo"} />
+            <Typography
+              variant="h3"
+              align="center"
+              gutterBottom
+              style={{ marginTop: "8px", marginLeft: "8px" }}
             >
-              <Image src="/obra-logo.png" height={60} width={60} alt={"Obra Logo"} />
+              Obra
+            </Typography>
+          </Box>
+        </Fade>
+
+        <Main
+          changer={setAboutActive}
+          active={aboutActive}
+          title={"About"}
+          description={`Our story began in 2020. Back then, we were only a handful of
+          high school students with a diverse set of skills ranging from
+          technology to arts (and even a combination of both), that were
+          harnessed within our previous years. We were always thinking
+          of ways to help promote local art given that it is a diverse
+          and wonderful part of us Filipino’s culture. After thoughtful
+          planning, we established Obra – an online art e-commerce
+          platform for Filipinos, by Filipinos. We aim to give aspiring
+          artists a platform to showcase their works of passion and
+          talents to people of all kinds.`}
+          fontSize={"h6"}
+        />
+
+        <Main
+          changer={setVisionActive}
+          active={visionActive}
+          icon={<RemoveRedEyeIcon fontSize="large" />}
+          title={"Vision"}
+          description={`Our vision is an environment where Filipino artists’ Obra
+          Maestra is widely proclaimed by Filipinos. That means
+          providing every artist with an opportunity, and every customer
+          satisfaction. We also yearn in the future that Obra isn’t seen
+          as just a company that offers an e-commerce platform for
+          selling and buying art. Instead, they’ll know that Obra is a
+          canvas for Filipino artists to show their skills and talents
+          in.`}
+          fontSize={"h5"}
+        />
+
+        <Main
+          changer={setMissionActive}
+          active={missionActive}
+          icon={<FlagIcon fontSize="large" />}
+          title={"Mission"}
+          description={`Obra’s mission is to render a canvas painted with
+          opportunities for Filipino artists, where the arts are
+          accessible, inclusive, and conveyed.`}
+        />
+
+        <VisibilitySensor
+          onChange={(isVisible) => {
+            setTeamActive(isVisible);
+          }}
+          partialVisibility={true}
+        >
+          <Box textAlign="center" marginBottom={12} id="developers">
+            <Fade in={teamActive} timeout={2500}>
               <Typography
-                variant="h3"
-                align="center"
+                variant="h2"
                 gutterBottom
-                style={{ marginTop: "8px", marginLeft: "8px" }}
+                align="center"
+                style={{ marginBottom: "48px" }}
               >
-                Obra
+                Our Team
               </Typography>
-            </Box>
-          </Fade>
+            </Fade>
+          </Box>
+        </VisibilitySensor>
 
-          <Main
-            changer={setAboutActive}
-            active={aboutActive}
-            title={"About"}
-            description={`Our story began in 2020. Back then, we were only a handful of
-            high school students with a diverse set of skills ranging from
-            technology to arts (and even a combination of both), that were
-            harnessed within our previous years. We were always thinking
-            of ways to help promote local art given that it is a diverse
-            and wonderful part of us Filipino’s culture. After thoughtful
-            planning, we established Obra – an online art e-commerce
-            platform for Filipinos, by Filipinos. We aim to give aspiring
-            artists a platform to showcase their works of passion and
-            talents to people of all kinds.`}
-            fontSize={"h6"}
-          />
+        <SingleDev
+          changer={setCEOActive}
+          active={CEOActive}
+          name={"Armand Sotelo"}
+          role={"CEO of Maestro"}
+          image={"/Developers/Armand.jpg"}
+          fb={"https://www.facebook.com/rmnd.jsph1"}
+        />
 
-          <Main
-            changer={setVisionActive}
-            active={visionActive}
-            icon={<RemoveRedEyeIcon fontSize="large" />}
-            title={"Vision"}
-            description={`Our vision is an environment where Filipino artists’ Obra
-            Maestra is widely proclaimed by Filipinos. That means
-            providing every artist with an opportunity, and every customer
-            satisfaction. We also yearn in the future that Obra isn’t seen
-            as just a company that offers an e-commerce platform for
-            selling and buying art. Instead, they’ll know that Obra is a
-            canvas for Filipino artists to show their skills and talents
-            in.`}
-            fontSize={"h5"}
-          />
+        <DevList
+          changer={setDevActive}
+          List={Developers}
+          active={devActive}
+          teamName={"Web Developers"}
+        />
+        <DevList
+          changer={setMarketActive}
+          List={Marketing}
+          active={marketActive}
+          teamName={"Marketing Team"}
+        />
+        <DevList
+          changer={setFinanceActive}
+          List={Finance}
+          active={financeActive}
+          teamName={"Finance Team"}
+        />
 
-          <Main
-            changer={setMissionActive}
-            active={missionActive}
-            icon={<FlagIcon fontSize="large" />}
-            title={"Mission"}
-            description={`Obra’s mission is to render a canvas painted with
-            opportunities for Filipino artists, where the arts are
-            accessible, inclusive, and conveyed.`}
-          />
+        <SingleDev
+          changer={setPublicActive}
+          active={publicActive}
+          name={"Cristopher James Castillo"}
+          role={"Public Relations Officer"}
+          image={"/Developers/Castillo.jpg"}
+          fb={"https://www.facebook.com/jamesycastillo"}
+          twt={"https://twitter.com/jccastillo420"}
+        />
 
-          <VisibilitySensor
-            onChange={(isVisible) => {
-              setTeamActive(isVisible);
-            }}
-            partialVisibility={true}
-          >
-            <Box textAlign="center" marginBottom={12} id="developers">
-              <Fade in={teamActive} timeout={2500}>
-                <Typography
-                  variant="h2"
-                  gutterBottom
-                  align="center"
-                  style={{ marginBottom: "48px" }}
-                >
-                  Our Team
-                </Typography>
-              </Fade>
-            </Box>
-          </VisibilitySensor>
+        <SingleDev
+          changer={setHumanActive}
+          active={humanActive}
+          name={"Darryl Javier"}
+          role={"Human Relations Officer"}
+          image={"/Developers/Darryl.jpg"}
+          fb={"https://www.facebook.com/darryl.javier.5"}
+          twt={"https://twitter.com/therealjavierr"}
+        />
 
-          <SingleDev
-            changer={setCEOActive}
-            active={CEOActive}
-            name={"Armand Sotelo"}
-            role={"CEO of Maestro"}
-            image={"/Developers/Armand.jpg"}
-            fb={"https://www.facebook.com/rmnd.jsph1"}
-          />
+        <VisibilitySensor
+          onChange={(isVisible) => {
+            setContactActive(isVisible);
+          }}
+          partialVisibility={true}
+        >
+          <Box textAlign="center" marginBottom={18} marginTop={6} id="contacts">
+            <Fade in={contactActive} timeout={2500}>
+              <Typography
+                variant="h2"
+                gutterBottom
+                align="center"
+                style={{ marginBottom: "48px" }}
+              >
+                Contact Us
+              </Typography>
+            </Fade>
 
-          <DevList
-            changer={setDevActive}
-            List={Developers}
-            active={devActive}
-            teamName={"Web Developers"}
-          />
-          <DevList
-            changer={setMarketActive}
-            List={Marketing}
-            active={marketActive}
-            teamName={"Marketing Team"}
-          />
-          <DevList
-            changer={setFinanceActive}
-            List={Finance}
-            active={financeActive}
-            teamName={"Finance Team"}
-          />
-
-          <SingleDev
-            changer={setPublicActive}
-            active={publicActive}
-            name={"Cristopher James Castillo"}
-            role={"Public Relations Officer"}
-            image={"/Developers/Castillo.jpg"}
-            fb={"https://www.facebook.com/jamesycastillo"}
-            twt={"https://twitter.com/jccastillo420"}
-          />
-
-          <SingleDev
-            changer={setHumanActive}
-            active={humanActive}
-            name={"Darryl Javier"}
-            role={"Human Relations Officer"}
-            image={"/Developers/Darryl.jpg"}
-            fb={"https://www.facebook.com/darryl.javier.5"}
-            twt={"https://twitter.com/therealjavierr"}
-          />
-
-          <VisibilitySensor
-            onChange={(isVisible) => {
-              setContactActive(isVisible);
-            }}
-            partialVisibility={true}
-          >
-            <Box textAlign="center" marginBottom={18} marginTop={6} id="contacts">
-              <Fade in={contactActive} timeout={2500}>
-                <Typography
-                  variant="h2"
-                  gutterBottom
-                  align="center"
-                  style={{ marginBottom: "48px" }}
-                >
-                  Contact Us
-                </Typography>
-              </Fade>
-
-              <Slide in={contactActive} timeout={200} direction="up">
-                <Grid container spacing={4}>
-                  <Grid item xs={12} sm={4}>
-                    <Button component="a" startIcon={<MailIcon />}>
-                      <Typography>ObraWeb@gmail.com</Typography>
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Button component="a" startIcon={<FacebookIcon />}>
-                      <Typography>Obra</Typography>
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Button component="a" startIcon={<TwitterIcon />}>
-                      <Typography>Obra_Website</Typography>
-                    </Button>
-                  </Grid>
+            <Slide in={contactActive} timeout={200} direction="up">
+              <Grid container spacing={4}>
+                <Grid item xs={12} sm={4}>
+                  <Button component="a" startIcon={<MailIcon />}>
+                    <Typography>ObraWeb@gmail.com</Typography>
+                  </Button>
                 </Grid>
-              </Slide>
-            </Box>
-          </VisibilitySensor>
+                <Grid item xs={12} sm={4}>
+                  <Button component="a" startIcon={<FacebookIcon />}>
+                    <Typography>Obra</Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Button component="a" startIcon={<TwitterIcon />}>
+                    <Typography>Obra_Website</Typography>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Slide>
+          </Box>
+        </VisibilitySensor>
 
-          <Copyright />
-        </Container>
-      </Box>
-    </>
-  );
+        <Copyright />
+      </Container>
+    </Box>
+  </>;
 };
 
 export default About;

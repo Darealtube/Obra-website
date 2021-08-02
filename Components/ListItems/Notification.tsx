@@ -103,7 +103,7 @@ const Notification = ({
                   id={notif.node.id}
                   onClick={DeleteNotif}
                   disabled={deleteDisabled}
-                >
+                  size="large">
                   <DeleteIcon />
                 </IconButton>
               </ListItem>

@@ -22,7 +22,6 @@ type Props = {
     | "caption"
     | "button"
     | "overline"
-    | "srOnly"
     | "inherit";
 };
 

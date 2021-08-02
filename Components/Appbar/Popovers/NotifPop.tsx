@@ -81,65 +81,63 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     }
   }, [refetching]);
 
-  return (
-    <>
-      <IconButton
-        onClick={handleNotif}
-        style={showNotif ? { display: "none" } : { display: "inline-flex" }}
-      >
-        <Badge badgeContent={notifCount} color="secondary">
-          <NotificationImportantIcon fontSize="large" htmlColor="white" />
-        </Badge>
-      </IconButton>
-      <Popover
-        anchorEl={notifAnchor}
-        keepMounted
-        open={Boolean(notifAnchor)}
-        onClose={handleNotifClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <Box className={styles.box}>
-          <Typography>Notifications</Typography>
-        </Box>
-        <Divider />
-        <List className={styles.notifmenu} id="notifList">
-          <InfiniteScroll
-            dataLength={user.userId.notifications.edges.length}
-            next={More}
-            hasMore={user.userId.notifications.pageInfo.hasNextPage}
-            loader={
-              <>
-                <br />
-                <CircularProgress />
-              </>
+  return <>
+    <IconButton
+      onClick={handleNotif}
+      style={showNotif ? { display: "none" } : { display: "inline-flex" }}
+      size="large">
+      <Badge badgeContent={notifCount} color="secondary">
+        <NotificationImportantIcon fontSize="large" htmlColor="white" />
+      </Badge>
+    </IconButton>
+    <Popover
+      anchorEl={notifAnchor}
+      keepMounted
+      open={Boolean(notifAnchor)}
+      onClose={handleNotifClose}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+    >
+      <Box className={styles.box}>
+        <Typography>Notifications</Typography>
+      </Box>
+      <Divider />
+      <List className={styles.notifmenu} id="notifList">
+        <InfiniteScroll
+          dataLength={user.userId.notifications.edges.length}
+          next={More}
+          hasMore={user.userId.notifications.pageInfo.hasNextPage}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+          scrollableTarget="notifList"
+          scrollThreshold={0.9}
+        >
+          <Notification
+            newUser={user.userId.newUser}
+            notifications={
+              user.userId ? user.userId.notifications.edges : null
             }
-            style={{
-              overflow: "hidden",
-              textAlign: "center",
-            }}
-            scrollableTarget="notifList"
-            scrollThreshold={0.9}
-          >
-            <Notification
-              newUser={user.userId.newUser}
-              notifications={
-                user.userId ? user.userId.notifications.edges : null
-              }
-              deleteDisabled={disabled}
-              resetNotif={handleResetNotif}
-            />
-          </InfiniteScroll>
-        </List>
-      </Popover>
-    </>
-  );
+            deleteDisabled={disabled}
+            resetNotif={handleResetNotif}
+          />
+        </InfiniteScroll>
+      </List>
+    </Popover>
+  </>;
 };
 
 export default NotifPop;

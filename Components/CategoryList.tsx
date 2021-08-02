@@ -1,9 +1,9 @@
 import styles from "../pages/styles/General/Trending.module.css";
 import {
   Box,
-  GridList,
-  GridListTile,
-  GridListTileBar,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
   IconButton,
   CircularProgress,
 } from "@material-ui/core";
@@ -67,14 +67,14 @@ const CategoryList = ({ data, first, fetchMore, second }: Props) => {
         }}
         scrollThreshold={0.8}
       >
-        <GridList cellHeight="auto" spacing={2}>
+        <ImageList rowHeight="auto" gap={8}>
           {data?.edges.map((tile) => (
-            <GridListTile key={tile.node.art} className={styles.listTile}>
+            <ImageListItem key={tile.node.art} className={styles.listTile}>
               <Box
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                onClick={handleOpen}
+                /* onClick={handleOpen} */
                 id={tile.node.watermarkArt}
               >
                 <Image
@@ -84,24 +84,24 @@ const CategoryList = ({ data, first, fetchMore, second }: Props) => {
                   alt={"Art Image"}
                 />
               </Box>
-              <GridListTileBar
+              <ImageListItemBar
                 title={`${tile.node.title} ${
                   tile.node.author ? ` by ${tile.node.author.name}` : ""
                 }`}
-                titlePosition="top"
+                position="top"
                 className={styles.titleBar}
                 actionIcon={
                   <Link href={`/posts/${tile.node.id}`} passHref>
-                    <IconButton>
+                    <IconButton size="large">
                       <VisibilityIcon />
                     </IconButton>
                   </Link>
                 }
                 actionPosition="right"
               />
-            </GridListTile>
+            </ImageListItem>
           ))}
-        </GridList>
+        </ImageList>
       </InfiniteScroll>
 
       <DynamicImage handleClose={handleClose} open={open} art={targetArt} />

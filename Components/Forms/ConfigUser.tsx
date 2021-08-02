@@ -1,14 +1,15 @@
 import { Grid, TextField, Button, Typography } from "@material-ui/core";
 import styles from "../../pages/styles/General/Configure.module.css";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Select from "react-select";
 import "react-calendar/dist/Calendar.css";
-import moment from "moment";
 import { Action, State } from "../../Hooks/Reducers/ConfigReducer";
 import { UserValidate1 } from "../../utils/userValidator";
 import { useSession } from "next-auth/client";
 import countryList from "react-select-country-list";
-import dynamic from "next/dynamic";
+import AdapterMoment from "@material-ui/lab/AdapterMoment";
+import LocalizationProvider from "@material-ui/lab/LocalizationProvider";
+import DatePicker from "@material-ui/lab/DatePicker";
 
 type Props = {
   user: State;
@@ -23,11 +24,8 @@ const customStyles = {
   }),
 };
 
-const DynamicDate = dynamic(() => import("../MainPopovers/DatePopover"));
-
 const ConfigUser = ({ user, dispatch }: Props) => {
   const [session] = useSession();
-  const [dateAnchor, setdateAnchor] = useState<null | HTMLElement>(null);
   const countries: { value: string; label: string }[] = useMemo(
     () => countryList().getData(),
     []
@@ -35,7 +33,6 @@ const ConfigUser = ({ user, dispatch }: Props) => {
 
   const handleDate = (value: Date) => {
     dispatch({ type: "DATE_CHANGE", payload: value });
-    setdateAnchor(null);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,14 +67,6 @@ const ConfigUser = ({ user, dispatch }: Props) => {
     }
   };
 
-  const handleCalendar = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setdateAnchor(event.currentTarget);
-  };
-
-  const handleCalendarClose = () => {
-    setdateAnchor(null);
-  };
-
   return (
     <>
       <form className={styles.form} onSubmit={handleNext}>
@@ -103,20 +92,15 @@ const ConfigUser = ({ user, dispatch }: Props) => {
             />
           </Grid>
 
-          <Grid item xs={6} style={{ marginTop: "16px" }}>
-            <Button
-              onClick={handleCalendar}
-              className={styles.birthday}
-              fullWidth
-              color="primary"
-              variant="contained"
-            >
-              {` Birthday:
-  
-                  ${moment(user.birthday).format("MM/DD/YYYY")}
-                  
-                  `}
-            </Button>
+          <Grid item xs={6}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                label="Birthday"
+                value={user.birthday}
+                onChange={handleDate}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Grid>
 
           <Grid item xs={6}>
@@ -187,12 +171,6 @@ const ConfigUser = ({ user, dispatch }: Props) => {
           </Grid>
         </Grid>
       </form>
-      <DynamicDate
-        dateAnchor={dateAnchor}
-        handleClose={handleCalendarClose}
-        handleDate={handleDate}
-        initValue={user.birthday}
-      />
     </>
   );
 };

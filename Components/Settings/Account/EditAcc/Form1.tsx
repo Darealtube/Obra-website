@@ -73,110 +73,108 @@ const Form1 = ({ user, dispatch, disableSubmit }: Props) => {
     }
   };
 
-  return (
-    <>
-      <Grid item xs={12} className={styles.backdrop}>
-        {!backdropLoading ? (
-          <>
-            <Image
-              src={backdrop}
-              layout="fill"
-              objectFit="cover"
-              alt={"Backdrop Image"}
-            />
-            <IconButton onClick={handleBackdropClick}>
-              <PhotoCameraIcon />
-            </IconButton>
-          </>
-        ) : (
-          <CircularProgress />
-        )}
-        <input
-          onChange={handleBackdrop}
-          type="file"
-          id="file"
-          ref={inputFile2}
-          style={{ display: "none" }}
-        />
-      </Grid>
+  return <>
+    <Grid item xs={12} className={styles.backdrop}>
+      {!backdropLoading ? (
+        <>
+          <Image
+            src={backdrop}
+            layout="fill"
+            objectFit="cover"
+            alt={"Backdrop Image"}
+          />
+          <IconButton onClick={handleBackdropClick} size="large">
+            <PhotoCameraIcon />
+          </IconButton>
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+      <input
+        onChange={handleBackdrop}
+        type="file"
+        id="file"
+        ref={inputFile2}
+        style={{ display: "none" }}
+      />
+    </Grid>
 
-      <Grid item xs={6} sm={2} className={styles.dp}>
-        {!loading ? (
-          <>
-            <Image
-              src={placeholder}
-              layout="fill"
-              objectFit="contain"
-              className={styles.avatar}
-              alt={"User Image Placeholder"}
-            />
-            <IconButton onClick={handleAvatarClick}>
-              <PhotoCameraIcon />
-            </IconButton>
-          </>
-        ) : (
-          <CircularProgress />
-        )}
-        <input
-          onChange={handleArt}
-          type="file"
-          id="file"
-          ref={inputFile}
-          style={{ display: "none" }}
-        />
-      </Grid>
-      <Grid item xs={6} sm={10}>
-        <Button
-          type="submit"
-          variant="outlined"
-          style={{ float: "right" }}
-          disabled={disableSubmit || disabledWhileArt}
-        >
-          Save
-        </Button>
-      </Grid>
+    <Grid item xs={6} sm={2} className={styles.dp}>
+      {!loading ? (
+        <>
+          <Image
+            src={placeholder}
+            layout="fill"
+            objectFit="contain"
+            className={styles.avatar}
+            alt={"User Image Placeholder"}
+          />
+          <IconButton onClick={handleAvatarClick} size="large">
+            <PhotoCameraIcon />
+          </IconButton>
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+      <input
+        onChange={handleArt}
+        type="file"
+        id="file"
+        ref={inputFile}
+        style={{ display: "none" }}
+      />
+    </Grid>
+    <Grid item xs={6} sm={10}>
+      <Button
+        type="submit"
+        variant="outlined"
+        style={{ float: "right" }}
+        disabled={disableSubmit || disabledWhileArt}
+      >
+        Save
+      </Button>
+    </Grid>
 
-      <Grid item xs={12}>
-        <Typography variant="h6">Username</Typography>
-        <TextField
-          id="name"
-          name="name"
-          variant="filled"
-          margin="normal"
-          required
-          color="primary"
-          fullWidth
-          label="Username"
-          value={user.name}
-          onChange={handleChange}
-        />
-        <br />
-        <Divider />
-      </Grid>
+    <Grid item xs={12}>
+      <Typography variant="h6">Username</Typography>
+      <TextField
+        id="name"
+        name="name"
+        variant="filled"
+        margin="normal"
+        required
+        color="primary"
+        fullWidth
+        label="Username"
+        value={user.name}
+        onChange={handleChange}
+      />
+      <br />
+      <Divider />
+    </Grid>
 
-      <Grid item xs={12}>
-        <Typography variant="h6">Bio</Typography>
-        <TextField
-          id="userBio"
-          label="Bio"
-          name="userBio"
-          color="primary"
-          variant="outlined"
-          margin="none"
-          required
-          fullWidth
-          rows={4}
-          inputProps={{ maxLength: 400 }}
-          multiline={true}
-          rowsMax={4}
-          value={user.userBio}
-          onChange={handleChange}
-        />
-        <br />
-        <Divider />
-      </Grid>
-    </>
-  );
+    <Grid item xs={12}>
+      <Typography variant="h6">Bio</Typography>
+      <TextField
+        id="userBio"
+        label="Bio"
+        name="userBio"
+        color="primary"
+        variant="outlined"
+        margin="none"
+        required
+        fullWidth
+        rows={4}
+        inputProps={{ maxLength: 400 }}
+        multiline={true}
+        maxRows={4}
+        value={user.userBio}
+        onChange={handleChange}
+      />
+      <br />
+      <Divider />
+    </Grid>
+  </>;
 };
 
 export default Form1;

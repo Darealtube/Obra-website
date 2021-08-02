@@ -131,7 +131,7 @@ const ReportCommentForm = ({ data }: { data: CommentInterface }) => {
                     color="primary"
                     rows={4}
                     multiline={true}
-                    rowsMax={6}
+                    maxRows={6}
                     onChange={handleChange}
                     inputProps={{ maxLength: 500, minLength: 50 }}
                   />

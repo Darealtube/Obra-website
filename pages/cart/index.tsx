@@ -143,115 +143,113 @@ const Cart = ({ id }: { id: string }) => {
     });
   };
 
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>My Cart</title>
-      </Head>
-      <Appbar />
-      <CssBaseline />
-      <CartWrap totalPrice={totalPrice}>
-        <List className={styles.artCart} id="artCart" ref={ref}>
-          <Box display="flex" flexDirection={Small ? "column" : "row"}>
-            <ListItem style={{ backgroundColor: "peachpuff" }}>
-              <ListItemAvatar>
-                <Checkbox
-                  color="primary"
-                  onChange={handleSelectAll}
-                  checked={selected === userId.cart.idList}
-                />
-              </ListItemAvatar>
-              <ListItemText
-                primary={"Select All Items"}
-                style={{ flexGrow: 1 }}
+  return <>
+    <Head>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <title>My Cart</title>
+    </Head>
+    <Appbar />
+    <CssBaseline />
+    <CartWrap totalPrice={totalPrice}>
+      <List className={styles.artCart} id="artCart" ref={ref}>
+        <Box display="flex" flexDirection={Small ? "column" : "row"}>
+          <ListItem style={{ backgroundColor: "peachpuff" }}>
+            <ListItemAvatar>
+              <Checkbox
+                color="primary"
+                onChange={handleSelectAll}
+                checked={selected === userId.cart.idList}
               />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleRemoveSelected}
-              >
-                <Typography>Remove Selected Items</Typography>
-              </Button>
-            </ListItem>
-          </Box>
-          <InfiniteScroll
-            dataLength={userId.cart.edges.length}
-            next={More}
-            hasMore={hasMore}
-            loader={
-              <>
-                <br />
-                <CircularProgress />
-              </>
-            }
-            style={{
-              overflow: "hidden",
-              textAlign: "center",
-            }}
-            scrollThreshold={0.6}
-            scrollableTarget="artCart"
-          >
-            {userId.cart.edges.map((item) => (
-              <>
-                <ListItem key={item.node.id} style={{ display: "flex" }}>
-                  <Box>
-                    <ListItemAvatar>
-                      <Image
-                        src={item.node.postID.watermarkArt}
-                        width={400}
-                        height={200}
-                        className={styles.avatar}
-                        alt={"Author Image"}
-                      />
-                    </ListItemAvatar>
-                  </Box>
-                  <ListItemText
-                    style={{ marginLeft: "12px", flexGrow: 1 }}
-                    primary={item.node.postID.title}
-                    secondary={
-                      <>
-                        {item.node.postID.description},{" "}
-                        {(Small || Laptop) && `Price: ${item.node.cost}`}
-                      </>
-                    }
-                  />
-                  {!Laptop && !Small && (
-                    <ListItemText primary={item.node.cost} />
-                  )}
-
-                  <Box
-                    className={styles.cartActions}
-                    style={
-                      LaptopL && !Small
-                        ? { flexDirection: "column" }
-                        : { flexDirection: "row" }
-                    }
-                  >
-                    <Checkbox
-                      color="primary"
-                      id={item.node.id}
-                      value={item.node.cost}
-                      onChange={handleSelect}
-                      checked={selected.includes(item.node.id)}
+            </ListItemAvatar>
+            <ListItemText
+              primary={"Select All Items"}
+              style={{ flexGrow: 1 }}
+            />
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleRemoveSelected}
+            >
+              <Typography>Remove Selected Items</Typography>
+            </Button>
+          </ListItem>
+        </Box>
+        <InfiniteScroll
+          dataLength={userId.cart.edges.length}
+          next={More}
+          hasMore={hasMore}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+          scrollThreshold={0.6}
+          scrollableTarget="artCart"
+        >
+          {userId.cart.edges.map((item) => (
+            <>
+              <ListItem key={item.node.id} style={{ display: "flex" }}>
+                <Box>
+                  <ListItemAvatar>
+                    <Image
+                      src={item.node.postID.watermarkArt}
+                      width={400}
+                      height={200}
+                      className={styles.avatar}
+                      alt={"Author Image"}
                     />
-                    <IconButton
-                      aria-label="edit"
-                      id={item.node.id}
-                      value={item.node.cost}
-                      onClick={handleRemove}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </ListItem>
-              </>
-            ))}
-          </InfiniteScroll>
-        </List>
-      </CartWrap>
-    </>
-  );
+                  </ListItemAvatar>
+                </Box>
+                <ListItemText
+                  style={{ marginLeft: "12px", flexGrow: 1 }}
+                  primary={item.node.postID.title}
+                  secondary={
+                    <>
+                      {item.node.postID.description},{" "}
+                      {(Small || Laptop) && `Price: ${item.node.cost}`}
+                    </>
+                  }
+                />
+                {!Laptop && !Small && (
+                  <ListItemText primary={item.node.cost} />
+                )}
+
+                <Box
+                  className={styles.cartActions}
+                  style={
+                    LaptopL && !Small
+                      ? { flexDirection: "column" }
+                      : { flexDirection: "row" }
+                  }
+                >
+                  <Checkbox
+                    color="primary"
+                    id={item.node.id}
+                    value={item.node.cost}
+                    onChange={handleSelect}
+                    checked={selected.includes(item.node.id)}
+                  />
+                  <IconButton
+                    aria-label="edit"
+                    id={item.node.id}
+                    value={item.node.cost}
+                    onClick={handleRemove}
+                    size="large">
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+              </ListItem>
+            </>
+          ))}
+        </InfiniteScroll>
+      </List>
+    </CartWrap>
+  </>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

@@ -30,31 +30,29 @@ const CommSettingsEdit = () => {
     }
   );
 
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Edit Commission Settings</title>
-      </Head>
-      <SettingsWrap>
-        <Box display="flex">
-          <Link href={"/home"} passHref>
-            <IconButton component="a">
-              <HomeIcon />
-            </IconButton>
-          </Link>
-          <Typography variant="h4" style={{ flexGrow: 1 }}>
-            Commission Settings
-          </Typography>
-          <Link href={"/settings/commissionInfo/"} passHref>
-            <Button component="a">Cancel</Button>
-          </Link>
-        </Box>
-        <Divider />
-        <CommSettingsEditForm editCommSettings={editCommSettings} />
-      </SettingsWrap>
-    </>
-  );
+  return <>
+    <Head>
+      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      <title>Edit Commission Settings</title>
+    </Head>
+    <SettingsWrap>
+      <Box display="flex">
+        <Link href={"/home"} passHref>
+          <IconButton component="a" size="large">
+            <HomeIcon />
+          </IconButton>
+        </Link>
+        <Typography variant="h4" style={{ flexGrow: 1 }}>
+          Commission Settings
+        </Typography>
+        <Link href={"/settings/commissionInfo/"} passHref>
+          <Button component="a">Cancel</Button>
+        </Link>
+      </Box>
+      <Divider />
+      <CommSettingsEditForm editCommSettings={editCommSettings} />
+    </SettingsWrap>
+  </>;
 };
 
 export default CommSettingsEdit;

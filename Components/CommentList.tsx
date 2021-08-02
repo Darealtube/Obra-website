@@ -79,7 +79,7 @@ const CommentList = ({ comments }: Props) => {
                   onClick={handleEdit}
                   value={comment.node.id}
                   id={comment.node.author ? comment.node.author.id : ""}
-                >
+                  size="large">
                   <MoreVertIcon />
                 </IconButton>
               </ListItemSecondaryAction>

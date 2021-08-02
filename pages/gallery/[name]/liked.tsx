@@ -1,6 +1,5 @@
 import Head from "next/head";
 import {
-  CssBaseline,
   Container,
   Typography,
   Divider,
@@ -39,14 +38,19 @@ const LikedGallery = () => {
         <title>{name ? `${name}'s Liked Gallery` : "Liked Gallery"}</title>
       </Head>
       <Appbar />
-      <Container className={styles.content}>
+      <Container className={styles.content} sx={{ marginTop: "80px" }}>
         {!data?.userName && name && !loading ? (
           <>
             <DefaultErrorPage statusCode={404} />
           </>
         ) : data && name ? (
           <>
-            <Box display="flex" marginBottom={2}>
+            <Box
+              display="flex"
+              marginBottom={2}
+              justifyContent="center"
+              alignItems="center"
+            >
               <Image
                 src={data?.userName.image}
                 width={80}

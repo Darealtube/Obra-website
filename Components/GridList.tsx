@@ -1,17 +1,14 @@
 import styles from "../pages/styles/General/Trending.module.css";
 import {
-  Box,
-  GridList,
-  GridListTile,
-  GridListTileBar,
-  IconButton,
+  ImageList,
+  ImageListItem,
   CircularProgress,
+  Box,
+  Button,
 } from "@material-ui/core";
 import Image from "next/image";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../Hooks/usePagination";
 import { Posts } from "../interfaces/UserInterface";
@@ -35,7 +32,7 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
     key: first,
     fetchMore,
     info: data,
-    limit: 4,
+    limit: 12,
     key2: key2exist,
   });
 
@@ -65,16 +62,16 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
           overflow: "hidden",
           textAlign: "center",
         }}
-        scrollThreshold={0.8}
+        scrollThreshold={0.4}
       >
-        <GridList cellHeight="auto" spacing={2}>
+        <ImageList variant="masonry" cols={3} gap={8}>
           {data?.edges.map((tile) => (
-            <GridListTile key={tile.node.art} className={styles.listTile}>
+            <ImageListItem key={tile.node.watermarkArt}>
               <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
                 onClick={handleOpen}
+                component={Button}
+                disableRipple
+                disableFocusRipple
                 id={tile.node.watermarkArt}
               >
                 <Image
@@ -84,24 +81,9 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
                   alt={"Art Image"}
                 />
               </Box>
-              <GridListTileBar
-                title={`${tile.node.title} ${
-                  tile.node.author ? ` by ${tile.node.author.name}` : ""
-                }`}
-                titlePosition="top"
-                className={styles.titleBar}
-                actionIcon={
-                  <Link href={`/posts/${tile.node.id}`} passHref>
-                    <IconButton>
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Link>
-                }
-                actionPosition="right"
-              />
-            </GridListTile>
+            </ImageListItem>
           ))}
-        </GridList>
+        </ImageList>
       </InfiniteScroll>
 
       <DynamicImage handleClose={handleClose} open={open} art={targetArt} />

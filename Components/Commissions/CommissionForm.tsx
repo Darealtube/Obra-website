@@ -83,6 +83,14 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
       [e.target.name]: e.target.value,
     });
   };
+
+  const handleDeadlineChange = (_e: Event, newValue: number | number[]) => {
+    setCommission({
+      ...commission,
+      deadline: newValue as number,
+    });
+  };
+
   const handleArt = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files.length != 0) {
       setDisableSubmit(true);
@@ -150,7 +158,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
               color="primary"
               rows={3}
               multiline={true}
-              rowsMax={4}
+              maxRows={4}
               onChange={handleChange}
             />
           </Grid>
@@ -215,7 +223,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
               name="deadline"
               min={3}
               max={7}
-              onChange={handleChange}
+              onChange={handleDeadlineChange}
               disabled={deadDisabled}
             />
           </Grid>
@@ -250,7 +258,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
                   objectFit="cover"
                   alt={"Art Commission Placeholder"}
                 />
-                <IconButton onClick={handleArtClick}>
+                <IconButton onClick={handleArtClick} size="large">
                   <PhotoCameraIcon />
                 </IconButton>
               </>

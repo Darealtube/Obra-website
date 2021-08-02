@@ -3,6 +3,7 @@ import {
   Button,
   Chip,
   CircularProgress,
+  Container,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -14,11 +15,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
-import { Autocomplete } from "@material-ui/lab";
+import { Autocomplete } from "@material-ui/core";
 import React from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
-import { Action, State } from "../../Hooks/Reducers/PostReducer";
+import { Action, State, Tag } from "../../Hooks/Reducers/PostReducer";
 import useTag from "../../Hooks/useTag";
 import styles from "../../pages/styles/General/Create.module.css";
 
@@ -114,7 +115,7 @@ const PostForm = ({
               color="primary"
               rows={3}
               multiline={true}
-              rowsMax={4}
+              maxRows={4}
               onChange={handleChange}
             />
           </Grid>
@@ -162,7 +163,9 @@ const PostForm = ({
             <Autocomplete
               id="asynchronous-demo"
               getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => option.name === value.name}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
               filterSelectedOptions
               onOpen={handleTagActive}
               onClose={handleTagActive}
@@ -176,15 +179,19 @@ const PostForm = ({
               options={options}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
-              renderOption={(option) => (
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Typography noWrap>{option.name} </Typography>
-                  <Chip
-                    label={`${option.artCount} art(s) with this tag`}
-                    size="small"
-                    style={{ marginLeft: "12px" }}
-                  />
-                </Box>
+              renderOption={(props, option: Tag, _status) => (
+                <li {...props}>
+                  <Container
+                    sx={{ display: "flex", margin: "8px 0px 8px 0px" }}
+                  >
+                    <Typography noWrap>{option.name} </Typography>
+                    <Chip
+                      label={`${option.artCount} art(s) with this tag`}
+                      size="small"
+                      style={{ marginLeft: "12px" }}
+                    />
+                  </Container>
+                </li>
               )}
               renderInput={(params) => (
                 <TextField
@@ -194,12 +201,12 @@ const PostForm = ({
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
-                      <React.Fragment>
+                      <>
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
                         {params.InputProps.endAdornment}
-                      </React.Fragment>
+                      </>
                     ),
                   }}
                 />

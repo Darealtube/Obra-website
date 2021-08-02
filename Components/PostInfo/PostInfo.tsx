@@ -66,7 +66,7 @@ const PostInfo = ({
         <Typography variant="overline">Comments</Typography>
         <Divider />
         {commentToggle ? (
-          <IconButton onClick={handleDrawer} style={{ width: "inherit" }}>
+          <IconButton onClick={handleDrawer} style={{ width: "inherit" }} size="large">
             <ExpandMoreIcon />
           </IconButton>
         ) : (

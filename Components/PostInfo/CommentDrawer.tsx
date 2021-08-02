@@ -48,7 +48,7 @@ const CommentDrawer = ({
             Comments
           </Typography>
 
-          <IconButton onClick={handleDrawer}>
+          <IconButton onClick={handleDrawer} size="large">
             <CloseIcon />
           </IconButton>
         </Toolbar>

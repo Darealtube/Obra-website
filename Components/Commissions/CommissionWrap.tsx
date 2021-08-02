@@ -66,12 +66,12 @@ const CommissionWrap = ({ children }: {children: ReactNode}) => {
         onClose={handleClose}
       >
         <Link href="/commissions/yourCommissions/" passHref>
-          <MenuItem button onClick={handleClose}>
+          <MenuItem onClick={handleClose} component="button">
             General
           </MenuItem>
         </Link>
         <Link href="/commissions/yourCommissions/pending" passHref>
-          <MenuItem button onClick={handleClose}>
+          <MenuItem onClick={handleClose} component="button">
             Pending
           </MenuItem>
         </Link>

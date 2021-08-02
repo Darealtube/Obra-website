@@ -85,7 +85,7 @@ export const CardList = ({ postData }: PostData) => {
                       onClick={handleEdit}
                       value={post.node.id}
                       id={post.node.author.id}
-                    >
+                      size="large">
                       <MoreVertIcon />
                     </IconButton>
                   }

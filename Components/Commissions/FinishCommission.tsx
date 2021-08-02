@@ -95,7 +95,7 @@ const FinishCommission = ({
                     objectFit="cover"
                     alt={"Commission Finished Art Placeholder"}
                   />
-                  <IconButton onClick={handleArtClick}>
+                  <IconButton onClick={handleArtClick} size="large">
                     <PhotoCameraIcon />
                   </IconButton>
                 </>
@@ -123,7 +123,7 @@ const FinishCommission = ({
                 color="primary"
                 rows={8}
                 multiline={true}
-                rowsMax={12}
+                maxRows={12}
                 onChange={handleChange}
               />
             </Grid>

@@ -2,7 +2,7 @@ import { Snackbar, IconButton } from "@material-ui/core";
 import React from "react";
 import "react-calendar/dist/Calendar.css";
 import CloseIcon from "@material-ui/icons/Close";
-import Alert from "@material-ui/lab/Alert";
+import Alert from '@material-ui/core/Alert';
 
 type Props = {
   error: boolean;

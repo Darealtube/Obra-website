@@ -23,7 +23,6 @@ const CommentPopover = ({
       keepMounted
       open={Boolean(editAnchor)}
       onClose={handleEditClose}
-      onExited={handleEditExit}
       anchorOrigin={{
         vertical: "top",
         horizontal: "left",
@@ -32,7 +31,9 @@ const CommentPopover = ({
         vertical: "top",
         horizontal: "right",
       }}
-    >
+      TransitionProps={{
+        onExited: handleEditExit
+      }}>
       <List>
         <CommentEditMenu
           id={targetId}

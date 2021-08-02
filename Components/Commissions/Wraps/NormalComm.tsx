@@ -36,7 +36,7 @@ const NormalComm = ({
           <Container>
             <Box display="flex">
               <Link href="/home" passHref>
-                <IconButton component="a">
+                <IconButton component="a" size="large">
                   <KeyboardBackspaceIcon />
                 </IconButton>
               </Link>

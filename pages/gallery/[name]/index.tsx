@@ -6,18 +6,20 @@ import {
   CircularProgress,
   Box,
   Button,
+  useMediaQuery,
 } from "@material-ui/core";
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import { USER_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
-import Gridlist from "../../../Components/GridList";
+import ArtList from "../../../Components/ArtList";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import DefaultErrorPage from "next/error";
 
 const Gallery = () => {
+  const sm = useMediaQuery("(max-width: 960px)");
   const router = useRouter();
   const name = router.query.name as string;
   const { data, fetchMore, loading } = useQuery<UserData, QueryNameVars>(
@@ -47,6 +49,7 @@ const Gallery = () => {
           <>
             <Box
               display="flex"
+              flexDirection={sm ? "column" : "row"}
               marginBottom={2}
               justifyContent="center"
               alignItems="center"
@@ -61,25 +64,28 @@ const Gallery = () => {
               <Typography
                 variant="h4"
                 style={{ marginLeft: "8px", flexGrow: 1 }}
+                align={sm ? "center" : "inherit"}
               >
                 {name}&apos;s Gallery
               </Typography>
 
-              <Button
-                component="a"
-                href={`/gallery/${encodeURIComponent(name)}`}
-              >
-                Gallery
-              </Button>
-              <Button
-                component="a"
-                href={`/gallery/${encodeURIComponent(name)}/liked`}
-              >
-                Liked Gallery
-              </Button>
+              <Box display="flex">
+                <Button
+                  component="a"
+                  href={`/gallery/${encodeURIComponent(name)}`}
+                >
+                  Gallery
+                </Button>
+                <Button
+                  component="a"
+                  href={`/gallery/${encodeURIComponent(name)}/liked`}
+                >
+                  Liked Gallery
+                </Button>
+              </Box>
             </Box>
             <Divider />
-            <Gridlist
+            <ArtList
               data={data?.userName.posts}
               fetchMore={fetchMore}
               first={"userName"}

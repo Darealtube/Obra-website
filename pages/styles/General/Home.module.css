@@ -1,12 +1,29 @@
 .root {
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 
 .content {
   margin-top: 80px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+.categoryContainer {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  height: 100%;
+  width: 100%;
+}
+
+.searchBar {
+  height: 10vh;
+  text-align: center;
+  font-size: x-large;
+  box-shadow: 10px 11px 24px 2px rgba(58,50,50,0.81);
+  border-radius: 50px 50px 50px 50px;
 }
 
 .divider {

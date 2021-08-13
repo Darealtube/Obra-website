@@ -5,6 +5,8 @@ import {
   CircularProgress,
   Box,
   Button,
+  Grow,
+  ImageListItemBar,
 } from "@material-ui/core";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,10 +14,9 @@ import dynamic from "next/dynamic";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../Hooks/usePagination";
 import { Posts } from "../interfaces/UserInterface";
+import { useMediaQuery } from "@material-ui/core";
 
-const DynamicImage = dynamic(
-  () => import("../Components/PostInfo/ImageDialog")
-);
+const DynamicImage = dynamic(() => import("./PostInfo/ImageDialog"));
 
 type Props = {
   data: Posts;
@@ -24,7 +25,9 @@ type Props = {
   second?: string;
 };
 
-const Gridlist = ({ data, first, fetchMore, second }: Props) => {
+const ArtList = ({ data, first, fetchMore, second }: Props) => {
+  const sm = useMediaQuery("(max-width: 960px)");
+  const xs = useMediaQuery("(max-width: 500px)");
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
   const key2exist = second && second != "" ? second : null;
@@ -64,24 +67,29 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
         }}
         scrollThreshold={0.4}
       >
-        <ImageList variant="masonry" cols={3} gap={8}>
+        <ImageList variant="masonry" cols={xs ? 1 : sm ? 2 : 3} gap={8}>
           {data?.edges.map((tile) => (
-            <ImageListItem key={tile.node.watermarkArt}>
-              <Box
-                onClick={handleOpen}
-                component={Button}
-                disableRipple
-                disableFocusRipple
-                id={tile.node.watermarkArt}
-              >
-                <Image
-                  src={tile.node.watermarkArt}
-                  width={tile.node.width}
-                  height={tile.node.height}
-                  alt={"Art Image"}
-                />
-              </Box>
-            </ImageListItem>
+            <div key={tile.node.watermarkArt} className={styles.art}>
+              <Grow in={true} timeout={2000}>
+                <ImageListItem>
+                  <Box
+                    onClick={handleOpen}
+                    component={Button}
+                    disableRipple
+                    disableFocusRipple
+                    id={tile.node.watermarkArt}
+                  >
+                    <Image
+                      src={tile.node.watermarkArt}
+                      width={tile.node.width}
+                      height={tile.node.height}
+                      alt={"Art Image"}
+                    />
+                  </Box>
+                  <ImageListItemBar position="below" title={tile.node.title} />
+                </ImageListItem>
+              </Grow>
+            </div>
           ))}
         </ImageList>
       </InfiniteScroll>
@@ -91,4 +99,4 @@ const Gridlist = ({ data, first, fetchMore, second }: Props) => {
   );
 };
 
-export default Gridlist;
+export default ArtList;

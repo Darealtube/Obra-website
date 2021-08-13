@@ -12,13 +12,13 @@ import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import { TRENDING_POSTS_QUERY } from "../apollo/apolloQueries";
 import {
-  FeaturedPostsData,
+  TrendingPostsData,
   PaginatedPostsVars,
 } from "../interfaces/QueryInterfaces";
-import Gridlist from "../Components/GridList";
+import ArtList from "../Components/ArtList";
 
 const Trending = () => {
-  const { data, fetchMore } = useQuery<FeaturedPostsData, PaginatedPostsVars>(
+  const { data, fetchMore } = useQuery<TrendingPostsData, PaginatedPostsVars>(
     TRENDING_POSTS_QUERY,
     {
       variables: {
@@ -39,8 +39,8 @@ const Trending = () => {
         <Typography variant="h4">Trending Posts</Typography>
         <Divider />
         {data ? (
-          <Gridlist
-            data={data?.featuredPosts}
+          <ArtList
+            data={data?.trendingPosts}
             first={"featuredPosts"}
             fetchMore={fetchMore}
           />

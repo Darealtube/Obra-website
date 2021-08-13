@@ -66,25 +66,6 @@ export const USER_QUERY = gql`
   }
 `;
 
-//Fetch all Posts
-export const POST_QUERY = gql`
-  query Posts($after: ID, $limit: Int) {
-    posts(limit: $limit, after: $after) {
-      totalCount
-      edges {
-        node {
-          ...PostInfo
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-  ${PostInfo}
-`;
-
 //Fetch User by ID
 export const USER_ID_QUERY = gql`
   query UserID($id: ID!) {
@@ -97,7 +78,7 @@ export const USER_ID_QUERY = gql`
 
 //Fetch Post By ID
 export const POST_ID_QUERY = gql`
-  query PostID($id: ID!, $after: ID, $limit: Int) {
+  query PostID($id: ID!, $after: String, $limit: Int) {
     postId(id: $id) {
       id
       title
@@ -181,7 +162,7 @@ export const COMMENT_ID_QUERY = gql`
 
 //Fetch Appbar Info
 export const APPBAR_USER_QUERY = gql`
-  query UserAppbarID($id: ID!, $after: ID, $limit: Int) {
+  query UserAppbarID($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       ...UserInfo
       admin
@@ -218,12 +199,11 @@ export const APPBAR_USER_QUERY = gql`
 
 //Fetch User and Posts
 export const USER_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: ID, $limit: Int) {
+  query UserPosts($name: String!, $after: String, $limit: Int) {
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
       posts(limit: $limit, after: $after) {
-        totalCount
         edges {
           node {
             ...PostInfo
@@ -242,12 +222,11 @@ export const USER_POST_QUERY = gql`
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: ID, $limit: Int) {
+  query UserPosts($name: String!, $after: String, $limit: Int) {
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
       likedPosts(limit: $limit, after: $after) {
-        totalCount
         edges {
           node {
             ...PostInfo
@@ -266,9 +245,8 @@ export const USER_LIKED_POST_QUERY = gql`
 `;
 
 export const POST_RECOMMENDED_QUERY = gql`
-  query RecommendedPosts($id: ID!, $after: ID, $limit: Int) {
+  query RecommendedPosts($id: ID!, $after: String, $limit: Int) {
     recommendedPosts(id: $id, limit: $limit, after: $after) {
-      totalCount
       edges {
         node {
           ...PostInfo
@@ -283,34 +261,20 @@ export const POST_RECOMMENDED_QUERY = gql`
   ${PostInfo}
 `;
 
-export const HOME_RECOMMENDED_QUERY = gql`
-  query HomeRecommended($id: ID, $after: ID, $limit: Int) {
-    userId(id: $id) {
-      id
-      homeRecommended(after: $after, limit: $limit) {
-        totalCount
-        edges {
-          node {
-            ...PostInfo
+export const TRENDING_POSTS_QUERY = gql`
+  query Trending($after: String, $limit: Int) {
+    trendingPosts(after: $after, limit: $limit) {
+      edges {
+        node {
+          id
+          art
+          watermarkArt
+          title
+          author {
+            ...UserInfo
           }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-    }
-  }
-  ${PostInfo}
-`;
-
-export const FEATURED_POSTS_QUERY = gql`
-  query FeaturedPosts($after: ID, $limit: Int) {
-    featuredPosts(after: $after, limit: $limit) {
-      totalCount
-      edges {
-        node {
-          ...PostInfo
+          width
+          height
         }
       }
       pageInfo {
@@ -319,25 +283,7 @@ export const FEATURED_POSTS_QUERY = gql`
       }
     }
   }
-  ${PostInfo}
-`;
-
-export const NEW_POSTS_QUERY = gql`
-  query NewPosts($after: ID, $limit: Int) {
-    newPosts(after: $after, limit: $limit) {
-      totalCount
-      edges {
-        node {
-          ...PostInfo
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-  ${PostInfo}
+  ${UserInfo}
 `;
 
 export const EDIT_POST_QUERY = gql`
@@ -407,11 +353,10 @@ export const USER_COMM_INFO_QUERY = gql`
 `;
 
 export const COMMISSIONS_QUERY = gql`
-  query Commissions($id: ID!, $after: ID, $limit: Int) {
+  query Commissions($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       commissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -436,11 +381,10 @@ export const COMMISSIONS_QUERY = gql`
 `;
 
 export const YOUR_COMMISSIONS_QUERY = gql`
-  query Commissions($id: ID!, $after: ID, $limit: Int) {
+  query Commissions($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       yourCommissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -465,11 +409,10 @@ export const YOUR_COMMISSIONS_QUERY = gql`
 `;
 
 export const PENDING_COMMS_QUERY = gql`
-  query PendingComms($id: ID!, $after: ID, $limit: Int) {
+  query PendingComms($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       pendingCommissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -494,11 +437,10 @@ export const PENDING_COMMS_QUERY = gql`
 `;
 
 export const YOUR_PENDING_COMMS_QUERY = gql`
-  query YourPendingComms($id: ID!, $after: ID, $limit: Int) {
+  query YourPendingComms($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       yourPendingCommissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -523,11 +465,10 @@ export const YOUR_PENDING_COMMS_QUERY = gql`
 `;
 
 export const FINISHED_COMMS_QUERY = gql`
-  query FinishedComms($id: ID!, $after: ID, $limit: Int) {
+  query FinishedComms($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       finishedCommissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -552,11 +493,10 @@ export const FINISHED_COMMS_QUERY = gql`
 `;
 
 export const YOUR_FINISHED_COMMS_QUERY = gql`
-  query YourFinishedComms($id: ID!, $after: ID, $limit: Int) {
+  query YourFinishedComms($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       yourFinishedCommissions(after: $after, limit: $limit) {
-        totalCount
         pageInfo {
           hasNextPage
           endCursor
@@ -583,39 +523,11 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
   }
 `;
 
-// FOR NOW
-export const TRENDING_POSTS_QUERY = gql`
-  query FeaturedPosts($after: ID, $limit: Int) {
-    featuredPosts(after: $after, limit: $limit) {
-      totalCount
-      edges {
-        node {
-          id
-          art
-          watermarkArt
-          title
-          author {
-            ...UserInfo
-          }
-          width
-          height
-        }
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-  ${UserInfo}
-`;
-
 export const USER_GALLERY_QUERY = gql`
-  query UserGallery($after: ID, $limit: Int, $name: String!) {
+  query UserGallery($after: String, $limit: Int, $name: String!) {
     userName(name: $name) {
       ...UserInfo
       posts(limit: $limit, after: $after) {
-        totalCount
         edges {
           node {
             id
@@ -637,11 +549,10 @@ export const USER_GALLERY_QUERY = gql`
 `;
 
 export const USER_LIKED_GALLERY_QUERY = gql`
-  query UserGallery($after: ID, $limit: Int, $name: String!) {
+  query UserGallery($after: String, $limit: Int, $name: String!) {
     userName(name: $name) {
       ...UserInfo
       likedPosts(limit: $limit, after: $after) {
-        totalCount
         edges {
           node {
             id
@@ -690,9 +601,8 @@ export const REPORT_COUNT_QUERY = gql`
 `;
 
 export const REPORTED_POSTS_QUERY = gql`
-  query ReportedPost($after: ID, $limit: Int) {
+  query ReportedPost($after: String, $limit: Int) {
     reports(after: $after, limit: $limit, type: "Post") {
-      totalCount
       pageInfo {
         endCursor
         hasNextPage
@@ -724,9 +634,8 @@ export const REPORTED_POSTS_QUERY = gql`
 `;
 
 export const REPORTED_COMMENTS_QUERY = gql`
-  query ReportedComment($after: ID, $limit: Int) {
+  query ReportedComment($after: String, $limit: Int) {
     reports(after: $after, limit: $limit, type: "Comment") {
-      totalCount
       pageInfo {
         endCursor
         hasNextPage
@@ -763,9 +672,8 @@ export const REPORTED_COMMENTS_QUERY = gql`
 `;
 
 export const BUG_REPORTS_QUERY = gql`
-  query BugReports($after: ID, $limit: Int) {
+  query BugReports($after: String, $limit: Int) {
     reports(after: $after, limit: $limit, type: "Bug") {
-      totalCount
       pageInfo {
         endCursor
         hasNextPage
@@ -827,13 +735,12 @@ export const REPORT_ID_QUERY = gql`
 `;
 
 export const CART_QUERY = gql`
-  query CartQuery($id: ID!, $after: ID, $limit: Int) {
+  query CartQuery($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {
       id
       cart(limit: $limit, after: $after) {
         idList
         totalCost
-        totalCount
         pageInfo {
           endCursor
           hasNextPage
@@ -856,11 +763,88 @@ export const CART_QUERY = gql`
   }
 `;
 
-export const SEARCH_TAGS_QUERY = gql`
-  query SearchTag($tag: String) {
-    searchTags(tag: $tag) {
-      name
-      artCount
+export const SEARCH_QUERY = gql`
+  query SearchTag($key: String!, $type: String!, $after: String, $limit: Int) {
+    search(key: $key, type: $type, after: $after, limit: $limit) {
+      __typename
+      ... on TagConnection {
+        edges {
+          artCount
+          name
+        }
+      }
+      ... on UserConnection {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            image
+          }
+        }
+      }
+      ... on CategoryConnection {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            name
+            artCount
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CATEGORY_QUERY = gql`
+  query SearchCategory(
+    $key: String!
+    $type: String!
+    $after: String
+    $limit: Int
+  ) {
+    search(key: $key, type: $type, after: $after, limit: $limit) {
+      __typename
+      ... on CategoryConnection {
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        edges {
+          node {
+            name
+            artCount
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CATEGORY_POSTS_QUERY = gql`
+  query CategoryPosts($category: String!, $after: String, $limit: Int) {
+    categoryPosts(category: $category, after: $after, limit: $limit) {
+      edges {
+        node {
+          id
+          art
+          watermarkArt
+          title
+          width
+          height
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      totalCount
     }
   }
 `;

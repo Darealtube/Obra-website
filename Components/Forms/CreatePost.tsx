@@ -20,7 +20,7 @@ import React from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { Action, State, Tag } from "../../Hooks/Reducers/PostReducer";
-import useTag from "../../Hooks/useTag";
+import useSearch from "../../Hooks/useSearch";
 import styles from "../../pages/styles/General/Create.module.css";
 
 interface Props {
@@ -39,7 +39,12 @@ const PostForm = ({
   handleSubmit,
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const { loading, options } = useTag(post.tagInput, open);
+  const { loading, options } = useSearch({
+    key: post.tagInput,
+    type: "tag",
+    open,
+  });
+
   const handleNumber = (values: NumberFormatValues) => {
     dispatch({ type: "CHANGE", field: "price", payload: values.value });
   };
@@ -113,7 +118,6 @@ const PostForm = ({
               label="Description"
               name="description"
               color="primary"
-              rows={3}
               multiline={true}
               maxRows={4}
               onChange={handleChange}

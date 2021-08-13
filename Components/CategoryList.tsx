@@ -1,111 +1,57 @@
 import styles from "../pages/styles/General/Trending.module.css";
 import {
   Box,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  IconButton,
-  CircularProgress,
+  Typography,
+  Grid,
+  Button,
+  Paper,
+  Grow,
+  Container,
 } from "@material-ui/core";
 import Image from "next/image";
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import Link from "next/link";
-import InfiniteScroll from "react-infinite-scroll-component";
-import usePagination from "../Hooks/usePagination";
-import { Posts } from "../interfaces/UserInterface";
 
-const DynamicImage = dynamic(
-  () => import("../Components/PostInfo/ImageDialog")
-);
-
-type Props = {
-  data: Posts;
-  first?: string;
-  fetchMore: any;
-  second?: string;
-};
-
-const CategoryList = ({ data, first, fetchMore, second }: Props) => {
-  const [open, setOpen] = useState(false);
-  const [targetArt, settargetArt] = useState("");
-  const key2exist = second && second != "" ? second : null;
-  const { More, hasMore } = usePagination({
-    key: first,
-    fetchMore,
-    info: data,
-    limit: 4,
-    key2: key2exist,
-  });
-
-  const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setOpen(true);
-    settargetArt(e.currentTarget.id);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    settargetArt("");
-  };
-
+const CategoryList = ({ data }) => {
   return (
-    <div className={styles.listRoot}>
-      <InfiniteScroll
-        dataLength={data?.edges.length}
-        next={More}
-        hasMore={hasMore}
-        loader={
-          <>
-            <br />
-            <CircularProgress />
-          </>
-        }
-        style={{
-          overflow: "hidden",
-          textAlign: "center",
-        }}
-        scrollThreshold={0.8}
-      >
-        <ImageList rowHeight="auto" gap={8}>
-          {data?.edges.map((tile) => (
-            <ImageListItem key={tile.node.art} className={styles.listTile}>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                /* onClick={handleOpen} */
-                id={tile.node.watermarkArt}
+    <Grid container spacing={4}>
+      {data?.map((tag, index) => (
+        <Grow
+          in={true}
+          style={{ transformOrigin: "0 0 0" }}
+          timeout={1000 + index * 200}
+          key={tag.node.name}
+        >
+          <Grid item lg={3} md={4} sm={6} xs={12} sx={{ marginBottom: "12px" }}>
+            <Link
+              passHref
+              href={`/categories/${encodeURIComponent(tag.node.name)}`}
+            >
+              <Button
+                sx={{
+                  width: "100%",
+                  height: "20vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+                variant="outlined"
+                component={Paper}
+                elevation={6}
+                className={styles.category}
               >
-                <Image
-                  src={tile.node.watermarkArt}
-                  width={tile.node.width}
-                  height={tile.node.height}
-                  alt={"Art Image"}
-                />
-              </Box>
-              <ImageListItemBar
-                title={`${tile.node.title} ${
-                  tile.node.author ? ` by ${tile.node.author.name}` : ""
-                }`}
-                position="top"
-                className={styles.titleBar}
-                actionIcon={
-                  <Link href={`/posts/${tile.node.id}`} passHref>
-                    <IconButton size="large">
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Link>
-                }
-                actionPosition="right"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      </InfiniteScroll>
-
-      <DynamicImage handleClose={handleClose} open={open} art={targetArt} />
-    </div>
+                <Typography gutterBottom variant="h6">
+                  {tag.node.name}
+                </Typography>
+                <Typography>
+                  {tag.node.artCount} arts in this category.
+                </Typography>
+              </Button>
+            </Link>
+          </Grid>
+        </Grow>
+      ))}
+    </Grid>
   );
 };
 

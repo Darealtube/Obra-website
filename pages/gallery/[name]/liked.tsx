@@ -12,7 +12,7 @@ import Appbar from "../../../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import { USER_LIKED_GALLERY_QUERY } from "../../../apollo/apolloQueries";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
-import Gridlist from "../../../Components/GridList";
+import ArtList from "../../../Components/ArtList";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import DefaultErrorPage from "next/error";
@@ -79,7 +79,7 @@ const LikedGallery = () => {
               </Button>
             </Box>
             <Divider />
-            <Gridlist
+            <ArtList
               data={data?.userName.likedPosts}
               fetchMore={fetchMore}
               first={"userName"}

@@ -119,7 +119,7 @@ const Create = () => {
         <title>Create</title>
       </Head>
       <CssBaseline />
-      <Appbar />
+      {/* <Appbar /> */}
       <Grid container className={styles.grid}>
         <Grid item xs={12} sm={6} md={7} className={styles.displayArt}>
           {/* Art Display */}

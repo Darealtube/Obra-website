@@ -9,7 +9,7 @@
 }
 
 .listRoot {
-  display: "flex";
+  display: flex;
 }
 
 .listTile {
@@ -19,4 +19,20 @@
 .titleBar {
   background: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
     "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)";
+}
+
+.category {
+  transition: all 0.4s ease-in-out;
+}
+
+.category:hover {
+  transform: scale(1.1);
+}
+
+.art {
+  transition: all 0.2s ease-in-out;
+}
+
+.art:hover {
+  transform: scale(0.9);
 }

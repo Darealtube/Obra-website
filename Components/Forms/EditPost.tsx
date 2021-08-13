@@ -19,9 +19,9 @@ import React, { useReducer } from "react";
 import { useState } from "react";
 import NumberFormat, { NumberFormatValues } from "react-number-format";
 import { State, reducer, Tag } from "../../Hooks/Reducers/PostReducer";
-import useTag from "../../Hooks/useTag";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
+import useSearch from "../../Hooks/useSearch";
 
 interface Props {
   postId: PostInterface;
@@ -45,7 +45,11 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [post, dispatch] = useReducer(reducer, initState);
-  const { loading, options } = useTag(post.tagInput, open);
+  const { loading, options } = useSearch({
+    key: post.tagInput,
+    type: "tag",
+    open,
+  });
   const [disabled, setDisabled] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({

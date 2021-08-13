@@ -29,17 +29,29 @@ function createApolloClient() {
       typePolicies: {
         Query: {
           fields: {
-            // relayStylePagination is a kind of cursor-based pagination that uses similar syntax
-            // to Relay. It uses nodes and edges in order to paginate through a list. DO NOT FORGET TO
-            // SET A NEW FIELD HERE IF THERE IS AN ADDED QUERY THAT RETURNS EDGES OR USES RELAY STYLE PAGINATION.
-            // If there is a problem such as that a query is not paginating, you probably haven't set that field here with
-            // a 'relayStylePagination()' function.
-            // Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination
+            /*
+            relayStylePagination is a kind of cursor-based pagination that uses similar syntax
+             to Relay. It uses nodes and edges in order to paginate through a list. DO NOT FORGET TO
+             SET A NEW FIELD HERE IF THERE IS AN ADDED QUERY THAT RETURNS EDGES OR USES RELAY STYLE PAGINATION.
+             If there is a problem such as that a query is not paginating, you probably haven't set that field here with
+             a 'relayStylePagination()' function.
+             Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination 
+          */
             reports: relayStylePagination(),
             featuredPosts: relayStylePagination(),
             posts: relayStylePagination(),
             newPosts: relayStylePagination(),
             recommendedPosts: relayStylePagination(),
+            /* 
+              Whenever you are using relayStylePagination and you need to use other variables to paginate,
+              like for example this search query here; You need to pass the extra "keys" that is required to
+              paginate or for the query to execute at all. The search query not only returns a new value when
+              a user types a new "key", but it also paginates on a specific key. In these situations, we need
+              to add other keys in the relayStylePagination parameter. 
+              Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination
+            */
+            search: relayStylePagination(["key", "type"]),
+            categoryPosts: relayStylePagination(),
           },
         },
         User: {

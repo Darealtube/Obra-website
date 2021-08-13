@@ -3,13 +3,12 @@ import {
   ALL_USER_QUERY,
   BUG_REPORTS_QUERY,
   CART_QUERY,
-  FEATURED_POSTS_QUERY,
-  HOME_RECOMMENDED_QUERY,
+  CATEGORY_POSTS_QUERY,
+  CATEGORY_QUERY,
   IS_ADMIN,
   IS_LIKED_ARTIST,
   IS_LIKED_OR_ADDED_POST,
   IS_SAME_USER,
-  NEW_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
   REPORTED_COMMENTS_QUERY,
@@ -21,13 +20,9 @@ import {
   YOUR_FINISHED_COMMS_QUERY,
 } from "../apollo/apolloQueries";
 import {
-  FeaturedPostsData,
-  NewPostsData,
-  PaginatedPostsVars,
   PostData,
   RecommendedPostData,
   UserData,
-  HomeUserData,
   UserIdData,
   QueryNameVars,
   QueryIdVars,
@@ -135,30 +130,29 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
   };
 };
 
-export const fetchPosts = async (id: string) => {
+export const fetchHomeCategories = async () => {
   const apolloClient = initializeApollo();
-  await apolloClient.query<FeaturedPostsData, PaginatedPostsVars>({
-    query: FEATURED_POSTS_QUERY,
+  await apolloClient.query({
+    query: CATEGORY_QUERY,
     variables: {
-      limit: 4,
+      key: "",
+      type: "category",
+      limit: 20,
     },
   });
-  await apolloClient.query<NewPostsData, PaginatedPostsVars>({
-    query: NEW_POSTS_QUERY,
+  return apolloClient;
+};
+
+export const fetchCategoryPosts = async (category: string) => {
+  const apolloClient = initializeApollo();
+  await apolloClient.query({
+    query: CATEGORY_POSTS_QUERY,
     variables: {
-      limit: 4,
+      category,
+      limit: 20,
     },
   });
 
-  if (id) {
-    await apolloClient.query<HomeUserData, QueryIdVars>({
-      query: HOME_RECOMMENDED_QUERY,
-      variables: {
-        id: id,
-        limit: 4,
-      },
-    });
-  }
   return apolloClient;
 };
 

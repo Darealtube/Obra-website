@@ -8,7 +8,6 @@ interface edges {
 interface Info {
   edges: edges[];
   pageInfo: PageInfo;
-  totalCount: number;
 }
 
 /* 
@@ -82,7 +81,7 @@ const usePagination = ({
   const More = () => {
     if (!refetching) {
       fetchMore({
-        variables: { after: info?.edges.slice(-1)[0]?.node.id, limit: limit },
+        variables: { after: info?.pageInfo.endCursor, limit: limit },
       }).then((fetchMoreResult) => {
         if (fetchMoreResult.data[`${key}`]) {
           setPage((prevpage) => prevpage + 1);

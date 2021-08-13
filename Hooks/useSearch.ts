@@ -22,8 +22,6 @@ const useSearch = ({
   const [hasMore, sethasMore] = useState(false);
   const [loadOptions, { loading, data, fetchMore: fetchMoreOptions }] =
     useLazyQuery(SEARCH_QUERY);
-
-  console.log(data);
   // If the search bar is active, detect if the user is still typing in the search bar.
   useEffect(() => {
     let typeTimer;

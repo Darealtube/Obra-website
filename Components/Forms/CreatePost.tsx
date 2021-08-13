@@ -180,7 +180,7 @@ const PostForm = ({
               inputValue={post.tagInput}
               onInputChange={handleTagInput}
               onKeyPress={handleCustomTag}
-              options={options}
+              options={options.map((item) => item.node)}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
               renderOption={(props, option: Tag, _status) => (

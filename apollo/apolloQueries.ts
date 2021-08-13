@@ -769,8 +769,10 @@ export const SEARCH_QUERY = gql`
       __typename
       ... on TagConnection {
         edges {
-          artCount
-          name
+          node {
+            name
+            artCount
+          }
         }
       }
       ... on UserConnection {

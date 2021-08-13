@@ -197,7 +197,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               inputValue={post.tagInput}
               onInputChange={handleTagInput}
               onKeyPress={handleCustomTag}
-              options={options}
+              options={options.map((item) => item.node)}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
               renderOption={(_props, option: Tag, _status) => (

@@ -38,7 +38,7 @@ const CategoriesPage = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Categories</title>
       </Head>
-      <CssBaseline />
+      <Appbar />
       <Container sx={{ marginTop: "80px" }}>
         <Typography align="center" variant="h4" gutterBottom>
           Search art categories/tags that you would like to see!
@@ -81,6 +81,7 @@ const CategoriesPage = () => {
           {!loading && <CategoryList data={options} />}
         </Container>
       </InfiniteScroll>
+      <CssBaseline />
     </div>
   );
 };

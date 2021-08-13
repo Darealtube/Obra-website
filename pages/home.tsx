@@ -14,6 +14,7 @@ import { CATEGORY_QUERY } from "../apollo/apolloQueries";
 import { fetchHomeCategories } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
 import CategoryList from "../Components/CategoryList";
+import Link from "next/link";
 
 const Home = () => {
   const {
@@ -40,10 +41,7 @@ const Home = () => {
             Categories
           </Typography>
         </Fade>
-        <CategoryList data={search.edges} />
-        <Button variant="outlined" sx={{ marginTop: "12px" }}>
-          <Typography>View More Categories</Typography>
-        </Button>
+        <CategoryList data={search.edges} includeMoreButton={true} />
       </Container>
     </div>
   );

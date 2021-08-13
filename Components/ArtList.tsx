@@ -7,6 +7,8 @@ import {
   Button,
   Grow,
   ImageListItemBar,
+  IconButton,
+  Typography,
 } from "@material-ui/core";
 import Image from "next/image";
 import { useState } from "react";
@@ -15,6 +17,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../Hooks/usePagination";
 import { Posts } from "../interfaces/UserInterface";
 import { useMediaQuery } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import Link from "next/link";
 
 const DynamicImage = dynamic(() => import("./PostInfo/ImageDialog"));
 
@@ -27,7 +31,7 @@ type Props = {
 
 const ArtList = ({ data, first, fetchMore, second }: Props) => {
   const sm = useMediaQuery("(max-width: 960px)");
-  const xs = useMediaQuery("(max-width: 500px)");
+  const xs = useMediaQuery("(max-width: 570px)");
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
   const key2exist = second && second != "" ? second : null;
@@ -86,7 +90,23 @@ const ArtList = ({ data, first, fetchMore, second }: Props) => {
                       alt={"Art Image"}
                     />
                   </Box>
-                  <ImageListItemBar position="below" title={tile.node.title} />
+                  <Box textAlign="center">
+                    <ImageListItemBar
+                      position="below"
+                      title={<Typography>{tile.node.title}</Typography>}
+                      actionIcon={
+                        <Link href={`/posts/${tile.node.id}/`} passHref>
+                          <IconButton
+                            component="a"
+                            size="large"
+                            sx={{ position: "relative", bottom: "4px" }}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                        </Link>
+                      }
+                    />
+                  </Box>
                 </ImageListItem>
               </Grow>
             </div>

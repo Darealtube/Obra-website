@@ -95,7 +95,7 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
         tags: post.tags.map((tag) => tag.name),
       },
     });
-    router.push("/home");
+    router.push("/");
   };
 
   const handleNumber = (values: NumberFormatValues) => {

@@ -68,7 +68,7 @@ const BugReportForm = ({ reportBug }: Prop) => {
         vidFormat: bugReport.format,
       },
     });
-    router.push("/home");
+    router.push("/");
   };
 
   return (

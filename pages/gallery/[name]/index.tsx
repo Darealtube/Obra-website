@@ -27,7 +27,7 @@ const Gallery = () => {
     {
       variables: {
         name: name,
-        limit: 4,
+        limit: 20,
       },
       skip: !name,
     }

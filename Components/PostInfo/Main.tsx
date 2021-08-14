@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { Grid, Typography, Chip, Button } from "@material-ui/core";
-import { useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
@@ -47,58 +47,62 @@ const Main = ({ postID, setOpen, alreadyLiked, alreadyAdded }: Props) => {
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!session && !loading) {
-      router.replace("/api/auth/signin");
-    }
-
-    if (!liked) {
-      setLiked(true);
-      setDisabled(true);
-      like({
-        variables: { postId: postID.id, userID: session?.id },
-        update: () => {
-          setDisabled(false);
-        },
+      signIn("google", {
+        callbackUrl: `https://obra-website.vercel.app/`,
       });
     } else {
-      setLiked(false);
-      setDisabled(true);
-      unlike({
-        variables: { postId: postID.id, userID: session?.id },
-        update: () => {
-          setDisabled(false);
-        },
-      });
+      if (!liked) {
+        setLiked(true);
+        setDisabled(true);
+        like({
+          variables: { postId: postID.id, userID: session?.id },
+          update: () => {
+            setDisabled(false);
+          },
+        });
+      } else {
+        setLiked(false);
+        setDisabled(true);
+        unlike({
+          variables: { postId: postID.id, userID: session?.id },
+          update: () => {
+            setDisabled(false);
+          },
+        });
+      }
     }
   };
 
   const handleCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!session && !loading) {
-      router.replace("/api/auth/signin");
-    }
-
-    if (!added) {
-      setAdded(true);
-      setCartDisabled(true);
-      addtoCart({
-        variables: {
-          postID: postID.id,
-          userID: session?.id,
-          cost: +postID.price,
-        },
-        update: () => {
-          setCartDisabled(false);
-        },
+      signIn("google", {
+        callbackUrl: `https://obra-website.vercel.app/`,
       });
     } else {
-      setAdded(false);
-      setCartDisabled(true);
-      removeFromCart({
-        variables: { postID: postID.id, userID: session?.id },
-        update: () => {
-          setCartDisabled(false);
-        },
-      });
+      if (!added) {
+        setAdded(true);
+        setCartDisabled(true);
+        addtoCart({
+          variables: {
+            postID: postID.id,
+            userID: session?.id,
+            cost: +postID.price,
+          },
+          update: () => {
+            setCartDisabled(false);
+          },
+        });
+      } else {
+        setAdded(false);
+        setCartDisabled(true);
+        removeFromCart({
+          variables: { postID: postID.id, userID: session?.id },
+          update: () => {
+            setCartDisabled(false);
+          },
+        });
+      }
     }
   };
 

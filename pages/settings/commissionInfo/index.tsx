@@ -20,7 +20,7 @@ const CommSettings = () => {
     </Head>
     <SettingsWrap>
       <Box display="flex">
-        <Link href={"/home"} passHref>
+        <Link href={"/"} passHref>
           <IconButton component="a" size="large">
             <HomeIcon />
           </IconButton>

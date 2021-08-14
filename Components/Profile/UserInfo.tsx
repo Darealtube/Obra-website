@@ -12,7 +12,7 @@ import {
 } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
 import dynamic from "next/dynamic";
 import {
@@ -50,26 +50,29 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!session && !loading) {
-      router.replace("/api/auth/signin");
-    }
-    if (!liked) {
-      setLiked(true);
-      setDisabled(true);
-      likeArtist({
-        variables: { artistID: artist.id, userID: session.id },
-        update: () => {
-          setDisabled(false);
-        },
+      signIn("google", {
+        callbackUrl: `https://obra-website.vercel.app/`,
       });
     } else {
-      setLiked(false);
-      setDisabled(true);
-      unlikeArtist({
-        variables: { artistID: artist.id, userID: session.id },
-        update: () => {
-          setDisabled(false);
-        },
-      });
+      if (!liked) {
+        setLiked(true);
+        setDisabled(true);
+        likeArtist({
+          variables: { artistID: artist.id, userID: session.id },
+          update: () => {
+            setDisabled(false);
+          },
+        });
+      } else {
+        setLiked(false);
+        setDisabled(true);
+        unlikeArtist({
+          variables: { artistID: artist.id, userID: session.id },
+          update: () => {
+            setDisabled(false);
+          },
+        });
+      }
     }
   };
 

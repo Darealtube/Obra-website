@@ -52,7 +52,7 @@ const About = () => {
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <title>About Us</title>
     </Head>
-    <Link href="/home" passHref>
+    <Link href="/" passHref>
       <IconButton component="a" size="large">
         <HomeIcon fontSize="large" />
       </IconButton>

@@ -51,7 +51,7 @@ const ReportForm = ({ data }: { data: PostInterface }) => {
         reason: report.reason,
       },
     });
-    router.push("/home");
+    router.push("/");
   };
 
   return (

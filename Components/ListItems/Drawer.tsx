@@ -102,7 +102,7 @@ const DrawerItems = () => {
         </ListItemText>
       </ListItem>
       <Divider />
-      <Link href={"/home"} passHref>
+      <Link href={"/"} passHref>
         <ListItem button component="a">
           <ListItemIcon>
             <HomeIcon />

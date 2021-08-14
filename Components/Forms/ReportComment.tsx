@@ -54,7 +54,7 @@ const ReportCommentForm = ({ data }: { data: CommentInterface }) => {
         reason: report.reason,
       },
     });
-    router.push("/home");
+    router.push("/");
   };
 
   return (

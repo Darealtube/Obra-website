@@ -74,7 +74,7 @@ const CommissionForm = ({ name, commissionRates }: Props) => {
         rates: finalRates,
       },
     });
-    router.push("/home");
+    router.push("/");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

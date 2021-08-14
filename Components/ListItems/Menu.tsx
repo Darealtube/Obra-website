@@ -16,9 +16,14 @@ const Menu = ({ name }: { name: string }) => {
   // This should be set as an absolute url, and we could set it as the official
   // url and it will work even in the development environment as this signOut
   // ultimately relies on the NEXTAUTH_URL environment variable.
+  /*
+    This link for signIn or signOut should be changed from http://localhost:3000/
+    when in development mode, to https://obra-website.vercel.app/ when deploying to
+    vercel (production).
+  */
   const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    signOut({ callbackUrl: "http://localhost:3000/" });
+    signOut({ callbackUrl: "https://obra-website.vercel.app/" });
   };
 
   return (

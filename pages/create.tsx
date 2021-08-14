@@ -102,7 +102,7 @@ const Create = () => {
           height: post.height,
         },
       });
-      router.push("/home");
+      router.push("/");
     }
   };
 

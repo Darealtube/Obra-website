@@ -35,7 +35,7 @@ const NormalComm = ({
         <Grid item xs={8}>
           <Container>
             <Box display="flex">
-              <Link href="/home" passHref>
+              <Link href="/" passHref>
                 <IconButton component="a" size="large">
                   <KeyboardBackspaceIcon />
                 </IconButton>

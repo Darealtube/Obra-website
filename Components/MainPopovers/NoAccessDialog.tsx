@@ -24,7 +24,7 @@ const NotAllowedDialog = ({ open }: { open: boolean }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Link href={"/home"} passHref>
+        <Link href={"/"} passHref>
           <Button component="a">Return Home</Button>
         </Link>
       </DialogActions>

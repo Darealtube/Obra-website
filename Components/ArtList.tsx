@@ -39,7 +39,7 @@ const ArtList = ({ data, first, fetchMore, second }: Props) => {
     key: first,
     fetchMore,
     info: data,
-    limit: 12,
+    limit: 20,
     key2: key2exist,
   });
 
@@ -73,7 +73,7 @@ const ArtList = ({ data, first, fetchMore, second }: Props) => {
       >
         <ImageList variant="masonry" cols={xs ? 1 : sm ? 2 : 3} gap={8}>
           {data?.edges.map((tile) => (
-            <div key={tile.node.watermarkArt} className={styles.art}>
+            <div key={tile.node.watermarkArt}>
               <Grow in={true} timeout={2000}>
                 <ImageListItem>
                   <Box

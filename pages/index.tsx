@@ -1,189 +1,57 @@
-import Link from "next/link";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
 import {
-  Toolbar,
   CssBaseline,
-  Paper,
-  Grid,
+  Container,
   Typography,
-  Button,
   Fade,
-  Box,
 } from "@material-ui/core";
-import PaletteIcon from "@material-ui/icons/Palette";
-import styles from "./styles/General/Login.module.css";
+import Appbar from "../Components/Appbar/Appbar";
+import styles from "./styles/General/Home.module.css";
 import Head from "next/head";
-import { signIn, useSession } from "next-auth/client";
-import { useRouter } from "next/router";
+import { GetStaticProps } from "next";
+import { useQuery } from "@apollo/client";
+import { CATEGORY_QUERY } from "../apollo/apolloQueries";
+import { fetchHomeCategories } from "../utils/fetchData";
+import { addApolloState } from "../apollo/apolloClient";
+import CategoryList from "../Components/CategoryList";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link href="/#">Canvas</Link> {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.preventDefault();
-  signIn("google", {
-    callbackUrl: `https://obra-website.vercel.app/home`,
+const Home = () => {
+  const {
+    data: { search },
+  } = useQuery(CATEGORY_QUERY, {
+    variables: {
+      key: "",
+      type: "category",
+      limit: 20,
+    },
   });
-};
-
-const Login = () => {
-  const router = useRouter();
-  const [session, loading] = useSession();
-  const [load, setLoad] = useState(true);
-  const [reveal, setReveal] = useState(false);
-
-  useEffect(() => {
-    let timer1;
-    if (!loading && !session) {
-      timer1 = setTimeout(() => {
-        setLoad(false);
-      }, 3000);
-    } else if (!loading && session) {
-      router.push("/home");
-    }
-
-    return () => {
-      clearTimeout(timer1);
-    };
-  }, [loading, router, session]);
-
-  useEffect(() => {
-    let timer2;
-    if (!load && !session) {
-      timer2 = setTimeout(() => {
-        setReveal(true);
-      }, 1000);
-    }
-
-    return () => {
-      clearTimeout(timer2);
-    };
-  }, [load, session]);
 
   return (
-    <div>
+    <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Obra</title>
+        <title>Home</title>
       </Head>
       <CssBaseline />
-      {reveal ? (
-        <Fade in={reveal} timeout={1500}>
-          <Grid container className={styles.root}>
-            {/* Side Image */}
-            <Grid item xs={12} sm={4} md={7} className={styles.sideImage}>
-              <Image
-                src="https://picsum.photos/600"
-                alt="Scenery image"
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center left"
-              />
-            </Grid>
-            {/* Side Image */}
-
-            {/* Form */}
-            <Grid
-              item
-              xs={12}
-              sm={8}
-              md={5}
-              component={Paper}
-              elevation={6}
-              square
-            >
-              <div className={styles.paper}>
-                <Box display="flex">
-                  <PaletteIcon fontSize="large" />
-                  <Typography variant="h4" color="inherit" noWrap>
-                    Obra
-                  </Typography>
-                </Box>
-                <br />
-                <Box>
-                  <Typography variant="h5" gutterBottom>
-                    Canvas is a website that focuses on Artists, giving them an
-                    opportunity to shine amidst the shame that brings upon the
-                    Art Community.
-                  </Typography>
-                  <Box marginTop={4}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      className={styles.submit}
-                      onClick={handleSignIn}
-                    >
-                      Log In
-                    </Button>
-                  </Box>
-                </Box>
-
-                <Box marginTop={8}>
-                  <Typography variant="h5" gutterBottom>
-                    Or if you are just here to look at art and other posts,
-                    proceed as a guest or an unknown user. Keep in mind that you
-                    will not be able to like/dislike, perform transaction
-                    related functions (like adding to carts, and commissioning).
-                  </Typography>
-
-                  <Box marginTop={4}>
-                    <Link passHref href={"/home"}>
-                      <Button
-                        component="a"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={styles.submit}
-                      >
-                        Proceed as Guest
-                      </Button>
-                    </Link>
-                  </Box>
-                </Box>
-              </div>
-              {/*Copyright*/}
-              <Copyright />
-              {/*Copyright*/}
-            </Grid>
-            {/* Form */}
-          </Grid>
+      <Appbar />
+      <Container className={styles.content}>
+        <Fade in={true} timeout={1500}>
+          <Typography gutterBottom variant="h1" align="center">
+            Categories
+          </Typography>
         </Fade>
-      ) : (
-        <Fade in={load} timeout={500}>
-          <Box
-            display="flex"
-            height="100vh"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Image
-              src="/obra-logo.png"
-              height={60}
-              width={60}
-              alt={"Obra Logo"}
-            />
-            <Typography
-              variant="h3"
-              align="center"
-              gutterBottom
-              style={{ marginTop: "8px", marginLeft: "8px" }}
-            >
-              Obra
-            </Typography>
-          </Box>
-        </Fade>
-      )}
+        <CategoryList data={search.edges} includeMoreButton={true} />
+      </Container>
     </div>
   );
 };
 
-export default Login;
+export const getStaticProps: GetStaticProps = async () => {
+  const apollo = await fetchHomeCategories();
+
+  return addApolloState(apollo, {
+    props: {},
+    revalidate: 10,
+  });
+};
+
+export default Home;

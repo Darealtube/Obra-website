@@ -73,7 +73,7 @@ const ConfigUser2 = ({ dispatch, user, configUser }: Props) => {
           artKinds: user.artKinds,
         },
       });
-      router.push("/home");
+      router.push("/");
     }
   };
 

@@ -18,30 +18,24 @@ export interface EditUserData {
   editUser: UserInterface;
 }
 
-export interface LikeData {
-  likePost: boolean;
-}
-
-export interface UnlikeData {
-  unlikePost: boolean;
+export interface LikeUnlikeData {
+  likeUnlikePost: boolean;
 }
 
 export interface UnlikeLikeVars {
   postId: string;
   userID: string;
+  action: string;
 }
 
-export interface LikeArtistData {
-  likePost: boolean;
-}
-
-export interface UnlikeArtistData {
-  unlikePost: boolean;
+export interface LikeUnlikeArtistData {
+  likeUnlikeArtist: boolean;
 }
 
 export interface UnlikeLikeArtistVars {
   artistID: string;
   userID: string;
+  action: string;
 }
 
 export interface EditPostData {
@@ -53,15 +47,6 @@ export interface EditPostVars {
   title: string;
   description: string;
   tags: string[];
-}
-
-export interface ViewPostData {
-  viewPost: boolean;
-}
-
-export interface ViewPostVars {
-  viewed: string;
-  userId: string;
 }
 
 export interface ConfigData {

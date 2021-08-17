@@ -22,7 +22,7 @@ const Trending = () => {
     TRENDING_POSTS_QUERY,
     {
       variables: {
-        limit: 4,
+        limit: 20,
       },
     }
   );
@@ -35,9 +35,11 @@ const Trending = () => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <Container className={styles.content}>
-        <Typography variant="h4">Trending Posts</Typography>
-        <Divider />
+      <Container className={styles.content} sx={{ marginTop: "80px" }}>
+        <Typography variant="h2" gutterBottom align="center">
+          Trending Posts
+        </Typography>
+
         {data ? (
           <ArtList
             data={data?.trendingPosts}

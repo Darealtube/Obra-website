@@ -11,6 +11,7 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  Container,
 } from "@material-ui/core";
 import Palette from "@material-ui/icons/Palette";
 import { Autocomplete } from "@material-ui/core";
@@ -22,6 +23,8 @@ import { State, reducer, Tag } from "../../Hooks/Reducers/PostReducer";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/General/Create.module.css";
 import useSearch from "../../Hooks/useSearch";
+import { EditValidate } from "../../utils/postValidator";
+import dynamic from "next/dynamic";
 
 interface Props {
   postId: PostInterface;
@@ -29,18 +32,19 @@ interface Props {
   id: string;
 }
 
+const DynamicError = dynamic(() => import("./Snackbars/ConfigSnack"));
+
 const EditPostForm = ({ edit, id, postId }: Props) => {
   const initState: State = {
     title: postId.title,
     description: postId.description,
-    art: postId.art,
     watermarkArt: postId.watermarkArt,
     price: postId.price,
     sale: postId.sale,
     tags: postId.tags,
     tagInput: "",
-    width: postId.width,
-    height: postId.height,
+    error: false,
+    errMessage: "",
   };
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -87,15 +91,25 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setDisabled(true);
-    edit({
-      variables: {
-        postId: id,
-        title: post.title,
-        description: post.description,
-        tags: post.tags.map((tag) => tag.name),
-      },
-    });
-    router.push("/");
+    const valid = EditValidate(post);
+    if (valid.error && valid.errMessage) {
+      dispatch({
+        type: "ERROR",
+        payload: valid.error,
+        message: valid.errMessage,
+      });
+      setDisabled(false);
+    } else {
+      edit({
+        variables: {
+          postId: id,
+          title: post.title,
+          description: post.description,
+          tags: post.tags.map((tag) => tag.name),
+        },
+      });
+      router.push("/");
+    }
   };
 
   const handleNumber = (values: NumberFormatValues) => {
@@ -105,6 +119,17 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
   const handleSale = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: "SALE", payload: (e.target as HTMLInputElement).value });
   };
+
+  const handleErrorClose = (
+    event: React.SyntheticEvent | React.MouseEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch({ type: "ERROR", payload: false });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -200,31 +225,34 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
               options={options.map((item) => item.node)}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
-              renderOption={(_props, option: Tag, _status) => (
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Typography noWrap>{option.name} </Typography>
-                  <Chip
-                    label={`${option.artCount} art(s) with this tag`}
-                    size="small"
-                    style={{ marginLeft: "12px" }}
-                  />
-                </Box>
+              renderOption={(props, option: Tag, _status) => (
+                <li {...props}>
+                  <Container
+                    sx={{ display: "flex", margin: "8px 0px 8px 0px" }}
+                  >
+                    <Typography noWrap>{option.name} </Typography>
+                    <Chip
+                      label={`${option.artCount} art(s) with this tag`}
+                      size="small"
+                      style={{ marginLeft: "12px" }}
+                    />
+                  </Container>
+                </li>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  required
                   label="Select Tags or Input with , or Enter after word/phrase."
                   variant="outlined"
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
-                      <React.Fragment>
+                      <>
                         {loading ? (
                           <CircularProgress color="inherit" size={20} />
                         ) : null}
                         {params.InputProps.endAdornment}
-                      </React.Fragment>
+                      </>
                     ),
                   }}
                 />
@@ -245,6 +273,11 @@ const EditPostForm = ({ edit, id, postId }: Props) => {
           </Grid>
         </Grid>
       </form>
+      <DynamicError
+        error={post.error}
+        errMessage={post.errMessage}
+        handleErrorClose={handleErrorClose}
+      />
     </>
   );
 };

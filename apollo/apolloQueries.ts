@@ -85,7 +85,10 @@ export const POST_ID_QUERY = gql`
       author {
         id
         name
+        image
       }
+      date
+      likes
       sale
       price
       tags {
@@ -291,7 +294,6 @@ export const EDIT_POST_QUERY = gql`
     postId(id: $id) {
       id
       title
-      art
       watermarkArt
       author {
         id
@@ -890,27 +892,15 @@ export const IS_SAME_USER = gql`
   }
 `;
 
-export const LIKE_MUTATION = gql`
-  mutation Like($postId: ID!, $userID: ID!) {
-    likePost(postId: $postId, userID: $userID)
+export const LIKE_UNLIKE_MUTATION = gql`
+  mutation Like($postId: ID!, $userID: ID!, $action: String!) {
+    likeUnlikePost(postId: $postId, userID: $userID, action: $action)
   }
 `;
 
-export const UNLIKE_MUTATION = gql`
-  mutation unLike($postId: ID!, $userID: ID!) {
-    unlikePost(postId: $postId, userID: $userID)
-  }
-`;
-
-export const LIKE_ARTIST_MUTATION = gql`
-  mutation LikeArtist($artistID: ID!, $userID: ID!) {
-    likeArtist(artistID: $artistID, userID: $userID)
-  }
-`;
-
-export const UNLIKE_ARTIST_MUTATION = gql`
-  mutation UnlikeArtist($artistID: ID!, $userID: ID!) {
-    unlikeArtist(artistID: $artistID, userID: $userID)
+export const LIKE_UNLIKE_ARTIST_MUTATION = gql`
+  mutation LikeArtist($artistID: ID!, $userID: ID!, $action: String!) {
+    likeUnlikeArtist(artistID: $artistID, userID: $userID, action: $action)
   }
 `;
 
@@ -1170,12 +1160,6 @@ export const EDIT_COMMISSION_SETTINGS_MUTATION = gql`
 export const READ_NOTIF = gql`
   mutation ReadNotif($notifArray: [ID!]) {
     readNotif(notifArray: $notifArray)
-  }
-`;
-
-export const VIEW_POST = gql`
-  mutation ViewPost($viewed: ID!, $userId: ID!) {
-    viewPost(viewed: $viewed, userId: $userId)
   }
 `;
 

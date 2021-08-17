@@ -173,7 +173,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
       query: POST_RECOMMENDED_QUERY,
       variables: {
         id: id,
-        limit: 4,
+        limit: 12,
       },
     });
   }

@@ -1,108 +1,230 @@
 import {
-  Grid,
-  Typography,
-  Container,
-  CircularProgress,
-  Divider,
-  useMediaQuery,
+  Box,
+  Button,
   IconButton,
+  ImageListItem,
+  ImageListItemBar,
+  Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import { Dispatch, SetStateAction } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Post.module.css";
-import CommentList from "../CommentList";
-import CommentForm from "../Forms/CreateComment";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import usePagination from "../../Hooks/usePagination";
-import Main from "./Main";
+import React, { useState } from "react";
+import { PostInterface } from "../../interfaces/PostInterface";
+import { useMutation } from "@apollo/client";
+import { useSession } from "next-auth/client";
+import {
+  ADD_CART_MUTATION,
+  LIKE_UNLIKE_MUTATION,
+  UNADD_TO_CART_MUTATION,
+} from "../../apollo/apolloQueries";
+import {
+  addUnaddToCartVars,
+  LikeUnlikeData,
+  UnlikeLikeVars,
+} from "../../interfaces/MutationInterfaces";
+import Image from "next/image";
+import InfoIcon from "@material-ui/icons/Info";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import dynamic from "next/dynamic";
-
-const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
+import Link from "next/link";
 
 type Parameters = {
   postID: PostInterface;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  fetchMore: any;
   alreadyLiked: boolean;
   alreadyAdded: boolean;
+  handleOpenDialog: () => void;
 };
+
+const DynamicInfoDialog = dynamic(() => import("./InfoDialog"));
 
 const PostInfo = ({
   postID,
-  setOpen,
-  fetchMore,
   alreadyLiked,
   alreadyAdded,
+  handleOpenDialog,
 }: Parameters) => {
-  const commentToggle = useMediaQuery("(max-width:768px)");
-  const [openComment, setOpenComment] = useState(false);
+  const [openInfo, setOpenInfo] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [cartDisabled, setCartDisabled] = useState(false);
+  const [liked, setLiked] = useState(alreadyLiked);
+  const [added, setAdded] = useState(alreadyAdded);
+  const [session, loading] = useSession();
+  const [addtoCart] = useMutation<boolean, addUnaddToCartVars>(
+    ADD_CART_MUTATION
+  );
+  const [removeFromCart] = useMutation<boolean, addUnaddToCartVars>(
+    UNADD_TO_CART_MUTATION
+  );
+  const [like] = useMutation<LikeUnlikeData, UnlikeLikeVars>(
+    LIKE_UNLIKE_MUTATION
+  );
 
-  const { More, hasMore, ref } = usePagination({
-    key: "postId",
-    fetchMore,
-    info: postID.comments,
-    limit: 4,
-    key2: "comments",
-    executeWhileUnscrollable: true,
-  });
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!liked) {
+      setLiked(true);
+      setDisabled(true);
+      like({
+        variables: { postId: postID.id, userID: session?.id, action: "like" },
+        update: () => {
+          setDisabled(false);
+        },
+      });
+    } else {
+      setLiked(false);
+      setDisabled(true);
+      like({
+        variables: { postId: postID.id, userID: session?.id, action: "unlike" },
+        update: () => {
+          setDisabled(false);
+        },
+      });
+    }
+  };
 
-  const handleDrawer = () => {
-    setOpenComment(!openComment);
+  const handleCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!added) {
+      setAdded(true);
+      setCartDisabled(true);
+      addtoCart({
+        variables: {
+          postID: postID.id,
+          userID: session?.id,
+          cost: +postID.price,
+        },
+        update: () => {
+          setCartDisabled(false);
+        },
+      });
+    } else {
+      setAdded(false);
+      setCartDisabled(true);
+      removeFromCart({
+        variables: { postID: postID.id, userID: session?.id },
+        update: () => {
+          setCartDisabled(false);
+        },
+      });
+    }
+  };
+
+  const handleInfoDialog = () => {
+    setOpenInfo(!openInfo);
   };
 
   return (
-    <Grid item xs={12} md={8} className={styles.postInfo}>
-      <Container>
-        <Main
-          postID={postID}
-          setOpen={setOpen}
-          alreadyLiked={alreadyLiked}
-          alreadyAdded={alreadyAdded}
-        />
-        <br />
-        <br />
-        <Typography variant="overline">Comments</Typography>
-        <Divider />
-        {commentToggle ? (
-          <IconButton onClick={handleDrawer} style={{ width: "inherit" }} size="large">
-            <ExpandMoreIcon />
-          </IconButton>
-        ) : (
-          <>
-            <CommentForm id={postID.id} />
-            <InfiniteScroll
-              dataLength={postID.comments.edges.length}
-              next={More}
-              hasMore={hasMore}
-              loader={
+    <>
+      <ImageListItem>
+        <Box className={styles.artContainer}>
+          <Image
+            src={postID.watermarkArt}
+            layout="fill"
+            objectFit="contain"
+            onClick={handleOpenDialog}
+            alt={"Art Image"}
+          />
+        </Box>
+        <ImageListItemBar
+          title={<Typography>{postID.title}</Typography>}
+          subtitle={postID.description}
+          actionIcon={
+            <>
+              <IconButton
+                sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                size="medium"
+                onClick={handleInfoDialog}
+              >
+                <InfoIcon />
+              </IconButton>
+              {session && !loading && (
                 <>
-                  <br />
-                  <CircularProgress />
+                  <IconButton
+                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                    size="medium"
+                    onClick={handleLike}
+                    disabled={disabled}
+                  >
+                    {liked ? (
+                      <FavoriteIcon color="secondary" />
+                    ) : (
+                      <FavoriteBorderIcon color="inherit" />
+                    )}
+                  </IconButton>
+                  {postID.sale == "Yes" && postID.author.id != session?.id && (
+                    <IconButton
+                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      size="medium"
+                      onClick={handleCart}
+                      disabled={cartDisabled}
+                    >
+                      <AddShoppingCartIcon
+                        color={added ? "secondary" : "inherit"}
+                      />
+                    </IconButton>
+                  )}
                 </>
-              }
-              style={{
-                overflow: "hidden",
-              }}
-              scrollThreshold={0.5}
-            >
-              <CommentList comments={postID.comments.edges} />
-            </InfiniteScroll>
-          </>
-        )}
-      </Container>
+              )}
+            </>
+          }
+        />
+      </ImageListItem>
 
-      <DynamicCommentDrawer
-        id={postID.id}
-        More={More}
-        hasMore={hasMore}
-        comments={postID.comments.edges}
-        open={openComment}
-        handleDrawer={handleDrawer}
-        parentRef={ref}
+      <Box display="flex" marginTop={2} alignItems="center">
+        <Image
+          src={postID.author.image}
+          width={80}
+          height={80}
+          className={styles.avatar}
+          alt={"User Avatar"}
+        />
+        <Box className={styles.userInfo}>
+          <Box style={{ flexGrow: 1 }}>
+            <Typography variant="h4">{postID.author.name}</Typography>
+            <Typography>Created 1000 art(s)</Typography>
+          </Box>
+          <Box className={styles.userInfoOptions}>
+            {postID.author.id != session?.id ? (
+              <Link href={`/profile/${postID.author.name}/`} passHref>
+                <Button variant="outlined" component="a">
+                  View Profile
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href={`/post/${postID.id}/edit`} passHref>
+                  <Button
+                    variant="outlined"
+                    component="a"
+                    color="success"
+                    className={styles.userInfoButtons}
+                  >
+                    Edit Post
+                  </Button>
+                </Link>
+                <Link href="/" passHref>
+                  <Button
+                    variant="outlined"
+                    component="a"
+                    color="secondary"
+                    className={styles.userInfoButtons}
+                  >
+                    Delete Post
+                  </Button>
+                </Link>
+              </>
+            )}
+          </Box>
+        </Box>
+      </Box>
+
+      <DynamicInfoDialog
+        post={postID}
+        handleClose={handleInfoDialog}
+        open={openInfo}
       />
-    </Grid>
+    </>
   );
 };
 

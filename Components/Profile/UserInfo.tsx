@@ -1,23 +1,18 @@
 import { Button, Box, Paper, Typography, Container } from "@material-ui/core";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import { UserInterface } from "../../interfaces/UserInterface";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import BrushIcon from "@material-ui/icons/Brush";
-import {
-  LIKE_ARTIST_MUTATION,
-  UNLIKE_ARTIST_MUTATION,
-} from "../../apollo/apolloQueries";
+import { LIKE_UNLIKE_ARTIST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { signIn, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import EditIcon from "@material-ui/icons/Edit";
 import dynamic from "next/dynamic";
 import {
-  LikeArtistData,
-  UnlikeArtistData,
+  LikeUnlikeArtistData,
   UnlikeLikeArtistVars,
 } from "../../interfaces/MutationInterfaces";
 import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
@@ -32,16 +27,12 @@ type Props = {
 };
 
 const UserInfo = ({ artist, admin, userLiked }: Props) => {
-  const router = useRouter();
   const [disabled, setDisabled] = useState(false);
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
   const [openDialog, setOpenDialog] = useState(false);
-  const [likeArtist] = useMutation<LikeArtistData, UnlikeLikeArtistVars>(
-    LIKE_ARTIST_MUTATION
-  );
-  const [unlikeArtist] = useMutation<UnlikeArtistData, UnlikeLikeArtistVars>(
-    UNLIKE_ARTIST_MUTATION
+  const [likeArtist] = useMutation<LikeUnlikeArtistData, UnlikeLikeArtistVars>(
+    LIKE_UNLIKE_ARTIST_MUTATION
   );
 
   // handleLike will handle like and unlike functionality. It will update
@@ -49,30 +40,28 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   // It will redirect to the signIn page when it does not have session.
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!session && !loading) {
-      signIn("google", {
-        callbackUrl: `https://obra-website.vercel.app/`,
+    if (!liked) {
+      setLiked(true);
+      setDisabled(true);
+      likeArtist({
+        variables: { artistID: artist.id, userID: session.id, action: "like" },
+        update: () => {
+          setDisabled(false);
+        },
       });
     } else {
-      if (!liked) {
-        setLiked(true);
-        setDisabled(true);
-        likeArtist({
-          variables: { artistID: artist.id, userID: session.id },
-          update: () => {
-            setDisabled(false);
-          },
-        });
-      } else {
-        setLiked(false);
-        setDisabled(true);
-        unlikeArtist({
-          variables: { artistID: artist.id, userID: session.id },
-          update: () => {
-            setDisabled(false);
-          },
-        });
-      }
+      setLiked(false);
+      setDisabled(true);
+      likeArtist({
+        variables: {
+          artistID: artist.id,
+          userID: session.id,
+          action: "unlike",
+        },
+        update: () => {
+          setDisabled(false);
+        },
+      });
     }
   };
 
@@ -138,7 +127,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Container>
         )}
 
-        {!admin && artist ? (
+        {!admin && artist && session && !loading ? (
           <Container style={{ marginBottom: "16px" }}>
             <Button
               fullWidth

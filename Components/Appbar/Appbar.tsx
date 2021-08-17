@@ -52,10 +52,16 @@ const Appbar = () => {
             aria-label="open drawer"
             className={styles.menuButton}
             onClick={handleDrawer}
-            size="large">
+            size="large"
+          >
             <MenuIcon />
           </IconButton>
-          <Image src="/obra-logo.png" height={40} width={40} alt={"Obra Logo"} />
+          <Image
+            src="/obra-logo.png"
+            height={40}
+            width={40}
+            alt={"Obra Logo"}
+          />
           <Typography
             variant="h6"
             noWrap

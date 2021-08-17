@@ -3,13 +3,13 @@ type Options = "CHANGE" | "CUSTOM_TAG" | "SALE" | "CHANGE_ART" | "ERROR";
 export type State = {
   title: string;
   description: string;
-  art: string;
-  watermarkArt: string;
+  art?: string;
+  watermarkArt?: string;
   price: string;
   sale: string;
   tags: Tag[] | string[];
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   error?: boolean;
   errMessage?: string;
   tagInput?: string;

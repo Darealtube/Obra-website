@@ -50,7 +50,7 @@ const AppbarMenu = ({ user, fetchMore }: Prop) => {
           </Link>
         </IconButton>
       )}
-      <DynamicNotifPop user={user} fetchMore={fetchMore} />
+      {!XSmall && <DynamicNotifPop user={user} fetchMore={fetchMore} />}
       <IconButton onClick={handleProfile} size="large">
         {user.userId.image ? (
           <Image

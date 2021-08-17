@@ -1,17 +1,16 @@
 import Appbar from "../../../Components/Appbar/Appbar";
-import { CssBaseline, Grid } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import { Container, CssBaseline, Grid } from "@material-ui/core";
+import { useState } from "react";
 import styles from "../../styles/Specific/Post.module.css";
 import Head from "next/head";
 import { InitializePostInfo } from "../../../utils/fetchData";
 import { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
 import {
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
-  VIEW_POST,
 } from "../../../apollo/apolloQueries";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import PostInfo from "../../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../../Components/PostInfo/RecommendedList";
 import dynamic from "next/dynamic";
@@ -20,11 +19,8 @@ import {
   QueryIdVars,
   RecommendedPostData,
 } from "../../../interfaces/QueryInterfaces";
-import {
-  ViewPostData,
-  ViewPostVars,
-} from "../../../interfaces/MutationInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
+import Comments from "../../../Components/PostInfo/Comments";
 
 const DynamicImageDialog = dynamic(
   () => import("../../../Components/PostInfo/ImageDialog")
@@ -37,8 +33,6 @@ type Props = {
 };
 
 const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
-  const [session, loading] = useSession();
-  const [viewed] = useMutation<ViewPostData, ViewPostVars>(VIEW_POST);
   const [open, setOpen] = useState(false);
   const {
     data: { postId },
@@ -55,26 +49,13 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   } = useQuery<RecommendedPostData, QueryIdVars>(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
-      limit: 4,
+      limit: 12,
     },
   });
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleOpenDialog = () => {
+    setOpen(!open);
   };
-
-  // This useEffect adds the post to the view history of the user upon rendering the page.
-  useEffect(() => {
-    if (session && !loading) {
-      viewed({
-        variables: {
-          userId: session?.id,
-          viewed: id,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, loading]);
 
   return (
     <div className={styles.root}>
@@ -87,23 +68,29 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
       <Grid container className={styles.grid}>
         {postId && recommendedPosts && (
           <>
-            <PostInfo
-              postID={postId}
-              setOpen={setOpen}
-              fetchMore={MoreComm}
-              alreadyLiked={alreadyLiked}
-              alreadyAdded={alreadyAdded}
-            />
-            <RecommendedList
-              fetchMore={MoreRecc}
-              recommended={recommendedPosts}
-            />
+            <Grid item xs={12} md={6} lg={8} className={styles.postInfo}>
+              <Container sx={{ display: "flex", flexDirection: "column" }}>
+                <PostInfo
+                  postID={postId}
+                  alreadyAdded={alreadyAdded}
+                  alreadyLiked={alreadyLiked}
+                  handleOpenDialog={handleOpenDialog}
+                />
+                <Comments postID={postId} fetchMore={MoreComm} />
+              </Container>
+            </Grid>
+            <Grid item xs={12} md={6} lg={4} className={styles.recommended}>
+              <RecommendedList
+                fetchMore={MoreRecc}
+                recommended={recommendedPosts}
+              />
+            </Grid>
           </>
         )}
       </Grid>
 
       <DynamicImageDialog
-        handleClose={handleClose}
+        handleClose={handleOpenDialog}
         open={open}
         art={postId.watermarkArt}
       />
@@ -118,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     session ? session.id : null
   );
 
-  if (exists === false) {
+  if (!exists) {
     return {
       notFound: true,
     };

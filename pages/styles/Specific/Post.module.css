@@ -6,18 +6,12 @@
 .grid {
   height: 100%;
   position: relative;
-  margin-top: 80px;
 }
 
 .artContainer {
-  display: flex;
+  width: 100%;
+  height: 40vh;
   position: relative;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 500;
-  height: 500;
-  background: black;
 }
 
 .information {
@@ -82,4 +76,49 @@
 
 .avatar {
   border-radius: 50%;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-left: 8px;
+  width: 100%;
+}
+
+.userInfoButtons {
+  height: 40px;
+  margin: 4px 4px 4px 4px;
+}
+
+.userInfoOptions {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  width: 100%;
+}
+
+@media all and (max-width: 426px) {
+  .userInfo {
+    align-items: center;
+    flex-direction: column;
+  }
+  .userInfoButtons {
+    width: 100%;
+  }
+}
+
+@media all and (max-width: 546px) {
+  .userInfoOptions {
+    flex-direction: column;
+  }
+  .userInfo {
+    align-items: center;
+  }
+}
+
+@media all and (max-width: 1100px) and (min-width: 899px) {
+  .userInfoOptions {
+    flex-direction: column;
+  }
 }

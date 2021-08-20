@@ -29,7 +29,9 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
       </Box>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4} sx={{ position: "relative", bottom: "80px" }}>
-          <UserInfo artist={artist} admin={admin} userLiked={userLiked} />
+          {artist && (
+            <UserInfo artist={artist} admin={admin} userLiked={userLiked} />
+          )}
         </Grid>
         <Grid item xs={12} md={8}>
           {children}

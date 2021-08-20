@@ -74,130 +74,124 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
         alt={"User Image"}
       />
       <br />
-      {artist && (
-        <>
-          <Typography variant="h4" align="center" gutterBottom>
-            {artist.name}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-            paragraph
-          >
-            {artist.userBio && <Typography>{artist.userBio}</Typography>}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-          >
-            <CakeIcon className={styles.icon} /> Born in {artist.birthday}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-          >
-            <FlagIcon className={styles.icon} /> Lives in {artist.country}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-          >
-            <PersonIcon className={styles.icon} /> {artist.artLevel}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-          >
-            <PaletteIcon className={styles.icon} /> Specializes in &nbsp;
-            {artist.artStyles.join(", ").toString()}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            className={styles.text}
-            gutterBottom
-          >
-            <BrushIcon className={styles.icon} /> Does &nbsp;
-            {artist.artKinds.join(", ").toString()}
-          </Typography>
+      <Typography variant="h4" align="center" gutterBottom>
+        {artist.name}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+        paragraph
+      >
+        {artist.userBio}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+      >
+        <CakeIcon className={styles.icon} /> Born in {artist.birthday}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+      >
+        <FlagIcon className={styles.icon} /> Lives in {artist.country}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+      >
+        <PersonIcon className={styles.icon} /> {artist.artLevel}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+      >
+        <PaletteIcon className={styles.icon} /> Specializes in &nbsp;
+        {artist.artStyles.join(", ").toString()}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        align="center"
+        className={styles.text}
+        gutterBottom
+      >
+        <BrushIcon className={styles.icon} /> Does &nbsp;
+        {artist.artKinds.join(", ").toString()}
+      </Typography>
 
-          <Box width="80%">
-            <Link href={`/gallery/${artist.name}`} passHref>
+      <Box width="80%">
+        <Link href={`/gallery/${artist.name}`} passHref>
+          <Button
+            fullWidth
+            component="a"
+            variant="outlined"
+            sx={{ marginBottom: "8px" }}
+            startIcon={<PhotoAlbumIcon color="inherit" />}
+          >
+            <Typography align="center" color="black">
+              Gallery
+            </Typography>
+          </Button>
+        </Link>
+        {!admin && session && !loading ? (
+          <>
+            <Button
+              fullWidth
+              onClick={handleLike}
+              disabled={disabled}
+              variant="outlined"
+              sx={{ marginBottom: "8px" }}
+              startIcon={<FavoriteBorderIcon color="inherit" />}
+            >
+              <Typography align="center" color="black">
+                {liked ? "Unlike Artist" : "Like Artist"}
+              </Typography>
+            </Button>
+            <Link
+              href={`/profile/${encodeURIComponent(artist.name)}/commission`}
+              passHref
+            >
               <Button
                 fullWidth
                 component="a"
                 variant="outlined"
                 sx={{ marginBottom: "8px" }}
-                startIcon={<PhotoAlbumIcon color="inherit" />}
+                startIcon={<BrushIcon color="inherit" />}
               >
                 <Typography align="center" color="black">
-                  Gallery
+                  Commission Me!
                 </Typography>
               </Button>
             </Link>
-            {!admin && session && !loading ? (
-              <>
-                <Button
-                  fullWidth
-                  onClick={handleLike}
-                  disabled={disabled}
-                  variant="outlined"
-                  sx={{ marginBottom: "8px" }}
-                  startIcon={<FavoriteBorderIcon color="inherit" />}
-                >
-                  <Typography align="center" color="black">
-                    {liked ? "Unlike Artist" : "Like Artist"}
-                  </Typography>
-                </Button>
-                <Link
-                  href={`/profile/${encodeURIComponent(
-                    artist.name
-                  )}/commission`}
-                  passHref
-                >
-                  <Button
-                    fullWidth
-                    component="a"
-                    variant="outlined"
-                    sx={{ marginBottom: "8px" }}
-                    startIcon={<BrushIcon color="inherit" />}
-                  >
-                    <Typography align="center" color="black">
-                      Commission Me!
-                    </Typography>
-                  </Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link href={`/settings/account/`} passHref>
-                  <Button
-                    fullWidth
-                    component="a"
-                    variant="outlined"
-                    sx={{ marginBottom: "8px" }}
-                    startIcon={<SettingsIcon color="inherit" />}
-                  >
-                    <Typography align="center" color="black">
-                      Edit Profile{" "}
-                    </Typography>
-                  </Button>
-                </Link>
-              </>
-            )}
-          </Box>
-        </>
-      )}
+          </>
+        ) : (
+          <>
+            <Link href={`/settings/account/`} passHref>
+              <Button
+                fullWidth
+                component="a"
+                variant="outlined"
+                sx={{ marginBottom: "8px" }}
+                startIcon={<SettingsIcon color="inherit" />}
+              >
+                <Typography align="center" color="black">
+                  Edit Profile{" "}
+                </Typography>
+              </Button>
+            </Link>
+          </>
+        )}
+      </Box>
     </Container>
   );
 };

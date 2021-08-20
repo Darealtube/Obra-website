@@ -65,7 +65,14 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   };
 
   return (
-    <Container className={styles.userContainer}>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <Image
         src={artist && artist.image ? artist.image : "/user-empty-avatar.png"}
         width={160}

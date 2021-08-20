@@ -76,12 +76,12 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
       <br />
       {artist && (
         <>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" align="center" gutterBottom>
             {artist.name}
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
             paragraph
@@ -90,7 +90,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
           >
@@ -98,7 +98,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
           >
@@ -106,7 +106,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
           >
@@ -114,7 +114,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
           >
@@ -123,7 +123,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
           </Typography>
           <Typography
             variant="subtitle1"
-            align="left"
+            align="center"
             className={styles.text}
             gutterBottom
           >

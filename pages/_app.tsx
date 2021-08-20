@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { start, done } from "nprogress";
-import "nprogress/nprogress.css";
+import "../public/nprogress.css";
 import router from "next/router";
 import "./styles/patch.css";
 import { Provider } from "next-auth/client";

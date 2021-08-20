@@ -23,7 +23,10 @@ import { addApolloState } from "../../../apollo/apolloClient";
 import Comments from "../../../Components/PostInfo/Comments";
 
 const DynamicImageDialog = dynamic(
-  () => import("../../../Components/PostInfo/ImageDialog")
+  () => import("../../../Components/PostInfo/PostDialogs/ImageDialog")
+);
+const DynamicDeleteDialog = dynamic(
+  () => import("../../../Components/PostInfo/PostDialogs/DeleteDialog")
 );
 
 type Props = {
@@ -34,6 +37,7 @@ type Props = {
 
 const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const {
     data: { postId },
     fetchMore: MoreComm,
@@ -49,12 +53,16 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
   } = useQuery<RecommendedPostData, QueryIdVars>(POST_RECOMMENDED_QUERY, {
     variables: {
       id: id,
-      limit: 12,
+      limit: 20,
     },
   });
 
   const handleOpenDialog = () => {
     setOpen(!open);
+  };
+
+  const handleDeleteDialog = () => {
+    setDeleteOpen(!deleteOpen);
   };
 
   return (
@@ -75,6 +83,7 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
                   alreadyAdded={alreadyAdded}
                   alreadyLiked={alreadyLiked}
                   handleOpenDialog={handleOpenDialog}
+                  handleDeleteDialog={handleDeleteDialog}
                 />
                 <Comments postID={postId} fetchMore={MoreComm} />
               </Container>
@@ -93,6 +102,11 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
         handleClose={handleOpenDialog}
         open={open}
         art={postId.watermarkArt}
+      />
+      <DynamicDeleteDialog
+        handleClose={handleDeleteDialog}
+        open={deleteOpen}
+        postId={id}
       />
     </div>
   );

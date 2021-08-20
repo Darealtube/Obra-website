@@ -26,7 +26,7 @@ const DynamicNoSessDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoSessionDialog")
 );
 const DynamicPosterDialog = dynamic(
-  () => import("../../../Components/PostInfo/ImageDialog")
+  () => import("../../../Components/PostInfo/PostDialogs/ImageDialog")
 );
 
 const Commission = () => {

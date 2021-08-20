@@ -1,9 +1,4 @@
-import {
-  CssBaseline,
-  Container,
-  Typography,
-  Fade,
-} from "@material-ui/core";
+import { CssBaseline, Container, Typography, Fade } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import Head from "next/head";

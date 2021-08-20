@@ -19,6 +19,7 @@ export interface UserInterface {
   artKinds?: string[];
   userBio?: string;
   backdrop?: string;
+  artCount: number;
   homeRecommended: Posts;
   phone: string;
   age: string;

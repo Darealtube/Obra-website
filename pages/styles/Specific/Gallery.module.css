@@ -11,3 +11,26 @@
 .avatar {
   border-radius: 50%;
 }
+
+.galleryHeader {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.galleryTitle {
+  margin-left: 8px;
+  flex-grow: 1;
+}
+
+@media all and (max-width: 960px) {
+  .galleryHeader {
+    flex-direction: column;
+  }
+  .galleryTitle {
+    margin-left: 0;
+    text-align: center;
+  }
+}

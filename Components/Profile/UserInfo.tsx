@@ -1,4 +1,4 @@
-import { Button, Box, Paper, Typography, Container } from "@material-ui/core";
+import { Button, Box, Typography, Container } from "@material-ui/core";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
@@ -9,18 +9,18 @@ import { LIKE_UNLIKE_ARTIST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
-import EditIcon from "@material-ui/icons/Edit";
-import dynamic from "next/dynamic";
 import {
   LikeUnlikeArtistData,
   UnlikeLikeArtistVars,
 } from "../../interfaces/MutationInterfaces";
 import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
-
-const DynamicUserDrawer = dynamic(() => import("./UserDrawer"));
+import CakeIcon from "@material-ui/icons/Cake";
+import FlagIcon from "@material-ui/icons/Flag";
+import PersonIcon from "@material-ui/icons/Person";
+import PaletteIcon from "@material-ui/icons/Palette";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 type Props = {
-  children: React.ReactNode;
   artist: UserInterface;
   admin: boolean;
   userLiked: boolean;
@@ -30,7 +30,6 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
   const [disabled, setDisabled] = useState(false);
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
-  const [openDialog, setOpenDialog] = useState(false);
   const [likeArtist] = useMutation<LikeUnlikeArtistData, UnlikeLikeArtistVars>(
     LIKE_UNLIKE_ARTIST_MUTATION
   );
@@ -65,128 +64,141 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
     }
   };
 
-  const OpenDialog = () => {
-    setOpenDialog(true);
-  };
-
   return (
-    <Box className={styles.userContainer}>
-      <Paper className={styles.banner} elevation={6}>
-        <Box className={styles.dp}>
-          <Image
-            src={
-              artist && artist.image ? artist.image : "/user-empty-avatar.png"
-            }
-            layout="fill"
-            objectFit="contain"
-            alt={"User Image"}
-          />
-        </Box>
-        <br />
-        {artist && (
-          <Container
-            style={{ flexGrow: 1, color: "white", wordBreak: "break-word" }}
-          >
-            <Typography variant="h4">{artist.name}</Typography>
-            <br />
-            <Typography
-              variant="subtitle1"
-              align="left"
-              className={styles.text}
-              gutterBottom
-            >
-              {artist.userBio && <Typography>{artist.userBio}</Typography>}
-            </Typography>
-            <Button
-              fullWidth
-              className={styles.userOptions2}
-              onClick={OpenDialog}
-            >
-              <span>
-                <Typography align="center">
-                  <span className={styles.text}>
-                    {" "}
-                    <EditIcon className={styles.icon} />
-                    More information
-                  </span>
-                </Typography>
-              </span>
-            </Button>
-            <Link href={`/gallery/${artist.name}`} passHref>
-              <Button fullWidth className={styles.userOptions2} component="a">
-                <span>
-                  <Typography align="center">
-                    <span className={styles.text}>
-                      <PhotoAlbumIcon className={styles.icon} />
-                      Gallery
-                    </span>
-                  </Typography>
-                </span>
-              </Button>
-            </Link>
-          </Container>
-        )}
-
-        {!admin && artist && session && !loading ? (
-          <Container style={{ marginBottom: "16px" }}>
-            <Button
-              fullWidth
-              className={liked ? styles.userOptions2 : styles.userOptions}
-              onClick={handleLike}
-              disabled={disabled}
-            >
-              <span>
-                <Typography align="center">
-                  <span className={styles.text}>
-                    {" "}
-                    <FavoriteBorderIcon
-                      className={liked ? styles.icon2 : styles.icon}
-                    />
-                    {liked ? "Unlike Artist" : "Like Artist"}
-                  </span>
-                </Typography>
-              </span>
-            </Button>
-            <Link
-              href={`/profile/${encodeURIComponent(artist.name)}/commission`}
-              passHref
-            >
-              <Button fullWidth className={styles.userOptions} component="a">
-                <span>
-                  <Typography align="center">
-                    <span className={styles.text}>
-                      {" "}
-                      <BrushIcon className={styles.icon} /> Commission Me!{" "}
-                    </span>
-                  </Typography>
-                </span>
-              </Button>
-            </Link>
-          </Container>
-        ) : (
-          <>
-            <Link href={`/settings/account/`} passHref>
-              <Button fullWidth className={styles.userOptions} component="a">
-                <span>
-                  <Typography align="center">
-                    <span className={styles.text}>
-                      {" "}
-                      <BrushIcon className={styles.icon} /> Edit Profile{" "}
-                    </span>
-                  </Typography>
-                </span>
-              </Button>
-            </Link>
-          </>
-        )}
-      </Paper>
-
-      <DynamicUserDrawer
-        artist={artist}
-        open={openDialog}
-        setOpen={setOpenDialog}
+    <Container className={styles.userContainer}>
+      <Image
+        src={artist && artist.image ? artist.image : "/user-empty-avatar.png"}
+        width={160}
+        height={160}
+        className={styles.avatar}
+        alt={"User Image"}
       />
-    </Box>
+      <br />
+      {artist && (
+        <>
+          <Typography variant="h4" gutterBottom>
+            {artist.name}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+            paragraph
+          >
+            {artist.userBio && <Typography>{artist.userBio}</Typography>}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+          >
+            <CakeIcon className={styles.icon} /> Born in {artist.birthday}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+          >
+            <FlagIcon className={styles.icon} /> Lives in {artist.country}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+          >
+            <PersonIcon className={styles.icon} /> {artist.artLevel}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+          >
+            <PaletteIcon className={styles.icon} /> Specializes in &nbsp;
+            {artist.artStyles.join(", ").toString()}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            align="left"
+            className={styles.text}
+            gutterBottom
+          >
+            <BrushIcon className={styles.icon} /> Does &nbsp;
+            {artist.artKinds.join(", ").toString()}
+          </Typography>
+
+          <Box width="80%">
+            <Link href={`/gallery/${artist.name}`} passHref>
+              <Button
+                fullWidth
+                component="a"
+                variant="outlined"
+                sx={{ marginBottom: "8px" }}
+                startIcon={<PhotoAlbumIcon color="inherit" />}
+              >
+                <Typography align="center" color="black">
+                  Gallery
+                </Typography>
+              </Button>
+            </Link>
+            {!admin && session && !loading ? (
+              <>
+                <Button
+                  fullWidth
+                  onClick={handleLike}
+                  disabled={disabled}
+                  variant="outlined"
+                  sx={{ marginBottom: "8px" }}
+                  startIcon={<FavoriteBorderIcon color="inherit" />}
+                >
+                  <Typography align="center" color="black">
+                    {liked ? "Unlike Artist" : "Like Artist"}
+                  </Typography>
+                </Button>
+                <Link
+                  href={`/profile/${encodeURIComponent(
+                    artist.name
+                  )}/commission`}
+                  passHref
+                >
+                  <Button
+                    fullWidth
+                    component="a"
+                    variant="outlined"
+                    sx={{ marginBottom: "8px" }}
+                    startIcon={<BrushIcon color="inherit" />}
+                  >
+                    <Typography align="center" color="black">
+                      Commission Me!
+                    </Typography>
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href={`/settings/account/`} passHref>
+                  <Button
+                    fullWidth
+                    component="a"
+                    variant="outlined"
+                    sx={{ marginBottom: "8px" }}
+                    startIcon={<SettingsIcon color="inherit" />}
+                  >
+                    <Typography align="center" color="black">
+                      Edit Profile{" "}
+                    </Typography>
+                  </Button>
+                </Link>
+              </>
+            )}
+          </Box>
+        </>
+      )}
+    </Container>
   );
 };
 

@@ -43,7 +43,7 @@ const Appbar = () => {
   return (
     <div>
       {/* App Bar */}
-      <AppBar>
+      <AppBar sx={{ backgroundColor: "#2a9d8f" }}>
         <Toolbar>
           {/* Drawer and Logo */}
           <IconButton

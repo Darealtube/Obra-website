@@ -16,31 +16,30 @@ import dynamic from "next/dynamic";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../Hooks/usePagination";
 import { Posts } from "../interfaces/UserInterface";
-import { useMediaQuery } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import Link from "next/link";
 
-const DynamicImage = dynamic(() => import("./PostInfo/ImageDialog"));
+const DynamicImage = dynamic(
+  () => import("./PostInfo/PostDialogs/ImageDialog")
+);
 
 type Props = {
   data: Posts;
   first?: string;
   fetchMore: any;
   second?: string;
+  columns: number;
 };
 
-const ArtList = ({ data, first, fetchMore, second }: Props) => {
-  const sm = useMediaQuery("(max-width: 960px)");
-  const xs = useMediaQuery("(max-width: 570px)");
+const ArtList = ({ data, first, fetchMore, second = null, columns }: Props) => {
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
-  const key2exist = second && second != "" ? second : null;
   const { More, hasMore } = usePagination({
     key: first,
     fetchMore,
     info: data,
     limit: 20,
-    key2: key2exist,
+    key2: second,
   });
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,7 +70,7 @@ const ArtList = ({ data, first, fetchMore, second }: Props) => {
         }}
         scrollThreshold={0.4}
       >
-        <ImageList variant="masonry" cols={xs ? 1 : sm ? 2 : 3} gap={8}>
+        <ImageList variant="masonry" cols={columns} gap={8}>
           {data?.edges.map((tile) => (
             <div key={tile.node.watermarkArt}>
               <Grow in={true} timeout={2000}>

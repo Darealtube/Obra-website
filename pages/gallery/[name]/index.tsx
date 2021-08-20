@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import DefaultErrorPage from "next/error";
 
 const Gallery = () => {
+  const xs = useMediaQuery("(max-width: 570px)");
   const sm = useMediaQuery("(max-width: 960px)");
   const router = useRouter();
   const name = router.query.name as string;
@@ -47,13 +48,7 @@ const Gallery = () => {
           </>
         ) : data?.userName && name ? (
           <>
-            <Box
-              display="flex"
-              flexDirection={sm ? "column" : "row"}
-              marginBottom={2}
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box className={styles.galleryHeader}>
               <Image
                 src={data?.userName.image}
                 width={80}
@@ -61,11 +56,7 @@ const Gallery = () => {
                 className={styles.avatar}
                 alt={"User Avatar"}
               />
-              <Typography
-                variant="h4"
-                style={{ marginLeft: "8px", flexGrow: 1 }}
-                align={sm ? "center" : "inherit"}
-              >
+              <Typography variant="h4" className={styles.galleryTitle}>
                 {name}&apos;s Gallery
               </Typography>
 
@@ -90,6 +81,7 @@ const Gallery = () => {
               fetchMore={fetchMore}
               first={"userName"}
               second={"posts"}
+              columns={xs ? 1 : sm ? 2 : 3}
             />
           </>
         ) : (

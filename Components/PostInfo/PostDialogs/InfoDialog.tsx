@@ -5,7 +5,7 @@ import {
   DialogTitle,
   Divider,
 } from "@material-ui/core";
-import { PostInterface } from "../../interfaces/PostInterface";
+import { PostInterface } from "../../../interfaces/PostInterface";
 
 type Props = {
   handleClose: () => void;

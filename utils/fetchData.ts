@@ -80,7 +80,7 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
     query: USER_POST_QUERY,
     variables: {
       name: name,
-      limit: 4,
+      limit: 20,
     },
   });
 
@@ -109,7 +109,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
     query: USER_LIKED_POST_QUERY,
     variables: {
       name: name,
-      limit: 4,
+      limit: 20,
     },
   });
 
@@ -173,7 +173,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
       query: POST_RECOMMENDED_QUERY,
       variables: {
         id: id,
-        limit: 12,
+        limit: 20,
       },
     });
   }

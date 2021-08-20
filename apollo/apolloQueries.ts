@@ -17,6 +17,8 @@ export const PostInfo = gql`
     date
     art
     watermarkArt
+    width
+    height
     tags {
       name
     }
@@ -86,6 +88,7 @@ export const POST_ID_QUERY = gql`
         id
         name
         image
+        artCount
       }
       date
       likes

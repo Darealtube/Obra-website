@@ -1,7 +1,5 @@
-/* eslint-disable react/no-children-prop */
 import React from "react";
-import { Box } from "@material-ui/core";
-import RightInfo from "./RightInfo";
+import { Box, Grid } from "@material-ui/core";
 import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
@@ -29,15 +27,14 @@ const ProfileWrap = ({ children, artist, admin, userLiked }: Props) => {
           alt={"Backdrop Image"}
         />
       </Box>
-      <Box className={styles.information}>
-        <UserInfo
-          children={children}
-          artist={artist}
-          admin={admin}
-          userLiked={userLiked}
-        />
-        <RightInfo children={children} artist={artist} />
-      </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4} sx={{ position: "relative", bottom: "80px" }}>
+          <UserInfo artist={artist} admin={admin} userLiked={userLiked} />
+        </Grid>
+        <Grid item xs={12} md={8}>
+          {children}
+        </Grid>
+      </Grid>
     </div>
   );
 };

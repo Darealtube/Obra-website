@@ -26,6 +26,8 @@ import InfoIcon from "@material-ui/icons/Info";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import ReportIcon from "@material-ui/icons/Report";
+import PersonIcon from "@material-ui/icons/Person";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -34,15 +36,17 @@ type Parameters = {
   alreadyLiked: boolean;
   alreadyAdded: boolean;
   handleOpenDialog: () => void;
+  handleDeleteDialog: () => void;
 };
 
-const DynamicInfoDialog = dynamic(() => import("./InfoDialog"));
+const DynamicInfoDialog = dynamic(() => import("./PostDialogs/InfoDialog"));
 
 const PostInfo = ({
   postID,
   alreadyLiked,
   alreadyAdded,
   handleOpenDialog,
+  handleDeleteDialog,
 }: Parameters) => {
   const [openInfo, setOpenInfo] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -182,15 +186,32 @@ const PostInfo = ({
         <Box className={styles.userInfo}>
           <Box style={{ flexGrow: 1 }}>
             <Typography variant="h4">{postID.author.name}</Typography>
-            <Typography>Created 1000 art(s)</Typography>
+            <Typography>Created {postID.author.artCount} art(s)</Typography>
           </Box>
           <Box className={styles.userInfoOptions}>
             {postID.author.id != session?.id ? (
-              <Link href={`/profile/${postID.author.name}/`} passHref>
-                <Button variant="outlined" component="a">
-                  View Profile
-                </Button>
-              </Link>
+              <>
+                <Link href={`/profile/${postID.author.name}/`} passHref>
+                  <Button
+                    variant="outlined"
+                    component="a"
+                    className={styles.userInfoButtons}
+                    startIcon={<PersonIcon />}
+                  >
+                    View Profile
+                  </Button>
+                </Link>
+                <Link href={`/report/post/${postID.id}`} passHref>
+                  <Button
+                    variant="outlined"
+                    component="a"
+                    className={styles.userInfoButtons}
+                    startIcon={<ReportIcon />}
+                  >
+                    Report Post
+                  </Button>
+                </Link>
+              </>
             ) : (
               <>
                 <Link href={`/post/${postID.id}/edit`} passHref>
@@ -203,16 +224,15 @@ const PostInfo = ({
                     Edit Post
                   </Button>
                 </Link>
-                <Link href="/" passHref>
-                  <Button
-                    variant="outlined"
-                    component="a"
-                    color="secondary"
-                    className={styles.userInfoButtons}
-                  >
-                    Delete Post
-                  </Button>
-                </Link>
+                <Button
+                  variant="outlined"
+                  component="a"
+                  color="secondary"
+                  className={styles.userInfoButtons}
+                  onClick={handleDeleteDialog}
+                >
+                  Delete Post
+                </Button>
               </>
             )}
           </Box>

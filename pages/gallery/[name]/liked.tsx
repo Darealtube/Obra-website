@@ -6,6 +6,7 @@ import {
   CircularProgress,
   Box,
   Button,
+  useMediaQuery,
 } from "@material-ui/core";
 import styles from "../../styles/Specific/Gallery.module.css";
 import Appbar from "../../../Components/Appbar/Appbar";
@@ -18,6 +19,8 @@ import { useRouter } from "next/router";
 import DefaultErrorPage from "next/error";
 
 const LikedGallery = () => {
+  const xs = useMediaQuery("(max-width: 570px)");
+  const sm = useMediaQuery("(max-width: 960px)");
   const router = useRouter();
   const name = router.query.name as string;
   const { data, fetchMore, loading } = useQuery<UserData, QueryNameVars>(
@@ -45,12 +48,7 @@ const LikedGallery = () => {
           </>
         ) : data && name ? (
           <>
-            <Box
-              display="flex"
-              marginBottom={2}
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box className={styles.galleryHeader}>
               <Image
                 src={data?.userName.image}
                 width={80}
@@ -58,10 +56,7 @@ const LikedGallery = () => {
                 className={styles.avatar}
                 alt={"User Avatar"}
               />
-              <Typography
-                variant="h4"
-                style={{ marginLeft: "8px", flexGrow: 1 }}
-              >
+              <Typography variant="h4" className={styles.galleryTitle}>
                 {name}&apos;s Liked Gallery
               </Typography>
 
@@ -84,6 +79,7 @@ const LikedGallery = () => {
               fetchMore={fetchMore}
               first={"userName"}
               second={"likedPosts"}
+              columns={xs ? 1 : sm ? 2 : 3}
             />
           </>
         ) : (

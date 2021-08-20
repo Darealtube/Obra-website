@@ -1,5 +1,10 @@
 import { useQuery } from "@apollo/client";
-import { Container, CssBaseline, Typography } from "@material-ui/core";
+import {
+  Container,
+  CssBaseline,
+  Typography,
+  useMediaQuery,
+} from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import { addApolloState } from "../../apollo/apolloClient";
 import { CATEGORY_POSTS_QUERY } from "../../apollo/apolloQueries";
@@ -10,6 +15,8 @@ import styles from "../styles/General/Home.module.css";
 import Head from "next/head";
 
 const Category = ({ category }) => {
+  const xs = useMediaQuery("(max-width: 570px)");
+  const sm = useMediaQuery("(max-width: 960px)");
   const {
     data: { categoryPosts },
     fetchMore,
@@ -27,9 +34,7 @@ const Category = ({ category }) => {
       </Head>
       <CssBaseline />
       <Appbar />
-      <Container
-        sx={{ display: "flex", flexDirection: "column", marginTop: "80px" }}
-      >
+      <Container className={styles.content}>
         <Typography gutterBottom align="center" variant="h4">
           {categoryPosts.totalCount} art(s) in {category}
         </Typography>
@@ -37,6 +42,7 @@ const Category = ({ category }) => {
           data={categoryPosts}
           fetchMore={fetchMore}
           first={"categoryPosts"}
+          columns={xs ? 1 : sm ? 2 : 3}
         />
       </Container>
     </div>

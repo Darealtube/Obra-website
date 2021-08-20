@@ -27,17 +27,8 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
               href={`/categories/${encodeURIComponent(tag.node.name)}`}
             >
               <Button
-                sx={{
-                  width: "100%",
-                  height: "20vh",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
                 variant="outlined"
-                component={Paper}
-                elevation={6}
+                component="a"
                 className={styles.category}
               >
                 <Typography gutterBottom variant="h6">

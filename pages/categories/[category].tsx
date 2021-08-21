@@ -15,8 +15,6 @@ import styles from "../styles/General/Home.module.css";
 import Head from "next/head";
 
 const Category = ({ category }) => {
-  const xs = useMediaQuery("(max-width: 570px)");
-  const sm = useMediaQuery("(max-width: 960px)");
   const {
     data: { categoryPosts },
     fetchMore,
@@ -42,7 +40,6 @@ const Category = ({ category }) => {
           data={categoryPosts}
           fetchMore={fetchMore}
           first={"categoryPosts"}
-          columns={xs ? 1 : sm ? 2 : 3}
         />
       </Container>
     </div>

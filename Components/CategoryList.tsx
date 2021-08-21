@@ -47,17 +47,8 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
           <Grid item lg={3} md={4} sm={6} xs={12} sx={{ marginBottom: "12px" }}>
             <Link passHref href={`/categories/`}>
               <Button
-                sx={{
-                  width: "100%",
-                  height: "20vh",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
                 variant="outlined"
-                component={Paper}
-                elevation={6}
+                component="a"
                 className={styles.category}
               >
                 <Typography gutterBottom variant="h6">

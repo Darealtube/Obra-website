@@ -2,8 +2,6 @@ import Appbar from "../../../Components/Appbar/Appbar";
 import {
   CssBaseline,
   Box,
-  Tabs,
-  Tab,
   useMediaQuery,
   useTheme,
   Typography,
@@ -20,17 +18,15 @@ import ArtList from "../../../Components/ArtList";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
 import { useState } from "react";
-import router from "next/router";
 
 type Props = {
   name: string;
-  id: string;
   alreadyLiked: boolean;
   currentPage: string;
 };
 
-const UserIDLiked = ({ name, id, alreadyLiked, currentPage }: Props) => {
-  const [tabsValue, setTabsValue] = useState(currentPage);
+const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
+  const [galleryView, setGalleryView] = useState(false);
   const theme = useTheme();
   const threeCol1 = useMediaQuery(theme.breakpoints.up("lg"));
   const threeCol2 = useMediaQuery("(max-width: 899px) and (min-width: 768px)");
@@ -40,14 +36,13 @@ const UserIDLiked = ({ name, id, alreadyLiked, currentPage }: Props) => {
     fetchMore,
   } = useQuery<UserData, QueryNameVars>(USER_LIKED_POST_QUERY, {
     variables: {
-      name: name,
+      name,
       limit: 20,
     },
   });
 
-  const handleTabChange = (event, newValue) => {
-    setTabsValue(newValue);
-    router.push(newValue);
+  const toggleGallery = () => {
+    setGalleryView(!galleryView);
   };
 
   return (
@@ -60,27 +55,28 @@ const UserIDLiked = ({ name, id, alreadyLiked, currentPage }: Props) => {
       <Appbar />
       <ProfileWrap
         artist={userName}
-        admin={userName?.id == id}
         userLiked={alreadyLiked}
+        galleryView={galleryView}
+        handleGallery={toggleGallery}
+        currentPage={currentPage}
       >
         <Box className={styles.postContainer}>
           {userName ? (
             <>
-              <Box justifyContent="center" alignItems="center" marginBottom={8}>
-                <Tabs value={tabsValue} onChange={handleTabChange}>
-                  <Tab label="Posts" value={`/profile/${name}/`} />
-                  <Tab
-                    label="Liked Posts"
-                    value={`/profile/${name}/liked`}
-                  />
-                </Tabs>
-              </Box>
               <ArtList
                 data={userName.likedPosts}
                 fetchMore={fetchMore}
                 first={"userName"}
                 second={"likedPosts"}
-                columns={threeCol1 || threeCol2 ? 3 : oneCol ? 1 : 2}
+                columns={
+                  !galleryView
+                    ? threeCol1 || threeCol2
+                      ? 3
+                      : oneCol
+                      ? 1
+                      : 2
+                    : null
+                }
               />
             </>
           ) : (
@@ -111,7 +107,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       session,
       name: context.params.name,
-      id: session ? session.id : null,
       alreadyLiked: alreadyLiked,
       currentPage: `/profile/${context.params.name}/liked`,
     },

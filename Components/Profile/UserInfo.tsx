@@ -13,7 +13,6 @@ import {
   LikeUnlikeArtistData,
   UnlikeLikeArtistVars,
 } from "../../interfaces/MutationInterfaces";
-import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
 import CakeIcon from "@material-ui/icons/Cake";
 import FlagIcon from "@material-ui/icons/Flag";
 import PersonIcon from "@material-ui/icons/Person";
@@ -22,11 +21,10 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 type Props = {
   artist: UserInterface;
-  admin: boolean;
   userLiked: boolean;
 };
 
-const UserInfo = ({ artist, admin, userLiked }: Props) => {
+const UserInfo = ({ artist, userLiked }: Props) => {
   const [disabled, setDisabled] = useState(false);
   const [session, loading] = useSession();
   const [liked, setLiked] = useState(userLiked);
@@ -137,20 +135,7 @@ const UserInfo = ({ artist, admin, userLiked }: Props) => {
       </Typography>
 
       <Box width="80%">
-        <Link href={`/gallery/${artist.name}`} passHref>
-          <Button
-            fullWidth
-            component="a"
-            variant="outlined"
-            sx={{ marginBottom: "8px" }}
-            startIcon={<PhotoAlbumIcon color="inherit" />}
-          >
-            <Typography align="center" color="black">
-              Gallery
-            </Typography>
-          </Button>
-        </Link>
-        {!admin && session && !loading ? (
+        {artist.id != session?.id && session && !loading ? (
           <>
             <Button
               fullWidth

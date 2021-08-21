@@ -76,7 +76,14 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
       <Grid container className={styles.grid}>
         {postId && recommendedPosts && (
           <>
-            <Grid item xs={12} md={6} lg={8} className={styles.postInfo}>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={8}
+              className={styles.postInfo}
+              sx={{ marginTop: "80px" }}
+            >
               <Container sx={{ display: "flex", flexDirection: "column" }}>
                 <PostInfo
                   postID={postId}
@@ -88,7 +95,7 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
                 <Comments postID={postId} fetchMore={MoreComm} />
               </Container>
             </Grid>
-            <Grid item xs={12} md={6} lg={4} className={styles.recommended}>
+            <Grid item xs={12} md={6} lg={4} sx={{ marginTop: "80px" }}>
               <RecommendedList
                 fetchMore={MoreRecc}
                 recommended={recommendedPosts}

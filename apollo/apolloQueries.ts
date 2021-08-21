@@ -528,56 +528,6 @@ export const YOUR_FINISHED_COMMS_QUERY = gql`
   }
 `;
 
-export const USER_GALLERY_QUERY = gql`
-  query UserGallery($after: String, $limit: Int, $name: String!) {
-    userName(name: $name) {
-      ...UserInfo
-      posts(limit: $limit, after: $after) {
-        edges {
-          node {
-            id
-            art
-            watermarkArt
-            title
-            width
-            height
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-    }
-  }
-  ${UserInfo}
-`;
-
-export const USER_LIKED_GALLERY_QUERY = gql`
-  query UserGallery($after: String, $limit: Int, $name: String!) {
-    userName(name: $name) {
-      ...UserInfo
-      likedPosts(limit: $limit, after: $after) {
-        edges {
-          node {
-            id
-            art
-            watermarkArt
-            title
-            width
-            height
-          }
-        }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
-    }
-  }
-  ${UserInfo}
-`;
-
 export const ALL_USER_QUERY = gql`
   query AllUsers {
     allUsersList

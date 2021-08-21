@@ -118,25 +118,23 @@ const DrawerItems = () => {
       </ListItem>
       {session && (
         <>
+          <Link href={`/profile/${session?.user.name}/`} passHref>
+            <ListItem button component="a">
+              <ListItemIcon>
+                <ImageIcon />
+              </ListItemIcon>
+              <ListItemText>Your Posts</ListItemText>
+            </ListItem>
+          </Link>
           <ListItem
             button
             component="a"
-            href={`/gallery/${session?.user.name}/`}
-          >
-            <ListItemIcon>
-              <ImageIcon />
-            </ListItemIcon>
-            <ListItemText>Gallery</ListItemText>
-          </ListItem>
-          <ListItem
-            button
-            component="a"
-            href={`/gallery/${session?.user.name}/liked`}
+            href={`/profile/${session?.user.name}/liked`}
           >
             <ListItemIcon>
               <FavoriteIcon />
             </ListItemIcon>
-            <ListItemText>Liked Gallery</ListItemText>
+            <ListItemText>Your Liked Posts</ListItemText>
           </ListItem>
         </>
       )}
@@ -188,34 +186,34 @@ const DrawerItems = () => {
         <Grid container spacing={2}>
           <Grid item>
             <Link href="/about" passHref>
-              <a style={{textDecoration: "none", color: "inherit"}}>
+              <a style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography>About</Typography>
               </a>
             </Link>
           </Grid>
           <Grid item>
             <Link href="/about" passHref>
-              <a style={{textDecoration: "none", color: "inherit"}}>
+              <a style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography>Terms and Conditions</Typography>
               </a>
             </Link>
           </Grid>
           <Grid item>
             <Link href="/about#developers" passHref>
-              <a style={{textDecoration: "none", color: "inherit"}}>
+              <a style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography>Developers</Typography>
               </a>
             </Link>
           </Grid>
           <Grid item>
             <Link href="/about#contacts" passHref>
-              <a style={{textDecoration: "none", color: "inherit"}}>
+              <a style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography>Contact Us</Typography>
               </a>
             </Link>
           </Grid>
           <Grid item>
-            <a style={{textDecoration: "none", color: "inherit"}}>
+            <a style={{ textDecoration: "none", color: "inherit" }}>
               <Typography>Canvas Tutorial</Typography>
             </a>
           </Grid>

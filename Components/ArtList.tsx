@@ -9,6 +9,7 @@ import {
   ImageListItemBar,
   IconButton,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 import Image from "next/image";
 import { useState } from "react";
@@ -28,10 +29,18 @@ type Props = {
   first?: string;
   fetchMore: any;
   second?: string;
-  columns: number;
+  columns?: number;
 };
 
-const ArtList = ({ data, first, fetchMore, second = null, columns }: Props) => {
+const ArtList = ({
+  data,
+  first,
+  fetchMore,
+  second = null,
+  columns = null,
+}: Props) => {
+  const xs = useMediaQuery("(max-width: 570px)");
+  const sm = useMediaQuery("(max-width: 960px)");
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
   const { More, hasMore } = usePagination({
@@ -70,7 +79,11 @@ const ArtList = ({ data, first, fetchMore, second = null, columns }: Props) => {
         }}
         scrollThreshold={0.4}
       >
-        <ImageList variant="masonry" cols={columns} gap={8}>
+        <ImageList
+          variant="masonry"
+          cols={columns ? columns : xs ? 1 : sm ? 2 : 3}
+          gap={8}
+        >
           {data?.edges.map((tile) => (
             <div key={tile.node.watermarkArt}>
               <Grow in={true} timeout={2000}>

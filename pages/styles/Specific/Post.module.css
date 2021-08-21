@@ -27,11 +27,6 @@
   display: flex;
   position: relative;
   justify-content: flex-start;
-  margin-top: 80px;
-}
-
-.recommended {
-  margin-top: 80px;
 }
 
 .card {

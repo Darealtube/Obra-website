@@ -5,7 +5,6 @@ import {
   Typography,
   CircularProgress,
   Box,
-  useMediaQuery,
 } from "@material-ui/core";
 import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
@@ -18,8 +17,6 @@ import {
 import ArtList from "../Components/ArtList";
 
 const Trending = () => {
-  const xs = useMediaQuery("(max-width: 570px)");
-  const sm = useMediaQuery("(max-width: 960px)");
   const { data, fetchMore } = useQuery<TrendingPostsData, PaginatedPostsVars>(
     TRENDING_POSTS_QUERY,
     {
@@ -45,9 +42,8 @@ const Trending = () => {
         {data ? (
           <ArtList
             data={data?.trendingPosts}
-            first={"featuredPosts"}
+            first={"trendingPosts"}
             fetchMore={fetchMore}
-            columns={xs ? 1 : sm ? 2 : 3}
           />
         ) : (
           <Box

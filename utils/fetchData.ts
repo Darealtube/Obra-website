@@ -4,11 +4,11 @@ import {
   BUG_REPORTS_QUERY,
   CART_QUERY,
   CATEGORY_POSTS_QUERY,
-  CATEGORY_QUERY,
   IS_ADMIN,
   IS_LIKED_ARTIST,
   IS_LIKED_OR_ADDED_POST,
   IS_SAME_USER,
+  POPULAR_CATEGORIES_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
   REPORTED_COMMENTS_QUERY,
@@ -133,14 +133,20 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
 export const fetchHomeCategories = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({
-    query: CATEGORY_QUERY,
-    variables: {
-      key: "",
-      type: "category",
-      limit: 20,
-    },
+    query: POPULAR_CATEGORIES_QUERY,
   });
   return apolloClient;
+};
+
+export const fetchPopularCategories = async () => {
+  const apolloClient = initializeApollo();
+  const {
+    data: { popularCategories },
+  } = await apolloClient.query({
+    query: POPULAR_CATEGORIES_QUERY,
+  });
+  const categories = popularCategories.map((category) => category.name);
+  return categories;
 };
 
 export const fetchCategoryPosts = async (category: string) => {

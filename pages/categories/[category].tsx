@@ -1,18 +1,23 @@
 import { useQuery } from "@apollo/client";
 import {
+  Box,
+  Button,
   Container,
   CssBaseline,
   Typography,
-  useMediaQuery,
 } from "@material-ui/core";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { addApolloState } from "../../apollo/apolloClient";
 import { CATEGORY_POSTS_QUERY } from "../../apollo/apolloQueries";
 import Appbar from "../../Components/Appbar/Appbar";
 import ArtList from "../../Components/ArtList";
-import { fetchCategoryPosts } from "../../utils/fetchData";
+import {
+  fetchCategoryPosts,
+  fetchPopularCategories,
+} from "../../utils/fetchData";
 import styles from "../styles/General/Home.module.css";
 import Head from "next/head";
+import router from "next/router";
 
 const Category = ({ category }) => {
   const {
@@ -24,6 +29,7 @@ const Category = ({ category }) => {
       limit: 20,
     },
   });
+
   return (
     <div className={styles.root}>
       <Head>
@@ -33,9 +39,19 @@ const Category = ({ category }) => {
       <CssBaseline />
       <Appbar />
       <Container className={styles.content}>
-        <Typography gutterBottom align="center" variant="h4">
-          {categoryPosts.totalCount} art(s) in {category}
-        </Typography>
+        <Box display="flex">
+          <Typography
+            gutterBottom
+            align="center"
+            variant="h4"
+            sx={{ flexGrow: 1 }}
+          >
+            {categoryPosts.totalCount} art(s) in {category}
+          </Typography>
+          <Button variant="contained" onClick={() => router.reload()}>
+            <Typography align="center">Refresh Results</Typography>
+          </Button>
+        </Box>
         <ArtList
           data={categoryPosts}
           fetchMore={fetchMore}
@@ -46,13 +62,23 @@ const Category = ({ category }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const data = await fetchPopularCategories();
+  const paths = data.map((name) => ({ params: { category: name } }));
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
   const data = await fetchCategoryPosts(context.params.category as string);
 
   return addApolloState(data, {
     props: {
       category: context.params.category,
     },
+    revalidate: 10,
   });
 };
 

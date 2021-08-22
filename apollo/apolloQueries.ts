@@ -759,6 +759,16 @@ export const SEARCH_QUERY = gql`
   }
 `;
 
+export const POPULAR_CATEGORIES_QUERY = gql`
+  query PopularCategories {
+    popularCategories {
+      id
+      name
+      artCount
+    }
+  }
+`;
+
 export const CATEGORY_QUERY = gql`
   query SearchCategory(
     $key: String!

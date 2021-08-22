@@ -19,12 +19,14 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
           in={true}
           style={{ transformOrigin: "0 0 0" }}
           timeout={1000 + index * 200}
-          key={tag.node.name}
+          key={tag.node?.name || tag.name}
         >
           <Grid item lg={3} md={4} sm={6} xs={12} sx={{ marginBottom: "12px" }}>
             <Link
               passHref
-              href={`/categories/${encodeURIComponent(tag.node.name)}`}
+              href={`/categories/${encodeURIComponent(
+                tag.node?.name || tag.name
+              )}`}
             >
               <Button
                 variant="outlined"
@@ -32,10 +34,10 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
                 className={styles.category}
               >
                 <Typography gutterBottom variant="h6">
-                  {tag.node.name}
+                  {tag.node?.name || tag.name}
                 </Typography>
                 <Typography>
-                  {tag.node.artCount} art(s) in this category.
+                  {tag.node?.artCount || tag.artCount} art(s) in this category.
                 </Typography>
               </Button>
             </Link>

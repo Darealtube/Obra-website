@@ -135,36 +135,42 @@ const UserInfo = ({ artist, userLiked }: Props) => {
       </Typography>
 
       <Box width="80%">
-        {artist.id != session?.id && session && !loading ? (
+        {artist.id != session?.id ? (
           <>
-            <Button
-              fullWidth
-              onClick={handleLike}
-              disabled={disabled}
-              variant="outlined"
-              sx={{ marginBottom: "8px" }}
-              startIcon={<FavoriteBorderIcon color="inherit" />}
-            >
-              <Typography align="center" color="black">
-                {liked ? "Unlike Artist" : "Like Artist"}
-              </Typography>
-            </Button>
-            <Link
-              href={`/profile/${encodeURIComponent(artist.name)}/commission`}
-              passHref
-            >
-              <Button
-                fullWidth
-                component="a"
-                variant="outlined"
-                sx={{ marginBottom: "8px" }}
-                startIcon={<BrushIcon color="inherit" />}
-              >
-                <Typography align="center" color="black">
-                  Commission Me!
-                </Typography>
-              </Button>
-            </Link>
+            {session && !loading && (
+              <>
+                <Button
+                  fullWidth
+                  onClick={handleLike}
+                  disabled={disabled}
+                  variant="outlined"
+                  sx={{ marginBottom: "8px" }}
+                  startIcon={<FavoriteBorderIcon color="inherit" />}
+                >
+                  <Typography align="center" color="black">
+                    {liked ? "Unlike Artist" : "Like Artist"}
+                  </Typography>
+                </Button>
+                <Link
+                  href={`/profile/${encodeURIComponent(
+                    artist.name
+                  )}/commission`}
+                  passHref
+                >
+                  <Button
+                    fullWidth
+                    component="a"
+                    variant="outlined"
+                    sx={{ marginBottom: "8px" }}
+                    startIcon={<BrushIcon color="inherit" />}
+                  >
+                    <Typography align="center" color="black">
+                      Commission Me!
+                    </Typography>
+                  </Button>
+                </Link>
+              </>
+            )}
           </>
         ) : (
           <>

@@ -214,7 +214,7 @@ const PostInfo = ({
               </>
             ) : (
               <>
-                <Link href={`/post/${postID.id}/edit`} passHref>
+                <Link href={`/posts/${postID.id}/edit`} passHref>
                   <Button
                     variant="outlined"
                     component="a"

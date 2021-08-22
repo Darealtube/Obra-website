@@ -135,6 +135,11 @@ export const fetchHomeCategories = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({
     query: CATEGORY_QUERY,
+    variables: {
+      key: "",
+      type: "category",
+      limit: 20,
+    },
   });
   return apolloClient;
 };

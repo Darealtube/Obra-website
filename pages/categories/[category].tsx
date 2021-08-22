@@ -41,13 +41,6 @@ const Category = ({ category }) => {
   if (router.isFallback) {
     return (
       <>
-        <Head>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-          <title>Loading Category...</title>
-        </Head>
         <Container className={styles.content}>
           <Box display="flex">
             <ImageList variant="masonry" cols={3} gap={8}>
@@ -108,10 +101,7 @@ const Category = ({ category }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchPopularCategories();
-  const paths = data.map((name) => ({
-    params: { category: encodeURIComponent(name) },
-  }));
-  console.log(paths);
+  const paths = data.map((name) => ({ params: { category: name } }));
   return {
     paths,
     fallback: true,

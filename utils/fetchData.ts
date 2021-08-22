@@ -4,6 +4,7 @@ import {
   BUG_REPORTS_QUERY,
   CART_QUERY,
   CATEGORY_POSTS_QUERY,
+  CATEGORY_QUERY,
   IS_ADMIN,
   IS_LIKED_ARTIST,
   IS_LIKED_OR_ADDED_POST,
@@ -133,7 +134,7 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
 export const fetchHomeCategories = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({
-    query: POPULAR_CATEGORIES_QUERY,
+    query: CATEGORY_QUERY,
   });
   return apolloClient;
 };

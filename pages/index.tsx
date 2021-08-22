@@ -4,21 +4,21 @@ import styles from "./styles/General/Home.module.css";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useQuery } from "@apollo/client";
-import {
-  CATEGORY_QUERY,
-  POPULAR_CATEGORIES_QUERY,
-} from "../apollo/apolloQueries";
-import {
-  fetchHomeCategories,
-  fetchPopularCategories,
-} from "../utils/fetchData";
+import { CATEGORY_QUERY } from "../apollo/apolloQueries";
+import { fetchHomeCategories } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
 import CategoryList from "../Components/CategoryList";
 
 const Home = () => {
   const {
-    data: { popularCategories },
-  } = useQuery(POPULAR_CATEGORIES_QUERY);
+    data: { search },
+  } = useQuery(CATEGORY_QUERY, {
+    variables: {
+      key: "",
+      type: "category",
+      limit: 20,
+    },
+  });
 
   return (
     <div className={styles.root}>
@@ -34,7 +34,7 @@ const Home = () => {
             Categories
           </Typography>
         </Fade>
-        <CategoryList data={popularCategories} includeMoreButton={true} />
+        <CategoryList data={search.edges} includeMoreButton={true} />
       </Container>
     </div>
   );

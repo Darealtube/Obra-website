@@ -1,11 +1,5 @@
 import Head from "next/head";
-import {
-  CssBaseline,
-  Container,
-  Typography,
-  CircularProgress,
-  Box,
-} from "@material-ui/core";
+import { CssBaseline, Container, Typography } from "@material-ui/core";
 import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";

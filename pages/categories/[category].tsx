@@ -67,7 +67,7 @@ const Category = ({ category }) => {
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>{category}</title>
+        <title>{category ? category : " Loading Page..."}</title>
       </Head>
       <CssBaseline />
       <Appbar />
@@ -101,7 +101,9 @@ const Category = ({ category }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchPopularCategories();
-  const paths = data.map((name) => ({ params: { category: name } }));
+  const paths = data.map((name) => ({
+    params: { category: encodeURIComponent(name) },
+  }));
   return {
     paths,
     fallback: true,

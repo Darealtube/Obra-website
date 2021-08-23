@@ -102,7 +102,7 @@ const Category = ({ category }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchPopularCategories();
   const paths = data.map((name) => ({
-    params: { category: encodeURI(name) },
+    params: { category: name },
   }));
   return {
     paths,
@@ -112,7 +112,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const data = await fetchCategoryPosts(context.params.category as string);
-
   return addApolloState(data, {
     props: {
       category: context.params.category,

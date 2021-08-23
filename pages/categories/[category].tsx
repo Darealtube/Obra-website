@@ -102,7 +102,7 @@ const Category = ({ category }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchPopularCategories();
   const paths = data.map((name) => ({
-    params: { category: encodeURIComponent(name) },
+    params: { category: encodeURI(name) },
   }));
   return {
     paths,

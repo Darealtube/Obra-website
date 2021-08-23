@@ -15,16 +15,19 @@ import {
   PaginatedPostsVars,
 } from "../interfaces/QueryInterfaces";
 import ArtList from "../Components/ArtList";
+import { GetStaticProps } from "next";
+import { fetchTrending } from "../utils/fetchData";
+import { addApolloState } from "../apollo/apolloClient";
 
 const Trending = () => {
-  const { data, fetchMore } = useQuery<TrendingPostsData, PaginatedPostsVars>(
-    TRENDING_POSTS_QUERY,
-    {
-      variables: {
-        limit: 20,
-      },
-    }
-  );
+  const {
+    data: { trendingPosts },
+    fetchMore,
+  } = useQuery<TrendingPostsData, PaginatedPostsVars>(TRENDING_POSTS_QUERY, {
+    variables: {
+      limit: 20,
+    },
+  });
 
   return (
     <div className={styles.root}>
@@ -38,26 +41,23 @@ const Trending = () => {
         <Typography variant="h2" gutterBottom align="center">
           Trending Posts
         </Typography>
-
-        {data ? (
-          <ArtList
-            data={data?.trendingPosts}
-            first={"trendingPosts"}
-            fetchMore={fetchMore}
-          />
-        ) : (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            marginTop={30}
-          >
-            <CircularProgress />
-          </Box>
-        )}
+        <ArtList
+          data={trendingPosts}
+          first={"trendingPosts"}
+          fetchMore={fetchMore}
+        />
       </Container>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const apollo = await fetchTrending();
+
+  return addApolloState(apollo, {
+    props: {},
+    revalidate: 10,
+  });
 };
 
 export default Trending;

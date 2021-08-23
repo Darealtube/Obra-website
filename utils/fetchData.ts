@@ -15,6 +15,7 @@ import {
   REPORTED_COMMENTS_QUERY,
   REPORTED_POSTS_QUERY,
   REPORT_ID_QUERY,
+  TRENDING_POSTS_QUERY,
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
@@ -138,6 +139,17 @@ export const fetchHomeCategories = async () => {
     variables: {
       key: "",
       type: "category",
+      limit: 20,
+    },
+  });
+  return apolloClient;
+};
+
+export const fetchTrending = async () => {
+  const apolloClient = initializeApollo();
+  await apolloClient.query({
+    query: TRENDING_POSTS_QUERY,
+    variables: {
       limit: 20,
     },
   });

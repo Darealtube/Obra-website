@@ -5,7 +5,6 @@ import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useQuery } from "@apollo/client";
 import {
-  CATEGORY_QUERY,
   POPULAR_CATEGORIES_QUERY,
 } from "../apollo/apolloQueries";
 import { fetchHomeCategories } from "../utils/fetchData";

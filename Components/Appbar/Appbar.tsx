@@ -4,6 +4,9 @@ import {
   Typography,
   IconButton,
   useMediaQuery,
+  SwipeableDrawer,
+  Drawer,
+  List,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
@@ -13,12 +16,9 @@ import { useQuery } from "@apollo/client";
 import AppbarMenu from "./AppbarMenu";
 import AppbarNoUser from "./AppbarNoUser";
 import styles from "../../pages/styles/Specific/Appbar.module.css";
-import dynamic from "next/dynamic";
 import { AppbarUserData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
-
-const DynamicSwipeable = dynamic(() => import("./Drawers/Normal"));
-const DynamicDrawer = dynamic(() => import("./Drawers/Swipeable"));
+import DrawerItems from "../ListItems/Drawer";
 
 const Appbar = () => {
   const [session, loading] = useSession();
@@ -84,9 +84,22 @@ const Appbar = () => {
 
       {/* Drawer */}
       {swipeable ? (
-        <DynamicSwipeable open={open} handleDrawer={handleDrawer} />
+        <SwipeableDrawer
+          anchor={"left"}
+          open={open}
+          onClose={handleDrawer}
+          onOpen={handleDrawer}
+        >
+          <List className={styles.list}>
+            <DrawerItems userName={user?.userId.name} /> {/* Drawer List */}
+          </List>
+        </SwipeableDrawer>
       ) : (
-        <DynamicDrawer open={open} handleDrawer={handleDrawer} />
+        <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
+          <List className={styles.list}>
+            <DrawerItems userName={user?.userId.name} /> {/* Drawer List */}
+          </List>
+        </Drawer>
       )}
       {/* Drawer */}
     </div>

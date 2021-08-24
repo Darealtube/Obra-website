@@ -1,26 +1,28 @@
-import {
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-  CircularProgress,
-  Container,
-  Divider,
-} from "@material-ui/core";
-import Image from "next/image";
 import styles from "../../../pages/styles/Specific/Commission.module.css";
+import {
+  Container,
+  Typography,
+  List,
+  ListItemAvatar,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  ListItemSecondaryAction,
+  IconButton,
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import Link from "next/link";
+import Image from "next/image";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../../../Hooks/usePagination";
-import Link from "next/link";
-import { Commissions } from "../../../interfaces/UserInterface";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 
-type Props = {
-  commissions: Commissions;
-  fetchMore: any;
-};
+const DynamicDialog = dynamic(() => import("../DeleteDialog"));
 
-const CommList = ({ commissions, fetchMore }: Props) => {
+const CommissionList = ({ fetchMore, commissions }) => {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [targetId, settargetId] = useState("");
   const { More, hasMore, ref } = usePagination({
     key: "userId",
     fetchMore,
@@ -29,12 +31,17 @@ const CommList = ({ commissions, fetchMore }: Props) => {
     key2: "commissions",
     executeWhileUnscrollable: true,
   });
-
+  const handleDeleteOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    settargetId(e.currentTarget.id);
+    setDeleteOpen(true);
+  };
+  const handleDeleteClose = () => {
+    settargetId("");
+    setDeleteOpen(false);
+  };
   return (
     <>
-      <Container className={styles.list} ref={ref} id="commList">
-        <Typography variant="h4">Commissions to do</Typography>
-        <Divider />
+      <Container ref={ref} id="commList">
         <List>
           <InfiniteScroll
             dataLength={commissions.edges.length}
@@ -83,22 +90,38 @@ const CommList = ({ commissions, fetchMore }: Props) => {
                     <ListItemText
                       primary={commission.node.title}
                       secondary={`Issued ${commission.node.dateIssued} `}
-                      style={{ flexGrow: 1, wordWrap: "break-word" }}
+                      style={{ wordWrap: "break-word" }}
                     />
-                    <Typography>
-                      Deadline:{" "}
+
+                    <Typography  sx={{marginRight: "16px"}}>
+                      Deadline:
                       {commission.node.deadline
                         ? commission.node.deadline
                         : "No Deadline"}
                     </Typography>
+
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        id={commission.node.id}
+                        onClick={handleDeleteOpen}
+                        size="large"
+                      >
+                        <CloseIcon color="secondary" />
+                      </IconButton>
+                    </ListItemSecondaryAction>
                   </ListItem>
                 </Link>
               ))}
           </InfiniteScroll>
         </List>
       </Container>
+      <DynamicDialog
+        open={deleteOpen}
+        handleClose={handleDeleteClose}
+        id={targetId}
+      />
     </>
   );
 };
 
-export default CommList;
+export default CommissionList;

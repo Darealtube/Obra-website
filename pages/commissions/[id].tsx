@@ -67,7 +67,6 @@ const CommissionID = () => {
         <CommissionWrap>
           <CommissionData
             commission={data.commissionId}
-            sessionId={session?.id}
           />
         </CommissionWrap>
       ) : (

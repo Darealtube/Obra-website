@@ -2,12 +2,10 @@ import { initializeApollo } from "../apollo/apolloClient";
 import {
   ALL_USER_QUERY,
   BUG_REPORTS_QUERY,
-  CART_QUERY,
   CATEGORY_POSTS_QUERY,
-  CATEGORY_QUERY,
   IS_ADMIN,
   IS_LIKED_ARTIST,
-  IS_LIKED_OR_ADDED_POST,
+  IS_LIKED_POST,
   IS_SAME_USER,
   POPULAR_CATEGORIES_QUERY,
   POST_ID_QUERY,
@@ -19,13 +17,11 @@ import {
   USER_ID_QUERY,
   USER_LIKED_POST_QUERY,
   USER_POST_QUERY,
-  YOUR_FINISHED_COMMS_QUERY,
 } from "../apollo/apolloQueries";
 import {
   PostData,
   RecommendedPostData,
   UserData,
-  UserIdData,
   QueryNameVars,
   QueryIdVars,
   isLikedorAddedData,
@@ -200,7 +196,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   const {
     data: { isLikedorAddedPost },
   } = await apolloClient.query<isLikedorAddedData, isLikedorAddedVars>({
-    query: IS_LIKED_OR_ADDED_POST,
+    query: IS_LIKED_POST,
     variables: {
       postID: id,
       userID: sessionId,
@@ -211,7 +207,6 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
     data: apolloClient,
     exists: postId ? true : false,
     alreadyLiked: isLikedorAddedPost.isLiked as boolean,
-    alreadyAdded: isLikedorAddedPost.isAdded as boolean,
   };
 };
 
@@ -315,32 +310,4 @@ export const fetchReportId = async (id: string, reportedId: string) => {
   });
 
   return { data: apolloClient, exists: reportId ? true : false, isAdmin };
-};
-
-export const fetchCart = async (sessionId: string) => {
-  const apolloClient = initializeApollo();
-
-  await apolloClient.query<UserIdData, QueryIdVars>({
-    query: CART_QUERY,
-    variables: {
-      id: sessionId,
-      limit: 4,
-    },
-  });
-
-  return apolloClient;
-};
-
-export const fetchFinishedComms = async (sessionId: string) => {
-  const apolloClient = initializeApollo();
-
-  await apolloClient.query<UserIdData, QueryIdVars>({
-    query: YOUR_FINISHED_COMMS_QUERY,
-    variables: {
-      id: sessionId,
-      limit: 4,
-    },
-  });
-
-  return apolloClient;
 };

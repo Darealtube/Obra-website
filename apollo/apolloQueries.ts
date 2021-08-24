@@ -413,121 +413,6 @@ export const YOUR_COMMISSIONS_QUERY = gql`
   }
 `;
 
-export const PENDING_COMMS_QUERY = gql`
-  query PendingComms($id: ID!, $after: String, $limit: Int) {
-    userId(id: $id) {
-      id
-      pendingCommissions(after: $after, limit: $limit) {
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-        edges {
-          node {
-            id
-            fromUser {
-              id
-              name
-              image
-            }
-            dateIssued
-            title
-            deadline
-            description
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const YOUR_PENDING_COMMS_QUERY = gql`
-  query YourPendingComms($id: ID!, $after: String, $limit: Int) {
-    userId(id: $id) {
-      id
-      yourPendingCommissions(after: $after, limit: $limit) {
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-        edges {
-          node {
-            id
-            fromUser {
-              id
-              name
-              image
-            }
-            dateIssued
-            title
-            deadline
-            description
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const FINISHED_COMMS_QUERY = gql`
-  query FinishedComms($id: ID!, $after: String, $limit: Int) {
-    userId(id: $id) {
-      id
-      finishedCommissions(after: $after, limit: $limit) {
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-        edges {
-          node {
-            id
-            fromUser {
-              id
-              name
-              image
-            }
-            dateIssued
-            title
-            deadline
-            description
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const YOUR_FINISHED_COMMS_QUERY = gql`
-  query YourFinishedComms($id: ID!, $after: String, $limit: Int) {
-    userId(id: $id) {
-      id
-      yourFinishedCommissions(after: $after, limit: $limit) {
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-        edges {
-          node {
-            id
-            fromUser {
-              id
-              name
-              image
-            }
-            dateIssued
-            title
-            description
-            price
-            finishedArt
-            finishedwatermarkArt
-            message
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const ALL_USER_QUERY = gql`
   query AllUsers {
     allUsersList
@@ -689,35 +574,6 @@ export const REPORT_ID_QUERY = gql`
   ${PostInfo}
 `;
 
-export const CART_QUERY = gql`
-  query CartQuery($id: ID!, $after: String, $limit: Int) {
-    userId(id: $id) {
-      id
-      cart(limit: $limit, after: $after) {
-        idList
-        totalCost
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            cost
-            postID {
-              id
-              title
-              art
-              watermarkArt
-              description
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const SEARCH_QUERY = gql`
   query SearchTag($key: String!, $type: String!, $after: String, $limit: Int) {
     search(key: $key, type: $type, after: $after, limit: $limit) {
@@ -769,31 +625,6 @@ export const POPULAR_CATEGORIES_QUERY = gql`
   }
 `;
 
-export const CATEGORY_QUERY = gql`
-  query SearchCategory(
-    $key: String!
-    $type: String!
-    $after: String
-    $limit: Int
-  ) {
-    search(key: $key, type: $type, after: $after, limit: $limit) {
-      __typename
-      ... on CategoryConnection {
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-        edges {
-          node {
-            name
-            artCount
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const CATEGORY_POSTS_QUERY = gql`
   query CategoryPosts($category: String!, $after: String, $limit: Int) {
     categoryPosts(category: $category, after: $after, limit: $limit) {
@@ -822,12 +653,9 @@ export const IS_LIKED_ARTIST = gql`
   }
 `;
 
-export const IS_LIKED_OR_ADDED_POST = gql`
-  query LikedorAdded($userID: ID, $postID: ID!) {
-    isLikedorAddedPost(userID: $userID, postID: $postID) {
-      isLiked
-      isAdded
-    }
+export const IS_LIKED_POST = gql`
+  query Liked($userID: ID, $postID: ID!) {
+    isLikedPost(userID: $userID, postID: $postID)
   }
 `;
 
@@ -993,39 +821,6 @@ export const DELETE_REPORT_MUTATION = gql`
   }
 `;
 
-export const ACCEPT_COMMISSION_MUTATION = gql`
-  mutation AcceptCommission($commissionId: ID!, $message: String) {
-    acceptCommission(commissionId: $commissionId, message: $message) {
-      id
-      fromUser {
-        id
-        name
-        image
-      }
-      dateIssued
-      title
-      deadline
-      description
-    }
-  }
-`;
-
-export const FINISH_COMMISSION_MUTATION = gql`
-  mutation FinishCommission(
-    $commissionId: ID!
-    $message: String!
-    $finishedArt: String!
-    $finishedwatermarkArt: String!
-  ) {
-    finishCommission(
-      commissionId: $commissionId
-      message: $message
-      finishedArt: $finishedArt
-      finishedwatermarkArt: $finishedwatermarkArt
-    )
-  }
-`;
-
 export const CONFIG_MUTATION = gql`
   mutation ConfigUser(
     $userId: ID!
@@ -1166,35 +961,5 @@ export const WARN_MUTATION = gql`
       description: $description
       reason: $reason
     )
-  }
-`;
-
-export const ADD_CART_MUTATION = gql`
-  mutation AddToCart($userID: ID!, $postID: ID, $cost: Float) {
-    addToCart(userID: $userID, postID: $postID, cost: $cost)
-  }
-`;
-
-export const UNADD_TO_CART_MUTATION = gql`
-  mutation UnaddToCart($userID: ID!, $postID: ID) {
-    unaddToCart(userID: $userID, postID: $postID)
-  }
-`;
-
-export const REMOVE_FROM_CART_MUTATION = gql`
-  mutation RemoveFromCart($userID: ID!, $itemID: ID) {
-    removeFromCart(userID: $userID, itemID: $itemID) {
-      totalCost
-      idList
-    }
-  }
-`;
-
-export const REMOVE_SELECTED_FROM_CART_MUTATION = gql`
-  mutation RemoveSelectedFromCart($userID: ID!, $selected: [ID]) {
-    removeSelectedFromCart(userID: $userID, selected: $selected) {
-      totalCost
-      idList
-    }
   }
 `;

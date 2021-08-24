@@ -12,12 +12,9 @@ import { PostInterface } from "../../interfaces/PostInterface";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/client";
 import {
-  ADD_CART_MUTATION,
   LIKE_UNLIKE_MUTATION,
-  UNADD_TO_CART_MUTATION,
 } from "../../apollo/apolloQueries";
 import {
-  addUnaddToCartVars,
   LikeUnlikeData,
   UnlikeLikeVars,
 } from "../../interfaces/MutationInterfaces";
@@ -25,7 +22,6 @@ import Image from "next/image";
 import InfoIcon from "@material-ui/icons/Info";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ReportIcon from "@material-ui/icons/Report";
 import PersonIcon from "@material-ui/icons/Person";
 import dynamic from "next/dynamic";
@@ -34,7 +30,6 @@ import Link from "next/link";
 type Parameters = {
   postID: PostInterface;
   alreadyLiked: boolean;
-  alreadyAdded: boolean;
   handleOpenDialog: () => void;
   handleDeleteDialog: () => void;
 };
@@ -44,22 +39,13 @@ const DynamicInfoDialog = dynamic(() => import("./PostDialogs/InfoDialog"));
 const PostInfo = ({
   postID,
   alreadyLiked,
-  alreadyAdded,
   handleOpenDialog,
   handleDeleteDialog,
 }: Parameters) => {
   const [openInfo, setOpenInfo] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [cartDisabled, setCartDisabled] = useState(false);
   const [liked, setLiked] = useState(alreadyLiked);
-  const [added, setAdded] = useState(alreadyAdded);
   const [session, loading] = useSession();
-  const [addtoCart] = useMutation<boolean, addUnaddToCartVars>(
-    ADD_CART_MUTATION
-  );
-  const [removeFromCart] = useMutation<boolean, addUnaddToCartVars>(
-    UNADD_TO_CART_MUTATION
-  );
   const [like] = useMutation<LikeUnlikeData, UnlikeLikeVars>(
     LIKE_UNLIKE_MUTATION
   );
@@ -82,33 +68,6 @@ const PostInfo = ({
         variables: { postId: postID.id, userID: session?.id, action: "unlike" },
         update: () => {
           setDisabled(false);
-        },
-      });
-    }
-  };
-
-  const handleCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!added) {
-      setAdded(true);
-      setCartDisabled(true);
-      addtoCart({
-        variables: {
-          postID: postID.id,
-          userID: session?.id,
-          cost: +postID.price,
-        },
-        update: () => {
-          setCartDisabled(false);
-        },
-      });
-    } else {
-      setAdded(false);
-      setCartDisabled(true);
-      removeFromCart({
-        variables: { postID: postID.id, userID: session?.id },
-        update: () => {
-          setCartDisabled(false);
         },
       });
     }
@@ -156,18 +115,6 @@ const PostInfo = ({
                       <FavoriteBorderIcon color="inherit" />
                     )}
                   </IconButton>
-                  {postID.sale == "Yes" && postID.author.id != session?.id && (
-                    <IconButton
-                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                      size="medium"
-                      onClick={handleCart}
-                      disabled={cartDisabled}
-                    >
-                      <AddShoppingCartIcon
-                        color={added ? "secondary" : "inherit"}
-                      />
-                    </IconButton>
-                  )}
                 </>
               )}
             </>

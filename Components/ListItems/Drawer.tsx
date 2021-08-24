@@ -58,25 +58,7 @@ const MoreItems = [
   },
 ];
 
-const TransactionItems = [
-  {
-    label: "Wallet",
-    link: "/wallet",
-    icon: <AccountBalanceWalletIcon />,
-  },
-  {
-    label: "Transaction History",
-    link: "/transactions/history",
-    icon: <ReceiptIcon />,
-  },
-  {
-    label: "Your Cart",
-    link: "/cart/",
-    icon: <ShoppingCartIcon />,
-  },
-];
-
-const DrawerItems = () => {
+const DrawerItems = ({ userName }) => {
   const [session] = useSession();
   const { data } = useQuery(COMMISSION_COUNT_QUERY, {
     variables: {
@@ -118,7 +100,7 @@ const DrawerItems = () => {
       </ListItem>
       {session && (
         <>
-          <Link href={`/profile/${session?.user.name}/`} passHref>
+          <Link href={`/profile/${userName}/`} passHref>
             <ListItem button component="a">
               <ListItemIcon>
                 <ImageIcon />
@@ -126,11 +108,7 @@ const DrawerItems = () => {
               <ListItemText>Your Posts</ListItemText>
             </ListItem>
           </Link>
-          <ListItem
-            button
-            component="a"
-            href={`/profile/${session?.user.name}/liked`}
-          >
+          <ListItem button component="a" href={`/profile/${userName}/liked`}>
             <ListItemIcon>
               <FavoriteIcon />
             </ListItemIcon>
@@ -141,19 +119,6 @@ const DrawerItems = () => {
       {session && (
         <>
           <Divider />
-          <ListItem>
-            <Typography variant="h5">Transactions</Typography>
-          </ListItem>
-          {TransactionItems.map((item) => (
-            <>
-              <Link href={item.link} key={item.link} passHref>
-                <ListItem button component="a">
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText>{item.label}</ListItemText>
-                </ListItem>
-              </Link>
-            </>
-          ))}
           <ListItem button component="a" href={"/commissions"}>
             <ListItemIcon>
               <BrushIcon />

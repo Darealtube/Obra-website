@@ -1,15 +1,13 @@
 import CommissionWrap from "../../Components/Commissions/CommissionWrap";
 import Head from "next/head";
-import { CssBaseline } from "@material-ui/core";
+import { Box, CircularProgress, CssBaseline } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
-import { PENDING_COMMS_QUERY } from "../../apollo/apolloQueries";
 import { useSession } from "next-auth/client";
-import PendingList from "../../Components/Commissions/Lists/PendingList";
-import {
-  CommissionData, QueryIdVars,
-} from "../../interfaces/QueryInterfaces";
+import { CommissionData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { COMMISSIONS_QUERY } from "../../apollo/apolloQueries";
+import CommissionList from "../../Components/Commissions/Lists/CommissionList";
 
 const DynamicNoSessDialog = dynamic(
   () => import("../../Components/MainPopovers/NoSessionDialog")
@@ -19,7 +17,7 @@ const Commissions = () => {
   const [session, sessload] = useSession();
   const [noSess, setnoSess] = useState(false);
   const { data, fetchMore, loading } = useQuery<CommissionData, QueryIdVars>(
-    PENDING_COMMS_QUERY,
+    COMMISSIONS_QUERY,
     {
       variables: {
         id: session?.id,
@@ -43,11 +41,21 @@ const Commissions = () => {
       </Head>
       <CssBaseline />
       <CommissionWrap>
-        {data && !loading && (
-          <PendingList
-            pendingCommissions={data.userId.pendingCommissions}
+        {data?.userId && !loading ? (
+          <CommissionList
+            commissions={data?.userId.commissions}
             fetchMore={fetchMore}
           />
+        ) : (
+          <Box
+            width="100%"
+            height="100%"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress />
+          </Box>
         )}
       </CommissionWrap>
       <DynamicNoSessDialog open={noSess} />

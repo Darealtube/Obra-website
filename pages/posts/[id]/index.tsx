@@ -32,10 +32,9 @@ const DynamicDeleteDialog = dynamic(
 type Props = {
   id: string;
   alreadyLiked: boolean;
-  alreadyAdded: boolean;
 };
 
-const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
+const PostID = ({ id, alreadyLiked }: Props) => {
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const {
@@ -87,7 +86,6 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
               <Container sx={{ display: "flex", flexDirection: "column" }}>
                 <PostInfo
                   postID={postId}
-                  alreadyAdded={alreadyAdded}
                   alreadyLiked={alreadyLiked}
                   handleOpenDialog={handleOpenDialog}
                   handleDeleteDialog={handleDeleteDialog}
@@ -121,7 +119,7 @@ const PostID = ({ id, alreadyLiked, alreadyAdded }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const { data, exists, alreadyLiked, alreadyAdded } = await InitializePostInfo(
+  const { data, exists, alreadyLiked } = await InitializePostInfo(
     context.params.id as string,
     session ? session.id : null
   );
@@ -137,7 +135,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       session: session,
       id: context.params.id,
       alreadyLiked: alreadyLiked,
-      alreadyAdded: alreadyAdded,
     },
   });
 };

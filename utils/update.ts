@@ -1,8 +1,6 @@
-import { ApolloCache, DataProxy, FetchResult } from "@apollo/client";
+import { DataProxy, FetchResult } from "@apollo/client";
 import {
-  CART_QUERY,
   COMMISSIONS_QUERY,
-  PENDING_COMMS_QUERY,
   PostInfo,
   POST_ID_QUERY,
   UserInfo,
@@ -10,7 +8,6 @@ import {
   UserInfo3,
 } from "../apollo/apolloQueries";
 import {
-  AcceptCommissionData,
   AddCommentData,
   EditPostData,
   EditUserCommData,
@@ -59,58 +56,6 @@ export const commentUpdate = (
             { __typename: "CommentEdge", node: newComment },
             ...postId.comments.edges,
           ],
-        },
-      },
-    },
-  });
-};
-
-export const acceptCommission = (
-  cache: DataProxy,
-  mutationResult: FetchResult<
-    AcceptCommissionData,
-    Record<string, any>,
-    Record<string, any>
-  >,
-  id: string
-) => {
-  const newCommission = mutationResult.data.acceptCommission;
-  const { userId } = cache.readQuery<CommissionData, QueryIdVars>({
-    query: COMMISSIONS_QUERY,
-    variables: { id: id },
-  });
-  const { userId: userId2 } = cache.readQuery<CommissionData, QueryIdVars>({
-    query: PENDING_COMMS_QUERY,
-    variables: { id: id },
-  });
-  const newPending = userId2.pendingCommissions.edges.filter(
-    (commission) => commission.node.id != newCommission.id
-  );
-  cache.writeQuery({
-    query: COMMISSIONS_QUERY,
-    variables: { id: id },
-    data: {
-      userId: {
-        ...userId,
-        commissions: {
-          ...userId.commissions,
-          edges: [
-            { __typename: "CommissionEdge", node: newCommission },
-            ...userId.commissions.edges,
-          ],
-        },
-      },
-    },
-  });
-  cache.writeQuery({
-    query: PENDING_COMMS_QUERY,
-    variables: { id: id },
-    data: {
-      userId: {
-        ...userId2,
-        pendingCommissions: {
-          ...userId2.pendingCommissions,
-          edges: newPending,
         },
       },
     },
@@ -227,74 +172,6 @@ export const editPostUpdate = (
         title: newPost.title,
         description: newPost.description,
         tags: newPost.tags.map((tag) => tag.name),
-      },
-    });
-  }
-};
-
-export const removeCartUpdate = (
-  cache: ApolloCache<any>,
-  mutationResult,
-  id: string,
-  itemID: string
-) => {
-  const removeResult = mutationResult.data.removeFromCart;
-  const { userId } = cache.readQuery<UserIdData, QueryIdVars>({
-    query: CART_QUERY,
-    variables: { id: id },
-  });
-
-  cache.evict({ id: `Cart:${itemID}` });
-  cache.gc();
-
-  if (!removeResult.optimistic) {
-    cache.writeQuery({
-      query: CART_QUERY,
-      variables: { id: id },
-      data: {
-        userId: {
-          ...userId,
-          cart: {
-            ...userId.cart,
-            totalCost: removeResult.totalCost,
-            idList: removeResult.idList,
-          },
-        },
-      },
-    });
-  }
-};
-
-export const removeSelectedUpdate = (
-  cache: DataProxy,
-  mutationResult,
-  id: string,
-  selected: string[]
-) => {
-  const removeResult = mutationResult.data.removeSelectedFromCart;
-  const { userId } = cache.readQuery<UserIdData, QueryIdVars>({
-    query: CART_QUERY,
-    variables: { id: id },
-  });
-
-  const newCart = userId.cart.edges.filter(
-    (item) => !selected.includes(item.node.id)
-  );
-
-  if (!removeResult.optimistic) {
-    cache.writeQuery({
-      query: CART_QUERY,
-      variables: { id: id },
-      data: {
-        userId: {
-          ...userId,
-          cart: {
-            ...userId.cart,
-            totalCost: removeResult.totalCost,
-            idList: removeResult.idList,
-            edges: newCart,
-          },
-        },
       },
     });
   }

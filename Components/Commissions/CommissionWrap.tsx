@@ -1,81 +1,67 @@
-import { useQuery } from "@apollo/client";
-import { Menu, MenuItem, useMediaQuery } from "@material-ui/core";
-import { useSession } from "next-auth/client";
-import { ReactNode, useState } from "react";
-import { COMMISSIONS_QUERY } from "../../apollo/apolloQueries";
-import Link from "next/link";
-import dynamic from "next/dynamic";
 import {
-  CommissionData, QueryIdVars,
-} from "../../interfaces/QueryInterfaces";
+  Box,
+  Typography,
+  Button,
+  Container,
+  Toolbar,
+  IconButton,
+} from "@material-ui/core";
+import { ReactNode } from "react";
+import Link from "next/link";
+import styles from "../../pages/styles/Specific/Commission.module.css";
+import HomeIcon from "@material-ui/icons/Home";
 
-const DynamicNormalComm = dynamic(() => import("./Wraps/NormalComm"));
-const DynamicMobileComm = dynamic(() => import("./Wraps/MobileComm"));
-
-const CommissionWrap = ({ children }: {children: ReactNode}) => {
-  const mobile = useMediaQuery("(max-width: 700px)");
-  const [session] = useSession();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const { data, fetchMore, loading } = useQuery<CommissionData, QueryIdVars>(
-    COMMISSIONS_QUERY,
-    {
-      variables: {
-        id: session?.id,
-        limit: 4,
-      },
-      skip: !session,
-    }
-  );
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+const CommissionWrap = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
-      {mobile ? (
-        <DynamicMobileComm
-          // eslint-disable-next-line react/no-children-prop
-          children={children}
-          userId={data?.userId}
-          loading={loading}
-          fetchMore={fetchMore}
-          handleClick={handleClick}
-        />
-      ) : (
-        <DynamicNormalComm
-          // eslint-disable-next-line react/no-children-prop
-          children={children}
-          userId={data?.userId}
-          loading={loading}
-          fetchMore={fetchMore}
-          handleClick={handleClick}
-        />
-      )}
-
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <Link href="/commissions/yourCommissions/" passHref>
-          <MenuItem onClick={handleClose} component="button">
-            General
-          </MenuItem>
-        </Link>
-        <Link href="/commissions/yourCommissions/pending" passHref>
-          <MenuItem onClick={handleClose} component="button">
-            Pending
-          </MenuItem>
-        </Link>
-      </Menu>
+    <div className={styles.wrapRoot}>
+      <Container>
+        <Box width="100%">
+          <Toolbar>
+            <Link href="/" passHref>
+              <IconButton component="a">
+                <HomeIcon />
+              </IconButton>
+            </Link>
+            <Typography variant="h4" style={{ flexGrow: 1 }} align="center">
+              Commissions
+            </Typography>
+          </Toolbar>
+        </Box>
+        <Box
+          display="flex"
+          marginTop={4}
+          position="relative"
+          justifyContent="center"
+          marginBottom={4}
+          flexWrap="wrap"
+        >
+          <Link href="/commissions" passHref>
+            <Button
+              variant="outlined"
+              component="a"
+              style={{ margin: "4px 4px 4px 4px" }}
+            >
+              <Typography style={{ overflowWrap: "break-word" }}>
+                Commissions
+              </Typography>
+            </Button>
+          </Link>
+          <Link href="/commissions/yourCommissions/" passHref>
+            <Button
+              variant="outlined"
+              style={{ margin: "4px 4px 4px 4px" }}
+              component="a"
+            >
+              <Typography style={{ wordWrap: "break-word" }}>
+                Your Commissions
+              </Typography>
+            </Button>
+          </Link>
+        </Box>
+        <Box display="flex" flexDirection="column">
+          {children}
+        </Box>
+      </Container>
     </div>
   );
 };

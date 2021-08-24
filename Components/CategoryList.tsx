@@ -1,13 +1,5 @@
 import styles from "../pages/styles/General/Trending.module.css";
-import {
-  Box,
-  Typography,
-  Grid,
-  Button,
-  Paper,
-  Grow,
-  Container,
-} from "@material-ui/core";
+import { Typography, Grid, Button, Grow } from "@material-ui/core";
 import Image from "next/image";
 import Link from "next/link";
 

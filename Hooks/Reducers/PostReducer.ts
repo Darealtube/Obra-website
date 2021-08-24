@@ -1,4 +1,10 @@
-type Options = "CHANGE" | "CUSTOM_TAG" | "SALE" | "CHANGE_ART" | "ERROR";
+type Options =
+  | "CHANGE"
+  | "CHANGE_TAG"
+  | "CUSTOM_TAG"
+  | "SALE"
+  | "CHANGE_ART"
+  | "ERROR";
 
 export type State = {
   title: string;
@@ -29,7 +35,7 @@ export type Tag = {
 
 export type Action = {
   type: Options;
-  payload?: string | string[] | boolean;
+  payload?: string | string[] | boolean | Tag[];
   artPayload?: Values;
   field?: string;
   initialState?: State;
@@ -53,17 +59,17 @@ export const reducer = (state: State, action: Action): State => {
         height: action.artPayload.height,
       };
     case "CUSTOM_TAG":
-      let tagList = state.tags.map((tag) => tag.name);
-      if (
-        !tagList.includes(state.tagInput.trim().toUpperCase()) &&
-        state.tagInput.trim().length > 0
-      ) {
+      const tagList = state.tags.map((tag) =>
+        tag.name.replace(/[^a-zA-Z0-9 ]/g, "")
+      );
+      const input = state.tagInput
+        .trim()
+        .toUpperCase()
+        .replace(/[^a-zA-Z0-9 ]/g, "");
+      if (!tagList.includes(input) && input.length > 0) {
         return {
           ...state,
-          tags: [
-            ...state.tags,
-            { name: state.tagInput.trim().toUpperCase(), artCount: 0 },
-          ] as Tag[],
+          tags: [...state.tags, { name: input, artCount: 0 }] as Tag[],
         };
       } else {
         return { ...state, tagInput: "" };

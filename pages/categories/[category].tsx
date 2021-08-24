@@ -9,7 +9,7 @@ import {
   Typography,
   Skeleton,
 } from "@material-ui/core";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { addApolloState } from "../../apollo/apolloClient";
 import { CATEGORY_POSTS_QUERY } from "../../apollo/apolloQueries";
 import Appbar from "../../Components/Appbar/Appbar";
@@ -102,7 +102,7 @@ const Category = ({ category }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const data = await fetchPopularCategories();
   const paths = data.map((name) => ({
-    params: { category: encodeURI(name) },
+    params: { category: encodeURIComponent(name) },
   }));
   return {
     paths,

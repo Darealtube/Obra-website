@@ -11,12 +11,8 @@ export interface PostInterface {
   tags: Tag[];
   title: string;
   description: string;
-  sale?: string;
-  price: string;
   likes?: number;
   comments?: PostComments;
-  forSale?: boolean;
-  forSalePrice?: string;
   width: number;
   height: number;
 }

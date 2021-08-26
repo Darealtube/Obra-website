@@ -1,6 +1,14 @@
-import React, { useReducer, useState } from "react";
-import { CssBaseline, Paper, Grid, CircularProgress } from "@material-ui/core";
-import Appbar from "../Components/Appbar/Appbar";
+import React, { useReducer, useRef, useState } from "react";
+import {
+  CssBaseline,
+  CircularProgress,
+  Typography,
+  IconButton,
+  Box,
+  Container,
+  Grid,
+  Button,
+} from "@material-ui/core";
 import Image from "next/image";
 import styles from "./styles/General/Create.module.css";
 import Head from "next/head";
@@ -18,6 +26,9 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { PostValidate } from "../utils/postValidator";
 import { useRouter } from "next/router";
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
+import Link from "next/link";
 
 const DynamicError = dynamic(
   () => import("../Components/Forms/Snackbars/ConfigSnack")
@@ -32,8 +43,6 @@ const initState: State = {
   description: "",
   art: "",
   watermarkArt: "",
-  price: "",
-  sale: "No",
   tags: [],
   tagInput: "",
   width: 0,
@@ -52,6 +61,11 @@ const Create = () => {
   const router = useRouter();
   const [disabled, setDisabled] = useState(true);
   const { loading, setArt, placeholder } = useArt("");
+  const inputFile = useRef<HTMLInputElement>();
+
+  const handleArtClick = () => {
+    inputFile.current.click();
+  };
 
   const handleErrorClose = (
     event: React.SyntheticEvent | React.MouseEvent,
@@ -95,8 +109,6 @@ const Create = () => {
           description: post.description,
           art: post.art,
           watermarkArt: post.watermarkArt,
-          price: post.price,
-          sale: post.sale,
           tags: post.tags.map((tag) => tag.name),
           width: post.width,
           height: post.height,
@@ -119,41 +131,63 @@ const Create = () => {
         <title>Create</title>
       </Head>
       <CssBaseline />
-      <Appbar />
-      <Grid container className={styles.grid}>
-        <Grid item xs={12} sm={6} md={7} className={styles.displayArt}>
-          {/* Art Display */}
-          <div className={styles.artContainer}>
-            {placeholder && !loading ? (
-              <Image
-                src={placeholder}
-                layout="fill"
-                objectFit="contain"
-                objectPosition="center"
-                alt={"Art Image or Placeholder"}
-              />
-            ) : loading ? (
-              <CircularProgress />
-            ) : (
-              ""
-            )}
-          </div>
-          {/* Art Display */}
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6} square>
-          <div className={styles.paper}>
-            {!noSess && (
-              <PostForm
-                post={post}
-                handleArt={handleArt}
-                handleSubmit={handleSubmit}
-                dispatch={dispatch}
-                disabled={disabled}
-              />
-            )}
-          </div>
-        </Grid>
-      </Grid>
+      <Box display="flex" alignItems="center">
+        <Link href="/" passHref>
+          <IconButton component="a">
+            <HomeOutlinedIcon fontSize="large" />
+          </IconButton>
+        </Link>
+        <Typography variant="h4">Create</Typography>
+      </Box>
+      <Container sx={{ width: "100%" }}>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Button
+                startIcon={<PhotoCameraOutlinedIcon />}
+                onClick={handleArtClick}
+              >
+                <Typography>Change Art</Typography>
+              </Button>
+              <Box
+                width="100%"
+                height="70vh"
+                position="relative"
+                sx={{ backgroundImage: `url(${"/user-empty-backdrop.jpg"})` }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <input
+                  type="file"
+                  id="sampleArt"
+                  name="sampleArt"
+                  ref={inputFile}
+                  style={{ display: "none" }}
+                  onChange={handleArt}
+                />
+                {placeholder && !loading ? (
+                  <>
+                    <Image
+                      src={placeholder}
+                      layout="fill"
+                      objectFit="contain"
+                      alt={"Art Image or Placeholder"}
+                    />
+                  </>
+                ) : loading ? (
+                  <CircularProgress />
+                ) : (
+                  ""
+                )}
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <PostForm post={post} dispatch={dispatch} disabled={disabled} />
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
 
       <DynamicError
         error={post.error}

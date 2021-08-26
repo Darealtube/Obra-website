@@ -76,20 +76,9 @@ export interface CreatePostVars {
   description: string;
   art: string;
   watermarkArt: string;
-  price: string;
-  sale: string;
   author: string;
   width: number;
   height: number;
-}
-
-export interface AcceptCommissionData {
-  acceptCommission: CommissionInterface;
-}
-
-export interface AcceptCommissionVars {
-  commissionId: string;
-  message?: string;
 }
 
 export interface CommissionArtistVars {
@@ -103,13 +92,6 @@ export interface CommissionArtistVars {
   deadline?: number;
   price: number;
   rates: string[];
-}
-
-export interface FinishCommissionVars {
-  commissionId: string;
-  finishedArt: string;
-  message: string;
-  finishedwatermarkArt: string;
 }
 
 export interface ReportVars {
@@ -129,33 +111,6 @@ export interface WarnVars {
   title: string;
   description: string;
   reason: string;
-}
-
-export interface addUnaddToCartVars {
-  userID: string;
-  postID?: string;
-  cost?: number;
-}
-
-export interface CartRemoveVars {
-  userID: string;
-  itemID?: string;
-  selected?: string[];
-}
-
-export interface CartRemoveSelectedData {
-  removeSelectedFromCart: CartRemoveResult;
-}
-
-export interface CartRemoveData {
-  removeFromCart: CartRemoveResult;
-}
-
-interface CartRemoveResult {
-  __typename?: string;
-  optimistic?: boolean;
-  idList: string[];
-  totalCost: number;
 }
 
 export interface EditUserCommVars {

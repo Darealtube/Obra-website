@@ -38,9 +38,8 @@ function createApolloClient() {
              Know more: https://www.apollographql.com/docs/react/pagination/cursor-based/#relay-style-cursor-pagination 
           */
             reports: relayStylePagination(),
-            featuredPosts: relayStylePagination(),
+            trendingPosts: relayStylePagination(),
             posts: relayStylePagination(),
-            newPosts: relayStylePagination(),
             recommendedPosts: relayStylePagination(),
             /* 
               Whenever you are using relayStylePagination and you need to use other variables to paginate,
@@ -58,14 +57,9 @@ function createApolloClient() {
           fields: {
             likedPosts: relayStylePagination(),
             posts: relayStylePagination(),
-            homeRecommended: relayStylePagination(),
             notifications: relayStylePagination(),
             commissions: relayStylePagination(),
-            pendingCommissions: relayStylePagination(),
             yourCommissions: relayStylePagination(),
-            yourPendingCommissions: relayStylePagination(),
-            yourFinishedCommissions: relayStylePagination(),
-            cart: relayStylePagination(),
           },
         },
         Post: {

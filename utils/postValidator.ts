@@ -1,7 +1,6 @@
 import { State } from "../Hooks/Reducers/PostReducer";
 
 export const PostValidate = (state: State) => {
-  const actualPrice = +state.price.replaceAll(",", "");
   if (state.title.length > 40) {
     return {
       error: true,
@@ -17,11 +16,10 @@ export const PostValidate = (state: State) => {
       error: true,
       errMessage: "Please provide no more than 4 tags.",
     };
-  } else if (actualPrice > 9999) {
-    // FOR NOW
+  } else if (!state.art) {
     return {
       error: true,
-      errMessage: "The price is too high!",
+      errMessage: "Insert your art.",
     };
   } else {
     return {

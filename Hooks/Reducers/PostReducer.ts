@@ -1,18 +1,10 @@
-type Options =
-  | "CHANGE"
-  | "CHANGE_TAG"
-  | "CUSTOM_TAG"
-  | "SALE"
-  | "CHANGE_ART"
-  | "ERROR";
+type Options = "CHANGE" | "CUSTOM_TAG" | "CHANGE_ART" | "ERROR";
 
 export type State = {
   title: string;
   description: string;
   art?: string;
   watermarkArt?: string;
-  price: string;
-  sale: string;
   tags: Tag[] | string[];
   width?: number;
   height?: number;
@@ -74,12 +66,6 @@ export const reducer = (state: State, action: Action): State => {
       } else {
         return { ...state, tagInput: "" };
       }
-    case "SALE":
-      return {
-        ...state,
-        sale: action.payload as string,
-        ...(action.payload === "No" && { price: "" }),
-      };
     case "ERROR":
       return {
         ...state,

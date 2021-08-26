@@ -15,16 +15,11 @@ export interface PostData {
   postId: PostInterface;
 }
 
-export interface isLikedorAddedData {
-  isLikedorAddedPost: LikedorAdded;
+export interface isLikedData {
+  isLikedPost: boolean;
 }
 
-interface LikedorAdded {
-  isLiked: boolean;
-  isAdded: boolean;
-}
-
-export interface isLikedorAddedVars {
+export interface isLikedVars {
   postID: string;
   userID: string;
 }

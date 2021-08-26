@@ -92,8 +92,6 @@ export const POST_ID_QUERY = gql`
       }
       date
       likes
-      sale
-      price
       tags {
         name
       }
@@ -302,8 +300,6 @@ export const EDIT_POST_QUERY = gql`
         id
         name
       }
-      sale
-      price
       tags {
         name
         artCount
@@ -725,8 +721,6 @@ export const CREATE_POST_MUTATION = gql`
     $description: String!
     $art: String!
     $watermarkArt: String!
-    $price: String!
-    $sale: String!
     $author: ID!
     $width: Int!
     $height: Int!
@@ -736,8 +730,6 @@ export const CREATE_POST_MUTATION = gql`
       title: $title
       description: $description
       art: $art
-      price: $price
-      sale: $sale
       author: $author
       width: $width
       height: $height

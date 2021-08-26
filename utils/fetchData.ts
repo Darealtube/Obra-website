@@ -24,12 +24,12 @@ import {
   UserData,
   QueryNameVars,
   QueryIdVars,
-  isLikedorAddedData,
-  isLikedorAddedVars,
   ReportData,
   ReportVars,
   ReportIdData,
   ReportIdVars,
+  isLikedData,
+  isLikedVars,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the fetch functions that are used on pages that have
@@ -194,8 +194,8 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   }
 
   const {
-    data: { isLikedorAddedPost },
-  } = await apolloClient.query<isLikedorAddedData, isLikedorAddedVars>({
+    data: { isLikedPost },
+  } = await apolloClient.query<isLikedData, isLikedVars>({
     query: IS_LIKED_POST,
     variables: {
       postID: id,
@@ -206,7 +206,7 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
   return {
     data: apolloClient,
     exists: postId ? true : false,
-    alreadyLiked: isLikedorAddedPost.isLiked as boolean,
+    alreadyLiked: isLikedPost,
   };
 };
 

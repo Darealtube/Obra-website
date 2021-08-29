@@ -4,41 +4,6 @@ export const levelOptions = [
   "Student",
   "Veteran",
 ];
-export const styleOptions = [
-  "Abstract Expressionism",
-  "Art Deco",
-  "Art Nouveau",
-  "Avant-garde",
-  "Baroque",
-  "Bahaus",
-  "Classicism",
-  "Conceptual Art",
-  "Constructivism",
-  "Cubism",
-  "Dada / Dadaism",
-  "Expressionism",
-  "Fauvism",
-  "Futurism",
-  "Impressionism",
-  "Land Art",
-  "Minimalism",
-  "Neo - Impressionism",
-  "Neoclassicism",
-  "Post-Impressionism",
-  "Surrealism",
-  "Symbolism",
-  "Other",
-];
-
-export const kindOptions = [
-  "Sculpture",
-  "Landscape Painting",
-  "Portrait",
-  "Oil Painting",
-  "Digital Art",
-  "8-Bit Art",
-  "Fan Art",
-];
 
 export const marks = [
   {

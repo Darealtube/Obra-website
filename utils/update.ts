@@ -17,7 +17,6 @@ import {
   CommissionData,
   PostData,
   QueryIdVars,
-  UserIdData,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the update functions used for useMutations. In order to update
@@ -122,8 +121,6 @@ export const editUserUpdate = (
         country: newUser.country,
         phone: newUser.phone,
         artLevel: newUser.artLevel,
-        artStyles: newUser.artStyles,
-        artKinds: newUser.artKinds,
         age: newUser.age,
       },
     });

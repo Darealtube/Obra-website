@@ -1,6 +1,6 @@
 import { CommentInterface } from "./CommentInterface";
 import { PostInterface } from "./PostInterface";
-import { CommissionInterface, UserInterface } from "./UserInterface";
+import { UserInterface } from "./UserInterface";
 
 export interface ReadNotifData {
   readNotif: boolean;
@@ -47,23 +47,6 @@ export interface EditPostVars {
   title: string;
   description: string;
   tags: string[];
-}
-
-export interface ConfigData {
-  congifUser: boolean;
-}
-
-export interface ConfigVars {
-  userId: string;
-  name: string;
-  age: string;
-  country: string;
-  language: string;
-  birthday: string;
-  phone: string;
-  artLevel: string;
-  artKinds: string[];
-  artStyles: string[];
 }
 
 export interface CreatePostData {

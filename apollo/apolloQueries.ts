@@ -42,8 +42,6 @@ export const UserInfo2 = gql`
     country
     phone
     artLevel
-    artStyles
-    artKinds
     backdrop
   }
 `;
@@ -813,34 +811,6 @@ export const DELETE_REPORT_MUTATION = gql`
   }
 `;
 
-export const CONFIG_MUTATION = gql`
-  mutation ConfigUser(
-    $userId: ID!
-    $name: String!
-    $age: String!
-    $country: String!
-    $language: String!
-    $birthday: String!
-    $phone: String!
-    $artLevel: String!
-    $artStyles: [String!]
-    $artKinds: [String!]
-  ) {
-    configUser(
-      userId: $userId
-      name: $name
-      age: $age
-      country: $country
-      language: $language
-      birthday: $birthday
-      phone: $phone
-      artLevel: $artLevel
-      artStyles: $artStyles
-      artKinds: $artKinds
-    )
-  }
-`;
-
 export const EDIT_USER_MUTATION = gql`
   mutation EditUser(
     $userId: ID!
@@ -848,8 +818,6 @@ export const EDIT_USER_MUTATION = gql`
     $country: String!
     $birthday: String!
     $artLevel: String!
-    $artStyles: [String!]
-    $artKinds: [String!]
     $userBio: String
     $image: String
     $backdrop: String
@@ -862,8 +830,6 @@ export const EDIT_USER_MUTATION = gql`
       country: $country
       birthday: $birthday
       artLevel: $artLevel
-      artStyles: $artStyles
-      artKinds: $artKinds
       userBio: $userBio
       image: $image
       backdrop: $backdrop
@@ -875,8 +841,6 @@ export const EDIT_USER_MUTATION = gql`
       country
       birthday
       artLevel
-      artStyles
-      artKinds
       userBio
       image
       backdrop

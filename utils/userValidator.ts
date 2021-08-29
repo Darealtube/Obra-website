@@ -3,13 +3,12 @@ import { USER_EXISTS } from "../apollo/apolloQueries";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import countryList from "react-select-country-list";
 import { State } from "../Hooks/Reducers/UserReducer";
-import { State as configState } from "../Hooks/Reducers/ConfigReducer";
 
 // This is the Validator functions that we use throughout forms in our website.
 // They usually take two or more parameters including the state, and if there are
 // problems in validation, this is the right place to check.
 
-export const userValidator = async (state: State | configState, userId: string) => {
+export const userValidator = async (state: State, userId: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userExists },
@@ -42,77 +41,6 @@ export const userValidator = async (state: State | configState, userId: string) 
     return {
       error: true,
       errMessage: "Phone is invalid",
-    };
-  } else if (state.artStyles.length > 5 || state.artStyles.length == 0) {
-    return {
-      error: true,
-      errMessage: "Please enter no more than 5 Art Styles",
-    };
-  } else if (state.artKinds.length > 5 || state.artStyles.length == 0) {
-    return {
-      error: true,
-      errMessage: "Please enter no more than 5 Art Kinds",
-    };
-  } else {
-    return {
-      error: null,
-      errMessage: null,
-    };
-  }
-};
-
-export const UserValidate1 = async (state:State | configState, userId: string) => {
-  const apolloClient = initializeApollo();
-  const {
-    data: { userExists },
-  } = await apolloClient.query({
-    query: USER_EXISTS,
-    variables: {
-      userName: state.name,
-      userId,
-    },
-  });
-
-  if (userExists === true) {
-    return {
-      error: true,
-      errMessage: "Username already exists",
-    };
-  } else if (
-    +state.age <= 0 ||
-    +state.age > 100 ||
-    !Number.isInteger(+state.age)
-  ) {
-    return {
-      error: true,
-      errMessage: "Age is invalid",
-    };
-  } else if (
-    isValidPhoneNumber(state.phone, countryList().getValue(state.country)) ===
-    false
-  ) {
-    return {
-      error: true,
-      errMessage: "Phone is invalid",
-    };
-  } else {
-    return {
-      error: null,
-      errMessage: null,
-    };
-  }
-};
-
-export const UserValidate2 = (state:State | configState) => {
-  if (state.artStyles.length > 5 || state.artStyles.length == 0) {
-    return {
-      error: true,
-      errMessage: "Please enter no more than 5 Art Styles",
-    };
-  } else if (state.artKinds.length > 5 || state.artStyles.length == 0) {
-    return {
-      error: true,
-      errMessage: "Please enter no more than 5 Art Kinds",
     };
   } else {
     return {

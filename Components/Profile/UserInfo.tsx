@@ -89,7 +89,7 @@ const UserInfo = ({ artist, userLiked }: Props) => {
         gutterBottom
         paragraph
       >
-        {artist.userBio}
+        {artist.userBio || "No Bio"}
       </Typography>
       <Typography
         variant="subtitle1"
@@ -97,7 +97,8 @@ const UserInfo = ({ artist, userLiked }: Props) => {
         className={styles.text}
         gutterBottom
       >
-        <CakeIcon className={styles.icon} /> Born in {artist.birthday}
+        <CakeIcon className={styles.icon} />{" "}
+        {artist.birthday ? `Born in ${artist.birthday}` : "Birthday unknown"}
       </Typography>
       <Typography
         variant="subtitle1"
@@ -105,7 +106,8 @@ const UserInfo = ({ artist, userLiked }: Props) => {
         className={styles.text}
         gutterBottom
       >
-        <FlagIcon className={styles.icon} /> Lives in {artist.country}
+        <FlagIcon className={styles.icon} />{" "}
+        {artist.country ? `Lives in ${artist.country}` : "Country Unknown"}
       </Typography>
       <Typography
         variant="subtitle1"
@@ -113,25 +115,8 @@ const UserInfo = ({ artist, userLiked }: Props) => {
         className={styles.text}
         gutterBottom
       >
-        <PersonIcon className={styles.icon} /> {artist.artLevel}
-      </Typography>
-      <Typography
-        variant="subtitle1"
-        align="center"
-        className={styles.text}
-        gutterBottom
-      >
-        <PaletteIcon className={styles.icon} /> Specializes in &nbsp;
-        {artist.artStyles.join(", ").toString()}
-      </Typography>
-      <Typography
-        variant="subtitle1"
-        align="center"
-        className={styles.text}
-        gutterBottom
-      >
-        <BrushIcon className={styles.icon} /> Does &nbsp;
-        {artist.artKinds.join(", ").toString()}
+        <PersonIcon className={styles.icon} />{" "}
+        {artist.artLevel || "Profession Unknown"}
       </Typography>
 
       <Box width="80%">

@@ -1,20 +1,13 @@
 .backdrop {
   position: relative;
-  height: 10em;
+  height: 40vh;
   width: 100%;
-  background-color: lightblue;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .dp {
-  position: relative;
-  width: 140px;
-  height: 140px;
-  bottom: 50px;
-  background-color: black;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,4 +15,18 @@
 
 .avatar {
   border-radius: 50%;
+}
+
+.userMain {
+  margin-top: 16px;
+}
+
+.userInfo {
+  display: flex;
+}
+
+.text {
+  margin-left: 8px;
+  word-wrap: break-word;
+  word-break: break-all;
 }

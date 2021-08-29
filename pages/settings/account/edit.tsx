@@ -1,7 +1,5 @@
 import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 import EditForm from "../../../Components/Settings/Account/EditAcc/EditForm";
-import { Box, Typography, Divider, Button } from "@material-ui/core";
-import Link from "next/link";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
 import { useMutation, DataProxy } from "@apollo/client";
@@ -21,17 +19,7 @@ const EditAccount = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Edit Account</title>
       </Head>
-      <SettingsWrap>
-        <Box display="flex" marginBottom={4}>
-          <Typography variant="h4" sx={{ flexGrow: 1 }}>
-            Account
-          </Typography>
-          <Link href="/settings/account/" passHref>
-            <Button>Cancel</Button>
-          </Link>
-        </Box>
-        <br />
-        <Divider />
+      <SettingsWrap pageTitle={"Edit Account"}>
         <EditForm editUser={editUser} />
       </SettingsWrap>
     </>

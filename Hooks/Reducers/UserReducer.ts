@@ -9,8 +9,6 @@ export type State = {
   country: string;
   birthday: string;
   artLevel: string;
-  artStyles: string[];
-  artKinds: string[];
   userBio: string;
   image: string;
   placeholder: string;

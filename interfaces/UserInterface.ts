@@ -7,7 +7,6 @@ export interface UserInterface {
   posts?: Posts;
   likedPosts?: Posts;
   likedArtists?: UserInterface[];
-  balance?: string;
   notifications?: Notifications;
   name?: string; // Not required for now
   tutorial?: boolean;
@@ -15,8 +14,6 @@ export interface UserInterface {
   country?: string;
   birthday?: string;
   artLevel?: string;
-  artStyles?: string[];
-  artKinds?: string[];
   userBio?: string;
   backdrop?: string;
   artCount: number;

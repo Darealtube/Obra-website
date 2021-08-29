@@ -1,12 +1,10 @@
-import { CssBaseline, Container, Typography, Fade } from "@material-ui/core";
+import { Container, Typography, Fade } from "@material-ui/core";
 import Appbar from "../Components/Appbar/Appbar";
 import styles from "./styles/General/Home.module.css";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useQuery } from "@apollo/client";
-import {
-  POPULAR_CATEGORIES_QUERY,
-} from "../apollo/apolloQueries";
+import { POPULAR_CATEGORIES_QUERY } from "../apollo/apolloQueries";
 import { fetchHomeCategories } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
 import CategoryList from "../Components/CategoryList";
@@ -22,11 +20,10 @@ const Home = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Home</title>
       </Head>
-      <CssBaseline />
       <Appbar />
-      <Container className={styles.content}>
+      <Container sx={{ marginTop: "80px" }}>
         <Fade in={true} timeout={1500}>
-          <Typography gutterBottom variant="h1" align="center">
+          <Typography gutterBottom variant="h3" align="center">
             Categories
           </Typography>
         </Fade>

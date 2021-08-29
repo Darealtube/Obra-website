@@ -37,6 +37,6 @@ export default NextAuth({
   },
   pages: {
     signIn: "/auth/signin",
-    newUser: "/configure",
+    newUser: "/settings/account"
   },
 });

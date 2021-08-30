@@ -21,9 +21,9 @@ import useArt from "../../Hooks/useArt";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
 import { useMutation } from "@apollo/client";
-import { CREATE_COMMISSION_MUTATION } from "../../apollo/apolloQueries";
 import { Rates } from "../../interfaces/UserInterface";
 import { CommissionArtistVars } from "../../interfaces/MutationInterfaces";
+import { CREATE_COMMISSION_MUTATION } from "../../apollo/Mutations/commsMutations";
 
 const initState = {
   title: "",

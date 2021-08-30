@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import router from "next/router";
-import { DELETE_POST_MUTATION } from "../../../apollo/apolloQueries";
+import { DELETE_POST_MUTATION } from "../../../apollo/Mutations/postMutations";
 
 const DeleteDialog = ({ open, handleClose, postId }) => {
   const [deletePost] = useMutation(DELETE_POST_MUTATION);

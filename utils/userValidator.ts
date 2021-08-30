@@ -1,8 +1,8 @@
 import { initializeApollo } from "../apollo/apolloClient";
-import { USER_EXISTS } from "../apollo/apolloQueries";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import countryList from "react-select-country-list";
 import { State } from "../Hooks/Reducers/UserReducer";
+import { USER_EXISTS } from "../apollo/Queries/validateQueries";
 
 // This is the Validator functions that we use throughout forms in our website.
 // They usually take two or more parameters including the state, and if there are

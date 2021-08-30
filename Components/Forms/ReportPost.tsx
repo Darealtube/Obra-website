@@ -15,7 +15,7 @@ import { useSession } from "next-auth/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { REPORT_MUTATION } from "../../apollo/apolloQueries";
+import { REPORT_MUTATION } from "../../apollo/Mutations/reportMutation";
 import { ReportVars } from "../../interfaces/MutationInterfaces";
 import { PostInterface } from "../../interfaces/PostInterface";
 import styles from "../../pages/styles/Specific/Report.module.css";

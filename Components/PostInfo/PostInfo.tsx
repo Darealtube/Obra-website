@@ -12,9 +12,6 @@ import { PostInterface } from "../../interfaces/PostInterface";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/client";
 import {
-  LIKE_UNLIKE_MUTATION,
-} from "../../apollo/apolloQueries";
-import {
   LikeUnlikeData,
   UnlikeLikeVars,
 } from "../../interfaces/MutationInterfaces";
@@ -26,6 +23,7 @@ import ReportIcon from "@material-ui/icons/Report";
 import PersonIcon from "@material-ui/icons/Person";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { LIKE_UNLIKE_MUTATION } from "../../apollo/Mutations/postMutations";
 
 type Parameters = {
   postID: PostInterface;

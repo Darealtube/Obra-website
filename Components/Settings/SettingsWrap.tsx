@@ -15,7 +15,6 @@ import {
 import { useSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import React, { ReactNode, useEffect, useState } from "react";
-import { SETTINGS_QUERY } from "../../apollo/apolloQueries";
 import { QueryIdVars, SettingsData } from "../../interfaces/QueryInterfaces";
 import { UserInterface } from "../../interfaces/UserInterface";
 import SettingList from "../ListItems/SettingList";
@@ -23,6 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Link from "next/link";
 import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
+import { SETTINGS_QUERY } from "../../apollo/Queries/userQueries";
 
 export const UserContext = React.createContext<UserInterface>(null);
 const DynamicNoSessDialog = dynamic(

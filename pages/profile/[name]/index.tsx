@@ -5,7 +5,6 @@ import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { fetchUserandPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { USER_POST_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
@@ -13,6 +12,7 @@ import { addApolloState } from "../../../apollo/apolloClient";
 import ArtList from "../../../Components/ArtList";
 import { useTheme } from "@material-ui/core";
 import { useState } from "react";
+import { USER_POST_QUERY } from "../../../apollo/Queries/userQueries";
 
 type Props = {
   name: string;

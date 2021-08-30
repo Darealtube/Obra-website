@@ -2,7 +2,6 @@ import CommissionWrap from "../../Components/Commissions/CommissionWrap";
 import Head from "next/head";
 import { CssBaseline, Box } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
-import { COMMISSION_ID_QUERY } from "../../apollo/apolloQueries";
 import CommissionData from "../../Components/Commissions/CommissionData";
 import { useRouter } from "next/router";
 import {
@@ -14,6 +13,7 @@ import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { CircularProgress } from "@material-ui/core";
 import DefaultErrorPage from "next/error";
+import { COMMISSION_ID_QUERY } from "../../apollo/Queries/commsQueries";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../Components/MainPopovers/NoAccessDialog")

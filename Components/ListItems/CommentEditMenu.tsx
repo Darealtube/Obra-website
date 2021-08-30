@@ -3,9 +3,9 @@ import { ListItem, Divider, Button } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import { DELETE_COMMENT_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
+import { DELETE_COMMENT_MUTATION } from "../../apollo/Mutations/commentMutations";
 
 type Props = {
   id: string;

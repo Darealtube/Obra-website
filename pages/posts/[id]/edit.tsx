@@ -12,10 +12,6 @@ import Image from "next/image";
 import styles from "../../styles/General/Create.module.css";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
-import {
-  EDIT_POST_MUTATION,
-  EDIT_POST_QUERY,
-} from "../../../apollo/apolloQueries";
 import { DataProxy, useMutation, useQuery } from "@apollo/client";
 import EditPostForm from "../../../Components/Forms/EditPost";
 import {
@@ -29,6 +25,8 @@ import DefaultErrorPage from "next/error";
 import { PostData, QueryIdVars } from "../../../interfaces/QueryInterfaces";
 import Link from "next/link";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import { EDIT_POST_MUTATION } from "../../../apollo/Mutations/postMutations";
+import { EDIT_POST_QUERY } from "../../../apollo/Queries/postQueries";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")

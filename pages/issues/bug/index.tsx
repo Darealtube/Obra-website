@@ -7,9 +7,9 @@ import { fetchBugReports } from "../../../utils/fetchData";
 import Head from "next/head";
 import IssuesWrap from "../../../Components/Issues/IssuesWrap";
 import { useQuery } from "@apollo/client";
-import { BUG_REPORTS_QUERY } from "../../../apollo/apolloQueries";
 import BugReportList from "../../../Components/Issues/Lists/BugReportList";
 import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
+import { BUG_REPORTS_QUERY } from "../../../apollo/Queries/reportQueries";
 
 const BugReports = () => {
   const {

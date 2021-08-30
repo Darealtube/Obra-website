@@ -16,8 +16,8 @@ import CommissionForm from "../../../Components/Commissions/CommissionForm";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useQuery } from "@apollo/client";
-import { USER_COMM_INFO_QUERY } from "../../../apollo/apolloQueries";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
+import { USER_COMM_INFO_QUERY } from "../../../apollo/Queries/userQueries";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")

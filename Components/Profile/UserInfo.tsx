@@ -5,7 +5,6 @@ import styles from "../../pages/styles/Specific/Profile.module.css";
 import { UserInterface } from "../../interfaces/UserInterface";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import BrushIcon from "@material-ui/icons/Brush";
-import { LIKE_UNLIKE_ARTIST_MUTATION } from "../../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
@@ -16,8 +15,8 @@ import {
 import CakeIcon from "@material-ui/icons/Cake";
 import FlagIcon from "@material-ui/icons/Flag";
 import PersonIcon from "@material-ui/icons/Person";
-import PaletteIcon from "@material-ui/icons/Palette";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { LIKE_UNLIKE_ARTIST_MUTATION } from "../../apollo/Mutations/postMutations";
 
 type Props = {
   artist: UserInterface;

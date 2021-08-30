@@ -2,7 +2,6 @@ import { useQuery } from "@apollo/client";
 import { CssBaseline, CircularProgress, Box } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import { COMMENT_ID_QUERY } from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ import {
   CommentIdData,
   QueryIdVars,
 } from "../../../interfaces/QueryInterfaces";
+import { COMMENT_ID_QUERY } from "../../../apollo/Queries/postQueries";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportComment")

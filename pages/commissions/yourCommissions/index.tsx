@@ -2,7 +2,6 @@ import CommissionWrap from "../../../Components/Commissions/CommissionWrap";
 import Head from "next/head";
 import { CssBaseline } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
-import { YOUR_COMMISSIONS_QUERY } from "../../../apollo/apolloQueries";
 import { useSession } from "next-auth/client";
 import YourCommList from "../../../Components/Commissions/Lists/YourCommList";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../../../interfaces/QueryInterfaces";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { YOUR_COMMISSIONS_QUERY } from "../../../apollo/Queries/commsQueries";
 
 const DynamicNoSessDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoSessionDialog")

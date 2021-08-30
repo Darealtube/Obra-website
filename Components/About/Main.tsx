@@ -1,4 +1,4 @@
-import { Box, Typography, Fade, SvgIconTypeMap } from "@material-ui/core";
+import { Box, Typography, Fade } from "@material-ui/core";
 import VisibilitySensor from "react-visibility-sensor";
 import { Dispatch, SetStateAction } from "react";
 

@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import { useQuery } from "@apollo/client";
-import { REPORT_COUNT_QUERY } from "../../apollo/apolloQueries";
+import { REPORT_COUNT_QUERY } from "../../apollo/Queries/reportQueries";
 
 const IssuesWrap = () => {
   const { data } = useQuery(REPORT_COUNT_QUERY);

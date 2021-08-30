@@ -11,7 +11,6 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
-import { APPBAR_USER_QUERY } from "../../apollo/apolloQueries";
 import { useQuery } from "@apollo/client";
 import AppbarMenu from "./AppbarMenu";
 import AppbarNoUser from "./AppbarNoUser";
@@ -19,6 +18,7 @@ import styles from "../../pages/styles/Specific/Appbar.module.css";
 import { AppbarUserData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
 import DrawerItems from "../ListItems/Drawer";
+import { APPBAR_USER_QUERY } from "../../apollo/Queries/userQueries";
 
 const Appbar = () => {
   const [session, loading] = useSession();

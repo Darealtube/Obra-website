@@ -1,6 +1,5 @@
 import styles from "../pages/styles/General/Trending.module.css";
 import { Typography, Grid, Button, Grow } from "@material-ui/core";
-import Image from "next/image";
 import Link from "next/link";
 
 const CategoryList = ({ data, includeMoreButton = false }) => {

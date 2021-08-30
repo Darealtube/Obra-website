@@ -6,13 +6,13 @@ import { getSession } from "next-auth/client";
 import { addApolloState } from "../../apollo/apolloClient";
 import { fetchReportId } from "../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { REPORT_ID_QUERY } from "../../apollo/apolloQueries";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import PostReport from "../../Components/Issues/Reports/PostReport";
 import CommentReport from "../../Components/Issues/Reports/CommentReport";
 import BugReport from "../../Components/Issues/Reports/BugReport";
 import { ReportIdData, ReportIdVars } from "../../interfaces/QueryInterfaces";
+import { REPORT_ID_QUERY } from "../../apollo/Queries/reportQueries";
 
 const DynamicDeleteDialog = dynamic(
   () => import("../../Components/Issues/DeleteDialog")

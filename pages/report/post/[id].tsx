@@ -6,13 +6,13 @@ import {
 } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import { REPORT_POST_QUERY } from "../../../apollo/apolloQueries";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import dynamic from "next/dynamic";
 import DefaultErrorPage from "next/error";
 import { PostData, QueryIdVars } from "../../../interfaces/QueryInterfaces";
+import { REPORT_POST_QUERY } from "../../../apollo/Queries/postQueries";
 
 const DynamicReportForm = dynamic(
   () => import("../../../Components/Forms/ReportPost")

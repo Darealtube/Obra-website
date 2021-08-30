@@ -1,12 +1,7 @@
 import { DataProxy, FetchResult } from "@apollo/client";
-import {
-  COMMISSIONS_QUERY,
-  PostInfo,
-  POST_ID_QUERY,
-  UserInfo,
-  UserInfo2,
-  UserInfo3,
-} from "../apollo/apolloQueries";
+import { UserInfo, UserInfo2, UserInfo3, PostInfo } from "../apollo/fragments";
+import { COMMISSIONS_QUERY } from "../apollo/Queries/commsQueries";
+import { POST_ID_QUERY } from "../apollo/Queries/postQueries";
 import {
   AddCommentData,
   EditPostData,

@@ -11,9 +11,6 @@ import HomeIcon from "@material-ui/icons/Home";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 import ImageIcon from "@material-ui/icons/Image";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-import ReceiptIcon from "@material-ui/icons/Receipt";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import SettingsIcon from "@material-ui/icons/Settings";
 import EmojiFlagsIcon from "@material-ui/icons/EmojiFlags";
 import InfoIcon from "@material-ui/icons/Info";
@@ -22,8 +19,8 @@ import BrushIcon from "@material-ui/icons/Brush";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/client";
-import { COMMISSION_COUNT_QUERY } from "../../apollo/apolloQueries";
 import Image from "next/image";
+import { COMMISSION_COUNT_QUERY } from "../../apollo/Queries/commsQueries";
 
 function Copyright() {
   return (

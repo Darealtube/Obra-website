@@ -7,9 +7,9 @@ import { fetchPostReports } from "../../../utils/fetchData";
 import Head from "next/head";
 import IssuesWrap from "../../../Components/Issues/IssuesWrap";
 import { useQuery } from "@apollo/client";
-import { REPORTED_POSTS_QUERY } from "../../../apollo/apolloQueries";
 import ReportList from "../../../Components/Issues/Lists/ReportList";
 import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
+import { REPORTED_POSTS_QUERY } from "../../../apollo/Queries/reportQueries";
 
 const PostIssues = () => {
   const {

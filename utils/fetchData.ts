@@ -1,23 +1,28 @@
 import { initializeApollo } from "../apollo/apolloClient";
 import {
-  ALL_USER_QUERY,
-  BUG_REPORTS_QUERY,
-  CATEGORY_POSTS_QUERY,
-  IS_ADMIN,
-  IS_LIKED_ARTIST,
-  IS_LIKED_POST,
-  IS_SAME_USER,
   POPULAR_CATEGORIES_QUERY,
+  CATEGORY_POSTS_QUERY,
+} from "../apollo/Queries/categoryQueries";
+import {
+  TRENDING_POSTS_QUERY,
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
-  REPORTED_COMMENTS_QUERY,
+} from "../apollo/Queries/postQueries";
+import {
   REPORTED_POSTS_QUERY,
+  REPORTED_COMMENTS_QUERY,
+  BUG_REPORTS_QUERY,
   REPORT_ID_QUERY,
-  TRENDING_POSTS_QUERY,
-  USER_ID_QUERY,
-  USER_LIKED_POST_QUERY,
+} from "../apollo/Queries/reportQueries";
+import {
   USER_POST_QUERY,
-} from "../apollo/apolloQueries";
+  USER_LIKED_POST_QUERY,
+} from "../apollo/Queries/userQueries";
+import {
+  IS_LIKED_ARTIST,
+  IS_LIKED_POST,
+  IS_ADMIN,
+} from "../apollo/Queries/validateQueries";
 import {
   PostData,
   RecommendedPostData,
@@ -38,37 +43,6 @@ import {
  each getServerSideProps/getStaticProps addApolloState function
  found from the apolloClient file. This is in order to add the 
  data into the cache. Other information could be passed as well. */
-
-export const fetchUser = async (id: string) => {
-  const apolloClient = initializeApollo();
-  const {
-    data: { userId },
-  } = await apolloClient.query({
-    query: USER_ID_QUERY,
-    variables: {
-      id: id,
-    },
-  });
-  if (!userId) {
-    return null;
-  }
-  return userId;
-};
-
-export const isSameUser = async (id: string, name: string) => {
-  const apolloClient = initializeApollo();
-  const {
-    data: { isSameUser },
-  } = await apolloClient.query({
-    query: IS_SAME_USER,
-    variables: {
-      userId: id,
-      userName: name,
-    },
-  });
-
-  return { data: apolloClient, same: isSameUser };
-};
 
 export const fetchUserandPosts = async (name: string, userID: string) => {
   const apolloClient = initializeApollo();
@@ -208,18 +182,6 @@ export const InitializePostInfo = async (id: string, sessionId: string) => {
     exists: postId ? true : false,
     alreadyLiked: isLikedPost,
   };
-};
-
-export const fetchAllUsers = async () => {
-  const apolloClient = initializeApollo();
-
-  const {
-    data: { allUsersList },
-  } = await apolloClient.query({
-    query: ALL_USER_QUERY,
-  });
-
-  return allUsersList as string[];
 };
 
 export const fetchPostReports = async (id: string) => {

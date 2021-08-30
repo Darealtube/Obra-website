@@ -3,7 +3,7 @@ import { TextField, InputAdornment, IconButton } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
-import { CREATE_COMMENT_MUTATION } from "../../apollo/apolloQueries";
+import { CREATE_COMMENT_MUTATION } from "../../apollo/Mutations/commentMutations";
 import { AddCommentData } from "../../interfaces/MutationInterfaces";
 import { commentUpdate } from "../../utils/update";
 

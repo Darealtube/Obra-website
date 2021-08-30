@@ -13,7 +13,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Link from "next/link";
 import { useSession } from "next-auth/client";
 import { useMutation } from "@apollo/client";
-import { DELETE_NOTIF_MUTATION } from "../../apollo/apolloQueries";
+import { DELETE_NOTIF_MUTATION } from "../../apollo/Mutations/notifMutations";
 
 type Props = {
   notifications: notifedges[];

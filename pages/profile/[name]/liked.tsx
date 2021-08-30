@@ -11,13 +11,13 @@ import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { fetchUserandLikedPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
-import { USER_LIKED_POST_QUERY } from "../../../apollo/apolloQueries";
 import { getSession } from "next-auth/client";
 import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import ArtList from "../../../Components/ArtList";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
 import { useState } from "react";
+import { USER_LIKED_POST_QUERY } from "../../../apollo/Queries/userQueries";
 
 type Props = {
   name: string;

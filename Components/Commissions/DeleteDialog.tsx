@@ -9,7 +9,7 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import { useState } from "react";
-import { DELETE_COMMISSION_MUTATION } from "../../apollo/apolloQueries";
+import { DELETE_COMMISSION_MUTATION } from "../../apollo/Mutations/commsMutations";
 
 type Props = {
   open: boolean;

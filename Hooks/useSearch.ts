@@ -1,6 +1,6 @@
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { SEARCH_QUERY } from "../apollo/apolloQueries";
+import { SEARCH_QUERY } from "../apollo/Queries/categoryQueries";
 
 type SearchProps = {
   key: string;

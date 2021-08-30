@@ -3,7 +3,6 @@ import { CssBaseline, Container, Typography } from "@material-ui/core";
 import styles from "./styles/General/Trending.module.css";
 import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
-import { TRENDING_POSTS_QUERY } from "../apollo/apolloQueries";
 import {
   TrendingPostsData,
   PaginatedPostsVars,
@@ -12,6 +11,7 @@ import ArtList from "../Components/ArtList";
 import { GetStaticProps } from "next";
 import { fetchTrending } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
+import { TRENDING_POSTS_QUERY } from "../apollo/Queries/postQueries";
 
 const Trending = () => {
   const {

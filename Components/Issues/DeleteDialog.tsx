@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Dialog, DialogTitle, DialogActions, Button } from "@material-ui/core";
 import { useRouter } from "next/router";
-import { DELETE_REPORT_MUTATION } from "../../apollo/apolloQueries";
+import { DELETE_REPORT_MUTATION } from "../../apollo/Mutations/reportMutation";
 
 type Props = {
   open: boolean;

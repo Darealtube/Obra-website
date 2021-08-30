@@ -4,10 +4,10 @@ import styles from "./styles/General/Home.module.css";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { useQuery } from "@apollo/client";
-import { POPULAR_CATEGORIES_QUERY } from "../apollo/apolloQueries";
 import { fetchHomeCategories } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
 import CategoryList from "../Components/CategoryList";
+import { POPULAR_CATEGORIES_QUERY } from "../apollo/Queries/categoryQueries";
 
 const Home = () => {
   const {

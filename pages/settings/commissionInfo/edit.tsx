@@ -3,13 +3,13 @@ import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 import Head from "next/head";
 import CommSettingsEditForm from "../../../Components/Settings/Commission/CommissionEditForm";
 import { useMutation } from "@apollo/client";
-import { EDIT_COMMISSION_SETTINGS_MUTATION } from "../../../apollo/apolloQueries";
 import { useSession } from "next-auth/client";
 import { editUserCommSettingUpdate } from "../../../utils/update";
 import {
   EditUserCommData,
   EditUserCommVars,
 } from "../../../interfaces/MutationInterfaces";
+import { EDIT_COMMISSION_SETTINGS_MUTATION } from "../../../apollo/Mutations/userMutation";
 
 const CommSettingsEdit = () => {
   const [session] = useSession();

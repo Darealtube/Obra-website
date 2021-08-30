@@ -20,8 +20,8 @@ import {
   ReadNotifData,
   ReadNotifVars,
 } from "../../../interfaces/MutationInterfaces";
-import { READ_NOTIF } from "../../../apollo/apolloQueries";
 import NotificationImportantIcon from "@material-ui/icons/NotificationImportant";
+import { READ_NOTIF } from "../../../apollo/Mutations/notifMutations";
 
 type Props = {
   user: AppbarUserData;

@@ -7,8 +7,8 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { AppbarUserData } from "../../interfaces/QueryInterfaces";
 import { useQuery } from "@apollo/client";
-import { REPORT_COUNT_QUERY } from "../../apollo/apolloQueries";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
+import { REPORT_COUNT_QUERY } from "../../apollo/Queries/reportQueries";
 
 const DynamicNotifPop = dynamic(() => import("./Popovers/NotifPop"));
 const DynamicUserPop = dynamic(() => import("./Popovers/UserPopover"));

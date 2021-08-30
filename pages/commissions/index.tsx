@@ -6,8 +6,8 @@ import { useSession } from "next-auth/client";
 import { CommissionData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { COMMISSIONS_QUERY } from "../../apollo/apolloQueries";
 import CommissionList from "../../Components/Commissions/Lists/CommissionList";
+import { COMMISSIONS_QUERY } from "../../apollo/Queries/commsQueries";
 
 const DynamicNoSessDialog = dynamic(
   () => import("../../Components/MainPopovers/NoSessionDialog")

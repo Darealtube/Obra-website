@@ -13,7 +13,6 @@ import Image from "next/image";
 import styles from "./styles/General/Create.module.css";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
-import { CREATE_POST_MUTATION } from "../apollo/apolloQueries";
 import { useMutation } from "@apollo/client";
 import PostForm from "../Components/Forms/CreatePost";
 import { reducer, State } from "../Hooks/Reducers/PostReducer";
@@ -29,6 +28,7 @@ import { useRouter } from "next/router";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
 import Link from "next/link";
+import { CREATE_POST_MUTATION } from "../apollo/Mutations/postMutations";
 
 const DynamicError = dynamic(
   () => import("../Components/Forms/Snackbars/ConfigSnack")

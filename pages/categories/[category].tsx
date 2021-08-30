@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { addApolloState } from "../../apollo/apolloClient";
-import { CATEGORY_POSTS_QUERY } from "../../apollo/apolloQueries";
 import Appbar from "../../Components/Appbar/Appbar";
 import ArtList from "../../Components/ArtList";
 import {
@@ -21,6 +20,7 @@ import {
 import styles from "../styles/General/Home.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { CATEGORY_POSTS_QUERY } from "../../apollo/Queries/categoryQueries";
 
 const skeletalArts = [
   { width: 160, height: 320 },

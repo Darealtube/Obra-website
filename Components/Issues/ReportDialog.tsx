@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { WARN_MUTATION } from "../../apollo/apolloQueries";
+import { WARN_MUTATION } from "../../apollo/Mutations/reportMutation";
 import { WarnVars } from "../../interfaces/MutationInterfaces";
 
 interface ReportProps {

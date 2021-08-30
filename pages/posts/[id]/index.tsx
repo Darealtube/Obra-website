@@ -6,10 +6,6 @@ import Head from "next/head";
 import { InitializePostInfo } from "../../../utils/fetchData";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
-import {
-  POST_ID_QUERY,
-  POST_RECOMMENDED_QUERY,
-} from "../../../apollo/apolloQueries";
 import { useQuery } from "@apollo/client";
 import PostInfo from "../../../Components/PostInfo/PostInfo";
 import RecommendedList from "../../../Components/PostInfo/RecommendedList";
@@ -21,6 +17,10 @@ import {
 } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
 import Comments from "../../../Components/PostInfo/Comments";
+import {
+  POST_ID_QUERY,
+  POST_RECOMMENDED_QUERY,
+} from "../../../apollo/Queries/postQueries";
 
 const DynamicImageDialog = dynamic(
   () => import("../../../Components/PostInfo/PostDialogs/ImageDialog")

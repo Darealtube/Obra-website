@@ -1,11 +1,12 @@
 import CommissionWrap from "../../Components/Commissions/CommissionWrap";
 import Head from "next/head";
-import { CssBaseline, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import CommissionData from "../../Components/Commissions/CommissionData";
 import { useRouter } from "next/router";
 import {
-  CommissionIdData, QueryIdVars,
+  CommissionIdData,
+  QueryIdVars,
 } from "../../interfaces/QueryInterfaces";
 import { useState } from "react";
 import { useSession } from "next-auth/client";
@@ -58,20 +59,22 @@ const CommissionID = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Commission</title>
       </Head>
-      <CssBaseline />
-      {!data?.commissionId && !sessload && !loading ? (
-        <>
+      {!data?.commissionId && !loading ? (
+        <Box
+          maxHeight="100%"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <DefaultErrorPage statusCode={404} />
-        </>
+        </Box>
       ) : data?.commissionId && !loading && !noSess && !notAllowed ? (
         <CommissionWrap>
-          <CommissionData
-            commission={data.commissionId}
-          />
+          <CommissionData commission={data.commissionId} />
         </CommissionWrap>
       ) : (
         <Box
-          height="100vh"
+          maxHeight="100%"
           display="flex"
           justifyContent="center"
           alignItems="center"

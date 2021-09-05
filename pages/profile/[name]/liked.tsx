@@ -1,11 +1,4 @@
-import Appbar from "../../../Components/Appbar/Appbar";
-import {
-  CssBaseline,
-  Box,
-  useMediaQuery,
-  useTheme,
-  Typography,
-} from "@material-ui/core";
+import { Box, useMediaQuery, useTheme, Typography } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
@@ -16,8 +9,9 @@ import ProfileWrap from "../../../Components/Profile/ProfileWrap";
 import ArtList from "../../../Components/ArtList";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { USER_LIKED_POST_QUERY } from "../../../apollo/Queries/userQueries";
+import { AppContext } from "../../../Components/Appbar/AppWrap";
 
 type Props = {
   name: string;
@@ -26,11 +20,25 @@ type Props = {
 };
 
 const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
+  const drawerOpen = useContext(AppContext);
   const [galleryView, setGalleryView] = useState(false);
   const theme = useTheme();
-  const threeCol1 = useMediaQuery(theme.breakpoints.up("lg"));
-  const threeCol2 = useMediaQuery("(max-width: 899px) and (min-width: 768px)");
-  const oneCol = useMediaQuery("(max-width: 515px)");
+  const xl = useMediaQuery(theme.breakpoints.up("xl"));
+  const lg = useMediaQuery(theme.breakpoints.between("lg", "xl"));
+  const lgmd = useMediaQuery(`(min-width: 900px) and (max-width: 1100px)`);
+  const mobile = useMediaQuery(`(max-width: 900px)`);
+  const sm = useMediaQuery(`(min-width: 782px) and (max-width: 899px)`);
+  const xs = useMediaQuery(`(max-width: 599px)`);
+
+  const drawerOpenColumns = xl ? 3 : lgmd ? 1 : 2;
+  const drawerClosedColumns = xl ? 4 : lg ? 3 : 2;
+  const mobileColumns = sm ? 3 : xs ? 1 : 2;
+
+  const artListColumns = !mobile
+    ? (drawerOpen && galleryView) || !drawerOpen
+      ? drawerClosedColumns
+      : drawerOpenColumns
+    : mobileColumns;
   const {
     data: { userName },
     fetchMore,
@@ -51,8 +59,6 @@ const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Liked</title>
       </Head>
-      <CssBaseline />
-      <Appbar />
       <ProfileWrap
         artist={userName}
         userLiked={alreadyLiked}
@@ -60,31 +66,21 @@ const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
         handleGallery={toggleGallery}
         currentPage={currentPage}
       >
-        <Box className={styles.postContainer}>
-          {userName ? (
-            <>
-              <ArtList
-                data={userName.likedPosts}
-                fetchMore={fetchMore}
-                first={"userName"}
-                second={"likedPosts"}
-                columns={
-                  !galleryView
-                    ? threeCol1 || threeCol2
-                      ? 3
-                      : oneCol
-                      ? 1
-                      : 2
-                    : null
-                }
-              />
-            </>
-          ) : (
-            <Typography variant="h5">
-              This user has been deleted, or has changed their name.
-            </Typography>
-          )}
-        </Box>
+        {userName ? (
+          <>
+            <ArtList
+              data={userName.likedPosts}
+              fetchMore={fetchMore}
+              first={"userName"}
+              second={"likedPosts"}
+              columns={artListColumns}
+            />
+          </>
+        ) : (
+          <Typography variant="h5">
+            This user has been deleted, or has changed their name.
+          </Typography>
+        )}
       </ProfileWrap>
     </div>
   );

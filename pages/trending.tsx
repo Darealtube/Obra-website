@@ -30,8 +30,7 @@ const Trending = () => {
         <title>Trending</title>
       </Head>
       <CssBaseline />
-      <Appbar />
-      <Container className={styles.content} sx={{ marginTop: "80px" }}>
+      <Container>
         <Typography variant="h2" gutterBottom align="center">
           Trending Posts
         </Typography>

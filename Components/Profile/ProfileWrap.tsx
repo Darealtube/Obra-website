@@ -29,10 +29,10 @@ const ProfileWrap = ({
   const handleTabChange = (event, newValue) => {
     setTabsValue(newValue);
     router.push(newValue);
-  };
+  }; 
 
   return (
-    <div className={styles.wrapRoot}>
+    <>
       {!galleryView && (
         <Box className={styles.backdrop}>
           <Image
@@ -62,7 +62,6 @@ const ProfileWrap = ({
           item
           xs={12}
           md={galleryView ? 12 : 8}
-          sx={galleryView ? { marginTop: "80px" } : { marginTop: "24px" }}
         >
           <Button
             onClick={handleGallery}
@@ -89,7 +88,7 @@ const ProfileWrap = ({
           {children}
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 };
 

@@ -20,9 +20,8 @@ type ReportProps = {
 const PostReport = ({ report, handleReportOpen, handleOpen }: ReportProps) => {
   return (
     <>
-      <Container style={{ height: "100vh", width: "100vw" }}>
+      <Container style={{ maxHeight: "100%", maxWidth: "100%" }}>
         <Grid container>
-          <CssBaseline />
           <Grid item xs={12} md={6} className={styles.item}>
             <Box position="relative" height="100%" width="100%">
               <Image

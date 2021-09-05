@@ -70,7 +70,6 @@ const Category = ({ category }) => {
         <title>{category ? category : " Loading Page..."}</title>
       </Head>
       <CssBaseline />
-      <Appbar />
       <Container className={styles.content}>
         {data?.categoryPosts && (
           <>

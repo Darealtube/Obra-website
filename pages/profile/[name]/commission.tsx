@@ -1,16 +1,9 @@
-import {
-  Paper,
-  CssBaseline,
-  Grid,
-  Box,
-  useMediaQuery,
-  Button,
-} from "@material-ui/core";
+import { Paper, Grid, Box, useMediaQuery, Button } from "@material-ui/core";
 import styles from "../../styles/Specific/Commission.module.css";
 import Image from "next/image";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import CommissionForm from "../../../Components/Commissions/CommissionForm";
 import { useEffect } from "react";
@@ -18,6 +11,7 @@ import dynamic from "next/dynamic";
 import { useQuery } from "@apollo/client";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { USER_COMM_INFO_QUERY } from "../../../apollo/Queries/userQueries";
+import { AppContext } from "../../../Components/Appbar/AppWrap";
 
 const DynamicNotAllowedDialog = dynamic(
   () => import("../../../Components/MainPopovers/NoAccessDialog")
@@ -30,6 +24,8 @@ const DynamicPosterDialog = dynamic(
 );
 
 const Commission = () => {
+  const Small = useMediaQuery("(max-width: 960px)");
+  const drawerOpen = useContext(AppContext);
   const [session, loading] = useSession();
   const [notAllowed, setnotAllowed] = useState(false);
   const [noSess, setnoSess] = useState(false);
@@ -41,7 +37,6 @@ const Commission = () => {
     },
     skip: !router.query.name,
   });
-  const Small = useMediaQuery("(max-width: 960px)");
 
   useEffect(() => {
     if (!session && !loading) {
@@ -67,7 +62,6 @@ const Commission = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Commission {router.query.name}</title>
       </Head>
-      <CssBaseline />
       <Image
         src="https://picsum.photos/600"
         alt="Scenery image"
@@ -79,12 +73,16 @@ const Commission = () => {
       <Grid
         container
         spacing={2}
-        style={{ height: "100%", width: "100%", backgroundColor: "black" }}
+        style={{
+          maxHeight: "100%",
+          maxWidth: "100%",
+          backgroundColor: "black",
+        }}
       >
         <Grid
           item
           xs={12}
-          md={6}
+          md={drawerOpen ? 12 : 6}
           style={{
             display: "flex",
             justifyContent: "center",
@@ -103,7 +101,7 @@ const Commission = () => {
         <Grid
           item
           xs={12}
-          md={6}
+          md={drawerOpen ? 12 : 6}
           style={{
             display: "flex",
             justifyContent: "center",

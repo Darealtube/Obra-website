@@ -10,9 +10,7 @@ const AccountSettings = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Account</title>
       </Head>
-      <SettingsWrap pageTitle={"Account"}>
-        <MainInfo />
-      </SettingsWrap>
+      <MainInfo />
     </>
   );
 };

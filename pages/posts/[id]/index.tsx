@@ -1,6 +1,5 @@
-import Appbar from "../../../Components/Appbar/Appbar";
-import { Container, CssBaseline, Grid } from "@material-ui/core";
-import { useState } from "react";
+import { Container, Grid } from "@material-ui/core";
+import { useContext, useState } from "react";
 import styles from "../../styles/Specific/Post.module.css";
 import Head from "next/head";
 import { InitializePostInfo } from "../../../utils/fetchData";
@@ -16,11 +15,11 @@ import {
   RecommendedPostData,
 } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
-import Comments from "../../../Components/PostInfo/Comments";
 import {
   POST_ID_QUERY,
   POST_RECOMMENDED_QUERY,
 } from "../../../apollo/Queries/postQueries";
+import { AppContext } from "../../../Components/Appbar/AppWrap";
 
 const DynamicImageDialog = dynamic(
   () => import("../../../Components/PostInfo/PostDialogs/ImageDialog")
@@ -35,6 +34,7 @@ type Props = {
 };
 
 const PostID = ({ id, alreadyLiked }: Props) => {
+  const drawerOpen = useContext(AppContext);
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const {
@@ -70,18 +70,15 @@ const PostID = ({ id, alreadyLiked }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{postId.title}</title>
       </Head>
-      <CssBaseline />
-      <Appbar />
       <Grid container className={styles.grid}>
         {postId && recommendedPosts && (
           <>
             <Grid
               item
               xs={12}
-              md={6}
-              lg={8}
+              md={12}
+              lg={drawerOpen ? 12 : 8}
               className={styles.postInfo}
-              sx={{ marginTop: "80px" }}
             >
               <Container sx={{ display: "flex", flexDirection: "column" }}>
                 <PostInfo
@@ -89,11 +86,11 @@ const PostID = ({ id, alreadyLiked }: Props) => {
                   alreadyLiked={alreadyLiked}
                   handleOpenDialog={handleOpenDialog}
                   handleDeleteDialog={handleDeleteDialog}
+                  fetchComments={MoreComm}
                 />
-                <Comments postID={postId} fetchMore={MoreComm} />
               </Container>
             </Grid>
-            <Grid item xs={12} md={6} lg={4} sx={{ marginTop: "80px" }}>
+            <Grid item xs={12} md={12} lg={drawerOpen ? 12 : 4}>
               <RecommendedList
                 fetchMore={MoreRecc}
                 recommended={recommendedPosts}

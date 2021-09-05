@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const CategoryList = ({ data, includeMoreButton = false }) => {
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
       {data?.map((tag, index) => (
         <Grow
           in={true}
@@ -12,7 +12,7 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
           timeout={1000 + index * 200}
           key={tag.node?.name || tag.name}
         >
-          <Grid item lg={3} md={4} sm={6} xs={12} sx={{ marginBottom: "12px" }}>
+          <Grid item xs={"auto"} sx={{ marginBottom: "12px" }}>
             <Link
               passHref
               href={`/categories/${encodeURIComponent(
@@ -24,10 +24,10 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
                 component="a"
                 className={styles.category}
               >
-                <Typography gutterBottom variant="h6">
+                <Typography gutterBottom variant="h6" align="center">
                   {tag.node?.name || tag.name}
                 </Typography>
-                <Typography>
+                <Typography align="center">
                   {tag.node?.artCount || tag.artCount} art(s) in this category.
                 </Typography>
               </Button>
@@ -37,7 +37,7 @@ const CategoryList = ({ data, includeMoreButton = false }) => {
       ))}
       {includeMoreButton && (
         <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={5200}>
-          <Grid item lg={3} md={4} sm={6} xs={12} sx={{ marginBottom: "12px" }}>
+          <Grid item xs={"auto"} sx={{ marginBottom: "12px" }}>
             <Link passHref href={`/categories/`}>
               <Button
                 variant="outlined"

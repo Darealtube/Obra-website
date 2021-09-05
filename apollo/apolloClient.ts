@@ -19,7 +19,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: `https://obra-api.vercel.app/api/graphql`,
+      uri: `http://localhost:4000/api/graphql`,
       credentials: "include", // "include" because our API server is on another domain. "same-origin" if not.
       fetchOptions: {
         mode: "cors", // This should always be CORS as our API server is on another domain.

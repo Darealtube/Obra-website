@@ -39,7 +39,6 @@ const Commissions = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Commissions</title>
       </Head>
-      <CssBaseline />
       <CommissionWrap>
         {data?.userId && !loading ? (
           <CommissionList

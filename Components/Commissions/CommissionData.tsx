@@ -1,7 +1,6 @@
-import { Grid, Typography, Box, Button } from "@material-ui/core";
+import { Grid, Typography, Box, Container, Divider } from "@material-ui/core";
 import Image from "next/image";
 import { CommissionInterface } from "../../interfaces/UserInterface";
-import styles from "../../pages/styles/Specific/Commission.module.css";
 
 const CommissionData = ({
   commission,
@@ -10,16 +9,54 @@ const CommissionData = ({
 }) => {
   return (
     <>
-      <div className={styles.list2}>
-        <Grid container spacing={2} style={{ width: "100%", height: "100%" }}>
-          <Grid item xs={6}>
+      <Container>
+        <Grid container spacing={1} sx={{ maxHeight: "100%" }}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            style={{
+              position: "relative",
+              height: "64vh",
+              width: "100%",
+              backgroundImage: `url(${"/user-empty-backdrop.jpg"})`,
+              border: "8px ridge",
+            }}
+          >
+            <Image
+              src={
+                commission.sampleArt
+                  ? commission.sampleArt
+                  : "/user-empty-backdrop.jpg"
+              }
+              layout="fill"
+              objectFit="contain"
+              alt={"Commission Sample Art"}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box width="100%" marginBottom={4}>
+              <Typography variant="h4" align="center">
+                Description
+              </Typography>
+              <Divider />
+            </Box>
             <Box fontSize={22}>
-              <Typography variant="h4" gutterBottom>
+              <Typography variant="h4" gutterBottom align="center">
                 {commission.title}
               </Typography>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom paragraph align="center">
                 {commission.description}
               </Typography>
+
               <Typography variant="body1" gutterBottom>
                 Size: {commission.width} x {commission.height}{" "}
               </Typography>
@@ -38,20 +75,8 @@ const CommissionData = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={6} style={{ position: "relative" }}>
-            <Image
-              src={
-                commission.sampleArt
-                  ? commission.sampleArt
-                  : "/user-empty-backdrop.jpg"
-              }
-              layout="fill"
-              objectFit="contain"
-              alt={"Commission Sample Art"}
-            />
-          </Grid>
         </Grid>
-      </div>
+      </Container>
     </>
   );
 };

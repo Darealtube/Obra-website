@@ -3,36 +3,41 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  useMediaQuery,
   SwipeableDrawer,
   Drawer,
   List,
+  useMediaQuery,
+  Button,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { useState } from "react";
-import { useSession } from "next-auth/client";
-import { useQuery } from "@apollo/client";
 import AppbarMenu from "./AppbarMenu";
-import AppbarNoUser from "./AppbarNoUser";
+import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import styles from "../../pages/styles/Specific/Appbar.module.css";
-import { AppbarUserData, QueryIdVars } from "../../interfaces/QueryInterfaces";
 import Image from "next/image";
 import DrawerItems from "../ListItems/Drawer";
-import { APPBAR_USER_QUERY } from "../../apollo/Queries/userQueries";
+import { signIn, useSession } from "next-auth/client";
+import { AppbarUserData } from "../../interfaces/QueryInterfaces";
+import { useState } from "react";
 
-const Appbar = () => {
+type AppBarProps = {
+  user: AppbarUserData;
+  fetchMore: any;
+};
+
+const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  /*
+    This link for signIn or signOut should be changed from http://localhost:3000/
+    when in development mode, to https://obra-website.vercel.app/ when deploying to
+    vercel (production).
+  */
+  signIn("google", {
+    callbackUrl: `https://obra-website.vercel.app/`,
+  });
+};
+
+const Appbar = ({ user, fetchMore }: AppBarProps) => {
   const [session, loading] = useSession();
-  const { data: user, fetchMore } = useQuery<AppbarUserData, QueryIdVars>(
-    APPBAR_USER_QUERY,
-    {
-      variables: {
-        id: session?.id,
-        limit: 4,
-      },
-      skip: !session,
-      pollInterval: 60000,
-    }
-  );
   const [open, setOpen] = useState(false);
   const swipeable = useMediaQuery(`(max-width: 480px)`);
 
@@ -43,7 +48,7 @@ const Appbar = () => {
   return (
     <div>
       {/* App Bar */}
-      <AppBar sx={{ backgroundColor: "#2a9d8f" }}>
+      <AppBar color="transparent">
         <Toolbar>
           {/* Drawer and Logo */}
           <IconButton
@@ -74,7 +79,14 @@ const Appbar = () => {
           {session && !loading && user ? (
             <AppbarMenu user={user} fetchMore={fetchMore} />
           ) : !session && !loading ? (
-            <AppbarNoUser />
+            <Button
+              startIcon={<AccountCircleOutlinedIcon />}
+              onClick={handleSignIn}
+              variant="contained"
+              color="success"
+            >
+              <Typography>Sign In</Typography>
+            </Button>
           ) : (
             ""
           )}
@@ -91,13 +103,21 @@ const Appbar = () => {
           onOpen={handleDrawer}
         >
           <List className={styles.list}>
-            <DrawerItems userName={user?.userId.name} /> {/* Drawer List */}
+            <DrawerItems
+              userName={user?.userId.name}
+              admin={user?.userId.admin}
+            />{" "}
+            {/* Drawer List */}
           </List>
         </SwipeableDrawer>
       ) : (
         <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
           <List className={styles.list}>
-            <DrawerItems userName={user?.userId.name} /> {/* Drawer List */}
+            <DrawerItems
+              userName={user?.userId.name}
+              admin={user?.userId.admin}
+            />{" "}
+            {/* Drawer List */}
           </List>
         </Drawer>
       )}

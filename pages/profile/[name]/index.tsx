@@ -1,5 +1,4 @@
-import Appbar from "../../../Components/Appbar/Appbar";
-import { CssBaseline, Typography, useMediaQuery } from "@material-ui/core";
+import { Typography, useMediaQuery } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
@@ -13,6 +12,8 @@ import ArtList from "../../../Components/ArtList";
 import { useTheme } from "@material-ui/core";
 import { useState } from "react";
 import { USER_POST_QUERY } from "../../../apollo/Queries/userQueries";
+import { useContext } from "react";
+import { AppContext } from "../../../Components/Appbar/AppWrap";
 
 type Props = {
   name: string;
@@ -21,11 +22,26 @@ type Props = {
 };
 
 const UserID = ({ name, alreadyLiked, currentPage }: Props) => {
+  const drawerOpen = useContext(AppContext);
   const [galleryView, setGalleryView] = useState(false);
   const theme = useTheme();
-  const threeCol1 = useMediaQuery(theme.breakpoints.up("lg"));
-  const threeCol2 = useMediaQuery("(max-width: 899px) and (min-width: 768px)");
-  const oneCol = useMediaQuery("(max-width: 515px)");
+  const xl = useMediaQuery(theme.breakpoints.up("xl"));
+  const lg = useMediaQuery(theme.breakpoints.between("lg", "xl"));
+  const lgmd = useMediaQuery(`(min-width: 900px) and (max-width: 1100px)`);
+  const mobile = useMediaQuery(`(max-width: 900px)`);
+  const sm = useMediaQuery(`(min-width: 782px) and (max-width: 899px)`);
+  const xs = useMediaQuery(`(max-width: 599px)`);
+
+  const drawerOpenColumns = xl ? 3 : lgmd ? 1 : 2;
+  const drawerClosedColumns = lg || xl ? 3 : 2;
+  const mobileColumns = sm ? 3 : xs ? 1 : 2;
+
+  const artListColumns = !mobile
+    ? (drawerOpen && galleryView) || !drawerOpen
+      ? drawerClosedColumns
+      : drawerOpenColumns
+    : mobileColumns;
+
   const {
     data: { userName },
     fetchMore,
@@ -46,8 +62,6 @@ const UserID = ({ name, alreadyLiked, currentPage }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{name}</title>
       </Head>
-      <CssBaseline />
-      <Appbar />
       <ProfileWrap
         artist={userName}
         userLiked={alreadyLiked}
@@ -62,15 +76,7 @@ const UserID = ({ name, alreadyLiked, currentPage }: Props) => {
               fetchMore={fetchMore}
               first={"userName"}
               second={"posts"}
-              columns={
-                !galleryView
-                  ? threeCol1 || threeCol2
-                    ? 3
-                    : oneCol
-                    ? 1
-                    : 2
-                  : null
-              }
+              columns={artListColumns}
             />
           </>
         ) : (

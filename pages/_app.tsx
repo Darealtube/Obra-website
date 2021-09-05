@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { start, done } from "nprogress";
 import "../public/nprogress.css";
-import router from "next/router";
+import { useRouter } from "next/router";
 import "./styles/patch.css";
 import { Provider } from "next-auth/client";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../apollo/apolloClient";
+import SettingsWrap from "../Components/Settings/SettingsWrap";
+import AppWrap from "../Components/Appbar/AppWrap";
 
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   const apolloClient = useApollo(pageProps);
   useEffect(() => {
     const handleRouteStart = () => {
@@ -26,10 +29,24 @@ export default function MyApp({ Component, pageProps }) {
     };
   }, []);
 
+  if (router.pathname.startsWith("/settings/")) {
+    return (
+      <ApolloProvider client={apolloClient}>
+        <Provider session={pageProps.session}>
+          <SettingsWrap>
+            <Component {...pageProps} />
+          </SettingsWrap>
+        </Provider>
+      </ApolloProvider>
+    );
+  }
+
   return (
     <ApolloProvider client={apolloClient}>
       <Provider session={pageProps.session}>
-        <Component {...pageProps} />
+        <AppWrap>
+          <Component {...pageProps} />
+        </AppWrap>
       </Provider>
     </ApolloProvider>
   );

@@ -5,7 +5,6 @@ import {
   Typography,
   TextField,
 } from "@material-ui/core";
-import Appbar from "../../Components/Appbar/Appbar";
 import styles from "../styles/General/Home.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
@@ -33,18 +32,17 @@ const CategoriesPage = () => {
   };
 
   return (
-    <div className={styles.root}>
+    <>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Categories</title>
       </Head>
-      <Appbar />
-      <Container sx={{ marginTop: "80px" }}>
+      <Container>
         <Typography align="center" variant="h4" gutterBottom>
           Search art categories/tags that you would like to see!
         </Typography>
         <TextField
-          variant="outlined"
+          variant="outlined" 
           margin="normal"
           required
           fullWidth
@@ -82,7 +80,7 @@ const CategoriesPage = () => {
         </Container>
       </InfiniteScroll>
       <CssBaseline />
-    </div>
+    </>
   );
 };
 

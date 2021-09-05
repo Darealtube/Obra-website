@@ -40,7 +40,7 @@ const ArtList = ({
   columns = null,
 }: Props) => {
   const xs = useMediaQuery("(max-width: 570px)");
-  const sm = useMediaQuery("(max-width: 960px)");
+  const md = useMediaQuery("(max-width: 1100px)");
   const [open, setOpen] = useState(false);
   const [targetArt, settargetArt] = useState("");
   const { More, hasMore } = usePagination({
@@ -81,7 +81,7 @@ const ArtList = ({
       >
         <ImageList
           variant="masonry"
-          cols={columns ? columns : xs ? 1 : sm ? 2 : 3}
+          cols={columns ? columns : xs ? 1 : md ? 2 : 3}
           gap={8}
         >
           {data?.edges.map((tile) => (

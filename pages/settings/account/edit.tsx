@@ -19,9 +19,7 @@ const EditAccount = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Edit Account</title>
       </Head>
-      <SettingsWrap pageTitle={"Edit Account"}>
-        <EditForm editUser={editUser} />
-      </SettingsWrap>
+      <EditForm editUser={editUser} />
     </>
   );
 };

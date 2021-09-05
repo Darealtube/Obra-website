@@ -15,15 +15,6 @@ const IssuesWrap = () => {
   const { data } = useQuery(REPORT_COUNT_QUERY);
 
   return <>
-    <Box display="flex">
-      <Link href="/" passHref>
-        <IconButton component="a" size="large">
-          <KeyboardBackspaceIcon />
-        </IconButton>
-      </Link>
-      <Typography variant="h4">Reports</Typography>
-      <Divider />
-    </Box>
     <Box
       display="flex"
       marginTop={4}

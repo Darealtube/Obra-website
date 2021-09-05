@@ -20,6 +20,16 @@ export const USER_ID_QUERY = gql`
   ${UserInfo}
 `;
 
+export const DRAWER_COUNTS_QUERY = gql`
+  query DrawerCounts($userId: ID!) {
+    drawerCounts(userId: $userId) {
+      commissions
+      unreadNotif
+      issues
+    }
+  }
+`;
+
 export const APPBAR_USER_QUERY = gql`
   query UserAppbarID($id: ID!, $after: String, $limit: Int) {
     userId(id: $id) {

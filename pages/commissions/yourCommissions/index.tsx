@@ -5,7 +5,8 @@ import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/client";
 import YourCommList from "../../../Components/Commissions/Lists/YourCommList";
 import {
-  CommissionData, QueryIdVars,
+  CommissionData,
+  QueryIdVars,
 } from "../../../interfaces/QueryInterfaces";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
@@ -41,7 +42,6 @@ const YourCommissions = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Your Commissions</title>
       </Head>
-      <CssBaseline />
       <CommissionWrap>
         {data && !loading && (
           <YourCommList

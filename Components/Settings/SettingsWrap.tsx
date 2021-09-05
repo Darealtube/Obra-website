@@ -29,13 +29,7 @@ const DynamicNoSessDialog = dynamic(
   () => import("../../Components/MainPopovers/NoSessionDialog")
 );
 
-const SettingsWrap = ({
-  children,
-  pageTitle,
-}: {
-  children: ReactNode;
-  pageTitle: string;
-}) => {
+const SettingsWrap = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -92,7 +86,7 @@ const SettingsWrap = ({
                   <HomeIcon />
                 </IconButton>
               </Link>
-              <Typography variant="h4">{pageTitle}</Typography>
+              <Typography variant="h4">Settings</Typography>
             </Box>
 
             <Container>

@@ -21,12 +21,10 @@ const RecommendedList = ({ fetchMore, recommended }: Parameters) => {
   const xl = useMediaQuery(theme.breakpoints.up("lg"));
   const lg = useMediaQuery(theme.breakpoints.only("lg"));
   const md = useMediaQuery(theme.breakpoints.only("md"));
-  const sm = useMediaQuery(theme.breakpoints.only("sm"));
   const xs = useMediaQuery(theme.breakpoints.only("xs"));
-  
 
   const drawerOpenColumns = xl ? 3 : 2;
-  const drawerCloseColumns = lg || xs ? 1 : md ? 3 : 2;
+  const drawerCloseColumns = xl || lg || xs ? 1 : md ? 3 : 2;
 
   return (
     <>

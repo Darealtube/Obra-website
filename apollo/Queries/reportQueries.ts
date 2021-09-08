@@ -119,7 +119,6 @@ export const REPORT_ID_QUERY = gql`
       reportedId {
         ... on Post {
           ...PostInfo
-          price
         }
         ... on Comment {
           id

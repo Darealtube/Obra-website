@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Grid, Tab, Tabs } from "@material-ui/core";
+import { Box, Button, Grid, Tab, Tabs, Typography } from "@material-ui/core";
 import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
@@ -29,7 +29,7 @@ const ProfileWrap = ({
   const handleTabChange = (event, newValue) => {
     setTabsValue(newValue);
     router.push(newValue);
-  }; 
+  };
 
   return (
     <>
@@ -58,17 +58,15 @@ const ProfileWrap = ({
             {artist && <UserInfo artist={artist} userLiked={userLiked} />}
           </Grid>
         )}
-        <Grid
-          item
-          xs={12}
-          md={galleryView ? 12 : 8}
-        >
+        <Grid item xs={12} md={galleryView ? 12 : 8}>
           <Button
             onClick={handleGallery}
             startIcon={<PanoramaIcon />}
-            sx={{ marginLeft: "8px" }}
+            sx={{ marginTop: "16px" }}
           >
-            {!galleryView ? "Gallery View" : "Exit Gallery View"}
+            <Typography align="center">
+              {!galleryView ? "Gallery View" : "Exit Gallery View"}
+            </Typography>
           </Button>
           <Box
             display="flex"

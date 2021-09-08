@@ -1,11 +1,10 @@
 import { Box, Typography, Button } from "@material-ui/core";
 import { ReactNode } from "react";
 import Link from "next/link";
-import styles from "../../pages/styles/Specific/Commission.module.css";
 
 const CommissionWrap = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <>
       <Typography variant="h4" style={{ flexGrow: 1 }} align="center">
         Commissions
       </Typography>
@@ -43,7 +42,7 @@ const CommissionWrap = ({ children }: { children: ReactNode }) => {
       <Box display="flex" flexDirection="column">
         {children}
       </Box>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-import { Box, CssBaseline, Container } from "@material-ui/core";
-import styles from "../../styles/General/Issues.module.css";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { addApolloState } from "../../../apollo/apolloClient";
@@ -15,26 +13,22 @@ const CommentIssues = () => {
   const {
     data: { reports },
     fetchMore,
-  } = useQuery<ReportData,ReportVars>(REPORTED_COMMENTS_QUERY, {
+  } = useQuery<ReportData, ReportVars>(REPORTED_COMMENTS_QUERY, {
     variables: {
       limit: 4,
     },
   });
 
   return (
-    <div className={styles.wrapRoot}>
+    <>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Comment Issues</title>
       </Head>
-      <CssBaseline />
-      <Container>
-      <IssuesWrap />
-      <Box display="flex" flexDirection="column">
+      <IssuesWrap>
         <ReportList reports={reports} fetchMore={fetchMore} />
-      </Box>
-      </Container>
-    </div>
+      </IssuesWrap>
+    </>
   );
 };
 

@@ -6,8 +6,10 @@ import {
   Paper,
   Button,
 } from "@material-ui/core";
+import { useContext } from "react";
 import { ReportInterface } from "../../../interfaces/ReportInterface";
 import styles from "../../../pages/styles/General/Issues.module.css";
+import { AppContext } from "../../Appbar/AppWrap";
 
 type ReportProps = {
   report: ReportInterface;
@@ -15,17 +17,28 @@ type ReportProps = {
 };
 
 const BugReport = ({ report, handleOpen }: ReportProps) => {
+  const drawerOpen = useContext(AppContext);
   return (
     <>
       <Container className={styles.bugContainer}>
-        <Grid container spacing={2} style={{height: "100%", width: "100%"}}>
-          <Grid item xs={12} md={6} className={styles.bugItem}>
-            <video width="100%" height="320" controls>
+        <Grid container spacing={2} style={{ height: "100%", width: "100%" }}>
+          <Grid
+            item
+            xs={12}
+            md={drawerOpen ? 12 : 6}
+            className={styles.bugItem}
+          >
+            <video width="100%" height="50%" controls>
               <source src={report.bugVid} type={`video/${report.vidFormat}`} />
               Your browser does not support the video tag.
             </video>
           </Grid>
-          <Grid item xs={12} md={6} className={styles.bugItem}>
+          <Grid
+            item
+            xs={12}
+            md={drawerOpen ? 12 : 6}
+            className={styles.bugItem}
+          >
             <Paper elevation={6}>
               <Container>
                 <Box marginTop={4}>

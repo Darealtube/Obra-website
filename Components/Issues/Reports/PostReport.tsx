@@ -5,11 +5,12 @@ import {
   Typography,
   Paper,
   Button,
-  CssBaseline,
 } from "@material-ui/core";
 import styles from "../../../pages/styles/General/Issues.module.css";
 import Image from "next/image";
 import { ReportInterface } from "../../../interfaces/ReportInterface";
+import { useContext } from "react";
+import { AppContext } from "../../Appbar/AppWrap";
 
 type ReportProps = {
   report: ReportInterface;
@@ -18,12 +19,30 @@ type ReportProps = {
 };
 
 const PostReport = ({ report, handleReportOpen, handleOpen }: ReportProps) => {
+  const drawerOpen = useContext(AppContext);
   return (
     <>
-      <Container style={{ maxHeight: "100%", maxWidth: "100%" }}>
-        <Grid container>
-          <Grid item xs={12} md={6} className={styles.item}>
-            <Box position="relative" height="100%" width="100%">
+      <Container>
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            md={drawerOpen ? 12 : 6}
+            className={styles.item}
+            sx={{
+              background: `url(${report.reportedId.art}) no-repeat`,
+              backgroundSize: "cover",
+            }}
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              position="relative"
+              height="100%"
+              width="100%"
+              sx={{ backdropFilter: "blur(10px)" }}
+            >
               <Image
                 src={report.reportedId.art}
                 layout="fill"
@@ -32,32 +51,9 @@ const PostReport = ({ report, handleReportOpen, handleOpen }: ReportProps) => {
               />
             </Box>
           </Grid>
-          <Grid item xs={12} md={6} className={styles.item}>
+          <Grid item xs={12} md={drawerOpen ? 12 : 6} className={styles.item}>
             <Paper elevation={6} className={styles.paper}>
               <Container>
-                {/* <Box display="flex" marginTop={2}>
-                  <Image
-                    src={report.reportedId.author.image}
-                    width={40}
-                    height={40}
-                    className={styles.avatar}
-                  />
-                  <Typography variant="h6">
-                    Posted by {report.reportedId.author.name} on{" "}
-                    {report.reportedId.date}
-                  </Typography>
-                </Box>
-                <Box display="flex" marginTop={2}>
-                  <Image
-                    src={report.senderId.image}
-                    width={40}
-                    height={40}
-                    className={styles.avatar}
-                  />
-                  <Typography variant="h6">
-                    Reported by {report.senderId.name} on {report.date}
-                  </Typography>
-                </Box> */}
                 <Box marginTop={4}>
                   <Typography variant="h4" align="center" gutterBottom>
                     Details

@@ -35,8 +35,6 @@ const drawerWidth = "24vw";
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme, open }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -49,6 +47,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
     }),
     marginLeft: 0,
   }),
+  maxWidth: "100%",
+  marginTop: "24px"
 }));
 
 const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -173,7 +173,7 @@ const AppWrap = ({ children }) => {
             color="primary"
             onClick={handleDrawer}
             variant="extended"
-            sx={{ position: "sticky", top: "5px" }}
+            sx={{ position: "fixed", top: 8, left: 8, zIndex: 1 }}
           >
             <MenuIcon />
             <Image

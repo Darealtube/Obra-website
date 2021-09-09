@@ -55,7 +55,7 @@ const useArt = (initPlaceHolder: string) => {
 
 async function getSignature() {
   //Call API which handles the signature and timestamp
-  const response = await fetch("/api/cloud_sign");
+  const response = await fetch("/api/image_cloud_sign");
   //Get the response in JSON format
   const data = await response.json();
   //Extract signature and timestamp

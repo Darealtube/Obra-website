@@ -78,6 +78,8 @@ const BugReport = () => {
     }
   }, [session, sessload]);
 
+  console.log(bugReport);
+
   return (
     <>
       <Head>
@@ -96,7 +98,7 @@ const BugReport = () => {
               />
             </Grid>
             <Grid item xs={12} className={styles.formItem}>
-              <Box className={styles.formBoxes} marginRight={2}>
+              <Box width="50%" className={styles.formBoxes} marginRight={2}>
                 <TextField
                   variant="outlined"
                   margin="none"
@@ -114,6 +116,7 @@ const BugReport = () => {
               <Box
                 display="flex"
                 flexDirection="column"
+                width="50%"
                 className={styles.formBoxes}
               >
                 <InputLabel>What is the reason of this report?</InputLabel>

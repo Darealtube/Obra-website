@@ -24,6 +24,8 @@ import { COMMISSION_COUNT_QUERY } from "../../apollo/Queries/commsQueries";
 import PersonIcon from "@material-ui/icons/Person";
 import { REPORT_COUNT_QUERY } from "../../apollo/Queries/reportQueries";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
+import dynamic from "next/dynamic";
+import { AppbarUserData } from "../../interfaces/QueryInterfaces";
 
 function Copyright() {
   return (
@@ -34,6 +36,8 @@ function Copyright() {
     </Typography>
   );
 }
+
+const DynamicNotifPop = dynamic(() => import("../Appbar/Popovers/NotifPop"));
 
 const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
@@ -64,11 +68,11 @@ const MoreItems = [
 ];
 
 type DrawerProps = {
-  userName: string;
-  admin: boolean;
+  user: AppbarUserData;
+  moreNotif: any;
 };
 
-const DrawerItems = ({ userName, admin }: DrawerProps) => {
+const DrawerItems = ({ user, moreNotif }: DrawerProps) => {
   const [session] = useSession();
   const { data } = useQuery(COMMISSION_COUNT_QUERY, {
     variables: {
@@ -77,11 +81,11 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
     skip: !session,
   });
   const { data: reports } = useQuery(REPORT_COUNT_QUERY, {
-    skip: !admin,
+    skip: !user?.userId.admin,
   });
 
   return (
-    <div>
+    <>
       <Link href={"/"} passHref>
         <ListItem button component="a">
           <ListItemIcon>
@@ -100,7 +104,7 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
       </Link>
       {session && (
         <>
-          <Link href={`/profile/${userName}/`} passHref>
+          <Link href={`/profile/${user.userId.name}/`} passHref>
             <ListItem button component="a">
               <ListItemIcon>
                 <PersonIcon />
@@ -108,7 +112,11 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
               <ListItemText>Profile</ListItemText>
             </ListItem>
           </Link>
-          <ListItem button component="a" href={`/profile/${userName}/liked`}>
+          <ListItem
+            button
+            component="a"
+            href={`/profile/${user.userId.name}/liked`}
+          >
             <ListItemIcon>
               <FavoriteIcon />
             </ListItemIcon>
@@ -125,6 +133,7 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
               <ListItemText>Commissions</ListItemText>
             </Badge>
           </ListItem>
+          <DynamicNotifPop user={user} fetchMore={moreNotif} />
           <ListItem component={Button} onClick={handleSignOut}>
             <ListItemIcon>
               <ExitToAppIcon />
@@ -145,7 +154,7 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
           </ListItem>
         </Link>
       ))}
-      {admin && (
+      {user?.userId.admin && (
         <Link href="/issues/post" passHref>
           <ListItem button component="a">
             <ListItemIcon>
@@ -201,7 +210,7 @@ const DrawerItems = ({ userName, admin }: DrawerProps) => {
       <ListItem>
         <Copyright />
       </ListItem>
-    </div>
+    </>
   );
 };
 

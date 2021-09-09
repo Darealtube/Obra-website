@@ -8,6 +8,7 @@ import { useQuery } from "@apollo/client";
 import BugReportList from "../../../Components/Issues/Lists/BugReportList";
 import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
 import { BUG_REPORTS_QUERY } from "../../../apollo/Queries/reportQueries";
+import AppWrap from "../../../Components/Appbar/AppWrap";
 
 const BugReports = () => {
   const {
@@ -25,9 +26,7 @@ const BugReports = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Bug Reports</title>
       </Head>
-      <IssuesWrap>
-        <BugReportList reports={reports} fetchMore={fetchMore} />
-      </IssuesWrap>
+      <BugReportList reports={reports} fetchMore={fetchMore} />
     </>
   );
 };
@@ -47,6 +46,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       session,
     },
   });
+};
+
+BugReports.getWrap = function wrap(page) {
+  return (
+    <>
+      <AppWrap>
+        <IssuesWrap>{page}</IssuesWrap>
+      </AppWrap>
+    </>
+  );
 };
 
 export default BugReports;

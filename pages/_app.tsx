@@ -6,12 +6,14 @@ import "./styles/patch.css";
 import { Provider } from "next-auth/client";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../apollo/apolloClient";
-import SettingsWrap from "../Components/Settings/SettingsWrap";
 import AppWrap from "../Components/Appbar/AppWrap";
+
+const defaultWrap = (page) => <AppWrap>{page}</AppWrap>;
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const apolloClient = useApollo(pageProps);
+  const getWrap = Component.getWrap || defaultWrap;
   useEffect(() => {
     const handleRouteStart = () => {
       start();
@@ -29,24 +31,10 @@ export default function MyApp({ Component, pageProps }) {
     };
   }, []);
 
-  if (router.pathname.startsWith("/settings/")) {
-    return (
-      <ApolloProvider client={apolloClient}>
-        <Provider session={pageProps.session}>
-          <SettingsWrap>
-            <Component {...pageProps} />
-          </SettingsWrap>
-        </Provider>
-      </ApolloProvider>
-    );
-  }
-
   return (
     <ApolloProvider client={apolloClient}>
       <Provider session={pageProps.session}>
-        <AppWrap>
-          <Component {...pageProps} />
-        </AppWrap>
+        {getWrap(<Component {...pageProps} />)}
       </Provider>
     </ApolloProvider>
   );

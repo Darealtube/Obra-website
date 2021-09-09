@@ -1,7 +1,7 @@
 import React from "react";
-import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 import Head from "next/head";
 import MainInfo from "../../../Components/Settings/Account/MainInfo";
+import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 
 const AccountSettings = () => {
   return (
@@ -11,6 +11,14 @@ const AccountSettings = () => {
         <title>Account</title>
       </Head>
       <MainInfo />
+    </>
+  );
+};
+
+AccountSettings.getWrap = function wrap(page) {
+  return (
+    <>
+      <SettingsWrap>{page}</SettingsWrap>
     </>
   );
 };

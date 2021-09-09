@@ -32,4 +32,12 @@ const CommSettingsEdit = () => {
   );
 };
 
+CommSettingsEdit.getWrap = function wrap(page) {
+  return (
+    <>
+      <SettingsWrap>{page}</SettingsWrap>
+    </>
+  );
+};
+
 export default CommSettingsEdit;

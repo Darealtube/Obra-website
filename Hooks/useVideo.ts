@@ -25,10 +25,6 @@ const useVideo = (initPlaceHolder: string) => {
     data.append("signature", signature); // Signature
     data.append("timestamp", timestamp); // Timestamp
     data.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_KEY);
-    data.append(
-      "eager",
-      "w_400,h_400,g_south_east,x_5,y_5,l_obra_watermark,o_76"
-    );
     const res = await fetch(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/video/upload`,
       {
@@ -38,6 +34,7 @@ const useVideo = (initPlaceHolder: string) => {
       }
     );
     const file = await res.json();
+    console.log(file)
     url = await file.secure_url;
     format = await file.format;
     let reader = new FileReader();
@@ -53,7 +50,7 @@ const useVideo = (initPlaceHolder: string) => {
 
 async function getSignature() {
   //Call API which handles the signature and timestamp
-  const response = await fetch("/api/cloud_sign");
+  const response = await fetch("/api/video_cloud_sign");
   //Get the response in JSON format
   const data = await response.json();
   //Extract signature and timestamp

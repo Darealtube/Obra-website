@@ -21,7 +21,7 @@ import { useState } from "react";
 
 type AppBarProps = {
   user: AppbarUserData;
-  fetchMore: any;
+  moreNotif: any;
 };
 
 const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,7 +36,7 @@ const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
   });
 };
 
-const Appbar = ({ user, fetchMore }: AppBarProps) => {
+const Appbar = ({ user, moreNotif }: AppBarProps) => {
   const [session, loading] = useSession();
   const [open, setOpen] = useState(false);
   const swipeable = useMediaQuery(`(max-width: 480px)`);
@@ -77,7 +77,7 @@ const Appbar = ({ user, fetchMore }: AppBarProps) => {
           </Typography>
           {/* Drawer and Logo */}
           {session && !loading && user ? (
-            <AppbarMenu user={user} fetchMore={fetchMore} />
+            <AppbarMenu user={user} />
           ) : !session && !loading ? (
             <Button
               startIcon={<AccountCircleOutlinedIcon />}
@@ -95,32 +95,17 @@ const Appbar = ({ user, fetchMore }: AppBarProps) => {
       {/* App Bar */}
 
       {/* Drawer */}
-      {swipeable ? (
-        <SwipeableDrawer
-          anchor={"left"}
-          open={open}
-          onClose={handleDrawer}
-          onOpen={handleDrawer}
-        >
-          <List className={styles.list}>
-            <DrawerItems
-              userName={user?.userId.name}
-              admin={user?.userId.admin}
-            />{" "}
-            {/* Drawer List */}
-          </List>
-        </SwipeableDrawer>
-      ) : (
-        <Drawer anchor={"left"} open={open} onClose={handleDrawer}>
-          <List className={styles.list}>
-            <DrawerItems
-              userName={user?.userId.name}
-              admin={user?.userId.admin}
-            />{" "}
-            {/* Drawer List */}
-          </List>
-        </Drawer>
-      )}
+      <SwipeableDrawer
+        anchor={"left"}
+        open={open}
+        onClose={handleDrawer}
+        onOpen={handleDrawer}
+      >
+        <List className={styles.list}>
+          <DrawerItems user={user} moreNotif={moreNotif} />
+          {/* Drawer List */}
+        </List>
+      </SwipeableDrawer>
       {/* Drawer */}
     </div>
   );

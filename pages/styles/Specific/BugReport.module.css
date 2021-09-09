@@ -23,10 +23,6 @@
   flex-direction: row;
 }
 
-.formBoxes {
-  width: 50%;
-}
-
 @media all and (max-width: 599px) {
   .formItem {
     flex-direction: column;

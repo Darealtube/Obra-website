@@ -8,6 +8,7 @@ import { useQuery } from "@apollo/client";
 import ReportList from "../../../Components/Issues/Lists/ReportList";
 import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
 import { REPORTED_COMMENTS_QUERY } from "../../../apollo/Queries/reportQueries";
+import AppWrap from "../../../Components/Appbar/AppWrap";
 
 const CommentIssues = () => {
   const {
@@ -25,9 +26,7 @@ const CommentIssues = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Comment Issues</title>
       </Head>
-      <IssuesWrap>
-        <ReportList reports={reports} fetchMore={fetchMore} />
-      </IssuesWrap>
+      <ReportList reports={reports} fetchMore={fetchMore} />
     </>
   );
 };
@@ -49,4 +48,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   });
 };
 
+CommentIssues.getWrap = function wrap(page) {
+  return (
+    <>
+      <AppWrap>
+        <IssuesWrap>{page}</IssuesWrap>
+      </AppWrap>
+    </>
+  );
+};
 export default CommentIssues;

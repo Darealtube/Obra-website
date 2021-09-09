@@ -8,6 +8,7 @@ import { useQuery } from "@apollo/client";
 import ReportList from "../../../Components/Issues/Lists/ReportList";
 import { ReportData, ReportVars } from "../../../interfaces/QueryInterfaces";
 import { REPORTED_POSTS_QUERY } from "../../../apollo/Queries/reportQueries";
+import AppWrap from "../../../Components/Appbar/AppWrap";
 
 const PostIssues = () => {
   const {
@@ -25,9 +26,7 @@ const PostIssues = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Post Issues</title>
       </Head>
-      <IssuesWrap>
-        <ReportList reports={reports} fetchMore={fetchMore} />
-      </IssuesWrap>
+      <ReportList reports={reports} fetchMore={fetchMore} />
     </>
   );
 };
@@ -47,6 +46,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       session,
     },
   });
+};
+
+PostIssues.getWrap = function wrap(page) {
+  return (
+    <>
+      <AppWrap>
+        <IssuesWrap>{page}</IssuesWrap>
+      </AppWrap>
+    </>
+  );
 };
 
 export default PostIssues;

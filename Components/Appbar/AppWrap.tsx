@@ -10,7 +10,6 @@ import {
   Divider,
   useMediaQuery,
   Box,
-  Avatar,
   ListItemSecondaryAction,
   Button,
   Skeleton,
@@ -48,7 +47,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
     marginLeft: 0,
   }),
   maxWidth: "100%",
-  marginTop: "24px"
+  marginTop: "24px",
 }));
 
 const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,69 +101,72 @@ const AppWrap = ({ children }) => {
           >
             <List>
               {session && !loading && user ? (
-                <ListItem>
-                  <ListItemIcon>
-                    {user?.userId.image ? (
+                <>
+                  <ListItem>
+                    <ListItemIcon>
                       <Image
-                        src={user.userId.image}
+                        src={
+                          user.userId.image
+                            ? user.userId.image
+                            : "/user-empty-avatar.png"
+                        }
                         width={40}
                         height={40}
                         className={styles.avatar}
                         alt={"User Image"}
                       />
-                    ) : (
-                      <Avatar src="" />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={user?.userId.name}
-                    sx={{ wordBreak: "break-all" }}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={handleDrawer}>
-                      <MenuIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={user?.userId.name}
+                      sx={{ wordBreak: "break-all" }}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={handleDrawer}>
+                        <MenuIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                  <Divider />
+                  <DrawerItems user={user} moreNotif={moreNotif} />
+                </>
               ) : !session && !loading ? (
-                <ListItem component={Button} onClick={handleSignIn}>
-                  <ListItemIcon>
-                    <AccountCircleOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText>Sign In</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={handleDrawer}>
-                      <MenuIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                <>
+                  <ListItem component={Button} onClick={handleSignIn}>
+                    <ListItemIcon>
+                      <AccountCircleOutlinedIcon />
+                    </ListItemIcon>
+                    <ListItemText>Sign In</ListItemText>
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={handleDrawer}>
+                        <MenuIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                  <Divider />
+                  <DrawerItems user={user} moreNotif={moreNotif} />
+                </>
               ) : (
-                <ListItem>
-                  <ListItemIcon>
-                    <Skeleton variant="circular" width={40} height={40} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <>
-                        <Skeleton variant="rectangular" />
-                      </>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={handleDrawer}>
-                      <MenuIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )}
-              <Divider />
-              {!loading ? (
-                <DrawerItems
-                  userName={user?.userId.name}
-                  admin={user?.userId.admin}
-                />
-              ) : (
-                <SkeletonDrawer />
+                <>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Skeleton variant="circular" width={40} height={40} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <>
+                          <Skeleton variant="rectangular" />
+                        </>
+                      }
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={handleDrawer}>
+                        <MenuIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                  <Divider />
+                  <SkeletonDrawer />
+                </>
               )}
             </List>
           </Drawer>
@@ -193,7 +195,7 @@ const AppWrap = ({ children }) => {
         </>
       ) : (
         <>
-          <Appbar fetchMore={moreNotif} user={user} />
+          <Appbar user={user} moreNotif={moreNotif} />
           <AppContext.Provider value={mobile ? false : open}>
             <Box marginTop="80px">{children}</Box>
           </AppContext.Provider>

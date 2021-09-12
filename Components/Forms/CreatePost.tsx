@@ -13,6 +13,7 @@ import React from "react";
 import { useState } from "react";
 import { Action, State, Tag } from "../../Hooks/Reducers/PostReducer";
 import useSearch from "../../Hooks/useSearch";
+import { TagEdges, TagInterface } from "../../interfaces/PostInterface";
 
 interface Props {
   post: State;
@@ -99,7 +100,7 @@ const PostForm = ({ post, disabled, dispatch }: Props) => {
         >
           <Autocomplete
             id="asynchronous-demo"
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option: TagInterface) => option.name}
             isOptionEqualToValue={(option, value) => option.name === value.name}
             filterSelectedOptions
             onOpen={handleTagActive}
@@ -111,7 +112,7 @@ const PostForm = ({ post, disabled, dispatch }: Props) => {
             inputValue={post.tagInput}
             onInputChange={handleTagInput}
             onKeyPress={handleCustomTag}
-            options={options.map((item) => item.node)}
+            options={(options as TagEdges[]).map((item) => item.node)}
             loading={loading}
             noOptionsText={<Typography>No Tags Found...</Typography>}
             renderOption={(props, option: Tag, _status) => (

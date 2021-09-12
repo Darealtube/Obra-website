@@ -44,7 +44,7 @@ const Notification = ({
     resetNotif();
   };
   return (
-    <div>
+    <>
       <ListItem className={styles.notifitem}>
         <Avatar className={styles.icon}>O</Avatar>
         <div>
@@ -110,7 +110,7 @@ const Notification = ({
             </Link>
           ))
         : ""}
-    </div>
+    </>
   );
 };
 

@@ -24,6 +24,7 @@ export interface UserInterface {
   admin: boolean;
   commissionPoster: string;
   commissionRates: Rates[];
+  isLikedBy?: boolean;
   // More to come
 }
 
@@ -31,10 +32,6 @@ export interface Rates {
   __typename?: string;
   type: string;
   price: number;
-}
-
-export interface UserData {
-  user: UserInterface;
 }
 
 export interface NotifInterface {
@@ -96,4 +93,14 @@ export interface Posts {
 export interface PageInfo {
   endCursor: string;
   hasNextPage: boolean;
+}
+
+export interface UserEdges {
+  node: UserInterface;
+}
+
+export interface Users {
+  edges: UserEdges[];
+  pageInfo: PageInfo;
+  totalCount: number;
 }

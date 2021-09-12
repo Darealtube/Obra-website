@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Container,
-  CssBaseline,
   ImageList,
   ImageListItem,
   Typography,
@@ -11,7 +10,6 @@ import {
 } from "@material-ui/core";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { addApolloState } from "../../apollo/apolloClient";
-import Appbar from "../../Components/Appbar/Appbar";
 import ArtList from "../../Components/ArtList";
 import {
   fetchCategoryPosts,
@@ -21,6 +19,10 @@ import styles from "../styles/General/Home.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { CATEGORY_POSTS_QUERY } from "../../apollo/Queries/categoryQueries";
+import {
+  CategoryPostsData,
+  CategoryPostsVars,
+} from "../../interfaces/QueryInterfaces";
 
 const skeletalArts = [
   { width: 160, height: 320 },
@@ -29,14 +31,17 @@ const skeletalArts = [
   { width: 1800, height: 920 },
 ];
 
-const Category = ({ category }) => {
+const Category = ({ category }: { category: string }) => {
   const router = useRouter();
-  const { data, fetchMore } = useQuery(CATEGORY_POSTS_QUERY, {
-    variables: {
-      category,
-      limit: 20,
-    },
-  });
+  const { data, fetchMore } = useQuery<CategoryPostsData, CategoryPostsVars>(
+    CATEGORY_POSTS_QUERY,
+    {
+      variables: {
+        category,
+        limit: 20,
+      },
+    }
+  );
 
   if (router.isFallback) {
     return (
@@ -69,8 +74,6 @@ const Category = ({ category }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>{category ? category : " Loading Page..."}</title>
       </Head>
-      <CssBaseline />
-      <Appbar />
       <Container className={styles.content}>
         {data?.categoryPosts && (
           <>

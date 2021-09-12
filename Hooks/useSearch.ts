@@ -1,14 +1,22 @@
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { SEARCH_QUERY } from "../apollo/Queries/categoryQueries";
+import { Categories } from "../interfaces/PostInterface";
+import { SearchData, SearchVars } from "../interfaces/QueryInterfaces";
+import { Users } from "../interfaces/UserInterface";
 
 type SearchProps = {
   key: string;
-  type: string;
+  type: "user" | "category" | "tag";
   open: boolean;
   limit?: number;
   executeOnMount?: boolean;
 };
+
+/* This is another hook originally developed that returns an option based on the key (searchInput), the type(searchType),
+   and it can be configured to run onMount or not. This can be used in any component as long as the required props are 
+   passed. It also supports pagination.
+*/
 
 const useSearch = ({
   key,
@@ -21,7 +29,7 @@ const useSearch = ({
   const [after, setAfter] = useState("" || null);
   const [hasMore, sethasMore] = useState(false);
   const [loadOptions, { loading, data, fetchMore: fetchMoreOptions }] =
-    useLazyQuery(SEARCH_QUERY);
+    useLazyQuery<SearchData, SearchVars>(SEARCH_QUERY);
   // If the search bar is active, detect if the user is still typing in the search bar.
   useEffect(() => {
     let typeTimer;
@@ -52,8 +60,16 @@ const useSearch = ({
   */
   useEffect(() => {
     if (data?.search) {
-      setAfter(type == "tag" ? null : data?.search.pageInfo.endCursor);
-      sethasMore(type == "tag" ? false : data?.search.pageInfo.hasNextPage);
+      setAfter(
+        type == "tag"
+          ? null
+          : (data?.search as Users | Categories).pageInfo.endCursor
+      );
+      sethasMore(
+        type == "tag"
+          ? false
+          : (data?.search as Users | Categories).pageInfo.hasNextPage
+      );
     }
   }, [data, type]);
 

@@ -1,11 +1,10 @@
 .root {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  max-height: 100%;
 }
 
 .content {
-  margin-top: 80px;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -13,7 +12,7 @@
 
 .categoryContainer {
   margin-top: 16px;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
   height: 100%;
   width: 100%;
 }
@@ -22,7 +21,7 @@
   height: 10vh;
   text-align: center;
   font-size: x-large;
-  box-shadow: 10px 11px 24px 2px rgba(58,50,50,0.81);
+  box-shadow: 10px 11px 24px 2px rgba(58, 50, 50, 0.81);
   border-radius: 50px 50px 50px 50px;
 }
 
@@ -79,4 +78,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.searchBarContainer {
+  display: flex;
+}
+
+@media all and (max-width: 320px) {
+  .searchBarContainer {
+    display: flex;
+    flex-direction: column;
+  }
 }

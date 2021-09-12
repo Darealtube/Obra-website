@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 
 const CommissionInfo = () => {
-const user = useContext(UserContext);
+const user = useContext(UserContext); // User Settings Information
   return (
     <>
         <Grid

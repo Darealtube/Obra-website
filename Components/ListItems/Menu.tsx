@@ -11,6 +11,11 @@ import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import { signOut } from "next-auth/client";
 import styles from "../../pages/styles/Specific/Lists.module.css";
 
+const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
+  signOut({ callbackUrl: "https://obra-website.vercel.app/" });
+};
+
 const Menu = ({ name }: { name: string }) => {
   // handleSignOut will sign a user out of the page and remove their session.
   // This should be set as an absolute url, and we could set it as the official
@@ -21,13 +26,8 @@ const Menu = ({ name }: { name: string }) => {
     when in development mode, to https://obra-website.vercel.app/ when deploying to
     vercel (production).
   */
-  const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    signOut({ callbackUrl: "https://obra-website.vercel.app/" });
-  };
-
   return (
-    <div>
+    <>
       <ListItem>
         <Link href={`/profile/${encodeURIComponent(name)}`} passHref>
           <Button component="a" className={styles.item}>
@@ -74,7 +74,7 @@ const Menu = ({ name }: { name: string }) => {
           <ContactSupportIcon className={styles.icon} /> Send Feedback
         </Button>
       </ListItem>
-    </div>
+    </>
   );
 };
 

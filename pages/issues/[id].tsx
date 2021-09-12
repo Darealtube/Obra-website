@@ -1,5 +1,3 @@
-import { CssBaseline } from "@material-ui/core";
-import styles from "../styles/General/Issues.module.css";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
@@ -56,45 +54,39 @@ const ReportID = ({ id }) => {
 
   return (
     <>
-      <div className={styles.wrapRoot}>
-        <CssBaseline />
-        <Head>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-          <title>Issue Details</title>
-        </Head>
-        {data?.reportId && data?.reportId?.type === "Post" ? (
-          <PostReport
-            report={data?.reportId}
-            handleOpen={handleOpen}
-            handleReportOpen={handleReportOpen}
-          />
-        ) : data?.reportId?.type === "Comment" ? (
-          <CommentReport
-            report={data?.reportId}
-            handleOpen={handleOpen}
-            handleReportOpen={handleReportOpen}
-          />
-        ) : data?.reportId?.type === "Bug" ? (
-          <BugReport report={data?.reportId} handleOpen={handleOpen} />
-        ) : (
-          ""
-        )}
-        <DynamicReportDialog
-          open={reportDialog}
-          handleClose={handleReportClose}
-          report={Report}
-          push={true}
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Issue Details</title>
+      </Head>
+      {data?.reportId && data?.reportId?.type === "Post" ? (
+        <PostReport
+          report={data?.reportId}
+          handleOpen={handleOpen}
+          handleReportOpen={handleReportOpen}
         />
-        <DynamicDeleteDialog
-          handleClose={handleClose}
-          open={deleteDialog}
-          targetId={id}
-          push={true}
+      ) : data?.reportId?.type === "Comment" ? (
+        <CommentReport
+          report={data?.reportId}
+          handleOpen={handleOpen}
+          handleReportOpen={handleReportOpen}
         />
-      </div>
+      ) : data?.reportId?.type === "Bug" ? (
+        <BugReport report={data?.reportId} handleOpen={handleOpen} />
+      ) : (
+        ""
+      )}
+      <DynamicReportDialog
+        open={reportDialog}
+        handleClose={handleReportClose}
+        report={Report}
+        push={true}
+      />
+      <DynamicDeleteDialog
+        handleClose={handleClose}
+        open={deleteDialog}
+        targetId={id}
+        push={true}
+      />
     </>
   );
 };

@@ -13,6 +13,8 @@ import styles from "../../../pages/styles/General/Issues.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { ReportInterface } from "../../../interfaces/ReportInterface";
+import { useContext } from "react";
+import { AppContext } from "../../Appbar/AppWrap";
 
 type ReportProps = {
   report: ReportInterface;
@@ -25,10 +27,11 @@ const CommentReport = ({
   handleReportOpen,
   handleOpen,
 }: ReportProps) => {
+  const drawerOpen = useContext(AppContext);
   return (
     <>
-      <Grid container spacing={2} style={{ height: "100vh", width: "100vw" }}>
-        <Grid item xs={12} md={6} className={styles.comment}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={drawerOpen ? 12 : 6} className={styles.comment}>
           <Paper elevation={6} className={styles.commentPaper}>
             <Container>
               {report.reportedId.author.name} sent this comment:
@@ -64,32 +67,14 @@ const CommentReport = ({
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6} className={styles.commentitem}>
+        <Grid
+          item
+          xs={12}
+          md={drawerOpen ? 12 : 6}
+          className={styles.commentitem}
+        >
           <Paper elevation={6} className={styles.paper}>
             <Container>
-              {/* <Box display="flex" marginTop={2}>
-                    <Image
-                      src={report.reportedId.author.image}
-                      width={40}
-                      height={40}
-                      className={styles.avatar}
-                    />
-                    <Typography variant="h6">
-                      Posted by {report.reportedId.author.name} on{" "}
-                      {report.reportedId.date}
-                    </Typography>
-                  </Box>
-                  <Box display="flex" marginTop={2}>
-                    <Image
-                      src={report.senderId.image}
-                      width={40}
-                      height={40}
-                      className={styles.avatar}
-                    />
-                    <Typography variant="h6">
-                      Reported by {report.senderId.name} on {report.date}
-                    </Typography>
-                  </Box> */}
               <Box marginTop={4}>
                 <Typography variant="h4" align="center" gutterBottom>
                   Details

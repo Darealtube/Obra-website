@@ -1,16 +1,13 @@
 import React, { useReducer, useRef, useState } from "react";
 import {
-  CssBaseline,
   CircularProgress,
   Typography,
-  IconButton,
   Box,
   Container,
   Grid,
   Button,
 } from "@material-ui/core";
 import Image from "next/image";
-import styles from "./styles/General/Create.module.css";
 import Head from "next/head";
 import { useSession } from "next-auth/client";
 import { useMutation } from "@apollo/client";
@@ -25,13 +22,11 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { PostValidate } from "../utils/postValidator";
 import { useRouter } from "next/router";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
-import Link from "next/link";
 import { CREATE_POST_MUTATION } from "../apollo/Mutations/postMutations";
 
-const DynamicError = dynamic(
-  () => import("../Components/Forms/Snackbars/ConfigSnack")
+const DynamicErrorSnack = dynamic(
+  () => import("../Components/Forms/Snackbars/ErrorSnack")
 );
 
 const DynamicNoSessDialog = dynamic(
@@ -125,20 +120,11 @@ const Create = () => {
   }, [session, sessload]);
 
   return (
-    <div className={styles.root}>
+    <>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Create</title>
       </Head>
-      <CssBaseline />
-      <Box display="flex" alignItems="center">
-        <Link href="/" passHref>
-          <IconButton component="a">
-            <HomeOutlinedIcon fontSize="large" />
-          </IconButton>
-        </Link>
-        <Typography variant="h4">Create</Typography>
-      </Box>
       <Container sx={{ width: "100%" }}>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -189,13 +175,13 @@ const Create = () => {
         </form>
       </Container>
 
-      <DynamicError
+      <DynamicErrorSnack
         error={post.error}
         errMessage={post.errMessage}
         handleErrorClose={handleErrorClose}
       />
       <DynamicNoSessDialog open={noSess} />
-    </div>
+    </>
   );
 };
 

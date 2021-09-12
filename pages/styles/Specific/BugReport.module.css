@@ -17,3 +17,17 @@
   justify-content: center;
   align-items: center;
 }
+
+.formItem {
+  display: flex;
+  flex-direction: row;
+}
+
+@media all and (max-width: 599px) {
+  .formItem {
+    flex-direction: column;
+  }
+  .formBoxes {
+    width: 100%;
+  }
+}

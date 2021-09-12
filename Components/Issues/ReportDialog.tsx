@@ -55,43 +55,45 @@ const ReportDialog = ({ open, handleClose, report, push }: Props) => {
     if (push) router.push("/issues/post/");
   };
 
-  return <>
-    <Dialog open={open} disableEscapeKeyDown>
-      <DialogTitle>Are you sure?</DialogTitle>
-      <form onSubmit={handleReport}>
-        <DialogContent>
-          <DialogContentText>
-            Leave a message warning the user about the report.
-          </DialogContentText>
-          <TextField
-            variant="outlined"
-            margin="none"
-            required
-            fullWidth
-            id="message"
-            label="Message"
-            placeholder="Leave a message on how you should be contacted about the
+  return (
+    <>
+      <Dialog open={open} disableEscapeKeyDown>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <form onSubmit={handleReport}>
+          <DialogContent>
+            <DialogContentText>
+              Leave a message warning the user about the report.
+            </DialogContentText>
+            <TextField
+              variant="outlined"
+              margin="none"
+              required
+              fullWidth
+              id="message"
+              label="Message"
+              placeholder="Leave a message on how you should be contacted about the
             price, and how you will transfer the art."
-            name="message"
-            color="primary"
-            inputProps={{ maxLength: 100, minLength: 20 }}
-            rows={3}
-            multiline={true}
-            maxRows={4}
-            onChange={handleChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button color="primary" type="submit">
-            Send Warning
-          </Button>
-        </DialogActions>
-      </form>
-    </Dialog>
-  </>;
+              name="message"
+              color="primary"
+              inputProps={{ maxLength: 100, minLength: 20 }}
+              rows={3}
+              multiline={true}
+              maxRows={4}
+              onChange={handleChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" type="submit">
+              Send Warning
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
+  );
 };
 
 export default ReportDialog;

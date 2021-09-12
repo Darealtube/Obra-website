@@ -1,24 +1,17 @@
-import {
-  CircularProgress,
-  useMediaQuery,
-  IconButton,
-  Box,
-  Typography,
-} from "@material-ui/core";
-import React, { useState } from "react";
+import { CircularProgress, Box } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import usePagination from "../../Hooks/usePagination";
-import dynamic from "next/dynamic";
+import { PostInterface } from "../../interfaces/PostInterface";
 
-const DynamicCommentDrawer = dynamic(() => import("./CommentDrawer"));
+type Props = {
+  postID: PostInterface;
+  fetchMore: any;
+};
 
-const Comments = ({ postID, fetchMore }) => {
-  const commentToggle = useMediaQuery("(max-width:768px)");
-  const [openComment, setOpenComment] = useState(false);
-  const { More, hasMore, ref } = usePagination({
+const Comments = ({ postID, fetchMore }: Props) => {
+  const { More, hasMore } = usePagination({
     key: "postId",
     fetchMore,
     info: postID.comments,
@@ -27,59 +20,29 @@ const Comments = ({ postID, fetchMore }) => {
     executeWhileUnscrollable: true,
   });
 
-  const handleDrawer = () => {
-    setOpenComment(!openComment);
-  };
-
   return (
     <>
       <Box marginTop={4}>
-        {commentToggle ? (
-          <>
-            <Typography align="center" variant="h6">
-              Comments
-            </Typography>
-            <IconButton
-              onClick={handleDrawer}
-              sx={{ width: "100%" }}
-              size="large"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </>
-        ) : (
-          <>
-            <CommentForm id={postID.id} />
-            <InfiniteScroll
-              dataLength={postID.comments.edges.length}
-              next={More}
-              hasMore={hasMore}
-              loader={
-                <>
-                  <br />
-                  <CircularProgress />
-                </>
-              }
-              style={{
-                overflow: "hidden",
-                textAlign: "center",
-              }}
-              scrollThreshold={0.5}
-            >
-              <CommentList comments={postID.comments.edges} />
-            </InfiniteScroll>
-          </>
-        )}
+        <CommentForm id={postID.id} />
+        <InfiniteScroll
+          dataLength={postID.comments.edges.length}
+          next={More}
+          hasMore={hasMore}
+          loader={
+            <>
+              <br />
+              <CircularProgress />
+            </>
+          }
+          style={{
+            overflow: "hidden",
+            textAlign: "center",
+          }}
+          scrollThreshold={0.5}
+        >
+          <CommentList comments={postID.comments.edges} />
+        </InfiniteScroll>
       </Box>
-      <DynamicCommentDrawer
-        id={postID.id}
-        More={More}
-        hasMore={hasMore}
-        comments={postID.comments.edges}
-        open={openComment}
-        handleDrawer={handleDrawer}
-        parentRef={ref}
-      />
     </>
   );
 };

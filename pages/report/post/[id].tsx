@@ -1,9 +1,5 @@
 import { useQuery } from "@apollo/client";
-import {
-  CssBaseline,
-  CircularProgress,
-  Box,
-} from "@material-ui/core";
+import { CircularProgress, Box } from "@material-ui/core";
 import { useSession } from "next-auth/client";
 import { useState } from "react";
 import Head from "next/head";
@@ -40,7 +36,6 @@ const ReportPost = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Report Post</title>
       </Head>
-      <CssBaseline />
       {(!data?.postId && !loading && router.query.id) ||
       (data?.postId && admin && !loading) ? (
         <DefaultErrorPage statusCode={404} />

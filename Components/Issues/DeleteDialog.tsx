@@ -31,15 +31,17 @@ const DeleteDialog = ({ open, handleClose, targetId, push }: Props) => {
     if (push) router.push("/issues/post/");
   };
 
-  return <>
-    <Dialog open={open} disableEscapeKeyDown>
-      <DialogTitle>Are you sure?</DialogTitle>
-      <DialogActions>
-        <Button onClick={handleDelete}>Yes</Button>
-        <Button onClick={handleClose}>No</Button>
-      </DialogActions>
-    </Dialog>
-  </>;
+  return (
+    <>
+      <Dialog open={open} disableEscapeKeyDown>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDelete}>Yes</Button>
+          <Button onClick={handleClose}>No</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
 };
 
 export default DeleteDialog;

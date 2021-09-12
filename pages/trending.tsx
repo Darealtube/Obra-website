@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { CssBaseline, Container, Typography } from "@material-ui/core";
 import styles from "./styles/General/Trending.module.css";
-import Appbar from "../Components/Appbar/Appbar";
 import { useQuery } from "@apollo/client";
 import {
   TrendingPostsData,
@@ -30,8 +29,7 @@ const Trending = () => {
         <title>Trending</title>
       </Head>
       <CssBaseline />
-      <Appbar />
-      <Container className={styles.content} sx={{ marginTop: "80px" }}>
+      <Container>
         <Typography variant="h2" gutterBottom align="center">
           Trending Posts
         </Typography>

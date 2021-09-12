@@ -25,8 +25,8 @@ import styles from "../../../../pages/styles/General/Settings.module.css";
 import { useRef } from "react";
 import InfoForm from "./InfoForm";
 
-const DynamicSnack = dynamic(
-  () => import("../../../Forms/Snackbars/ConfigSnack")
+const DynamicErrorSnack = dynamic(
+  () => import("../../../Forms/Snackbars/ErrorSnack")
 );
 
 const EditForm = ({ editUser }: { editUser: any }) => {
@@ -258,7 +258,7 @@ const EditForm = ({ editUser }: { editUser: any }) => {
           Save
         </Button>
       </form>
-      <DynamicSnack
+      <DynamicErrorSnack
         error={userData.error}
         errMessage={userData.errMessage}
         handleErrorClose={handleErrorClose}

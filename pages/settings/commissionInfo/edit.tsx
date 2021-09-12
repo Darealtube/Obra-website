@@ -27,9 +27,15 @@ const CommSettingsEdit = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Edit Commission Settings</title>
       </Head>
-      <SettingsWrap pageTitle={"Edit Settings"}>
-        <CommSettingsEditForm editCommSettings={editCommSettings} />
-      </SettingsWrap>
+      <CommSettingsEditForm editCommSettings={editCommSettings} />
+    </>
+  );
+};
+
+CommSettingsEdit.getWrap = function wrap(page) {
+  return (
+    <>
+      <SettingsWrap>{page}</SettingsWrap>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
-import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 import Head from "next/head";
 import MainInfo from "../../../Components/Settings/Account/MainInfo";
+import SettingsWrap from "../../../Components/Settings/SettingsWrap";
 
 const AccountSettings = () => {
   return (
@@ -10,9 +10,15 @@ const AccountSettings = () => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Account</title>
       </Head>
-      <SettingsWrap pageTitle={"Account"}>
-        <MainInfo />
-      </SettingsWrap>
+      <MainInfo />
+    </>
+  );
+};
+
+AccountSettings.getWrap = function wrap(page) {
+  return (
+    <>
+      <SettingsWrap>{page}</SettingsWrap>
     </>
   );
 };

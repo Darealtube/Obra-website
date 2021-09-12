@@ -5,9 +5,10 @@ import {
   Popover,
   Box,
   CircularProgress,
-  IconButton,
   Badge,
-  useMediaQuery,
+  ListItemIcon,
+  ListItem,
+  Button,
 } from "@material-ui/core";
 import Notification from "../../ListItems/Notification";
 import styles from "../../../pages/styles/Specific/Appbar.module.css";
@@ -29,7 +30,6 @@ type Props = {
 };
 
 const NotifPop = ({ user, fetchMore }: Props) => {
-  const showNotif = useMediaQuery("(max-width:280px)");
   const [disabled, setDisabled] = useState(false);
   const [notifAnchor, setnotifAnchor] = useState<null | HTMLElement>(null);
   const [read] = useMutation<ReadNotifData, ReadNotifVars>(READ_NOTIF);
@@ -67,12 +67,7 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     setnotifCount(0);
   };
 
-  useEffect(() => {
-    setnotifCount(
-      user.userId.notifications.totalUnreadCount + (user.userId.newUser ? 1 : 0)
-    );
-  }, [user.userId.notifications.totalUnreadCount, user.userId.newUser]);
-
+  /* This prevents notif delete spam to interfere with pagination. */
   useEffect(() => {
     if (refetching) {
       setDisabled(true);
@@ -81,63 +76,69 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     }
   }, [refetching]);
 
-  return <>
-    <IconButton
-      onClick={handleNotif}
-      style={showNotif ? { display: "none" } : { display: "inline-flex" }}
-      size="large">
-      <Badge badgeContent={notifCount} color="secondary">
-        <NotificationImportantIcon fontSize="large" htmlColor="white" />
-      </Badge>
-    </IconButton>
-    <Popover
-      anchorEl={notifAnchor}
-      keepMounted
-      open={Boolean(notifAnchor)}
-      onClose={handleNotifClose}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-    >
-      <Box className={styles.box}>
-        <Typography>Notifications</Typography>
-      </Box>
-      <Divider />
-      <List className={styles.notifmenu} id="notifList">
-        <InfiniteScroll
-          dataLength={user.userId.notifications.edges.length}
-          next={More}
-          hasMore={user.userId.notifications.pageInfo.hasNextPage}
-          loader={
-            <>
-              <br />
-              <CircularProgress />
-            </>
-          }
-          style={{
-            overflow: "hidden",
-            textAlign: "center",
-          }}
-          scrollableTarget="notifList"
-          scrollThreshold={0.9}
-        >
-          <Notification
-            newUser={user.userId.newUser}
-            notifications={
-              user.userId ? user.userId.notifications.edges : null
+  return (
+    <>
+      <ListItem
+        sx={{ color: "inherit" }}
+        component={Button}
+        onClick={handleNotif}
+      >
+        <ListItemIcon>
+          <NotificationImportantIcon />
+        </ListItemIcon>
+        <Badge badgeContent={notifCount} color="secondary">
+          <Typography variant="body1">Notifications</Typography>
+        </Badge>
+      </ListItem>
+      <Popover
+        anchorEl={notifAnchor}
+        keepMounted
+        open={Boolean(notifAnchor)}
+        onClose={handleNotifClose}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Box className={styles.box}>
+          <Typography>Notifications</Typography>
+        </Box>
+        <Divider />
+        <List className={styles.notifmenu} id="notifList">
+          <InfiniteScroll
+            dataLength={user.userId.notifications.edges.length}
+            next={More}
+            hasMore={user.userId.notifications.pageInfo.hasNextPage}
+            loader={
+              <>
+                <br />
+                <CircularProgress />
+              </>
             }
-            deleteDisabled={disabled}
-            resetNotif={handleResetNotif}
-          />
-        </InfiniteScroll>
-      </List>
-    </Popover>
-  </>;
+            style={{
+              overflow: "hidden",
+              textAlign: "center",
+            }}
+            scrollableTarget="notifList"
+            scrollThreshold={0.9}
+          >
+            <Notification
+              newUser={user.userId.newUser}
+              notifications={
+                user.userId ? user.userId.notifications.edges : null
+              }
+              deleteDisabled={disabled}
+              resetNotif={handleResetNotif}
+            />
+          </InfiniteScroll>
+        </List>
+      </Popover>
+    </>
+  );
 };
 
 export default NotifPop;

@@ -77,8 +77,6 @@ export const COMMISSION_ID_QUERY = gql`
       toArtist {
         id
       }
-      finished
-      accepted
       price
       rates
       dateIssued

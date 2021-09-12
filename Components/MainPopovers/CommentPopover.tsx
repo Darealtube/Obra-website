@@ -1,4 +1,4 @@
-import { List, Popover } from "@material-ui/core";
+import { Popover } from "@material-ui/core";
 import React from "react";
 import CommentEditMenu from "../ListItems/CommentEditMenu";
 
@@ -32,16 +32,15 @@ const CommentPopover = ({
         horizontal: "right",
       }}
       TransitionProps={{
-        onExited: handleEditExit
-      }}>
-      <List>
-        <CommentEditMenu
-          id={targetId}
-          admin={admin}
-          onClose={handleEditClose}
-          onExited={handleEditExit}
-        />
-      </List>
+        onExited: handleEditExit,
+      }}
+    >
+      <CommentEditMenu
+        id={targetId}
+        admin={admin}
+        onClose={handleEditClose}
+        onExited={handleEditExit}
+      />
     </Popover>
   );
 };

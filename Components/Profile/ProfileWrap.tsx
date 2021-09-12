@@ -1,32 +1,37 @@
-import React from "react";
+import React, { createContext } from "react";
 import { Box, Button, Grid, Tab, Tabs, Typography } from "@material-ui/core";
-import { UserInterface } from "../../interfaces/UserInterface";
 import Image from "next/image";
 import styles from "../../pages/styles/Specific/Profile.module.css";
 import UserInfo from "./UserInfo";
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import PanoramaIcon from "@material-ui/icons/Panorama";
+import { useSession } from "next-auth/client";
+import { USER_WRAP_QUERY } from "../../apollo/Queries/userQueries";
+import { useQuery } from "@apollo/client";
+import { UserData, UserWrapVars } from "../../interfaces/QueryInterfaces";
 
 type Props = {
   children: React.ReactNode;
-  artist: UserInterface;
-  userLiked: boolean;
-  galleryView: boolean;
-  handleGallery: () => void;
-  currentPage: string;
 };
 
-const ProfileWrap = ({
-  children,
-  artist,
-  userLiked,
-  galleryView,
-  handleGallery,
-  currentPage,
-}: Props) => {
-  const [tabsValue, setTabsValue] = useState(currentPage);
-  const handleTabChange = (event, newValue) => {
+export const UserWrapContext = createContext<boolean>(null); // Contains galleryView toggle
+
+const ProfileWrap = ({ children }: Props) => {
+  const [session] = useSession();
+  const router = useRouter();
+  const { data } = useQuery<UserData, UserWrapVars>(USER_WRAP_QUERY, {
+    variables: {
+      name: router.query.name as string,
+      userId: session?.id,
+    },
+  });
+  const [galleryView, setGalleryView] = useState(false);
+  const toggleGallery = () => {
+    setGalleryView(!galleryView);
+  };
+  const [tabsValue, setTabsValue] = useState(router.asPath);
+  const handleTabChange = (_event, newValue: string) => {
     setTabsValue(newValue);
     router.push(newValue);
   };
@@ -37,8 +42,8 @@ const ProfileWrap = ({
         <Box className={styles.backdrop}>
           <Image
             src={
-              artist && artist.backdrop
-                ? artist.backdrop
+              data?.userName && data?.userName.backdrop
+                ? data?.userName.backdrop
                 : "/user-empty-backdrop.jpg"
             }
             layout="fill"
@@ -55,12 +60,17 @@ const ProfileWrap = ({
             md={4}
             sx={{ position: "relative", bottom: "80px" }}
           >
-            {artist && <UserInfo artist={artist} userLiked={userLiked} />}
+            {data?.userName && (
+              <UserInfo
+                artist={data?.userName}
+                userLiked={data?.userName.isLikedBy}
+              />
+            )}
           </Grid>
         )}
         <Grid item xs={12} md={galleryView ? 12 : 8}>
           <Button
-            onClick={handleGallery}
+            onClick={toggleGallery}
             startIcon={<PanoramaIcon />}
             sx={{ marginTop: "16px" }}
           >
@@ -75,15 +85,24 @@ const ProfileWrap = ({
             marginBottom={4}
           >
             <Tabs value={tabsValue} onChange={handleTabChange}>
-              <Tab label="Posts" value={`/profile/${artist.name}/`} />
+              <Tab
+                label="Posts"
+                value={`/profile/${encodeURIComponent(
+                  router.query.name as string
+                )}`}
+              />
               <Tab
                 label="Liked Posts"
-                value={`/profile/${artist.name}/liked`}
+                value={`/profile/${encodeURIComponent(
+                  router.query.name as string
+                )}/liked`}
               />
             </Tabs>
             <br />
           </Box>
-          {children}
+          <UserWrapContext.Provider value={galleryView}>
+            {children}
+          </UserWrapContext.Provider>
         </Grid>
       </Grid>
     </>

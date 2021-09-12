@@ -24,7 +24,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import { useRouter } from "next/router";
 import { SETTINGS_QUERY } from "../../apollo/Queries/userQueries";
 
-export const UserContext = React.createContext<UserInterface>(null);
+export const UserContext = React.createContext<UserInterface>(null); // Contains User Settings Information
 const DynamicNoSessDialog = dynamic(
   () => import("../../Components/MainPopovers/NoSessionDialog")
 );

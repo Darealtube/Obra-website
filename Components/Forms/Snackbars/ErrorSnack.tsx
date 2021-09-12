@@ -2,7 +2,7 @@ import { Snackbar, IconButton } from "@material-ui/core";
 import React from "react";
 import "react-calendar/dist/Calendar.css";
 import CloseIcon from "@material-ui/icons/Close";
-import Alert from '@material-ui/core/Alert';
+import Alert from "@material-ui/core/Alert";
 
 type Props = {
   error: boolean;
@@ -13,7 +13,11 @@ type Props = {
   ) => void;
 };
 
-const ConfigSnack = ({ error, errMessage, handleErrorClose }: Props) => {
+/* This Component is usually used for displaying errors on form validations on forms that 
+   require validation.  
+*/
+
+const ErrorSnack = ({ error, errMessage, handleErrorClose }: Props) => {
   return (
     <Snackbar
       anchorOrigin={{
@@ -39,4 +43,4 @@ const ConfigSnack = ({ error, errMessage, handleErrorClose }: Props) => {
   );
 };
 
-export default ConfigSnack;
+export default ErrorSnack;

@@ -1,17 +1,19 @@
-import { Box, useMediaQuery, useTheme, Typography } from "@material-ui/core";
+import { useMediaQuery, useTheme, Typography } from "@material-ui/core";
 import styles from "../../styles/Specific/Profile.module.css";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { fetchUserandLikedPosts } from "../../../utils/fetchData";
 import { useQuery } from "@apollo/client";
 import { getSession } from "next-auth/client";
-import ProfileWrap from "../../../Components/Profile/ProfileWrap";
+import ProfileWrap, {
+  UserWrapContext,
+} from "../../../Components/Profile/ProfileWrap";
 import ArtList from "../../../Components/ArtList";
 import { QueryNameVars, UserData } from "../../../interfaces/QueryInterfaces";
 import { addApolloState } from "../../../apollo/apolloClient";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { USER_LIKED_POST_QUERY } from "../../../apollo/Queries/userQueries";
-import { AppContext } from "../../../Components/Appbar/AppWrap";
+import AppWrap, { AppContext } from "../../../Components/Appbar/AppWrap";
 
 type Props = {
   name: string;
@@ -19,9 +21,9 @@ type Props = {
   currentPage: string;
 };
 
-const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
+const UserIDLiked = ({ name }: Props) => {
   const drawerOpen = useContext(AppContext);
-  const [galleryView, setGalleryView] = useState(false);
+  const galleryView = useContext(UserWrapContext);
   const theme = useTheme();
   const xl = useMediaQuery(theme.breakpoints.up("xl"));
   const lg = useMediaQuery(theme.breakpoints.between("lg", "xl"));
@@ -49,46 +51,34 @@ const UserIDLiked = ({ name, alreadyLiked, currentPage }: Props) => {
     },
   });
 
-  const toggleGallery = () => {
-    setGalleryView(!galleryView);
-  };
-
   return (
     <div className={styles.root}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Liked</title>
       </Head>
-      <ProfileWrap
-        artist={userName}
-        userLiked={alreadyLiked}
-        galleryView={galleryView}
-        handleGallery={toggleGallery}
-        currentPage={currentPage}
-      >
-        {userName ? (
-          <>
-            <ArtList
-              data={userName.likedPosts}
-              fetchMore={fetchMore}
-              first={"userName"}
-              second={"likedPosts"}
-              columns={artListColumns}
-            />
-          </>
-        ) : (
-          <Typography variant="h5">
-            This user has been deleted, or has changed their name.
-          </Typography>
-        )}
-      </ProfileWrap>
+      {userName ? (
+        <>
+          <ArtList
+            data={userName.likedPosts}
+            fetchMore={fetchMore}
+            first={"userName"}
+            second={"likedPosts"}
+            columns={artListColumns}
+          />
+        </>
+      ) : (
+        <Typography variant="h5">
+          This user has been deleted, or has changed their name.
+        </Typography>
+      )}
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const { data, exists, alreadyLiked } = await fetchUserandLikedPosts(
+  const { data, exists } = await fetchUserandLikedPosts(
     context.params.name as string,
     session ? session.id : null
   );
@@ -103,10 +93,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       session,
       name: context.params.name,
-      alreadyLiked: alreadyLiked,
-      currentPage: `/profile/${context.params.name}/liked`,
     },
   });
+};
+
+UserIDLiked.getWrap = function wrap(page) {
+  return (
+    <AppWrap>
+      <ProfileWrap>{page}</ProfileWrap>
+    </AppWrap>
+  );
 };
 
 export default UserIDLiked;

@@ -7,11 +7,12 @@ import { fetchHomeCategories } from "../utils/fetchData";
 import { addApolloState } from "../apollo/apolloClient";
 import CategoryList from "../Components/CategoryList";
 import { POPULAR_CATEGORIES_QUERY } from "../apollo/Queries/categoryQueries";
+import { PopularCategoriesData } from "../interfaces/QueryInterfaces";
 
 const Home = () => {
   const {
     data: { popularCategories },
-  } = useQuery(POPULAR_CATEGORIES_QUERY);
+  } = useQuery<PopularCategoriesData>(POPULAR_CATEGORIES_QUERY);
 
   return (
     <div className={styles.root}>

@@ -41,3 +41,32 @@ export interface RecommendedPosts {
   pageInfo: PageInfo;
   totalCount: number;
 }
+
+export interface TagInterface {
+  name: string;
+  artCount: number;
+}
+
+export interface CategoryInterface {
+  id: string;
+  name: string;
+  artCount: string;
+}
+
+export interface TagEdges {
+  node: TagInterface;
+}
+
+export interface CategoryEdges {
+  node: CategoryInterface;
+}
+
+export interface Categories {
+  edges: CategoryEdges[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export interface Tags {
+  edges: TagEdges[];
+}

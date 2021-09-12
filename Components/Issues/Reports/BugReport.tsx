@@ -1,15 +1,6 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Paper,
-  Button,
-} from "@material-ui/core";
-import { useContext } from "react";
+import { Box, Container, Grid, Typography, Button } from "@material-ui/core";
 import { ReportInterface } from "../../../interfaces/ReportInterface";
 import styles from "../../../pages/styles/General/Issues.module.css";
-import { AppContext } from "../../Appbar/AppWrap";
 
 type ReportProps = {
   report: ReportInterface;
@@ -17,7 +8,6 @@ type ReportProps = {
 };
 
 const BugReport = ({ report, handleOpen }: ReportProps) => {
-  const drawerOpen = useContext(AppContext);
   return (
     <>
       <Container className={styles.bugContainer}>

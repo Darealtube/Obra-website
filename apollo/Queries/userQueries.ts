@@ -66,11 +66,22 @@ export const APPBAR_USER_QUERY = gql`
   ${UserInfo}
 `;
 
-export const USER_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: String, $limit: Int) {
+export const USER_WRAP_QUERY = gql`
+  query UserPosts($name: String!, $userId: ID!) {
     userName(name: $name) {
       ...UserInfo
       ...UserInfo2
+      isLikedBy(userId: $userId)
+    }
+  }
+  ${UserInfo}
+  ${UserInfo2}
+`;
+
+export const USER_POST_QUERY = gql`
+  query UserPosts($name: String!, $after: String, $limit: Int) {
+    userName(name: $name) {
+      id
       posts(limit: $limit, after: $after) {
         edges {
           node {
@@ -85,15 +96,12 @@ export const USER_POST_QUERY = gql`
     }
   }
   ${PostInfo}
-  ${UserInfo}
-  ${UserInfo2}
 `;
 
 export const USER_LIKED_POST_QUERY = gql`
-  query UserPosts($name: String!, $after: String, $limit: Int) {
+  query UserLikedPosts($name: String!, $after: String, $limit: Int) {
     userName(name: $name) {
-      ...UserInfo
-      ...UserInfo2
+      id
       likedPosts(limit: $limit, after: $after) {
         edges {
           node {
@@ -108,8 +116,6 @@ export const USER_LIKED_POST_QUERY = gql`
     }
   }
   ${PostInfo}
-  ${UserInfo}
-  ${UserInfo2}
 `;
 
 export const USER_COMM_INFO_QUERY = gql`

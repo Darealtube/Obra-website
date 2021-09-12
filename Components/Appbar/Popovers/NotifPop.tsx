@@ -67,6 +67,7 @@ const NotifPop = ({ user, fetchMore }: Props) => {
     setnotifCount(0);
   };
 
+  /* This prevents notif delete spam to interfere with pagination. */
   useEffect(() => {
     if (refetching) {
       setDisabled(true);

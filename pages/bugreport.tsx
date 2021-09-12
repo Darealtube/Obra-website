@@ -78,8 +78,6 @@ const BugReport = () => {
     }
   }, [session, sessload]);
 
-  console.log(bugReport);
-
   return (
     <>
       <Head>

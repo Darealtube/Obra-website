@@ -18,11 +18,7 @@ import {
   USER_POST_QUERY,
   USER_LIKED_POST_QUERY,
 } from "../apollo/Queries/userQueries";
-import {
-  IS_LIKED_ARTIST,
-  IS_LIKED_POST,
-  IS_ADMIN,
-} from "../apollo/Queries/validateQueries";
+import { IS_LIKED_POST, IS_ADMIN } from "../apollo/Queries/validateQueries";
 import {
   PostData,
   RecommendedPostData,
@@ -35,6 +31,11 @@ import {
   ReportIdVars,
   isLikedData,
   isLikedVars,
+  PopularCategoriesData,
+  TrendingPostsData,
+  PaginatedPostsVars,
+  CategoryPostsData,
+  CategoryPostsVars,
 } from "../interfaces/QueryInterfaces";
 
 /* These are the fetch functions that are used on pages that have
@@ -44,7 +45,7 @@ import {
  found from the apolloClient file. This is in order to add the 
  data into the cache. Other information could be passed as well. */
 
-export const fetchUserandPosts = async (name: string, userID: string) => {
+export const fetchUserandPosts = async (name: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },
@@ -56,20 +57,9 @@ export const fetchUserandPosts = async (name: string, userID: string) => {
     },
   });
 
-  const {
-    data: { isLikedArtist },
-  } = await apolloClient.query({
-    query: IS_LIKED_ARTIST,
-    variables: {
-      userID: userID,
-      artistName: name,
-    },
-  });
-
   return {
     data: apolloClient,
     exists: userName ? true : false,
-    alreadyLiked: isLikedArtist,
   };
 };
 
@@ -85,26 +75,15 @@ export const fetchUserandLikedPosts = async (name: string, userID: string) => {
     },
   });
 
-  const {
-    data: { isLikedArtist },
-  } = await apolloClient.query({
-    query: IS_LIKED_ARTIST,
-    variables: {
-      userID: userID,
-      artistName: name,
-    },
-  });
-
   return {
     data: apolloClient,
     exists: userName ? true : false,
-    alreadyLiked: isLikedArtist,
   };
 };
 
 export const fetchHomeCategories = async () => {
   const apolloClient = initializeApollo();
-  await apolloClient.query({
+  await apolloClient.query<PopularCategoriesData>({
     query: POPULAR_CATEGORIES_QUERY,
   });
   return apolloClient;
@@ -112,7 +91,7 @@ export const fetchHomeCategories = async () => {
 
 export const fetchTrending = async () => {
   const apolloClient = initializeApollo();
-  await apolloClient.query({
+  await apolloClient.query<TrendingPostsData, PaginatedPostsVars>({
     query: TRENDING_POSTS_QUERY,
     variables: {
       limit: 20,
@@ -125,7 +104,7 @@ export const fetchPopularCategories = async () => {
   const apolloClient = initializeApollo();
   const {
     data: { popularCategories },
-  } = await apolloClient.query({
+  } = await apolloClient.query<PopularCategoriesData>({
     query: POPULAR_CATEGORIES_QUERY,
   });
   const categories = popularCategories.map((category) => category.name);
@@ -134,7 +113,7 @@ export const fetchPopularCategories = async () => {
 
 export const fetchCategoryPosts = async (category: string) => {
   const apolloClient = initializeApollo();
-  await apolloClient.query({
+  await apolloClient.query<CategoryPostsData, CategoryPostsVars>({
     query: CATEGORY_POSTS_QUERY,
     variables: {
       category,

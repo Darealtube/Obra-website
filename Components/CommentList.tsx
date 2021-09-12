@@ -46,7 +46,7 @@ const CommentList = ({ comments }: Props) => {
   };
 
   return (
-    <div>
+    <>
       <List className={styles.commentList}>
         {comments &&
           comments.map((comment, index) => (
@@ -79,7 +79,8 @@ const CommentList = ({ comments }: Props) => {
                   onClick={handleEdit}
                   value={comment.node.id}
                   id={comment.node.author ? comment.node.author.id : ""}
-                  size="large">
+                  size="large"
+                >
                   <MoreVertIcon />
                 </IconButton>
               </ListItemSecondaryAction>
@@ -94,7 +95,7 @@ const CommentList = ({ comments }: Props) => {
         admin={admin}
         targetId={targetId}
       />
-    </div>
+    </>
   );
 };
 

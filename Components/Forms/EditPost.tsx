@@ -13,7 +13,11 @@ import { useRouter } from "next/router";
 import React, { useReducer } from "react";
 import { useState } from "react";
 import { State, reducer, Tag } from "../../Hooks/Reducers/PostReducer";
-import { PostInterface } from "../../interfaces/PostInterface";
+import {
+  PostInterface,
+  TagEdges,
+  TagInterface,
+} from "../../interfaces/PostInterface";
 import useSearch from "../../Hooks/useSearch";
 import { EditValidate } from "../../utils/postValidator";
 import dynamic from "next/dynamic";
@@ -23,7 +27,7 @@ interface Props {
   edit: any;
 }
 
-const DynamicError = dynamic(() => import("./Snackbars/ConfigSnack"));
+const DynamicErrorSnack = dynamic(() => import("./Snackbars/ErrorSnack"));
 
 const EditPostForm = ({ edit, postId }: Props) => {
   const router = useRouter();
@@ -153,7 +157,7 @@ const EditPostForm = ({ edit, postId }: Props) => {
           >
             <Autocomplete
               id="asynchronous-demo"
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option: TagInterface) => option.name}
               isOptionEqualToValue={(option, value) =>
                 option.name === value.name
               }
@@ -167,7 +171,7 @@ const EditPostForm = ({ edit, postId }: Props) => {
               inputValue={post.tagInput}
               onInputChange={handleTagInput}
               onKeyPress={handleCustomTag}
-              options={options.map((item) => item.node)}
+              options={(options as TagEdges[]).map((item) => item.node)}
               loading={loading}
               noOptionsText={<Typography>No Tags Found...</Typography>}
               renderOption={(props, option: Tag, _status) => (
@@ -221,7 +225,7 @@ const EditPostForm = ({ edit, postId }: Props) => {
           </Grid>
         </Grid>
       </form>
-      <DynamicError
+      <DynamicErrorSnack
         error={post.error}
         errMessage={post.errMessage}
         handleErrorClose={handleErrorClose}

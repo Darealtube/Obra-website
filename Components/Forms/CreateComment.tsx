@@ -7,11 +7,11 @@ import { CREATE_COMMENT_MUTATION } from "../../apollo/Mutations/commentMutations
 import { AddCommentData } from "../../interfaces/MutationInterfaces";
 import { commentUpdate } from "../../utils/update";
 
-type Comment = {
+type Props = {
   id: string;
 };
 
-const CommentForm = ({ id }: Comment) => {
+const CommentForm = ({ id }: Props) => {
   const [session] = useSession();
   const [addComment] = useMutation<AddCommentData>(CREATE_COMMENT_MUTATION, {
     update: (cache: DataProxy, mutationResult) =>
@@ -64,7 +64,11 @@ const CommentForm = ({ id }: Comment) => {
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">
-              <IconButton type="submit" disabled={disabled || !session} size="large">
+              <IconButton
+                type="submit"
+                disabled={disabled || !session}
+                size="large"
+              >
                 <SendIcon />
               </IconButton>
             </InputAdornment>

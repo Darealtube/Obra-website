@@ -10,12 +10,12 @@ import { RecommendedPosts } from "../../interfaces/PostInterface";
 import { AppContext } from "../Appbar/AppWrap";
 import ArtList from "../ArtList";
 
-type Parameters = {
+type Props = {
   fetchMore: any;
   recommended: RecommendedPosts;
 };
 
-const RecommendedList = ({ fetchMore, recommended }: Parameters) => {
+const RecommendedList = ({ fetchMore, recommended }: Props) => {
   const theme = useTheme();
   const drawerOpen = useContext(AppContext);
   const xl = useMediaQuery(theme.breakpoints.up("lg"));

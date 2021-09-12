@@ -17,10 +17,16 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import usePagination from "../../../Hooks/usePagination";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { Commissions } from "../../../interfaces/UserInterface";
 
 const DynamicDialog = dynamic(() => import("../DeleteDialog"));
 
-const CommissionList = ({ fetchMore, commissions }) => {
+type Props = {
+  fetchMore: any;
+  commissions: Commissions;
+};
+
+const CommissionList = ({ fetchMore, commissions }: Props) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [targetId, settargetId] = useState("");
   const { More, hasMore, ref } = usePagination({
@@ -93,7 +99,7 @@ const CommissionList = ({ fetchMore, commissions }) => {
                       style={{ wordWrap: "break-word" }}
                     />
 
-                    <Typography  sx={{marginRight: "16px"}}>
+                    <Typography sx={{ marginRight: "16px" }}>
                       Deadline:
                       {commission.node.deadline
                         ? commission.node.deadline

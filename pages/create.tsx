@@ -25,8 +25,8 @@ import { useRouter } from "next/router";
 import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
 import { CREATE_POST_MUTATION } from "../apollo/Mutations/postMutations";
 
-const DynamicError = dynamic(
-  () => import("../Components/Forms/Snackbars/ConfigSnack")
+const DynamicErrorSnack = dynamic(
+  () => import("../Components/Forms/Snackbars/ErrorSnack")
 );
 
 const DynamicNoSessDialog = dynamic(
@@ -175,7 +175,7 @@ const Create = () => {
         </form>
       </Container>
 
-      <DynamicError
+      <DynamicErrorSnack
         error={post.error}
         errMessage={post.errMessage}
         handleErrorClose={handleErrorClose}

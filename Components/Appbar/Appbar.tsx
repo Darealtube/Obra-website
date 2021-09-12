@@ -4,9 +4,7 @@ import {
   Typography,
   IconButton,
   SwipeableDrawer,
-  Drawer,
   List,
-  useMediaQuery,
   Button,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -39,18 +37,15 @@ const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
 const Appbar = ({ user, moreNotif }: AppBarProps) => {
   const [session, loading] = useSession();
   const [open, setOpen] = useState(false);
-  const swipeable = useMediaQuery(`(max-width: 480px)`);
 
   const handleDrawer = () => {
     setOpen(!open);
   };
 
   return (
-    <div>
-      {/* App Bar */}
-      <AppBar color="transparent">
+    <>
+      <AppBar>
         <Toolbar>
-          {/* Drawer and Logo */}
           <IconButton
             edge="start"
             color="inherit"
@@ -92,9 +87,7 @@ const Appbar = ({ user, moreNotif }: AppBarProps) => {
           )}
         </Toolbar>
       </AppBar>
-      {/* App Bar */}
 
-      {/* Drawer */}
       <SwipeableDrawer
         anchor={"left"}
         open={open}
@@ -103,11 +96,9 @@ const Appbar = ({ user, moreNotif }: AppBarProps) => {
       >
         <List className={styles.list}>
           <DrawerItems user={user} moreNotif={moreNotif} />
-          {/* Drawer List */}
         </List>
       </SwipeableDrawer>
-      {/* Drawer */}
-    </div>
+    </>
   );
 };
 

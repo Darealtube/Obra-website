@@ -10,11 +10,11 @@ import {
 import Link from "next/link";
 
 const MainItems = ["20%", "25%", "21%", "40%", "32%", "28%"];
-const MoreItems = ["25%", "32%", "18%", "30%", "24%"];
+const MoreItems = ["25%", "32%", "24%"];
 
 const SkeletonDrawer = () => {
   return (
-    <div>
+    <>
       {MainItems.map((width, index) => (
         <ListItem key={index}>
           <ListItemIcon>
@@ -85,7 +85,7 @@ const SkeletonDrawer = () => {
           </Grid>
         </Grid>
       </ListItem>
-    </div>
+    </>
   );
 };
 

@@ -14,14 +14,16 @@ import {
   QueryIdVars,
 } from "../interfaces/QueryInterfaces";
 
-/* These are the update functions used for useMutations. In order to update
- the UI in response to action such as deleting items or adding items, useMutation
- must update the cache manually in order for it to make it look like the changes 
- happened immediately. Primarily, these update functions take 2 parameters. The 
- first one is the cache in which the "update" option in useMutation provides, and
- the second one is the mutationResult which the "update" option also provides, but 
- the result depends on the mutation. You may see these functions from the useMutations 
- in different files/pages, and here is where they are found. */
+/* 
+   These are the update functions used for useMutations. In order to update
+   the UI in response to action such as deleting items or adding items, useMutation
+   must update the cache manually in order for it to make it look like the changes 
+   happened immediately. Primarily, these update functions take 2 parameters. The 
+   first one is the cache in which the "update" option in useMutation provides, and
+   the second one is the mutationResult which the "update" option also provides, but 
+   the result depends on the mutation. You may see these functions from the useMutations 
+   in different files/pages, and here is where they are found. 
+ */
 
 export const commentUpdate = (
   cache: DataProxy,

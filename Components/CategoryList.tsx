@@ -1,10 +1,20 @@
 import styles from "../pages/styles/General/Trending.module.css";
 import { Typography, Grid, Button, Grow } from "@material-ui/core";
 import Link from "next/link";
+import { CategoryEdges, CategoryInterface } from "../interfaces/PostInterface";
 
-const CategoryList = ({ data, includeMoreButton = false }) => {
+type Props = {
+  data: CategoryInterface[] | CategoryEdges[];
+  includeMoreButton?: boolean;
+};
+
+const CategoryList = ({ data, includeMoreButton = false }: Props) => {
   return (
-    <Grid container spacing={4} sx={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+    <Grid
+      container
+      spacing={4}
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
       {data?.map((tag, index) => (
         <Grow
           in={true}

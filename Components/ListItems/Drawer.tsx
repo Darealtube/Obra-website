@@ -13,9 +13,8 @@ import WhatshotIcon from "@material-ui/icons/Whatshot";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import SettingsIcon from "@material-ui/icons/Settings";
 import EmojiFlagsIcon from "@material-ui/icons/EmojiFlags";
-import InfoIcon from "@material-ui/icons/Info";
-import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import BrushIcon from "@material-ui/icons/Brush";
+import SearchIcon from "@material-ui/icons/Search";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { signOut, useSession } from "next-auth/client";
@@ -26,6 +25,7 @@ import { REPORT_COUNT_QUERY } from "../../apollo/Queries/reportQueries";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 import dynamic from "next/dynamic";
 import { AppbarUserData } from "../../interfaces/QueryInterfaces";
+import { useState } from "react";
 
 function Copyright() {
   return (
@@ -38,6 +38,7 @@ function Copyright() {
 }
 
 const DynamicNotifPop = dynamic(() => import("../Appbar/Popovers/NotifPop"));
+const DynamicSearchBar = dynamic(() => import("../SearchBar"));
 
 const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
@@ -54,16 +55,6 @@ const MoreItems = [
     label: "Report a Bug",
     link: "/bugreport",
     icon: <EmojiFlagsIcon />,
-  },
-  {
-    label: "Help",
-    link: "/help",
-    icon: <InfoIcon />,
-  },
-  {
-    label: "Feedback",
-    link: "/help/feedback",
-    icon: <ContactSupportIcon />,
   },
 ];
 
@@ -83,9 +74,20 @@ const DrawerItems = ({ user, moreNotif }: DrawerProps) => {
   const { data: reports } = useQuery(REPORT_COUNT_QUERY, {
     skip: !user?.userId.admin,
   });
+  const [openSearch, setOpenSearch] = useState(false);
+
+  const toggleSearch = () => {
+    setOpenSearch(!openSearch);
+  };
 
   return (
     <>
+      <ListItem button onClick={toggleSearch}>
+        <ListItemIcon>
+          <SearchIcon />
+        </ListItemIcon>
+        Search
+      </ListItem>
       <Link href={"/"} passHref>
         <ListItem button component="a">
           <ListItemIcon>
@@ -180,13 +182,6 @@ const DrawerItems = ({ user, moreNotif }: DrawerProps) => {
             </Link>
           </Grid>
           <Grid item>
-            <Link href="/about" passHref>
-              <a style={{ textDecoration: "none", color: "inherit" }}>
-                <Typography>Terms and Conditions</Typography>
-              </a>
-            </Link>
-          </Grid>
-          <Grid item>
             <Link href="/about#developers" passHref>
               <a style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography>Developers</Typography>
@@ -200,16 +195,13 @@ const DrawerItems = ({ user, moreNotif }: DrawerProps) => {
               </a>
             </Link>
           </Grid>
-          <Grid item>
-            <a style={{ textDecoration: "none", color: "inherit" }}>
-              <Typography>Canvas Tutorial</Typography>
-            </a>
-          </Grid>
         </Grid>
       </ListItem>
       <ListItem>
         <Copyright />
       </ListItem>
+      <DynamicSearchBar searchOpen={openSearch} handleClose={toggleSearch} />{" "}
+      {/* SearchBar Popover */}
     </>
   );
 };

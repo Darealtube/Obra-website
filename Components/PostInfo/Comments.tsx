@@ -3,8 +3,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import CommentList from "../CommentList";
 import CommentForm from "../Forms/CreateComment";
 import usePagination from "../../Hooks/usePagination";
+import { PostInterface } from "../../interfaces/PostInterface";
 
-const Comments = ({ postID, fetchMore }) => {
+type Props = {
+  postID: PostInterface;
+  fetchMore: any;
+};
+
+const Comments = ({ postID, fetchMore }: Props) => {
   const { More, hasMore } = usePagination({
     key: "postId",
     fetchMore,

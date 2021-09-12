@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ListItem, Divider, Button } from "@material-ui/core";
+import { ListItem, Divider, Button, List } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 import ContactSupportIcon from "@material-ui/icons/ContactSupport";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
@@ -33,34 +33,36 @@ const CommentEditMenu = ({ id, admin, onClose, onExited }: Props) => {
   };
 
   return (
-    <div>
-      {admin && (
-        <>
-          <ListItem>
-            <Link href={`/${id}/edit`} passHref>
-              <Button component="a" className={styles.item}>
-                <MeetingRoomIcon className={styles.icon} /> Edit
+    <>
+      <List>
+        {admin && (
+          <>
+            <ListItem>
+              <Link href={`/${id}/edit`} passHref>
+                <Button component="a" className={styles.item}>
+                  <MeetingRoomIcon className={styles.icon} /> Edit
+                </Button>
+              </Link>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <Button className={styles.item} onClick={DeleteComment}>
+                <InfoIcon className={styles.icon} /> Delete
               </Button>
-            </Link>
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <Button className={styles.item} onClick={DeleteComment}>
-              <InfoIcon className={styles.icon} /> Delete
-            </Button>
-          </ListItem>
-          <Divider />
-        </>
-      )}
+            </ListItem>
+            <Divider />
+          </>
+        )}
 
-      <ListItem>
-        <Link href={`/report/comment/${id}`} passHref>
-          <Button className={styles.item} component="a">
-            <ContactSupportIcon className={styles.icon} /> Report
-          </Button>
-        </Link>
-      </ListItem>
-    </div>
+        <ListItem>
+          <Link href={`/report/comment/${id}`} passHref>
+            <Button className={styles.item} component="a">
+              <ContactSupportIcon className={styles.icon} /> Report
+            </Button>
+          </Link>
+        </ListItem>
+      </List>
+    </>
   );
 };
 

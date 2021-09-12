@@ -27,7 +27,7 @@ const Menu = ({ name }: { name: string }) => {
     vercel (production).
   */
   return (
-    <div>
+    <>
       <ListItem>
         <Link href={`/profile/${encodeURIComponent(name)}`} passHref>
           <Button component="a" className={styles.item}>
@@ -74,7 +74,7 @@ const Menu = ({ name }: { name: string }) => {
           <ContactSupportIcon className={styles.icon} /> Send Feedback
         </Button>
       </ListItem>
-    </div>
+    </>
   );
 };
 

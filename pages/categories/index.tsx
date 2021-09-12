@@ -1,5 +1,4 @@
 import {
-  CssBaseline,
   Container,
   CircularProgress,
   Typography,
@@ -11,6 +10,7 @@ import Head from "next/head";
 import CategoryList from "../../Components/CategoryList";
 import useSearch from "../../Hooks/useSearch";
 import { useState } from "react";
+import { CategoryEdges } from "../../interfaces/PostInterface";
 
 const CategoriesPage = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -42,7 +42,7 @@ const CategoriesPage = () => {
           Search art categories/tags that you would like to see!
         </Typography>
         <TextField
-          variant="outlined" 
+          variant="outlined"
           margin="normal"
           required
           fullWidth
@@ -76,10 +76,9 @@ const CategoriesPage = () => {
         }}
       >
         <Container className={styles.categoryContainer}>
-          {!loading && <CategoryList data={options} />}
+          {!loading && <CategoryList data={options as CategoryEdges[]} />}
         </Container>
       </InfiniteScroll>
-      <CssBaseline />
     </>
   );
 };

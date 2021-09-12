@@ -29,7 +29,7 @@ import Comments from "./Comments";
 import { AppContext } from "../Appbar/AppWrap";
 import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 
-type Parameters = {
+type Props = {
   postID: PostInterface;
   alreadyLiked: boolean;
   handleOpenDialog: () => void;
@@ -46,7 +46,7 @@ const PostInfo = ({
   handleOpenDialog,
   handleDeleteDialog,
   fetchComments,
-}: Parameters) => {
+}: Props) => {
   const theme = useTheme();
   const [session] = useSession();
   const postAdmin = postID.author.id == session?.id;
@@ -133,11 +133,15 @@ const PostInfo = ({
             </IconButton>
           )}
           {commentToggle && (
-            <Badge badgeContent={postID.comments.totalCount} color="secondary">
-              <IconButton onClick={handleDrawer}>
+            <IconButton onClick={handleDrawer}>
+              <Badge
+                badgeContent={postID.comments.totalCount}
+                color="secondary"
+                variant="dot"
+              >
                 <CommentIcon />
-              </IconButton>
-            </Badge>
+              </Badge>
+            </IconButton>
           )}
           <Link href={`/report/post/${postID.id}`} passHref>
             <IconButton component="a">

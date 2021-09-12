@@ -63,7 +63,7 @@ export const fetchUserandPosts = async (name: string) => {
   };
 };
 
-export const fetchUserandLikedPosts = async (name: string, userID: string) => {
+export const fetchUserandLikedPosts = async (name: string) => {
   const apolloClient = initializeApollo();
   const {
     data: { userName },

@@ -79,8 +79,7 @@ const UserIDLiked = ({ name }: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const { data, exists } = await fetchUserandLikedPosts(
-    context.params.name as string,
-    session ? session.id : null
+    context.params.name as string
   );
 
   if (!exists) {

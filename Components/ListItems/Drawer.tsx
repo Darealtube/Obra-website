@@ -114,27 +114,27 @@ const DrawerItems = ({ user, moreNotif }: DrawerProps) => {
               <ListItemText>Profile</ListItemText>
             </ListItem>
           </Link>
-          <ListItem
-            button
-            component="a"
-            href={`/profile/${user.userId.name}/liked`}
-          >
-            <ListItemIcon>
-              <FavoriteIcon />
-            </ListItemIcon>
-            <ListItemText>Your Liked Posts</ListItemText>
-          </ListItem>
-          <ListItem button component="a" href={"/commissions"}>
-            <ListItemIcon>
-              <BrushIcon />
-            </ListItemIcon>
-            <Badge
-              color="secondary"
-              badgeContent={data?.userId.commissionCount}
-            >
-              <ListItemText>Commissions</ListItemText>
-            </Badge>
-          </ListItem>
+          <Link href={`/profile/${user.userId.name}/liked`} passHref>
+            <ListItem button component="a">
+              <ListItemIcon>
+                <FavoriteIcon />
+              </ListItemIcon>
+              <ListItemText>Your Liked Posts</ListItemText>
+            </ListItem>
+          </Link>
+          <Link href={"/commissions"} passHref>
+            <ListItem button component="a">
+              <ListItemIcon>
+                <BrushIcon />
+              </ListItemIcon>
+              <Badge
+                color="secondary"
+                badgeContent={data?.userId.commissionCount}
+              >
+                <ListItemText>Commissions</ListItemText>
+              </Badge>
+            </ListItem>
+          </Link>
           <DynamicNotifPop user={user} fetchMore={moreNotif} />
           <ListItem component={Button} onClick={handleSignOut}>
             <ListItemIcon>
